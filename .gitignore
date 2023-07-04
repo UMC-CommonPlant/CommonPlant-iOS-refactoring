@@ -85,6 +85,9 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+### macOS ###
+**/.DS_Store
+
 ### Xcode ###
 
 ## Xcode 8 and earlier
