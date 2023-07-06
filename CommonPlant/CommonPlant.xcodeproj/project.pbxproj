@@ -15,6 +15,12 @@
 		F91E47952A53EDE1008E07A9 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = F91E47942A53EDE1008E07A9 /* Moya */; };
 		F91E47982A53EDFF008E07A9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F91E47972A53EDFF008E07A9 /* SnapKit */; };
 		F91E479B2A53EE31008E07A9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F91E479A2A53EE31008E07A9 /* Kingfisher */; };
+		F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47A92A569128008E07A9 /* UIColor+Extension.swift */; };
+		F91E47AC2A569666008E07A9 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47AB2A569666008E07A9 /* empty.swift */; };
+		F91E47AE2A569679008E07A9 /* empty1.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47AD2A569678008E07A9 /* empty1.swift */; };
+		F91E47B02A569681008E07A9 /* empty2.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47AF2A569681008E07A9 /* empty2.swift */; };
+		F91E47B22A56968E008E07A9 /* empty3.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47B12A56968E008E07A9 /* empty3.swift */; };
+		F91E47B42A569698008E07A9 /* empty4.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47B32A569698008E07A9 /* empty4.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +31,12 @@
 		F91E47882A53E3CA008E07A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F91E478B2A53E3CA008E07A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F91E478D2A53E3CA008E07A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F91E47A92A569128008E07A9 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		F91E47AB2A569666008E07A9 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		F91E47AD2A569678008E07A9 /* empty1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty1.swift; sourceTree = "<group>"; };
+		F91E47AF2A569681008E07A9 /* empty2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty2.swift; sourceTree = "<group>"; };
+		F91E47B12A56968E008E07A9 /* empty3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty3.swift; sourceTree = "<group>"; };
+		F91E47B32A569698008E07A9 /* empty4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty4.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +131,7 @@
 		F91E47A22A53F0B6008E07A9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				F91E47A92A569128008E07A9 /* UIColor+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -126,6 +139,7 @@
 		F91E47A32A53F84B008E07A9 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				F91E47B32A569698008E07A9 /* empty4.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -133,6 +147,7 @@
 		F91E47A42A53F852008E07A9 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				F91E47B12A56968E008E07A9 /* empty3.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -140,6 +155,7 @@
 		F91E47A52A53F869008E07A9 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				F91E47AF2A569681008E07A9 /* empty2.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -147,6 +163,7 @@
 		F91E47A62A53F871008E07A9 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				F91E47AD2A569678008E07A9 /* empty1.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -154,6 +171,7 @@
 		F91E47A72A53F893008E07A9 /* Constraints */ = {
 			isa = PBXGroup;
 			children = (
+				F91E47AB2A569666008E07A9 /* empty.swift */,
 			);
 			path = Constraints;
 			sourceTree = "<group>";
@@ -247,8 +265,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				F91E47842A53E3C9008E07A9 /* ViewController.swift in Sources */,
+				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
+				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
+				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */,
+				F91E47AE2A569679008E07A9 /* empty1.swift in Sources */,
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
+				F91E47B02A569681008E07A9 /* empty2.swift in Sources */,
+				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
