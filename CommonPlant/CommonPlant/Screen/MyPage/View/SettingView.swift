@@ -120,6 +120,89 @@ class SettingView: UIView {
     }
     
     func setLayout() {
+        navigationBarView.snp.makeConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(56)
+        }
         
+        backButton.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.width.height.equalTo(56)
+        }
+        
+        settingTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(19)
+            make.leading.equalTo(backButton.snp.trailing).offset(8)
+            make.centerX.equalToSuperview()
+        }
+        
+        alarmView.snp.makeConstraints { make in
+            make.top.equalTo(navigationBarView.snp.bottom).offset(10)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(127)
+        }
+        
+        alarmTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(44)
+        }
+        
+        alarmSettingLabel.snp.makeConstraints { make in
+            make.top.equalTo(alarmTitleLabel.snp.bottom).offset(25)
+            make.leading.equalToSuperview().offset(36)
+            make.height.equalTo(24)
+        }
+        
+        alarmToggleSwitch.snp.makeConstraints { make in
+            make.top.equalTo(alarmTitleLabel.snp.bottom).offset(24)
+            make.trailing.equalToSuperview().offset(-36)
+            //make.width.equalTo(40)
+            //make.height.equalTo(24)
+        }
+        
+        alarmGuideLabel.snp.makeConstraints { make in
+            make.top.equalTo(alarmSettingLabel.snp.bottom)
+            make.leading.equalToSuperview().offset(36)
+        }
+        
+        divideView.snp.makeConstraints { make in
+            make.top.equalTo(alarmView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(8)
+        }
+        
+        accountView.snp.makeConstraints { make in
+            make.top.equalTo(divideView.snp.bottom).offset(16)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        accountTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.height.equalTo(24)
+        }
+        
+        logoutButton.snp.makeConstraints { make in
+            make.top.equalTo(accountTitleLabel.snp.bottom).offset(4)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(20)
+            make.height.equalTo(62)
+        }
+        
+        withdrawalButton.snp.makeConstraints { make in
+            make.top.equalTo(logoutButton.snp.bottom)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(20)
+            make.height.equalTo(62)
+        }
     }
 }
