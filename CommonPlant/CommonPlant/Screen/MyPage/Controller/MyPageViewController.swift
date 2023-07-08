@@ -10,8 +10,10 @@ import UIKit
 class MyPageViewController: UIViewController {
     
     let rootView = MyPageView()
+    let settingView = SettingView()
+    
     override func loadView() {
-        self.view = rootView
+        self.view = settingView
     }
     
     override func viewDidLoad() {
