@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C07DF86D2A5943FA00CDC5CC /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */; };
+		C07DF8722A5944FE00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
 		F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */; };
 		F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -60,9 +62,26 @@
 		C07DF86E2A59440400CDC5CC /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
-				C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */,
+				C07DF8702A5944E500CDC5CC /* Controller */,
+				C07DF86F2A5944DE00CDC5CC /* View */,
 			);
 			path = MyPage;
+			sourceTree = "<group>";
+		};
+		C07DF86F2A5944DE00CDC5CC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C07DF8702A5944E500CDC5CC /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		F91E47732A53E3C8008E07A9 = {
@@ -285,6 +304,7 @@
 				F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */,
 				F91E47AE2A569679008E07A9 /* empty1.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageView.swift in Sources */,
+				C07DF8722A5944FE00CDC5CC /* MyPageViewController.swift in Sources */,
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
 				F91E47B02A569681008E07A9 /* empty2.swift in Sources */,
 				C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */,
