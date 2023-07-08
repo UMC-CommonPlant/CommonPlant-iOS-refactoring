@@ -78,6 +78,55 @@ class MyPageView: UIView {
     }
     
     func setLayout() {
+        backgroundView.snp.makeConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide).offset(8)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(201)
+        }
         
+        baseView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(30)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        userProfileView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(85)
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(95)
+        }
+        
+        settingButton.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-10)
+            make.width.height.equalTo(56)
+        }
+        
+        userInfoView.snp.makeConstraints { make in
+            make.top.equalTo(backgroundView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(80)
+        }
+        
+        userNameLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(36)
+        }
+        
+        userEmailLabel.snp.makeConstraints { make in
+            make.top.equalTo(userNameLabel.snp.bottom)
+            make.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        editButton.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-38.5)
+            make.width.height.equalTo(56)
+        }
     }
 }
