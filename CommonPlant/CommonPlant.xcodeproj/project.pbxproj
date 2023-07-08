@@ -89,6 +89,14 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		C07DF8782A59492A00CDC5CC /* UIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				C07DF8752A5947C400CDC5CC /* CommonLabel.swift */,
+			);
+			path = UIComponents;
+			sourceTree = "<group>";
+		};
 		F91E47732A53E3C8008E07A9 = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +128,7 @@
 		F91E479C2A53EF43008E07A9 /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				C07DF8782A59492A00CDC5CC /* UIComponents */,
 				F91E47A72A53F893008E07A9 /* Constraints */,
 				F91E47A22A53F0B6008E07A9 /* Extensions */,
 			);
@@ -168,7 +177,6 @@
 		F91E47A22A53F0B6008E07A9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C07DF8752A5947C400CDC5CC /* CommonLabel.swift */,
 				F91E47A92A569128008E07A9 /* UIColor+Extension.swift */,
 				C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */,
 			);

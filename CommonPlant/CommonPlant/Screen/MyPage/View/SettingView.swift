@@ -77,7 +77,7 @@ class SettingView: UIView {
         alarmToggleSwitch.isOn = false
         alarmToggleSwitch.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         
-        divideView.backgroundColor = .gray2
+        divideView.backgroundColor = .gray1
         
         accountTitleLabel.text = "계정"
         accountTitleLabel.font = .bodyB1
