@@ -10,6 +10,7 @@
 		C07DF86D2A5943FA00CDC5CC /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */; };
 		C07DF8722A5944FE00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */; };
 		C07DF8742A59463E00CDC5CC /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8732A59463E00CDC5CC /* SettingView.swift */; };
+		C07DF8762A5947C400CDC5CC /* CommonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8752A5947C400CDC5CC /* CommonLabel.swift */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
 		F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */; };
 		F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */; };
@@ -31,6 +32,7 @@
 		C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C07DF8732A59463E00CDC5CC /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		C07DF8752A5947C400CDC5CC /* CommonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonLabel.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 		F91E47A22A53F0B6008E07A9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C07DF8752A5947C400CDC5CC /* CommonLabel.swift */,
 				F91E47A92A569128008E07A9 /* UIColor+Extension.swift */,
 				C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */,
 			);
@@ -309,6 +312,7 @@
 				C07DF86D2A5943FA00CDC5CC /* MyPageView.swift in Sources */,
 				C07DF8722A5944FE00CDC5CC /* MyPageViewController.swift in Sources */,
 				C07DF8742A59463E00CDC5CC /* SettingView.swift in Sources */,
+				C07DF8762A5947C400CDC5CC /* CommonLabel.swift in Sources */,
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
 				F91E47B02A569681008E07A9 /* empty2.swift in Sources */,
 				C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */,
