@@ -137,7 +137,7 @@ class SettingView: UIView {
         
         settingTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(19)
-            make.leading.equalTo(backButton.snp.trailing).offset(8)
+            //make.leading.equalTo(backButton.snp.trailing).offset(8)
             make.centerX.equalToSuperview()
         }
         
