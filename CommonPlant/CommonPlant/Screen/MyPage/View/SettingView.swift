@@ -101,7 +101,22 @@ class SettingView: UIView {
     }
     
     func setHierarchy() {
+        addSubview(navigationBarView)
+        addSubview(alarmView)
+        addSubview(accountView)
+        addSubview(divideView)
         
+        navigationBarView.addSubview(settingTitleLabel)
+        navigationBarView.addSubview(backButton)
+        
+        alarmView.addSubview(alarmTitleLabel)
+        alarmView.addSubview(alarmSettingLabel)
+        alarmView.addSubview(alarmGuideLabel)
+        alarmView.addSubview(alarmToggleSwitch)
+        
+        accountView.addSubview(accountTitleLabel)
+        accountView.addSubview(logoutButton)
+        accountView.addSubview(withdrawalButton)
     }
     
     func setLayout() {
