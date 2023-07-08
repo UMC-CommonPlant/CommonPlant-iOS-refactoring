@@ -15,13 +15,13 @@ class SettingView: UIView {
     var navigationBarView = UIView()
     var settingTitleLabel = UILabel()
     var alarmView = UIView()
-    var alarmTitleLabel = UILabel()
+    var alarmTitleLabel = CommonLabel()
     var alarmSettingLabel = UILabel()
     var alarmGuideLabel = UILabel()
     var alarmToggleSwitch = UISwitch()
     var divideView = UIView()
     var accountView = UIView()
-    var accountTitleLabel = UILabel()
+    var accountTitleLabel = CommonLabel()
     var logoutButton = UIButton()
     var withdrawalButton = UIButton()
     var backButton = UIButton()
@@ -58,6 +58,7 @@ class SettingView: UIView {
         alarmTitleLabel.font = .bodyB1
         alarmTitleLabel.textAlignment = .left
         alarmTitleLabel.textColor = .black
+        alarmTitleLabel.padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 0)
         
         alarmSettingLabel.text = "알림 설정"
         alarmSettingLabel.font = .bodyM2
@@ -82,6 +83,7 @@ class SettingView: UIView {
         accountTitleLabel.font = .bodyB1
         accountTitleLabel.textAlignment = .left
         accountTitleLabel.textColor = .black
+        accountTitleLabel.padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 0)
         
         var logoutAttr = AttributedString.init("로그아웃")
         logoutAttr.font = .bodyM2
