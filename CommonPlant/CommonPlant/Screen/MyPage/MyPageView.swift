@@ -65,7 +65,16 @@ class MyPageView: UIView {
     }
     
     func setHierarchy() {
+        addSubview(backgroundView)
+        addSubview(userInfoView)
         
+        backgroundView.addSubview(baseView)
+        backgroundView.addSubview(userProfileView)
+        backgroundView.addSubview(settingButton)
+        
+        userInfoView.addSubview(userNameLabel)
+        userInfoView.addSubview(userEmailLabel)
+        userInfoView.addSubview(editButton)
     }
     
     func setLayout() {
