@@ -120,7 +120,20 @@ class EditUserInfoView: UIView {
     }
     
     func setHierarchy() {
+        addSubview(navigationBarView)
+        addSubview(userProfileView)
+        addSubview(userNickNameTextFiled)
+        addSubview(underlineView)
+        addSubview(countLabel)
+        addSubview(messageLabel)
+        addSubview(checkDuplicateButton)
+        addSubview(doneButton)
         
+        navigationBarView.addSubview(backButton)
+        navigationBarView.addSubview(editTitleLabel)
+        
+        userProfileView.addSubview(profileImageView)
+        userProfileView.addSubview(cameraImageView)
     }
     
     func setLayout() {
