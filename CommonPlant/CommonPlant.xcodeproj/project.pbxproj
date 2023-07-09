@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C059A2712A5A4B54005C0449 /* EditUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoView.swift */; };
 		C07DF86D2A5943FA00CDC5CC /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */; };
 		C07DF8722A5944FE00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */; };
 		C07DF8742A59463E00CDC5CC /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8732A59463E00CDC5CC /* SettingView.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C059A2702A5A4B54005C0449 /* EditUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoView.swift; sourceTree = "<group>"; };
 		C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C07DF8732A59463E00CDC5CC /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */,
 				C07DF8732A59463E00CDC5CC /* SettingView.swift */,
 				C07DF87D2A597A8600CDC5CC /* WithdrwalView.swift */,
+				C059A2702A5A4B54005C0449 /* EditUserInfoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				C07DF8842A59844400CDC5CC /* UIView+Extension.swift in Sources */,
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
 				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
+				C059A2712A5A4B54005C0449 /* EditUserInfoView.swift in Sources */,
 				F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */,
 				F91E47AE2A569679008E07A9 /* empty1.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageView.swift in Sources */,
