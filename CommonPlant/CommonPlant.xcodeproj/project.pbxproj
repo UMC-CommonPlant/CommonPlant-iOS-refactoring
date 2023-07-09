@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C059A2712A5A4B54005C0449 /* EditUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoView.swift */; };
+		C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2722A5AA995005C0449 /* UILabel+Extension.swift */; };
 		C07DF86D2A5943FA00CDC5CC /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */; };
 		C07DF8722A5944FE00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */; };
 		C07DF8742A59463E00CDC5CC /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8732A59463E00CDC5CC /* SettingView.swift */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		C059A2702A5A4B54005C0449 /* EditUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoView.swift; sourceTree = "<group>"; };
+		C059A2722A5AA995005C0449 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		C07DF86C2A5943FA00CDC5CC /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		C07DF8712A5944FE00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C07DF8732A59463E00CDC5CC /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				F91E47A92A569128008E07A9 /* UIColor+Extension.swift */,
 				C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */,
 				C07DF8832A59844400CDC5CC /* UIView+Extension.swift */,
+				C059A2722A5AA995005C0449 /* UILabel+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				C059A2712A5A4B54005C0449 /* EditUserInfoView.swift in Sources */,
 				F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */,
 				F91E47AE2A569679008E07A9 /* empty1.swift in Sources */,
+				C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageView.swift in Sources */,
 				C07DF8722A5944FE00CDC5CC /* MyPageViewController.swift in Sources */,
 				C07DF8742A59463E00CDC5CC /* SettingView.swift in Sources */,

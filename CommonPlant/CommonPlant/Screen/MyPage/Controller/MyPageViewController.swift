@@ -12,9 +12,10 @@ class MyPageViewController: UIViewController {
     let rootView = MyPageView()
     let settingView = SettingView()
     let withdrawView = WithdrwalView()
+    let editView = EditUserInfoView()
     
     override func loadView() {
-        self.view = withdrawView
+        self.view = editView
     }
     
     override func viewDidLoad() {
