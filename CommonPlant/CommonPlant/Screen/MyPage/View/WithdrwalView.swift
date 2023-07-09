@@ -23,6 +23,7 @@ class WithdrwalView: UIView {
     var leaveView = UIImageView()
     var leaveImage = UIImage()
     var guideLabel = UILabel()
+    var bottomView = UIView()
     var checkButton = UIButton()
     var confirmLabel = UILabel()
     var deleteButton = UIButton()
@@ -42,7 +43,7 @@ class WithdrwalView: UIView {
     
     // MARK: Custom Method
     func setUI() {
-        scrollView.backgroundColor = .white
+        backgroundColor = .white
         
         var backBtnConfig = UIButton.Configuration.plain()
         var checkBtnConfig = UIButton.Configuration.plain()
@@ -114,9 +115,11 @@ class WithdrwalView: UIView {
         
         contentView.addSubview(navigationBarView)
         contentView.addSubview(backgroundView)
-        contentView.addSubview(checkButton)
-        contentView.addSubview(confirmLabel)
-        contentView.addSubview(deleteButton)
+        contentView.addSubview(bottomView)
+        
+        bottomView.addSubview(checkButton)
+        bottomView.addSubview(confirmLabel)
+        bottomView.addSubview(deleteButton)
         
         navigationBarView.addSubview(withdrawalTitleLabel)
         navigationBarView.addSubview(backButton)
@@ -128,18 +131,18 @@ class WithdrwalView: UIView {
     
     func setLayout() {
         scrollView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.top.bottom.equalTo(self.safeAreaLayoutGuide)
             make.left.right.equalTo(self.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { make in
             make.top.left.right.bottom.equalTo(scrollView)
             make.width.equalToSuperview()
-            make.height.greaterThanOrEqualTo(700).priority(.low)
+            make.height.greaterThanOrEqualToSuperview().priority(.low)
         }
         
         navigationBarView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(56)
@@ -180,22 +183,28 @@ class WithdrwalView: UIView {
             make.trailing.equalToSuperview().offset(-20)
         }
         
+        bottomView.snp.makeConstraints { make in
+            make.top.equalTo(backgroundView.snp.bottom).offset(24)
+            make.left.right.bottom.equalToSuperview()
+        }
+        
         checkButton.snp.makeConstraints { make in
-            make.top.equalTo(backgroundView.snp.bottom).offset(40)
+            make.top.equalToSuperview().offset(16)
             make.leading.equalToSuperview().offset(20)
             make.width.height.equalTo(24)
         }
         
         confirmLabel.snp.makeConstraints { make in
-            make.top.equalTo(backgroundView.snp.bottom).offset(41)
+            make.top.equalToSuperview().offset(17)
             make.leading.equalTo(checkButton.snp.trailing).offset(12)
             make.height.equalTo(22)
         }
         
         deleteButton.snp.makeConstraints { make in
-            make.top.equalTo(backgroundView.snp.bottom).offset(96)
+            make.top.greaterThanOrEqualTo(confirmLabel.snp.bottom).offset(33)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
+            make.bottom.equalToSuperview().offset(-32)
             make.height.equalTo(48)
         }
     }

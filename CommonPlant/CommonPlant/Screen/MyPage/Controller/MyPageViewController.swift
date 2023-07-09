@@ -15,7 +15,7 @@ class MyPageViewController: UIViewController {
     let editView = EditUserInfoView()
     
     override func loadView() {
-        self.view = editView
+        self.view = withdrawView
     }
     
     override func viewDidLoad() {
