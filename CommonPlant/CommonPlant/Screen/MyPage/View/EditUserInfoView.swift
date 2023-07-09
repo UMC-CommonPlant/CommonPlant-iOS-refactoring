@@ -137,6 +137,78 @@ class EditUserInfoView: UIView {
     }
     
     func setLayout() {
+        navigationBarView.snp.makeConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(56)
+        }
         
+        backButton.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.left.equalToSuperview()
+            make.width.height.equalTo(56)
+        }
+        
+        editTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(19)
+            make.centerX.equalToSuperview()
+        }
+        
+        userProfileView.snp.makeConstraints { make in
+            make.top.equalTo(navigationBarView.snp.bottom).offset(24)
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(100)
+        }
+        
+        profileImageView.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+            make.width.height.equalTo(83.33)
+        }
+        
+        cameraImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(69.27)
+            make.left.equalToSuperview().offset(69.49)
+            make.width.height.equalTo(23.83)
+        }
+        
+        userNickNameTextFiled.snp.makeConstraints { make in
+            make.top.equalTo(userProfileView.snp.bottom).offset(16)
+            make.left.equalTo(20)
+            make.right.equalTo(-61)
+            make.height.equalTo(56)
+        }
+        
+        underlineView.snp.makeConstraints { make in
+            make.top.equalTo(userNickNameTextFiled.snp.bottom)
+            make.left.equalTo(20)
+            make.right.equalTo(-20)
+            make.height.equalTo(1.2)
+        }
+        
+        checkDuplicateButton.snp.makeConstraints { make in
+            make.centerY.equalTo(userNickNameTextFiled.snp.centerY)
+            make.right.equalTo(-20)
+            make.width.equalTo(73)
+            make.height.equalTo(36)
+        }
+        
+        countLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(userNickNameTextFiled.snp.centerY)
+            make.right.equalTo(-20)
+            make.height.equalTo(20)
+        }
+        
+        messageLabel.snp.makeConstraints { make in
+            make.top.equalTo(underlineView.snp.bottom).offset(8)
+            make.left.equalTo(20)
+            make.right.equalTo(-20)
+        }
+        
+        doneButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-43)
+            make.left.equalTo(20)
+            make.right.equalTo(-20)
+            make.height.equalTo(48)
+        }
     }
 }
