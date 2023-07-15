@@ -1,5 +1,5 @@
 //
-//  MyPageView.swift
+//  MyPageViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 2023/07/07.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MyPageView: UIView {
+class MyPageViewController: UIViewController {
     // MARK: Properties
     
     // MARK: UI Components
@@ -25,21 +25,16 @@ class MyPageView: UIView {
     let editButton = UIButton()
     
     // MARK: Life Cycle
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setUI()
         setHierarchy()
         setLayout()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: Custom Method
     func setUI() {
-        backgroundColor = .white
+        view.backgroundColor = .white
         
         var settingBtnConfig = UIButton.Configuration.plain()
         var editBtnConfig = UIButton.Configuration.plain()
@@ -65,8 +60,8 @@ class MyPageView: UIView {
     }
     
     func setHierarchy() {
-        addSubview(backgroundView)
-        addSubview(userInfoView)
+        view.addSubview(backgroundView)
+        view.addSubview(userInfoView)
         
         backgroundView.addSubview(baseView)
         backgroundView.addSubview(userProfileView)
@@ -79,7 +74,7 @@ class MyPageView: UIView {
     
     func setLayout() {
         backgroundView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide).offset(8)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(201)

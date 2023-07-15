@@ -1,5 +1,5 @@
 //
-//  EditUserInfoView.swift
+//  EditUserInfoViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 2023/07/09.
@@ -13,7 +13,7 @@ enum buttonType: String {
     case usable = "사용 가능한 닉네임입니다"
 }
 
-class EditUserInfoView: UIView {
+class EditUserInfoViewController: UIViewController {
     // MARK: Properties
     let maximumCount = 10
     var textCount: Int = 0
@@ -39,21 +39,16 @@ class EditUserInfoView: UIView {
     var doneButton = UIButton()
     
     // MARK: Life Cycle
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setUI()
         setHierarchy()
         setLayout()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: Custom Method
     func setUI() {
-        backgroundColor = .white
+        view.backgroundColor = .white
         
         var backBtnConfig = UIButton.Configuration.plain()
         var resetBtnConfig = UIButton.Configuration.plain()
@@ -120,14 +115,14 @@ class EditUserInfoView: UIView {
     }
     
     func setHierarchy() {
-        addSubview(navigationBarView)
-        addSubview(userProfileView)
-        addSubview(userNickNameTextFiled)
-        addSubview(underlineView)
-        addSubview(countLabel)
-        addSubview(messageLabel)
-        addSubview(checkDuplicateButton)
-        addSubview(doneButton)
+        view.addSubview(navigationBarView)
+        view.addSubview(userProfileView)
+        view.addSubview(userNickNameTextFiled)
+        view.addSubview(underlineView)
+        view.addSubview(countLabel)
+        view.addSubview(messageLabel)
+        view.addSubview(checkDuplicateButton)
+        view.addSubview(doneButton)
         
         navigationBarView.addSubview(backButton)
         navigationBarView.addSubview(editTitleLabel)
@@ -138,7 +133,7 @@ class EditUserInfoView: UIView {
     
     func setLayout() {
         navigationBarView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.left.right.equalToSuperview()
             make.height.equalTo(56)
         }

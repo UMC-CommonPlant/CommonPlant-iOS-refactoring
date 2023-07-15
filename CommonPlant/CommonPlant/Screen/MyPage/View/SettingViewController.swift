@@ -1,5 +1,5 @@
 //
-//  SettingView.swift
+//  SettingViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 2023/07/08.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SettingView: UIView {
+class SettingViewController: UIViewController {
     // MARK: Properties
     
     // MARK: UI Components
@@ -27,20 +27,16 @@ class SettingView: UIView {
     var backButton = UIButton()
     
     // MARK: Life Cycle
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setUI()
         setHierarchy()
         setLayout()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: Custom Method
     func setUI() {
-        backgroundColor = .white
+        view.backgroundColor = .white
         
         var logoutBtnConfig = UIButton.Configuration.plain()
         var withDrawalBtnConfig = UIButton.Configuration.plain()
@@ -103,10 +99,10 @@ class SettingView: UIView {
     }
     
     func setHierarchy() {
-        addSubview(navigationBarView)
-        addSubview(alarmView)
-        addSubview(accountView)
-        addSubview(divideView)
+        view.addSubview(navigationBarView)
+        view.addSubview(alarmView)
+        view.addSubview(accountView)
+        view.addSubview(divideView)
         
         navigationBarView.addSubview(settingTitleLabel)
         navigationBarView.addSubview(backButton)
@@ -123,7 +119,7 @@ class SettingView: UIView {
     
     func setLayout() {
         navigationBarView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(56)

@@ -1,5 +1,5 @@
 //
-//  WithdrwalView.swift
+//  WithdrwalViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 2023/07/08.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WithdrwalView: UIView {
+class WithdrwalViewController: UIViewController {
     // MARK: Properties
     var userNickName: String = "커먼"
     var isOnClickCheckBtn: Bool = false
@@ -29,21 +29,16 @@ class WithdrwalView: UIView {
     var deleteButton = UIButton()
     
     // MARK: Life Cycle
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setUI()
         setHierarchy()
         setLayout()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: Custom Method
     func setUI() {
-        backgroundColor = .white
+        view.backgroundColor = .white
         
         var backBtnConfig = UIButton.Configuration.plain()
         var checkBtnConfig = UIButton.Configuration.plain()
@@ -110,7 +105,7 @@ class WithdrwalView: UIView {
     }
     
     func setHierarchy() {
-        addSubview(scrollView)
+        view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
         contentView.addSubview(navigationBarView)
@@ -131,8 +126,8 @@ class WithdrwalView: UIView {
     
     func setLayout() {
         scrollView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.safeAreaLayoutGuide)
-            make.left.right.equalTo(self.safeAreaLayoutGuide)
+            make.top.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.left.right.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { make in
