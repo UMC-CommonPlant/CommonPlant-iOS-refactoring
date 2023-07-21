@@ -78,15 +78,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F91E479B2A53EE31008E07A9 /* Kingfisher in Frameworks */,
-<<<<<<< HEAD
-=======
 				F91E47952A53EDE1008E07A9 /* Moya in Frameworks */,
 				C086A08F2A62322000F1560D /* RxSwift in Frameworks */,
 				C086A08D2A62322000F1560D /* RxCocoa in Frameworks */,
->>>>>>> e88bea6b2198fa23e09e8e6853f987662f0bfe35
 				F91E47982A53EDFF008E07A9 /* SnapKit in Frameworks */,
 				F9A1FB1A2A619F2300F346DE /* RxMoya in Frameworks */,
-				F9A1FB182A619F2300F346DE /* Moya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,12 +195,9 @@
 		F91E47A12A53EFAC008E07A9 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
 				F9D0CCA52A583456006D688C /* UIViewController + Extension.swift */,
-=======
 				C07DF86E2A59440400CDC5CC /* MyPage */,
->>>>>>> e88bea6b2198fa23e09e8e6853f987662f0bfe35
 				F91E47A82A53F8B2008E07A9 /* Main */,
 			);
 			path = Screen;
@@ -317,13 +310,10 @@
 			packageProductDependencies = (
 				F91E47972A53EDFF008E07A9 /* SnapKit */,
 				F91E479A2A53EE31008E07A9 /* Kingfisher */,
-<<<<<<< HEAD
 				F9A1FB172A619F2300F346DE /* Moya */,
 				F9A1FB192A619F2300F346DE /* RxMoya */,
-=======
 				C086A08C2A62322000F1560D /* RxCocoa */,
 				C086A08E2A62322000F1560D /* RxSwift */,
->>>>>>> e88bea6b2198fa23e09e8e6853f987662f0bfe35
 			);
 			productName = CommonPlant;
 			productReference = F91E477C2A53E3C9008E07A9 /* CommonPlant.app */;
@@ -356,11 +346,8 @@
 			packageReferences = (
 				F91E47962A53EDFF008E07A9 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F91E47992A53EE31008E07A9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-<<<<<<< HEAD
 				F9A1FB162A619F2300F346DE /* XCRemoteSwiftPackageReference "Moya" */,
-=======
 				C086A08B2A62322000F1560D /* XCRemoteSwiftPackageReference "RxSwift" */,
->>>>>>> e88bea6b2198fa23e09e8e6853f987662f0bfe35
 			);
 			productRefGroup = F91E477D2A53E3C9008E07A9 /* Products */;
 			projectDirPath = "";
@@ -390,18 +377,15 @@
 			files = (
 				F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */,
 				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
-<<<<<<< HEAD
 				F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */,
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
 				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */,
 				F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */,
-=======
 				C07DF8842A59844400CDC5CC /* UIView+Extension.swift in Sources */,
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
 				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				C059A2712A5A4B54005C0449 /* EditUserInfoView.swift in Sources */,
->>>>>>> e88bea6b2198fa23e09e8e6853f987662f0bfe35
 				F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */,
 				F91E47AE2A569679008E07A9 /* empty1.swift in Sources */,
 				C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */,
@@ -634,8 +618,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-<<<<<<< HEAD
-=======
 		C086A08B2A62322000F1560D /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -644,15 +626,6 @@
 				minimumVersion = 6.0.0;
 			};
 		};
-		F91E47932A53EDE1008E07A9 /* XCRemoteSwiftPackageReference "Moya" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Moya/Moya.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 15.0.0;
-			};
-		};
->>>>>>> e88bea6b2198fa23e09e8e6853f987662f0bfe35
 		F91E47962A53EDFF008E07A9 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -680,8 +653,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-<<<<<<< HEAD
-=======
 		C086A08C2A62322000F1560D /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C086A08B2A62322000F1560D /* XCRemoteSwiftPackageReference "RxSwift" */;
@@ -692,12 +663,6 @@
 			package = C086A08B2A62322000F1560D /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
 		};
-		F91E47942A53EDE1008E07A9 /* Moya */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F91E47932A53EDE1008E07A9 /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = Moya;
-		};
->>>>>>> e88bea6b2198fa23e09e8e6853f987662f0bfe35
 		F91E47972A53EDFF008E07A9 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F91E47962A53EDFF008E07A9 /* XCRemoteSwiftPackageReference "SnapKit" */;
