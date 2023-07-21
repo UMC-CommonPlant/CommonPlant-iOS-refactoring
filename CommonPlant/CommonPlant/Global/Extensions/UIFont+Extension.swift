@@ -14,7 +14,7 @@ extension UIFont {
     }
     
     static func AppleSDGothicNeo(_ type: fontType, size: CGFloat) -> UIFont {
-        return UIFont(name: "AppleSDGothicNeo-\(type).rawValue", size: size)!
+        return UIFont(name: "AppleSDGothicNeo-\(type.rawValue)", size: size)!
     }
 }
 
