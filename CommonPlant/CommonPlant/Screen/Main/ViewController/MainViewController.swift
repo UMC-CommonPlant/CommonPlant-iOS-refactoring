@@ -65,7 +65,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         self.navigationController?.isNavigationBarHidden = true
         self.view.backgroundColor = UIColor(red: 0.95, green: 0.96, blue: 0.96, alpha: 1)
     }
-    
+        
     // MARK: - CollectionView
     func bindCollectionView() {
         viewModel.mainObservable
@@ -192,7 +192,7 @@ extension MainViewController {
             $0.left.right.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(scrollView.snp.bottom)
             $0.bottom.equalTo(self.view)
-            $0.height.equalTo(98)
+            $0.height.equalTo(MainTabBarController.tabBarHeight)
         }
         
         contentView.snp.makeConstraints {

@@ -8,7 +8,11 @@
 import UIKit
 
 class MainTabBarController: UITabBarController {
+    // MARK: - Properties
+    static var tabBarHeight = 98
+    private var imageInset = 13
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -26,14 +30,18 @@ class MainTabBarController: UITabBarController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var tabFrame = self.tabBar.frame
-        tabFrame.size.height = 98
-        tabFrame.origin.y = self.view.frame.size.height - 98
+        if self.view.safeAreaInsets.bottom == 0 {
+            MainTabBarController.tabBarHeight = 64
+        }
+        tabFrame.size.height = CGFloat(MainTabBarController.tabBarHeight)
+        tabFrame.origin.y = self.view.frame.size.height - CGFloat(MainTabBarController.tabBarHeight)
         self.tabBar.frame = tabFrame
     }
-    
+
+    // MARK: - UI
     private func configureUI() {
         tabBar.backgroundColor = .white
-        let infoViewController = ViewController()
+        let infoViewController = MainViewController()
         let calenderViewController = MainViewController()
         let mainViewController = UINavigationController(rootViewController: MainViewController())
         let profileViewController = MainViewController()
@@ -43,11 +51,14 @@ class MainTabBarController: UITabBarController {
         mainViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "main"), selectedImage: UIImage(named: "mainActive"))
         profileViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "profile"), selectedImage: UIImage(named: "profileActive"))
         
-        infoViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 13, left: 0, bottom: -13, right: 0)
-        calenderViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 13, left: 0, bottom: -13, right: 0)
-        mainViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 13, left: 0, bottom: -13, right: 0)
-        profileViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 13, left: 0, bottom: -13, right: 0)
+        if self.view.safeAreaInsets.bottom == 0 {
+            imageInset = 5
+        }
         
+        infoViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
+        calenderViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
+        mainViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
+        profileViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
         
         self.viewControllers = [infoViewController, calenderViewController, mainViewController, profileViewController]
     }
@@ -61,14 +72,5 @@ class MainTabBarController: UITabBarController {
         borderLayer.backgroundColor = topBorderColor
         
         tabBar.layer.addSublayer(borderLayer)
-    }
-}
-
-
-import SwiftUI
-
-struct TabBarControllerPreview: PreviewProvider {
-    static var previews: some View {
-        MainTabBarController().toPreview()
     }
 }
