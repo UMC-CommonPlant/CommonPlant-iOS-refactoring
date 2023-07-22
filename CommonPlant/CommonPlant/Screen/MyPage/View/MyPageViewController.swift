@@ -33,6 +33,7 @@ class MyPageViewController: UIViewController {
         setUI()
         setHierarchy()
         setLayout()
+        setAction()
     }
     
     // MARK: Custom Method
@@ -131,5 +132,18 @@ class MyPageViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-38.5)
             make.width.height.equalTo(56)
         }
+    }
+    
+    func setAction() {
+        settingButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.showSettingView(self)
+        }).disposed(by: disposeBag)
+        
+        
+        editButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.showEditView(self)
+        }).disposed(by: disposeBag)
     }
 }
