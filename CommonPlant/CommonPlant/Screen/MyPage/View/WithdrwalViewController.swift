@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class WithdrwalViewController: UIViewController {
     // MARK: Properties
-    var userNickName: String = "커먼"
-    var isOnClickCheckBtn: Bool = false
+    var viewModel = WithdrwalViewModel()
+    var disposeBag = DisposeBag()
     
     // MARK: UI Components
     var scrollView = UIScrollView()
@@ -27,6 +29,8 @@ class WithdrwalViewController: UIViewController {
     var checkButton = UIButton()
     var confirmLabel = UILabel()
     var deleteButton = UIButton()
+    var selectedGray = UIImage(named: "SelectedGray")
+    var unSelectedGray = UIImage(named: "UnselectedGray")
     
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -54,7 +58,9 @@ class WithdrwalViewController: UIViewController {
         
         backgroundView.backgroundColor = .seaGreen
         
-        warningTitleLabel.text = "\(userNickName)님 잠시만요!"
+        MyPageViewModel.shared.userSubject.subscribe(onNext: { [weak self] userInfo in
+            self?.warningTitleLabel.text = "\(userInfo.nickName)님 잠시만요!"
+        }).disposed(by: disposeBag)
         warningTitleLabel.font = .head5
         warningTitleLabel.textAlignment = .center
         warningTitleLabel.textColor = .black
@@ -64,27 +70,19 @@ class WithdrwalViewController: UIViewController {
         leaveView.image = leaveImage
         
         guideLabel.text = """
-        ● 회원 탈퇴 시 현재 계정으로 작성한 게시글, 댓글 등을 수정할 수 없습니다.
         
-        ● 탈퇴 후에는 계정을 다시 살리거나 데이터를 복구할 수 없습니다.
+        • 회원 탈퇴 시 현재 계정으로 작성한 게시글, 댓글 등을 수정할 수 없습니다.
         
-        ● 본 계정으로 다시는 로그인 할 수 없습니다.
+        • 탈퇴 후에는 계정을 다시 살리거나 데이터를 복구할 수 없습니다.
+        
+        • 본 계정으로 다시는 로그인 할 수 없습니다.
         """
-        guideLabel.font = .captionM1
+        guideLabel.font = .bodyM3
         guideLabel.textAlignment = .left
         guideLabel.textColor = .gray6
         guideLabel.numberOfLines = 0
         guideLabel.lineBreakMode = .byCharWrapping
         
-        checkButton.configurationUpdateHandler = { button in
-            if self.isOnClickCheckBtn {
-                button.configuration?.image = UIImage(named: "SelectedGray")
-                self.isOnClickCheckBtn = false
-            } else {
-                button.configuration?.image = UIImage(named: "UnselectedGray")
-                self.isOnClickCheckBtn = true
-            }
-        }
         checkBtnConfig.image = UIImage(named: "UnselectedGray")
         checkButton.configuration = checkBtnConfig
         
@@ -102,6 +100,7 @@ class WithdrwalViewController: UIViewController {
         deleteButton.contentHorizontalAlignment = .center
         deleteButton.backgroundColor = .gray1
         deleteButton.makeRound(radius: 8)
+        deleteButton.isEnabled = true
     }
     
     func setHierarchy() {

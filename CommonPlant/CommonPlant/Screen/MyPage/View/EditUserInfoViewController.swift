@@ -6,19 +6,14 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-enum buttonType: String {
-    case normal = ""
-    case unusable = "2~10자의 닉네임으로 입력해주세요 or 중복된 닉네임입니다"
-    case usable = "사용 가능한 닉네임입니다"
-}
-
-class EditUserInfoViewController: UIViewController {
+class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
+    var disposeBag = DisposeBag()
+    let viewModel = EditUserInfoViewModel()
     let maximumCount = 10
-    var textCount: Int = 0
-    var userNickName: String = "커먼플랜트"
-    var buttonState: buttonType = .normal
     
     // MARK: UI Components
     var navigationBarView = UIView()
@@ -32,7 +27,6 @@ class EditUserInfoViewController: UIViewController {
     var userNickNameTextFiled = UITextField()
     var completeButton = UIButton()
     var underlineView = UIView()
-    //var resetButton = UIButton()
     var countLabel = UILabel()
     var checkDuplicateButton = UIButton()
     var messageLabel = UILabel()
@@ -51,7 +45,6 @@ class EditUserInfoViewController: UIViewController {
         view.backgroundColor = .white
         
         var backBtnConfig = UIButton.Configuration.plain()
-        var resetBtnConfig = UIButton.Configuration.plain()
         var checkDupleBtnConfig = UIButton.Configuration.plain()
         var doneBtnConfig = UIButton.Configuration.plain()
         
@@ -69,18 +62,20 @@ class EditUserInfoViewController: UIViewController {
         cameraImage = UIImage(named: "Camera")!
         cameraImageView.image = cameraImage
         
+        MyPageViewModel.shared.userSubject.subscribe(onNext: { [weak self] userInfo in
+            self?.userNickNameTextFiled.attributedPlaceholder = NSAttributedString(string: userInfo.nickName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        }).disposed(by: disposeBag)
+        userNickNameTextFiled.delegate = self
         userNickNameTextFiled.font = .bodyM1
         userNickNameTextFiled.textAlignment = .left
         userNickNameTextFiled.textColor = .black
+        userNickNameTextFiled.tintColor = .black
         userNickNameTextFiled.clearButtonMode = .whileEditing
-        userNickNameTextFiled.attributedPlaceholder = NSAttributedString(string: userNickName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         userNickNameTextFiled.autocorrectionType = .no
         userNickNameTextFiled.spellCheckingType = .no
         userNickNameTextFiled.autocapitalizationType = .none
         userNickNameTextFiled.returnKeyType = .done
-        userNickNameTextFiled.resignFirstResponder()
-
-        underlineView.backgroundColor = .gray2
+        userNickNameTextFiled.clearsOnInsertion = true
         
         var checkDupleAttr = AttributedString.init("중복검사")
         checkDupleAttr.font = .bodyM3
@@ -93,7 +88,7 @@ class EditUserInfoViewController: UIViewController {
         checkDuplicateButton.makeRound(radius: 4)
         checkDuplicateButton.isHidden = true
         
-        countLabel.text = "\(textCount)/\(maximumCount)"
+        countLabel.text = "\(viewModel.textCount.value)/\(maximumCount)"
         countLabel.font = .bodyB3
         countLabel.textAlignment = .right
         countLabel.textColor = .black
@@ -102,12 +97,10 @@ class EditUserInfoViewController: UIViewController {
         
         var doneAttr = AttributedString.init("수정 완료")
         doneAttr.font = .bodyM2
-        doneAttr.foregroundColor = .gray3
         doneBtnConfig.attributedTitle = doneAttr
         
         doneButton.configuration = doneBtnConfig
         doneButton.contentHorizontalAlignment = .center
-        doneButton.backgroundColor = .gray1
         doneButton.makeRound(radius: 8)
         
         messageLabel.font = .captionM2

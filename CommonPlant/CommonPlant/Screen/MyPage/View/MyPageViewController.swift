@@ -7,20 +7,23 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import Kingfisher
 
 class MyPageViewController: UIViewController {
     // MARK: Properties
+    let viewModel = MyPageViewModel()
+    var disposeBag = DisposeBag()
     
     // MARK: UI Components
     let backgroundView = UIView()
     let baseView = UIImageView()
     var baseImage = UIImage(named: "ProfileBackground")!
     let userProfileView = UIImageView()
-    var userProfileImage = UIImage(named: "ProfileGreen")
     var settingButton = UIButton()
-    
     let userInfoView = UIView()
-    lazy var userNameLabel = UILabel()
+    var userNameLabel = UILabel()
     var userEmailLabel = UILabel()
     let editButton = UIButton()
     
@@ -46,14 +49,19 @@ class MyPageViewController: UIViewController {
         editButton.configuration = editBtnConfig
         
         baseView.image = baseImage
-        userProfileView.image = userProfileImage
+        userProfileView.image = viewModel.profileImgRelay.value!
         
-        userNameLabel.text = "커먼플랜트"
+        viewModel.userSubject.subscribe (onNext: { [weak self] userInfo in
+            guard let self = self else { return }
+            
+            userNameLabel.text = userInfo.nickName
+            userEmailLabel.text = userInfo.email
+        }).disposed(by: disposeBag)
+
         userNameLabel.font = .head4
         userNameLabel.textAlignment = .center
         userNameLabel.textColor = .black
         
-        userEmailLabel.text = "alwaysweave@gmail.com"
         userEmailLabel.font = .captionM1
         userEmailLabel.textAlignment = .center
         userEmailLabel.textColor = .gray5
