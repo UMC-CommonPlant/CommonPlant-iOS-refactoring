@@ -38,6 +38,7 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         setUI()
         setHierarchy()
         setLayout()
+        setAction()
     }
     
     // MARK: Custom Method
@@ -198,5 +199,93 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
             make.right.equalTo(-20)
             make.height.equalTo(48)
         }
+    }
+    
+    func setAction() {
+        backButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.dissmissView(self)
+        }).disposed(by: disposeBag)
+        
+        viewModel.buttonState.map { state -> (UIColor, UIColor, UIColor, Bool) in
+            self.messageLabel.isHidden = false
+            self.messageLabel.text = state.rawValue
+            
+            switch state {
+            case .normal:
+                return (.gray2!, .gray3!, .gray1!, false)
+            case .unusable:
+                return (.activeRed!, .gray3!, .gray1!, false)
+            case .usable:
+                return (.activeBlue!, .white, .seaGreenDark1!, true)
+            }
+        }.subscribe(onNext: { [weak self] color, foregroundColor, backgroundColor, isEnable in
+            guard let self = self else { return }
+            
+            var btnConfig = doneButton.configuration
+            var btnAttr = btnConfig?.attributedTitle
+            
+            btnAttr?.foregroundColor = foregroundColor
+            btnConfig?.attributedTitle = btnAttr
+            
+            doneButton.configuration = btnConfig
+            doneButton.backgroundColor = backgroundColor
+            doneButton.isEnabled = isEnable
+            
+            messageLabel.textColor = color
+            underlineView.backgroundColor = color
+        }).disposed(by: disposeBag)
+        
+        viewModel.textCount.subscribe(onNext: { [weak self] count in
+            guard let self = self else { return }
+            countLabel.text = "\(count)/\(maximumCount)"
+            countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
+        }).disposed(by: disposeBag)
+        
+        checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            
+            let state = viewModel.checkNickNameVaild(userNickNameTextFiled)
+            viewModel.buttonState.accept(state)
+            view.endEditing(true)
+        }).disposed(by: disposeBag)
+        
+        doneButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            doneButton.backgroundColor = .seaGreenDark3
+        }).disposed(by: disposeBag)
+        
+        userNickNameTextFiled.rx.text.orEmpty
+            .map(viewModel.checkNickNameCount(_:))
+            .subscribe(onNext: { [weak self] count in
+                guard let self = self else { return }
+                viewModel.textCount.accept(count)
+            }).disposed(by: disposeBag)
+        
+        userNickNameTextFiled.rx.controlEvent(.editingDidBegin)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                viewModel.buttonState.accept(.normal)
+                viewModel.textCount.accept(0)
+                
+                userNickNameTextFiled.placeholder = ""
+                userNickNameTextFiled.text = ""
+                
+                underlineView.backgroundColor = .black
+                
+                messageLabel.isHidden = true
+                countLabel.isHidden = false
+                checkDuplicateButton.isHidden = true
+            }).disposed(by: disposeBag)
+        
+        userNickNameTextFiled.rx.controlEvent(.editingDidEndOnExit)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                checkDuplicateButton.isHidden = false
+                countLabel.isHidden = true
+                underlineView.backgroundColor = .gray2
+                userNickNameTextFiled.resignFirstResponder()
+            })
+            .disposed(by: disposeBag)
     }
 }

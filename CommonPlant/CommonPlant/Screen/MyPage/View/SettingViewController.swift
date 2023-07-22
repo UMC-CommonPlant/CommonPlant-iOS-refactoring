@@ -41,6 +41,7 @@ class SettingViewController: UIViewController {
         setUI()
         setHierarchy()
         setLayout()
+        setAction()
     }
     
     // MARK: Custom Method
@@ -253,5 +254,32 @@ class SettingViewController: UIViewController {
         backgroundView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalTo(self.view)
         }
+    }
+    
+    func setAction() {
+        withdrawalButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.showWithdrwalView(self)
+        }).disposed(by: disposeBag)
+        
+        logoutButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            backgroundView.isHidden = false
+        }).disposed(by: disposeBag)
+        
+        okButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            // 로그아웃 로직
+        }).disposed(by: disposeBag)
+        
+        cancleButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            backgroundView.isHidden = true
+        }).disposed(by: disposeBag)
+        
+        backButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.dissmissView(self)
+        }).disposed(by: disposeBag)
     }
 }
