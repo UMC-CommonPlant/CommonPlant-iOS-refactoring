@@ -38,6 +38,7 @@ class WithdrwalViewController: UIViewController {
         setUI()
         setHierarchy()
         setLayout()
+        setAction()
     }
     
     // MARK: Custom Method
@@ -201,5 +202,45 @@ class WithdrwalViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-32)
             make.height.equalTo(48)
         }
+    }
+    
+    func setAction() {
+        backButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.dissmissView(self)
+        }).disposed(by: disposeBag)
+        
+        viewModel.isOnCheckBtn.map { isOn -> (UIColor, UIColor, UIImage, Bool) in
+            return isOn ? (.seaGreenDark1!, .white, self.selectedGray!, true) : (.gray1!, .gray3!, self.unSelectedGray!, false)
+        }
+        .subscribe(onNext: { [weak self] backgroundColor, titleColor, image, isEnable in
+            guard let self = self else { return }
+            var btnConfig = deleteButton.configuration
+            var btnAttr = btnConfig?.attributedTitle
+            
+            btnAttr?.foregroundColor = titleColor
+            btnConfig?.attributedTitle = btnAttr
+            deleteButton.configuration = btnConfig
+            deleteButton.backgroundColor = backgroundColor
+            
+            deleteButton.isEnabled = isEnable
+            
+            checkButton.configuration?.image = image
+        })
+        .disposed(by: disposeBag)
+        
+        checkButton.rx.tap.subscribe(onNext: { [weak self] button in
+            guard let self = self else { return }
+
+            viewModel.isOnCheckBtn.accept(!viewModel.isOnCheckBtn.value)
+        }).disposed(by: disposeBag)
+       
+        deleteButton.rx.tap.map { value -> UIColor in
+            return .seaGreenDark3!
+        }.subscribe(onNext: { [weak self] backgroundColor in
+            guard let self = self else { return }
+            deleteButton.backgroundColor = backgroundColor
+            // 탈퇴 로직
+        }).disposed(by: disposeBag)
     }
 }
