@@ -10,10 +10,12 @@ import RxSwift
 import RxCocoa
 
 class MyPageViewModel {
+    // 싱글톤 패턴으로 다른 ViewController에서도 접근 가능
     static let shared = MyPageViewModel()
     
     var userSubject: BehaviorSubject<UserInfo>
-    var profileImgRelay = BehaviorRelay<UIImage?>(value: nil)
+    var infoProfileRelay = BehaviorRelay<UIImage?>(value: nil)
+    var editProfileRelay = BehaviorRelay<UIImage?>(value: nil)
     var disposeBag = DisposeBag()
     
     init() {
@@ -25,14 +27,20 @@ class MyPageViewModel {
     }
 
     private func oberveUserInfo() {
-        userSubject.map { userInfo -> UIImage? in
+        userSubject.map { userInfo -> (UIImage?, UIImage?) in
             if userInfo.profileImgURL.isEmpty {
-                return UIImage(named: "ProfileGreen")
+                return (UIImage(named: "ProfileGreen"), UIImage(named: "ProfileGray"))
             } else {
-                return nil
+                // 이미지 다운 로직
+                return (nil, nil)
             }
         }
-        .bind(to: profileImgRelay)
+        .subscribe(onNext: { [weak self] info, edit in
+            self?.infoProfileRelay.accept(info)
+            if info != edit {
+                self?.editProfileRelay.accept(edit)
+            }
+        })
         .disposed(by: disposeBag)
     }
     

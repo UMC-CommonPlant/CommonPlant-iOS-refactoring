@@ -50,7 +50,7 @@ class MyPageViewController: UIViewController {
         editButton.configuration = editBtnConfig
         
         baseView.image = baseImage
-        userProfileView.image = viewModel.profileImgRelay.value!
+        userProfileView.image = viewModel.infoProfileRelay.value!
         
         viewModel.userSubject.subscribe (onNext: { [weak self] userInfo in
             guard let self = self else { return }

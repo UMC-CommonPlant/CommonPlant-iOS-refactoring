@@ -59,8 +59,9 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         editTitleLabel.textAlignment = .center
         editTitleLabel.textColor = .black
         
-        profileImageView.image = UIImage(named: "ProfileGray")!
-        
+        if let profileImage = MyPageViewModel.shared.editProfileRelay.value ?? MyPageViewModel.shared.infoProfileRelay.value {
+            profileImageView.image = profileImage
+        }
         cameraImage = UIImage(named: "Camera")!
         cameraImageView.image = cameraImage
         
