@@ -261,8 +261,11 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             
+            checkDuplicateButton.isHidden = true
+            
             let state = viewModel.checkNickNameVaild(userNickNameTextFiled)
             viewModel.buttonState.accept(state)
+            
             view.endEditing(true)
         }).disposed(by: disposeBag)
         

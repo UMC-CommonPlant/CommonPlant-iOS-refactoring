@@ -30,6 +30,7 @@ class SettingViewController: UIViewController {
     var backButton = UIButton()
     var backgroundView = UIView()
     var logoutView = UIView()
+    var logoutTitleLabel = UILabel()
     var logoutMessageLabel = UILabel()
     var buttonView = UIView()
     var okButton = UIButton()
@@ -117,25 +118,35 @@ class SettingViewController: UIViewController {
         
         logoutView.backgroundColor = .white
         logoutView.makeRound(radius: 14)
+        logoutView.isHidden = true
         
-        logoutMessageLabel.text = "로그아웃"
-        logoutMessageLabel.font = .bodyB2
-        logoutMessageLabel.textColor = .black
+        logoutTitleLabel.text = "로그아웃"
+        logoutTitleLabel.font = .bodyB2
+        logoutTitleLabel.textColor = .black
+        logoutTitleLabel.textAlignment = .center
+        
+        logoutMessageLabel.text = "로그아웃 하시겠나요?"
+        logoutMessageLabel.font = .bodyM3
+        logoutMessageLabel.textColor = .gray6
         logoutMessageLabel.textAlignment = .center
         
         buttonView.backgroundColor = .gray2
         
         var okAttr = AttributedString.init("확인")
         okAttr.font = .bodyB2
-        okAttr.foregroundColor = .seaGreenDark3
         okBtnConfig.attributedTitle = okAttr
+        okBtnConfig.baseBackgroundColor = .white
+        okBtnConfig.baseForegroundColor = .seaGreenDark3
+        okBtnConfig.background.cornerRadius = 0
         okButton.configuration = okBtnConfig
         okButton.contentHorizontalAlignment = .center
         
         var cancleAttr = AttributedString.init("취소")
         cancleAttr.font = .bodyM2
-        cancleAttr.foregroundColor = .gray5
         cancleBtnConfig.attributedTitle = cancleAttr
+        cancleBtnConfig.baseBackgroundColor = .white
+        cancleBtnConfig.baseForegroundColor = .gray5
+        cancleBtnConfig.background.cornerRadius = 0
         cancleButton.configuration = cancleBtnConfig
         cancleButton.contentHorizontalAlignment = .center
     }
@@ -159,8 +170,9 @@ class SettingViewController: UIViewController {
         accountView.addSubview(logoutButton)
         accountView.addSubview(withdrawalButton)
         
-        backgroundView.addSubview(logoutView)
+        view.addSubview(logoutView)
         
+        logoutView.addSubview(logoutTitleLabel)
         logoutView.addSubview(logoutMessageLabel)
         logoutView.addSubview(buttonView)
         
@@ -254,6 +266,45 @@ class SettingViewController: UIViewController {
         backgroundView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalTo(self.view)
         }
+        
+        logoutView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(52.5)
+            make.trailing.equalToSuperview().offset(-52.5)
+            make.height.equalTo(148)
+        }
+        
+        logoutTitleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(33)
+        }
+        
+        logoutMessageLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(logoutTitleLabel.snp.bottom).offset(5)
+        }
+        
+        buttonView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(104)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(44)
+        }
+        
+        cancleButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalTo((view.frame.width - 105)/2 - 0.25)
+            make.height.equalTo(43.5)
+        }
+        
+        okButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalTo((view.frame.width - 105)/2 - 0.25)
+            make.height.equalTo(43.5)
+        }
     }
     
     func setAction() {
@@ -265,6 +316,7 @@ class SettingViewController: UIViewController {
         logoutButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             backgroundView.isHidden = false
+            logoutView.isHidden = false
         }).disposed(by: disposeBag)
         
         okButton.rx.tap.subscribe(onNext: { [weak self] in
@@ -275,6 +327,7 @@ class SettingViewController: UIViewController {
         cancleButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             backgroundView.isHidden = true
+            logoutView.isHidden = true
         }).disposed(by: disposeBag)
         
         backButton.rx.tap.subscribe(onNext: { [weak self] in
