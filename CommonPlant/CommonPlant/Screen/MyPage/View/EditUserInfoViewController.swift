@@ -104,7 +104,7 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         messageLabel.font = .captionM2
         messageLabel.textAlignment = .left
         
-        viewModel.buttonState.map { state -> (UIColor, UIColor, UIColor, Bool) in
+        viewModel.nickNameState.map { state -> (UIColor, UIColor, UIColor, Bool) in
             self.messageLabel.isHidden = false
             self.messageLabel.text = state.rawValue
             
@@ -236,6 +236,22 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
             viewModel.dissmissView(self)
         }).disposed(by: disposeBag)
         
+        checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            
+            checkDuplicateButton.isHidden = true
+            
+            let state = viewModel.checkNickNameVaild(userNickNameTextFiled)
+            viewModel.nickNameState.accept(state)
+            
+            view.endEditing(true)
+        }).disposed(by: disposeBag)
+        
+        doneButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            doneButton.backgroundColor = .seaGreenDark3
+        }).disposed(by: disposeBag)
+        
         profileImageView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { gesture in
@@ -250,22 +266,6 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
             })
             .disposed(by: disposeBag)
         
-        checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else { return }
-            
-            checkDuplicateButton.isHidden = true
-            
-            let state = viewModel.checkNickNameVaild(userNickNameTextFiled)
-            viewModel.buttonState.accept(state)
-            
-            view.endEditing(true)
-        }).disposed(by: disposeBag)
-        
-        doneButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else { return }
-            doneButton.backgroundColor = .seaGreenDark3
-        }).disposed(by: disposeBag)
-        
         userNickNameTextFiled.rx.text.orEmpty
             .map(viewModel.checkNickNameCount(_:))
             .subscribe(onNext: { [weak self] count in
@@ -276,7 +276,7 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         userNickNameTextFiled.rx.controlEvent(.editingDidBegin)
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                viewModel.buttonState.accept(.normal)
+                viewModel.nickNameState.accept(.normal)
                 viewModel.textCount.accept(0)
                 
                 userNickNameTextFiled.placeholder = ""
@@ -313,9 +313,7 @@ extension EditUserInfoViewController: PHPickerViewControllerDelegate {
                 DispatchQueue.main.async {
                     self.profileImageView.image = image as? UIImage
                     self.profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
-                    self.viewModel.buttonState.accept(.usable)
-                    self.underlineView.backgroundColor = .gray2
-                    self.messageLabel.text = ""
+                    self.viewModel.profileImgState.accept(.usable)
                 }
             }
         }
