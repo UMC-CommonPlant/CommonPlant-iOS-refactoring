@@ -25,7 +25,7 @@ class EditUserInfoViewModel {
 
     func checkNickNameVaild(_ textField: UITextField) -> buttonType {
         guard let text = textField.text else { return .normal }
-        if text.count > 2 && text.count < 10 {
+        if text.count > 1 && text.count < 10 {
             return .usable
         } else {
             return .unusable

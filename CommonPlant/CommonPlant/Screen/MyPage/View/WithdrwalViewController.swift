@@ -95,13 +95,23 @@ class WithdrwalViewController: UIViewController {
         var deleteAttr = AttributedString.init("계정 삭제하기")
         deleteAttr.font = .bodyM2
         deleteAttr.foregroundColor = .gray3
-        deleteBtnConfig.attributedTitle = deleteAttr
-        
-        deleteButton.configuration = deleteBtnConfig
         deleteButton.contentHorizontalAlignment = .center
-        deleteButton.backgroundColor = .gray1
         deleteButton.makeRound(radius: 8)
-        deleteButton.isEnabled = true
+        
+        viewModel.isOnCheckBtn.map { isOn -> (UIColor, UIColor, UIImage, Bool) in
+            return isOn ? (.seaGreenDark1!, .white, self.selectedGray!, true) : (.gray1!, .gray3!, self.unSelectedGray!, false)
+        }
+        .subscribe(onNext: { [weak self] backgroundColor, titleColor, image, isEnable in
+            guard let self = self else { return }
+            deleteAttr.foregroundColor = titleColor
+            deleteBtnConfig.attributedTitle = deleteAttr
+            deleteButton.configuration = deleteBtnConfig
+            deleteButton.backgroundColor = backgroundColor
+            deleteButton.isEnabled = isEnable
+            
+            checkButton.configuration?.image = image
+        })
+        .disposed(by: disposeBag)
     }
     
     func setHierarchy() {
@@ -209,25 +219,6 @@ class WithdrwalViewController: UIViewController {
             guard let self = self else { return }
             viewModel.dissmissView(self)
         }).disposed(by: disposeBag)
-        
-        viewModel.isOnCheckBtn.map { isOn -> (UIColor, UIColor, UIImage, Bool) in
-            return isOn ? (.seaGreenDark1!, .white, self.selectedGray!, true) : (.gray1!, .gray3!, self.unSelectedGray!, false)
-        }
-        .subscribe(onNext: { [weak self] backgroundColor, titleColor, image, isEnable in
-            guard let self = self else { return }
-            var btnConfig = deleteButton.configuration
-            var btnAttr = btnConfig?.attributedTitle
-            
-            btnAttr?.foregroundColor = titleColor
-            btnConfig?.attributedTitle = btnAttr
-            deleteButton.configuration = btnConfig
-            deleteButton.backgroundColor = backgroundColor
-            
-            deleteButton.isEnabled = isEnable
-            
-            checkButton.configuration?.image = image
-        })
-        .disposed(by: disposeBag)
         
         checkButton.rx.tap.subscribe(onNext: { [weak self] button in
             guard let self = self else { return }

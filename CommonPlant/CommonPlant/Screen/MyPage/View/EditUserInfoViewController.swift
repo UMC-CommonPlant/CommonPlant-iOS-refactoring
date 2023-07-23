@@ -91,23 +91,50 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         checkDuplicateButton.makeRound(radius: 4)
         checkDuplicateButton.isHidden = true
         
-        countLabel.text = "\(viewModel.textCount.value)/\(maximumCount)"
         countLabel.font = .bodyB3
         countLabel.textAlignment = .right
         countLabel.textColor = .black
         countLabel.isHidden = true
-        countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
         
         var doneAttr = AttributedString.init("수정 완료")
         doneAttr.font = .bodyM2
-        doneBtnConfig.attributedTitle = doneAttr
-        
-        doneButton.configuration = doneBtnConfig
         doneButton.contentHorizontalAlignment = .center
         doneButton.makeRound(radius: 8)
         
         messageLabel.font = .captionM2
         messageLabel.textAlignment = .left
+        
+        viewModel.buttonState.map { state -> (UIColor, UIColor, UIColor, Bool) in
+            self.messageLabel.isHidden = false
+            self.messageLabel.text = state.rawValue
+            
+            switch state {
+            case .normal:
+                return (.gray2!, .gray3!, .gray1!, false)
+            case .unusable:
+                return (.activeRed!, .gray3!, .gray1!, false)
+            case .usable:
+                return (.activeBlue!, .white, .seaGreenDark1!, true)
+            }
+        }.subscribe(onNext: { [weak self] color, foregroundColor, backgroundColor, isEnable in
+            guard let self = self else { return }
+            
+            doneAttr.foregroundColor = foregroundColor
+            doneBtnConfig.attributedTitle = doneAttr
+            
+            doneButton.configuration = doneBtnConfig
+            doneButton.backgroundColor = backgroundColor
+            doneButton.isEnabled = isEnable
+            
+            messageLabel.textColor = color
+            underlineView.backgroundColor = color
+        }).disposed(by: disposeBag)
+        
+        viewModel.textCount.subscribe(onNext: { [weak self] count in
+            guard let self = self else { return }
+            countLabel.text = "\(count)/\(maximumCount)"
+            countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
+        }).disposed(by: disposeBag)
     }
     
     func setHierarchy() {
@@ -222,41 +249,6 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
                 self.present(picker, animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
-        
-        viewModel.buttonState.map { state -> (UIColor, UIColor, UIColor, Bool) in
-            self.messageLabel.isHidden = false
-            self.messageLabel.text = state.rawValue
-            
-            switch state {
-            case .normal:
-                return (.gray2!, .gray3!, .gray1!, false)
-            case .unusable:
-                return (.activeRed!, .gray3!, .gray1!, false)
-            case .usable:
-                return (.activeBlue!, .white, .seaGreenDark1!, true)
-            }
-        }.subscribe(onNext: { [weak self] color, foregroundColor, backgroundColor, isEnable in
-            guard let self = self else { return }
-            
-            var btnConfig = doneButton.configuration
-            var btnAttr = btnConfig?.attributedTitle
-            
-            btnAttr?.foregroundColor = foregroundColor
-            btnConfig?.attributedTitle = btnAttr
-            
-            doneButton.configuration = btnConfig
-            doneButton.backgroundColor = backgroundColor
-            doneButton.isEnabled = isEnable
-            
-            messageLabel.textColor = color
-            underlineView.backgroundColor = color
-        }).disposed(by: disposeBag)
-        
-        viewModel.textCount.subscribe(onNext: { [weak self] count in
-            guard let self = self else { return }
-            countLabel.text = "\(count)/\(maximumCount)"
-            countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
-        }).disposed(by: disposeBag)
         
         checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
