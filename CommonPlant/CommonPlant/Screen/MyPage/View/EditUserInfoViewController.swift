@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import PhotosUI
 
 class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
@@ -56,9 +57,9 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         editTitleLabel.font = .bodyB1
         editTitleLabel.textAlignment = .center
         editTitleLabel.textColor = .black
-        
-        profileImage = UIImage(named: "ProfileGray")!
-        profileImageView.image = profileImage
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(profileDidTap))
+        userProfileView.addGestureRecognizer(tapGestureRecognizer)
+        profileImageView.image = UIImage(named: "ProfileGray")!
         
         cameraImage = UIImage(named: "Camera")!
         cameraImageView.image = cameraImage
@@ -288,4 +289,37 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
             })
             .disposed(by: disposeBag)
     }
+    
+    @objc func profileDidTap() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        
+        picker.delegate = self
+        
+        self.present(picker, animated: true, completion: nil)
+    }
 }
+
+extension EditUserInfoViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
+                DispatchQueue.main.async {
+                    self.profileImageView.image = image as? UIImage
+                    self.profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
+                    self.viewModel.buttonState.accept(.usable)
+                    self.underlineView.backgroundColor = .gray2
+                    self.messageLabel.text = ""
+                }
+            }
+        }
+    }
+}
+
