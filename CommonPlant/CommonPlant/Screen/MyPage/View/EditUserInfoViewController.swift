@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxGesture
 import PhotosUI
 
 class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
@@ -57,8 +58,7 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         editTitleLabel.font = .bodyB1
         editTitleLabel.textAlignment = .center
         editTitleLabel.textColor = .black
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(profileDidTap))
-        userProfileView.addGestureRecognizer(tapGestureRecognizer)
+        
         profileImageView.image = UIImage(named: "ProfileGray")!
         
         cameraImage = UIImage(named: "Camera")!
@@ -208,6 +208,20 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
             viewModel.dissmissView(self)
         }).disposed(by: disposeBag)
         
+        profileImageView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { gesture in
+                var configuration = PHPickerConfiguration()
+                configuration.filter = .images
+                
+                let picker = PHPickerViewController(configuration: configuration)
+                
+                picker.delegate = self
+                
+                self.present(picker, animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+        
         viewModel.buttonState.map { state -> (UIColor, UIColor, UIColor, Bool) in
             self.messageLabel.isHidden = false
             self.messageLabel.text = state.rawValue
@@ -288,17 +302,6 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
                 userNickNameTextFiled.resignFirstResponder()
             })
             .disposed(by: disposeBag)
-    }
-    
-    @objc func profileDidTap() {
-        var configuration = PHPickerConfiguration()
-        configuration.filter = .images
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        
-        picker.delegate = self
-        
-        self.present(picker, animated: true, completion: nil)
     }
 }
 
