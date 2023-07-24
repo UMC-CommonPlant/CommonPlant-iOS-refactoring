@@ -9,7 +9,7 @@ import UIKit
 
 extension UIColor {
     // Primary Color
-    class var seaGreen: UIColor? { return UIColor(named: "SeaGreen") }
+    class var seaGreen: UIColor? { return UIColor(named: "SeaGreenBG") }
     class var seaGreenDark1: UIColor? { return UIColor(named: "SeaGreenDark1") }
     class var seaGreenDark2: UIColor? { return UIColor(named: "SeaGreenDark2") }
     class var seaGreenDark3: UIColor? { return UIColor(named: "SeaGreenDark3") }
