@@ -1,16 +1,18 @@
 //
-//  WithdrwalView.swift
+//  WithdrwalViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 2023/07/08.
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-class WithdrwalView: UIView {
+class WithdrwalViewController: UIViewController {
     // MARK: Properties
-    var userNickName: String = "커먼"
-    var isOnClickCheckBtn: Bool = false
+    var viewModel = WithdrwalViewModel()
+    var disposeBag = DisposeBag()
     
     // MARK: UI Components
     var scrollView = UIScrollView()
@@ -27,23 +29,21 @@ class WithdrwalView: UIView {
     var checkButton = UIButton()
     var confirmLabel = UILabel()
     var deleteButton = UIButton()
+    var selectedGray = UIImage(named: "SelectedGray")
+    var unSelectedGray = UIImage(named: "UnselectedGray")
     
     // MARK: Life Cycle
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setUI()
         setHierarchy()
         setLayout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        setAction()
     }
     
     // MARK: Custom Method
     func setUI() {
-        backgroundColor = .white
+        view.backgroundColor = .white
         
         var backBtnConfig = UIButton.Configuration.plain()
         var checkBtnConfig = UIButton.Configuration.plain()
@@ -59,7 +59,9 @@ class WithdrwalView: UIView {
         
         backgroundView.backgroundColor = .seaGreen
         
-        warningTitleLabel.text = "\(userNickName)님 잠시만요!"
+        MyPageViewModel.shared.userSubject.subscribe(onNext: { [weak self] userInfo in
+            self?.warningTitleLabel.text = "\(userInfo.nickName)님 잠시만요!"
+        }).disposed(by: disposeBag)
         warningTitleLabel.font = .head5
         warningTitleLabel.textAlignment = .center
         warningTitleLabel.textColor = .black
@@ -69,27 +71,19 @@ class WithdrwalView: UIView {
         leaveView.image = leaveImage
         
         guideLabel.text = """
-        ● 회원 탈퇴 시 현재 계정으로 작성한 게시글, 댓글 등을 수정할 수 없습니다.
         
-        ● 탈퇴 후에는 계정을 다시 살리거나 데이터를 복구할 수 없습니다.
+        • 회원 탈퇴 시 현재 계정으로 작성한 게시글, 댓글 등을 수정할 수 없습니다.
         
-        ● 본 계정으로 다시는 로그인 할 수 없습니다.
+        • 탈퇴 후에는 계정을 다시 살리거나 데이터를 복구할 수 없습니다.
+        
+        • 본 계정으로 다시는 로그인 할 수 없습니다.
         """
-        guideLabel.font = .captionM1
+        guideLabel.font = .bodyM3
         guideLabel.textAlignment = .left
         guideLabel.textColor = .gray6
         guideLabel.numberOfLines = 0
         guideLabel.lineBreakMode = .byCharWrapping
         
-        checkButton.configurationUpdateHandler = { button in
-            if self.isOnClickCheckBtn {
-                button.configuration?.image = UIImage(named: "SelectedGray")
-                self.isOnClickCheckBtn = false
-            } else {
-                button.configuration?.image = UIImage(named: "UnselectedGray")
-                self.isOnClickCheckBtn = true
-            }
-        }
         checkBtnConfig.image = UIImage(named: "UnselectedGray")
         checkButton.configuration = checkBtnConfig
         
@@ -101,16 +95,27 @@ class WithdrwalView: UIView {
         var deleteAttr = AttributedString.init("계정 삭제하기")
         deleteAttr.font = .bodyM2
         deleteAttr.foregroundColor = .gray3
-        deleteBtnConfig.attributedTitle = deleteAttr
-        
-        deleteButton.configuration = deleteBtnConfig
         deleteButton.contentHorizontalAlignment = .center
-        deleteButton.backgroundColor = .gray1
         deleteButton.makeRound(radius: 8)
+        
+        viewModel.isOnCheckBtn.map { isOn -> (UIColor, UIColor, UIImage, Bool) in
+            return isOn ? (.seaGreenDark1!, .white, self.selectedGray!, true) : (.gray1!, .gray3!, self.unSelectedGray!, false)
+        }
+        .subscribe(onNext: { [weak self] backgroundColor, titleColor, image, isEnable in
+            guard let self = self else { return }
+            deleteAttr.foregroundColor = titleColor
+            deleteBtnConfig.attributedTitle = deleteAttr
+            deleteButton.configuration = deleteBtnConfig
+            deleteButton.backgroundColor = backgroundColor
+            deleteButton.isEnabled = isEnable
+            
+            checkButton.configuration?.image = image
+        })
+        .disposed(by: disposeBag)
     }
     
     func setHierarchy() {
-        addSubview(scrollView)
+        view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
         contentView.addSubview(navigationBarView)
@@ -131,8 +136,8 @@ class WithdrwalView: UIView {
     
     func setLayout() {
         scrollView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.safeAreaLayoutGuide)
-            make.left.right.equalTo(self.safeAreaLayoutGuide)
+            make.top.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.left.right.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { make in
@@ -207,5 +212,26 @@ class WithdrwalView: UIView {
             make.bottom.equalToSuperview().offset(-32)
             make.height.equalTo(48)
         }
+    }
+    
+    func setAction() {
+        backButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.dissmissView(self)
+        }).disposed(by: disposeBag)
+        
+        checkButton.rx.tap.subscribe(onNext: { [weak self] button in
+            guard let self = self else { return }
+
+            viewModel.isOnCheckBtn.accept(!viewModel.isOnCheckBtn.value)
+        }).disposed(by: disposeBag)
+       
+        deleteButton.rx.tap.map { value -> UIColor in
+            return .seaGreenDark3!
+        }.subscribe(onNext: { [weak self] backgroundColor in
+            guard let self = self else { return }
+            deleteButton.backgroundColor = backgroundColor
+            // 탈퇴 로직
+        }).disposed(by: disposeBag)
     }
 }

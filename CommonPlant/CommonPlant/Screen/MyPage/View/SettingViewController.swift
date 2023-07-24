@@ -1,5 +1,5 @@
 //
-//  SettingView.swift
+//  SettingViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 2023/07/08.
@@ -7,9 +7,12 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
-class SettingView: UIView {
+class SettingViewController: UIViewController {
     // MARK: Properties
+    let viewModel = SettingViewModel()
+    var disposeBag = DisposeBag()
     
     // MARK: UI Components
     var navigationBarView = UIView()
@@ -25,26 +28,32 @@ class SettingView: UIView {
     var logoutButton = UIButton()
     var withdrawalButton = UIButton()
     var backButton = UIButton()
+    var backgroundView = UIView()
+    var logoutView = UIView()
+    var logoutTitleLabel = UILabel()
+    var logoutMessageLabel = UILabel()
+    var buttonView = UIView()
+    var okButton = UIButton()
+    var cancleButton = UIButton()
     
     // MARK: Life Cycle
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setUI()
         setHierarchy()
         setLayout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        setAction()
     }
     
     // MARK: Custom Method
     func setUI() {
-        backgroundColor = .white
+        view.backgroundColor = .white
         
         var logoutBtnConfig = UIButton.Configuration.plain()
         var withDrawalBtnConfig = UIButton.Configuration.plain()
         var backBtnConfig = UIButton.Configuration.plain()
+        var okBtnConfig = UIButton.Configuration.filled()
+        var cancleBtnConfig = UIButton.Configuration.filled()
         
         backBtnConfig.image = UIImage(named: "Back")
         backButton.configuration = backBtnConfig
@@ -70,11 +79,13 @@ class SettingView: UIView {
         alarmGuideLabel.textAlignment = .left
         alarmGuideLabel.textColor = .seaGreenDark3
         
-        alarmToggleSwitch.setOn(true, animated: true)
+        viewModel.isActiveNotification.subscribe(onNext: { [weak self] isOn in
+            self?.alarmToggleSwitch.setOn(isOn, animated: true)
+        })
+        .disposed(by: disposeBag)
         alarmToggleSwitch.onTintColor = .seaGreenDark1
-        alarmToggleSwitch.thumbTintColor = .white
         alarmToggleSwitch.tintColor = .gray3
-        alarmToggleSwitch.isOn = false
+        alarmToggleSwitch.thumbTintColor = .white
         alarmToggleSwitch.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         
         divideView.backgroundColor = .gray1
@@ -100,13 +111,52 @@ class SettingView: UIView {
         withDrawalBtnConfig.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 16, bottom: 20, trailing: 20)
         withdrawalButton.configuration = withDrawalBtnConfig
         withdrawalButton.contentHorizontalAlignment = .left
+        
+        backgroundView.backgroundColor = .black
+        backgroundView.layer.opacity = 0.7
+        backgroundView.isHidden = true
+        
+        logoutView.backgroundColor = .white
+        logoutView.makeRound(radius: 14)
+        logoutView.isHidden = true
+        
+        logoutTitleLabel.text = "로그아웃"
+        logoutTitleLabel.font = .bodyB2
+        logoutTitleLabel.textColor = .black
+        logoutTitleLabel.textAlignment = .center
+        
+        logoutMessageLabel.text = "로그아웃 하시겠나요?"
+        logoutMessageLabel.font = .bodyM3
+        logoutMessageLabel.textColor = .gray6
+        logoutMessageLabel.textAlignment = .center
+        
+        buttonView.backgroundColor = .gray2
+        
+        var okAttr = AttributedString.init("확인")
+        okAttr.font = .bodyB2
+        okBtnConfig.attributedTitle = okAttr
+        okBtnConfig.baseBackgroundColor = .white
+        okBtnConfig.baseForegroundColor = .seaGreenDark3
+        okBtnConfig.background.cornerRadius = 0
+        okButton.configuration = okBtnConfig
+        okButton.contentHorizontalAlignment = .center
+        
+        var cancleAttr = AttributedString.init("취소")
+        cancleAttr.font = .bodyM2
+        cancleBtnConfig.attributedTitle = cancleAttr
+        cancleBtnConfig.baseBackgroundColor = .white
+        cancleBtnConfig.baseForegroundColor = .gray5
+        cancleBtnConfig.background.cornerRadius = 0
+        cancleButton.configuration = cancleBtnConfig
+        cancleButton.contentHorizontalAlignment = .center
     }
     
     func setHierarchy() {
-        addSubview(navigationBarView)
-        addSubview(alarmView)
-        addSubview(accountView)
-        addSubview(divideView)
+        view.addSubview(navigationBarView)
+        view.addSubview(alarmView)
+        view.addSubview(accountView)
+        view.addSubview(divideView)
+        view.addSubview(backgroundView)
         
         navigationBarView.addSubview(settingTitleLabel)
         navigationBarView.addSubview(backButton)
@@ -119,11 +169,20 @@ class SettingView: UIView {
         accountView.addSubview(accountTitleLabel)
         accountView.addSubview(logoutButton)
         accountView.addSubview(withdrawalButton)
+        
+        view.addSubview(logoutView)
+        
+        logoutView.addSubview(logoutTitleLabel)
+        logoutView.addSubview(logoutMessageLabel)
+        logoutView.addSubview(buttonView)
+        
+        buttonView.addSubview(okButton)
+        buttonView.addSubview(cancleButton)
     }
     
     func setLayout() {
         navigationBarView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(56)
@@ -137,7 +196,6 @@ class SettingView: UIView {
         
         settingTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(19)
-            //make.leading.equalTo(backButton.snp.trailing).offset(8)
             make.centerX.equalToSuperview()
         }
         
@@ -162,10 +220,8 @@ class SettingView: UIView {
         }
         
         alarmToggleSwitch.snp.makeConstraints { make in
-            make.top.equalTo(alarmTitleLabel.snp.bottom).offset(24)
+            make.top.equalTo(alarmTitleLabel.snp.bottom).offset(23)
             make.trailing.equalToSuperview().offset(-36)
-            //make.width.equalTo(40)
-            //make.height.equalTo(24)
         }
         
         alarmGuideLabel.snp.makeConstraints { make in
@@ -206,5 +262,77 @@ class SettingView: UIView {
             make.trailing.equalToSuperview().offset(20)
             make.height.equalTo(62)
         }
+        
+        backgroundView.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalTo(self.view)
+        }
+        
+        logoutView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(52.5)
+            make.trailing.equalToSuperview().offset(-52.5)
+            make.height.equalTo(148)
+        }
+        
+        logoutTitleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(33)
+        }
+        
+        logoutMessageLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(logoutTitleLabel.snp.bottom).offset(5)
+        }
+        
+        buttonView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(104)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(44)
+        }
+        
+        cancleButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalTo((view.frame.width - 105)/2 - 0.25)
+            make.height.equalTo(43.5)
+        }
+        
+        okButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalTo((view.frame.width - 105)/2 - 0.25)
+            make.height.equalTo(43.5)
+        }
+    }
+    
+    func setAction() {
+        withdrawalButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.showWithdrwalView(self)
+        }).disposed(by: disposeBag)
+        
+        logoutButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            backgroundView.isHidden = false
+            logoutView.isHidden = false
+        }).disposed(by: disposeBag)
+        
+        okButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            // 로그아웃 로직
+        }).disposed(by: disposeBag)
+        
+        cancleButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            backgroundView.isHidden = true
+            logoutView.isHidden = true
+        }).disposed(by: disposeBag)
+        
+        backButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.dissmissView(self)
+        }).disposed(by: disposeBag)
     }
 }
