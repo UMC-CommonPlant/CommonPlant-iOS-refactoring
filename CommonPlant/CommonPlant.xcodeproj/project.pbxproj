@@ -25,6 +25,8 @@
 		C086A08F2A62322000F1560D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C086A08E2A62322000F1560D /* RxSwift */; };
 		C0A0D4DD2A73E96800426514 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4DA2A73E96800426514 /* SignUpViewModel.swift */; };
 		C0A0D4DE2A73E96800426514 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4DB2A73E96800426514 /* UserModel.swift */; };
+		C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */; };
+		C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4E12A73EAE200426514 /* PrivacyViewModel.swift */; };
 		C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */; };
 		C0A5AFFB2A6CF2AE00C8248D /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = C0A5AFFA2A6CF2AE00C8248D /* RxGesture */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
@@ -65,6 +67,8 @@
 		C085BFBE2A71686E00188C02 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		C0A0D4DA2A73E96800426514 /* SignUpViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		C0A0D4DB2A73E96800426514 /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
+		C0A0D4E12A73EAE200426514 /* PrivacyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewModel.swift; sourceTree = "<group>"; };
 		C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				C085BFBB2A7148D500188C02 /* LogInViewController.swift */,
+				C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */,
 				C085BFBE2A71686E00188C02 /* SignUpViewController.swift */,
 			);
 			path = View;
@@ -166,6 +171,7 @@
 		C0A0D4D82A73E96800426514 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				C0A0D4E12A73EAE200426514 /* PrivacyViewModel.swift */,
 				C0A0D4DA2A73E96800426514 /* SignUpViewModel.swift */,
 				C0A0D4DB2A73E96800426514 /* UserModel.swift */,
 			);
@@ -435,6 +441,7 @@
 				C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */,
 				F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */,
 				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
+				C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */,
 				F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */,
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
 				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
@@ -463,6 +470,7 @@
 				C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */,
 				C07DF87E2A597A8600CDC5CC /* WithdrwalViewController.swift in Sources */,
 				C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */,
+				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
 				F9D0CCAA2A586208006D688C /* MainMyPlantCollectionViewCell.swift in Sources */,
 			);
