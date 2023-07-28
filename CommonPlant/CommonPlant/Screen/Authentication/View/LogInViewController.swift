@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  LogInViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 2023/07/26.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LoginViewController: UIViewController {
+class LogInViewController: UIViewController {
     // MARK: Properties
     
     // MARK: UI Components
