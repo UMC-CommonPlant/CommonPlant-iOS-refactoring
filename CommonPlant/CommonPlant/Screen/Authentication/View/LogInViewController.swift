@@ -7,9 +7,12 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 class LogInViewController: UIViewController {
     // MARK: Properties
+    var viewModel = LogInViewModel()
+    var disposeBag = DisposeBag()
     
     // MARK: UI Components
     var textLogoView = UIImageView()
@@ -27,6 +30,7 @@ class LogInViewController: UIViewController {
         setUI()
         setHierarchy()
         setLayout()
+        setAction()
     }
     
     // MARK: Custom Method
@@ -116,5 +120,23 @@ class LogInViewController: UIViewController {
             make.centerY.equalToSuperview()
             make.centerX.equalToSuperview()
         }
+    }
+    
+    func setAction() {
+        kakaoLoginView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                viewModel.kakaoLogIn()
+            })
+            .disposed(by: disposeBag)
+        
+        appleLoginView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                viewModel.appleLogIn()
+            })
+            .disposed(by: disposeBag)
     }
 }

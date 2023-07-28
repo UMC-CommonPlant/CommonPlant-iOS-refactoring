@@ -31,6 +31,7 @@ class PrivacyViewController: UIViewController {
         setUI()
         setHierarchy()
         setLayout()
+        setAction()
     }
     
     // MARK: Custom Method
@@ -131,7 +132,7 @@ class PrivacyViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(privacyView.snp.top)
         }
-        
+
         contentView.snp.makeConstraints { make in
             make.top.left.right.bottom.equalTo(scrollView)
             make.width.equalToSuperview()
@@ -156,7 +157,7 @@ class PrivacyViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-16)
             make.width.equalTo(24)
         }
-        
+
         agreeLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(33)
             make.leading.equalTo(checkButton.snp.trailing).offset(12)
@@ -169,5 +170,32 @@ class PrivacyViewController: UIViewController {
             make.right.equalTo(-20)
             make.height.equalTo(48)
         }
+    }
+    
+    func setAction() {
+        backButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.dissmissView(self)
+        }).disposed(by: disposeBag)
+        
+        checkButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            do {
+                if try viewModel.isAgreePolicy.value() {
+                    viewModel.isAgreePolicy.onNext(false)
+                } else {
+                    viewModel.isAgreePolicy.onNext(true)
+                }
+            } catch {
+                print("\(error)")
+            }
+        }).disposed(by: disposeBag)
+        
+        doneButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            doneButton.backgroundColor = .seaGreenDark3
+            SignUpViewModel.shared.isAgreePolicy.onNext(true)
+            viewModel.dissmissView(self)
+        }).disposed(by: disposeBag)
     }
 }
