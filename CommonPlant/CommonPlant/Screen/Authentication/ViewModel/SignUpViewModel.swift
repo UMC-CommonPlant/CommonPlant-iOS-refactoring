@@ -37,7 +37,12 @@ class SignUpViewModel {
         }
     }
     
-    func dissmissView(_ editVC: UIViewController) {
-        editVC.dismiss(animated: true)
+    func showPrivacyPolicyView(_ signUpVC: UIViewController) {
+        let nextVC = PrivacyViewController()
+        signUpVC.present(nextVC, animated: true)
+    }
+    
+    func dissmissView(_ signUpVC: UIViewController) {
+        signUpVC.dismiss(animated: true)
     }
 }

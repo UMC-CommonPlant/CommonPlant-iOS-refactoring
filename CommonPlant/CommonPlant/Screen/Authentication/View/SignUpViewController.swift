@@ -37,6 +37,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         setUI()
         setHierarchy()
         setLayout()
+        setAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -277,6 +278,83 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             make.right.equalTo(-20)
             make.height.equalTo(48)
         }
+    }
+    
+    func setAction() {
+        backButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            SignUpViewModel.shared.dissmissView(self)
+        }).disposed(by: disposeBag)
+        
+        checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            
+            checkDuplicateButton.isHidden = true
+            
+            let state = SignUpViewModel.shared.checkNickNameVaild(userNickNameTextFiled)
+            SignUpViewModel.shared.nickNameState.accept(state)
+            
+            view.endEditing(true)
+        }).disposed(by: disposeBag)
+        
+        privacyView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                SignUpViewModel.shared.showPrivacyPolicyView(self)
+            })
+            .disposed(by: disposeBag)
+        
+        doneButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            doneButton.backgroundColor = .seaGreenDark3
+        }).disposed(by: disposeBag)
+        
+        profileImageView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { _ in
+                var configuration = PHPickerConfiguration()
+                configuration.filter = .images
+                
+                let picker = PHPickerViewController(configuration: configuration)
+                
+                picker.delegate = self
+                
+                self.present(picker, animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        userNickNameTextFiled.rx.text.orEmpty
+            .map(SignUpViewModel.shared.checkNickNameCount(_:))
+            .subscribe(onNext: { count in
+                SignUpViewModel.shared.textCount.onNext(count)
+            }).disposed(by: disposeBag)
+        
+        userNickNameTextFiled.rx.controlEvent(.editingDidBegin)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                SignUpViewModel.shared.nickNameState.accept(.normal)
+                SignUpViewModel.shared.textCount.onNext(0)
+                
+                userNickNameTextFiled.placeholder = ""
+                userNickNameTextFiled.text = ""
+                
+                underlineView.backgroundColor = .black
+                
+                messageLabel.isHidden = true
+                countLabel.isHidden = false
+                checkDuplicateButton.isHidden = true
+            }).disposed(by: disposeBag)
+        
+        userNickNameTextFiled.rx.controlEvent(.editingDidEndOnExit)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                checkDuplicateButton.isHidden = false
+                countLabel.isHidden = true
+                underlineView.backgroundColor = .gray2
+                userNickNameTextFiled.resignFirstResponder()
+            })
+            .disposed(by: disposeBag)
     }
 }
 
