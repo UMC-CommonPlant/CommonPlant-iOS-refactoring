@@ -313,14 +313,27 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         profileImageView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { _ in
-                var configuration = PHPickerConfiguration()
-                configuration.filter = .images
+                let actionSheet = UIAlertController(title: "프로필 사진 설정", message: nil, preferredStyle: .actionSheet)
                 
-                let picker = PHPickerViewController(configuration: configuration)
+                actionSheet.addAction(UIAlertAction(title: "앨범에서 사진 선택", style: .default, handler: {(ACTION:UIAlertAction) in
+                    var configuration = PHPickerConfiguration()
+                    configuration.filter = .images
+                    
+                    let picker = PHPickerViewController(configuration: configuration)
+                    
+                    picker.delegate = self
+                    
+                    self.present(picker, animated: true, completion: nil)
+                }))
                 
-                picker.delegate = self
+                actionSheet.addAction(UIAlertAction(title: "기본 이미지로 변경", style: .default, handler: {(ACTION:UIAlertAction) in
+                    self.profileImageView.image = UIImage(named: "ProfileGreen")
+                }))
                 
-                self.present(picker, animated: true, completion: nil)
+                //취소 버튼 - 스타일(cancel)
+                actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+                
+                self.present(actionSheet, animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
         
