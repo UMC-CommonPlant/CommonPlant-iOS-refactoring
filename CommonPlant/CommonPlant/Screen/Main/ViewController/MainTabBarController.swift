@@ -24,7 +24,7 @@ class MainTabBarController: UITabBarController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.selectedIndex = 2
+        self.selectedIndex = 0
     }
     
     override func viewDidLayoutSubviews() {
@@ -41,12 +41,12 @@ class MainTabBarController: UITabBarController {
     // MARK: - UI
     private func configureUI() {
         tabBar.backgroundColor = .white
-        let infoViewController = MainViewController()
-        let calenderViewController = MainViewController()
+        let plantSearchViewController = UINavigationController(rootViewController: PlantSearchViewController())
+        let calenderViewController = PlantSearchViewController()
         let mainViewController = UINavigationController(rootViewController: MainViewController())
         let profileViewController = MyPageViewController()
         
-        infoViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "info"), selectedImage: UIImage(named: "infoActive"))
+        plantSearchViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "info"), selectedImage: UIImage(named: "infoActive"))
         calenderViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "calendar"), selectedImage: UIImage(named: "calendarActive"))
         mainViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "main"), selectedImage: UIImage(named: "mainActive"))
         profileViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "profile"), selectedImage: UIImage(named: "profileActive"))
@@ -55,12 +55,12 @@ class MainTabBarController: UITabBarController {
             imageInset = 5
         }
         
-        infoViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
+        plantSearchViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
         calenderViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
         mainViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
         profileViewController.tabBarItem.imageInsets = UIEdgeInsets(top: CGFloat(imageInset), left: 0, bottom: -CGFloat(imageInset), right: 0)
         
-        self.viewControllers = [infoViewController, calenderViewController, mainViewController, profileViewController]
+        self.viewControllers = [plantSearchViewController, calenderViewController, mainViewController, profileViewController]
     }
     
     private func configureBorder() {
