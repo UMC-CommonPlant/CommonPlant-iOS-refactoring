@@ -32,13 +32,8 @@ class PlantSearchCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI
     func setAttributes() {
-        background.backgroundColor = UIColor(red: 0.85, green: 0.79, blue: 0.96, alpha: 0.2)
         background.layer.cornerRadius = 8
-        
-        
-        icon.image = UIImage(named: "Sunlight")
-        
-        label.text = "햇빛"
+
         label.font = .bodyM3
     }
     
