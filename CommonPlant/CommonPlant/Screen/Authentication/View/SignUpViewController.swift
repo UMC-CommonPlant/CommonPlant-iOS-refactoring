@@ -58,8 +58,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         backBtnConfig.image = UIImage(named: "Back")
         backButton.configuration = backBtnConfig
         
-        profileImageView.image = UIImage(named: "ProfileGreen")
-        
         addImageView.image = UIImage(named: "Add")
         
         userNickNameTextFiled.delegate = self
@@ -110,6 +108,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         doneAttr.font = .bodyM2
         doneButton.contentHorizontalAlignment = .center
         doneButton.makeRound(radius: 8)
+        
+        SignUpViewModel.shared.profileImageRelay.subscribe(onNext: { [weak self] image in
+            guard let self = self else { return }
+            profileImageView.image = image
+            profileImageView.contentMode = .scaleAspectFill
+            profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
+        }).disposed(by: disposeBag)
         
         SignUpViewModel.shared.isAgreePolicy.subscribe(onNext: { [weak self] isAgree in
             guard let self = self else { return }
@@ -297,6 +302,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             view.endEditing(true)
         }).disposed(by: disposeBag)
         
+        doneButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            SignUpViewModel.shared.showMainView()
+        }).disposed(by: disposeBag)
+        
         privacyView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { [weak self] _ in
@@ -313,27 +323,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         profileImageView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { _ in
-                let actionSheet = UIAlertController(title: "프로필 사진 설정", message: nil, preferredStyle: .actionSheet)
-                
-                actionSheet.addAction(UIAlertAction(title: "앨범에서 사진 선택", style: .default, handler: {(ACTION:UIAlertAction) in
-                    var configuration = PHPickerConfiguration()
-                    configuration.filter = .images
-                    
-                    let picker = PHPickerViewController(configuration: configuration)
-                    
-                    picker.delegate = self
-                    
-                    self.present(picker, animated: true, completion: nil)
-                }))
-                
-                actionSheet.addAction(UIAlertAction(title: "기본 이미지로 변경", style: .default, handler: {(ACTION:UIAlertAction) in
-                    self.profileImageView.image = UIImage(named: "ProfileGreen")
-                }))
-                
-                //취소 버튼 - 스타일(cancel)
-                actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-                
-                self.present(actionSheet, animated: true, completion: nil)
+                SignUpViewModel.shared.showSettingProfileAlert(self)
             })
             .disposed(by: disposeBag)
         
@@ -368,23 +358,5 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 userNickNameTextFiled.resignFirstResponder()
             })
             .disposed(by: disposeBag)
-    }
-}
-
-extension SignUpViewController: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        
-        let itemProvider = results.first?.itemProvider
-        
-        if let itemProvider = itemProvider,
-           itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
-                DispatchQueue.main.async {
-                    self.profileImageView.image = image as? UIImage
-                    self.profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
-                }
-            }
-        }
     }
 }
