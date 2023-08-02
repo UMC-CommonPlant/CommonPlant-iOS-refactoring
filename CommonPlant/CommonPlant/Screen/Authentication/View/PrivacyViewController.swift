@@ -194,7 +194,7 @@ class PrivacyViewController: UIViewController {
         doneButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             doneButton.backgroundColor = .seaGreenDark3
-            SignUpViewModel.shared.isAgreePolicy.onNext(true)
+            SignUpViewModel.shared.isAgreePolicy.accept(true)
             viewModel.dissmissView(self)
         }).disposed(by: disposeBag)
     }

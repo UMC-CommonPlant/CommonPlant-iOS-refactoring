@@ -42,8 +42,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         SignUpViewModel.shared.nickNameState.accept(.normal)
-        SignUpViewModel.shared.profileImageRelay.accept(UIImage(named: "ProfileGreen"))
-        SignUpViewModel.shared.isAgreePolicy.onNext(false)
+        SignUpViewModel.shared.userEmail.onNext("")
+        SignUpViewModel.shared.userProfileImgURL.onNext("")
+        SignUpViewModel.shared.nickNameState.accept(.normal)
+        SignUpViewModel.shared.textCount.accept(0)
+        SignUpViewModel.shared.isAgreePolicy.accept(false)
     }
     
     // MARK: Custom Method
@@ -109,11 +112,19 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         doneButton.contentHorizontalAlignment = .center
         doneButton.makeRound(radius: 8)
         
-        SignUpViewModel.shared.profileImageRelay.subscribe(onNext: { [weak self] image in
+        SignUpViewModel.shared.userProfileImgURL.subscribe(onNext: { [weak self] imageURL in
             guard let self = self else { return }
-            profileImageView.image = image
-            profileImageView.contentMode = .scaleAspectFill
-            profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
+            if imageURL.isEmpty {
+                profileImageView.image = UIImage(named: "ProfileGreen")
+            } else {
+                if let imageURL = URL(string: imageURL) {
+                    DispatchQueue.main.async {
+                        self.profileImageView.load(url: imageURL)
+                        self.profileImageView.contentMode = .scaleAspectFill
+                        self.profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
+                    }
+                }
+            }
         }).disposed(by: disposeBag)
         
         SignUpViewModel.shared.isAgreePolicy.subscribe(onNext: { [weak self] isAgree in
@@ -288,7 +299,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     func setAction() {
         backButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
-            SignUpViewModel.shared.dissmissView(self)
+            self.dismiss(animated: true)
         }).disposed(by: disposeBag)
         
         checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
@@ -296,22 +307,35 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             
             checkDuplicateButton.isHidden = true
             
-            let state = SignUpViewModel.shared.checkNickNameVaild(userNickNameTextFiled)
-            SignUpViewModel.shared.nickNameState.accept(state)
+            guard let text = userNickNameTextFiled.text else { return }
+            if text.count > 1 && text.count < 10 {
+                SignUpViewModel.shared.nickNameState.accept(.usable)
+            } else {
+                SignUpViewModel.shared.nickNameState.accept(.unusable)
+            }
             
             view.endEditing(true)
         }).disposed(by: disposeBag)
         
-        doneButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else { return }
-            SignUpViewModel.shared.showMainView()
+        doneButton.rx.tap.subscribe(onNext: {
+            let scenes = UIApplication.shared.connectedScenes
+            let windowScene = scenes.first as? UIWindowScene
+            let window = windowScene?.windows.first
+            
+            let mainVC = MainTabBarController()
+            
+            UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                window?.rootViewController = mainVC
+            }, completion: nil)
         }).disposed(by: disposeBag)
         
         privacyView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                SignUpViewModel.shared.showPrivacyPolicyView(self)
+                
+                let nextVC = PrivacyViewController()
+                self.present(nextVC, animated: true)
             })
             .disposed(by: disposeBag)
         
@@ -323,21 +347,22 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         profileImageView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { _ in
-                SignUpViewModel.shared.showSettingProfileAlert(self)
+                self.showSettingProfileAlert()
             })
             .disposed(by: disposeBag)
         
-        userNickNameTextFiled.rx.text.orEmpty
-            .map(SignUpViewModel.shared.checkNickNameCount(_:))
+        userNickNameTextFiled.rx.text.orEmpty.map { text -> Int in
+                return text.count
+            }
             .subscribe(onNext: { count in
-                SignUpViewModel.shared.textCount.onNext(count)
+                SignUpViewModel.shared.textCount.accept(count)
             }).disposed(by: disposeBag)
         
         userNickNameTextFiled.rx.controlEvent(.editingDidBegin)
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
                 SignUpViewModel.shared.nickNameState.accept(.normal)
-                SignUpViewModel.shared.textCount.onNext(0)
+                SignUpViewModel.shared.textCount.accept(0)
                 
                 userNickNameTextFiled.placeholder = ""
                 userNickNameTextFiled.text = ""
@@ -358,5 +383,92 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 userNickNameTextFiled.resignFirstResponder()
             })
             .disposed(by: disposeBag)
+    }
+}
+
+extension SignUpViewController: PHPickerViewControllerDelegate {
+    func showSettingProfileAlert() {
+        let actionSheet = UIAlertController(title: "프로필 사진 설정", message: nil, preferredStyle: .actionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "앨범에서 사진 선택", style: .default, handler: {(ACTION:UIAlertAction) in
+            self.checkPermissionState()
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "기본 이미지로 변경", style: .default, handler: {(ACTION:UIAlertAction) in
+            SignUpViewModel.shared.userProfileImgURL.onNext("")
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func checkPermissionState() {
+        let requiredAccessLevel: PHAccessLevel = .readWrite
+        PHPhotoLibrary.requestAuthorization(for: requiredAccessLevel) { authorizationStatus in
+            DispatchQueue.main.async {
+                switch authorizationStatus {
+                case .authorized, .limited:
+                    self.showPhotoPicker()
+                case .denied:
+                    self.moveToSetting()
+                default:
+                    print("Unimplemented")
+                }
+            }
+        }
+    }
+    
+    func showPhotoPicker() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        
+        picker.delegate = self
+        
+        self.present(picker, animated: true, completion: nil)
+    }
+    
+    func moveToSetting() {
+        let alertController = UIAlertController(title: "사진 접근 권한이 없습니다.", message: "설정으로 이동하여 권한 설정을 해주세요.", preferredStyle: UIAlertController.Style.alert)
+        
+        let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+            
+            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            
+            if UIApplication.shared.canOpenURL(settingsUrl) {
+                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                    print("Settings opened: \(success)")
+                })
+            }
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: false, completion: nil)
+    }
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadFileRepresentation(forTypeIdentifier: "public.item") { (url, error) in
+                if error != nil {
+                    // Error handling
+                } else {
+                    if let url = url {
+                        SignUpViewModel.shared.userProfileImgURL.onNext(url.absoluteString)
+                    }
+                }
+            }
+        }
     }
 }
