@@ -31,9 +31,8 @@ class PlantSearchCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - UI
-    func setAttributes() {
+    private func setAttributes() {
         background.layer.cornerRadius = 8
-
         label.font = .bodyM3
     }
     

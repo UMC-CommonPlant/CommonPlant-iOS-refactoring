@@ -7,10 +7,9 @@
 
 import Foundation
 
-struct FamousSearchModel {
+struct PoplularSearchModel {
     var plantImage: String
     var plantName: String
     var scientificName: String
-    var searchCount: String
-    var searchDate: String
+    var searchCount: Int
 }
