@@ -10,6 +10,7 @@ import RxSwift
 
 struct PlantSearchViewModel {
     var plantSearchObservable = BehaviorSubject<[PoplularSearchModel]>(value: [])
+    let referenceDate: BehaviorSubject<String>
     
     init() {
         let sampleData1 = PoplularSearchModel(plantImage: "plant1", plantName: "몬스테라", scientificName: "Monstera deliciosa", searchCount: 100)
@@ -25,5 +26,10 @@ struct PlantSearchViewModel {
         
         let plantSearchModel = [sampleData1, sampleData2, sampleData3, sampleData4, sampleData5, sampleData6, sampleData7, sampleData8,sampleData9, sampleData10]
         plantSearchObservable.onNext(plantSearchModel)
+        
+        let sampleReferneceDate = DateFormatter()
+        sampleReferneceDate.dateFormat = "yyyy.MM.d"
+        let dateString = sampleReferneceDate.string(from: Date())
+        referenceDate = BehaviorSubject(value: "\(dateString) 기준")
     }
 }
