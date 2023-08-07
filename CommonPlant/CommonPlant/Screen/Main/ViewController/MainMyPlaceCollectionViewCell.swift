@@ -34,7 +34,6 @@ class MainMyPlaceCollectionViewCell: UICollectionViewCell {
         setConstraints()
         self.layoutIfNeeded()
         setGradient()
-        
     }
     
     // MARK: - UI
