@@ -19,7 +19,6 @@ class PopularSearchCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         configureCell()
         setupCorner()
-
     }
     
     required init?(coder: NSCoder) {
@@ -55,18 +54,12 @@ class PopularSearchCollectionViewCell: UICollectionViewCell {
         searchCountLabel.font = .bodyM4
         searchCountLabel.text = "지난달 \(model.searchCount)명이 검색"
         searchCountLabel.textColor = .gray5
-        
     }
     
     private func setConstraints() {
         [plantImage, nameLabel, scientificNameLabel, searchCountLabel].forEach {
             contentView.addSubview($0)
         }
-//        
-//        self.contentView.snp.makeConstraints {
-//            $0.width.equalTo(335)
-//            $0.left.right.equalToSuperview().offset(0)
-//        }
         
         plantImage.snp.makeConstraints {
             $0.width.equalTo(114)
@@ -91,14 +84,5 @@ class PopularSearchCollectionViewCell: UICollectionViewCell {
             $0.right.equalTo(contentView).offset(-12)
             $0.top.equalTo(contentView).offset(78)
         }
-    }
-}
-
-
-import SwiftUI
-
-struct Preview: PreviewProvider {
-    static var previews: some View {
-        MainTabBarController().toPreview()
     }
 }
