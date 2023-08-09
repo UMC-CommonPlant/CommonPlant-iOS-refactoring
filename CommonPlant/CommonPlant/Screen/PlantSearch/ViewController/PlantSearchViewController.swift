@@ -65,6 +65,15 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate, UISearch
         setpPopularSearchCollectionView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+    }
+    
     // MARK: - Custom Method
     private func configureUI() {
         setAttributes()
