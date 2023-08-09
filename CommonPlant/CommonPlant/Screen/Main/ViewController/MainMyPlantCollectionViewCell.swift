@@ -37,7 +37,7 @@ class MainMyPlantCollectionViewCell: UICollectionViewCell {
         imageView.layer.masksToBounds = true
         
         plantNameLabel.text = plant.plantName
-        plantNameLabel.font = .bodyB3
+        plantNameLabel.font = .bodyM3
     }
     
     private func setConstraints() {

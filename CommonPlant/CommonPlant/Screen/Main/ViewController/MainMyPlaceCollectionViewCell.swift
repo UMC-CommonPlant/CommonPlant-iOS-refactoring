@@ -34,7 +34,6 @@ class MainMyPlaceCollectionViewCell: UICollectionViewCell {
         setConstraints()
         self.layoutIfNeeded()
         setGradient()
-        
     }
     
     // MARK: - UI
@@ -44,7 +43,7 @@ class MainMyPlaceCollectionViewCell: UICollectionViewCell {
             UIColor(red: 0, green: 0, blue: 0, alpha: 1).cgColor,
             UIColor(red: 0, green: 0, blue: 0, alpha: 0).cgColor
         ]
-        gradientLayer.cornerRadius = 8
+        gradientLayer.cornerRadius = 16
         gradientLayer.colors = colors
         gradientLayer.locations = [0, 0.67]
         gradientLayer.startPoint = CGPoint(x: 0.25, y: 1)
@@ -58,13 +57,14 @@ class MainMyPlaceCollectionViewCell: UICollectionViewCell {
     
     func setAttributes(with place: Place) {
         imageView.image = UIImage(named: place.placeImage)
-        imageView.layer.cornerRadius = 8
+        imageView.layer.cornerRadius = 16
         imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
+        imageView.clipsToBounds = true
         
         gradientView.backgroundColor = .clear
         gradientView.alpha = 0.7
+        gradientView.layer.cornerRadius = 16
         
         placeLabel.text = place.placeName
         placeLabel.font = .bodyB2

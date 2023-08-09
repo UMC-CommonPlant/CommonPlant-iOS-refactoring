@@ -67,7 +67,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
     }
         
     // MARK: - CollectionView
-    func bindCollectionView() {
+    private func bindCollectionView() {
         viewModel.mainObservable
             .flatMap { mainModels -> Observable<[Place]> in
                 let places = mainModels.flatMap { $0.placeList }
@@ -92,7 +92,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
             .disposed(by: disposeBag)
     }
     
-    func setCollectionView() {
+    private func setCollectionView() {
         self.myPlaceCollectionView.register(MainMyPlaceCollectionViewCell.self, forCellWithReuseIdentifier: MainMyPlaceCollectionViewCell.identifier)
         self.myPlantCollectionView.register(MainMyPlantCollectionViewCell.self, forCellWithReuseIdentifier: MainMyPlantCollectionViewCell.identifier)
         myPlaceCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
@@ -107,7 +107,7 @@ extension MainViewController {
         setConstraints()
     }
     
-    func setGradient() {
+    private func setGradient() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = gradientView.bounds
         let colors: [CGColor] = [
