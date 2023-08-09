@@ -9,29 +9,27 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import RxGesture
 
-
-class PlantSearchViewController: UIViewController, UITableViewDelegate {
+class PlantSearchViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate {
     // MARK: - Properties
     private let collectionViewCellColor = ["OneRoomColor", "AirPurificationColor", "BeginnerColor", "SunlightColor", "WaterPreferenceColor", "InteriorColor"]
     private let collectionViewIcon = ["OneRoom", "AirPurification", "Beginner", "Sunlight", "WateringPot",  "Interior"]
     private let collectionViewCellLabelText = ["원룸", "공기정화", "초보집사", "채광", "물 주기", "인테리어"]
     
-    private let viewModel = PlantSearchViewModel()
+    private let plantSearchViewModel = PlantSearchViewModel()
     private let disposeBag = DisposeBag()
     private lazy var viewWidth = view.frame.width
     
-    
     // MARK: - UI Components
-    let scrollView = UIScrollView()
-    let contentView = UIView()
-    let emptyView = UIView()
-    let titleLable = UILabel()
-    let customNavigationBar = UINavigationBar()
-    let searchController = UISearchController(searchResultsController: nil)
-    let borderLineView = UIView()
-    let sampleLabel = UILabel()
-    let plantCategoryCollectionView: UICollectionView = {
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private let emptyView = UIView()
+    private let searchResultController = SearchResultViewController()
+    private lazy var searchController = UISearchController(searchResultsController: searchResultController)
+    private let borderLineView = UIView()
+    private let sampleLabel = UILabel()
+    private let plantCategoryCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 24
@@ -40,9 +38,9 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate {
         view.backgroundColor = .clear
         return view
     }()
-    let popularSearchWordLabel = UILabel()
-    let referenceDateLabel = UILabel()
-    lazy var popularSearchCollectionView: UICollectionView = {
+    private let popularSearchWordLabel = UILabel()
+    private let referenceDateLabel = UILabel()
+    private lazy var popularSearchCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 16
@@ -58,17 +56,13 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        self.navigationItem.title = "식물 정보"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1]
         configureUI()
         setUpBindings()
+        setSearchController()
         setCategoryCollectionView()
         setpPopularSearchCollectionView()
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = true
-        setNavigationbar()
     }
     
     // MARK: - Custom Method
@@ -77,10 +71,9 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate {
         setConstraints()
     }
     
-    private func setNavigationbar() {
-        let navigationItem = UINavigationItem()
-        customNavigationBar.setItems([navigationItem], animated: false)
-        customNavigationBar.topItem?.searchController = searchController
+    private func setSearchController() {
+        self.navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = searchResultController
         
         searchController.automaticallyShowsCancelButton = false
         searchController.hidesNavigationBarDuringPresentation = false
@@ -90,10 +83,17 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate {
         searchController.searchBar.searchTextField.borderStyle = .none
         searchController.searchBar.searchTextField.leftView?.tintColor = .black
         searchController.searchBar.setImage(UIImage(named: "Reset"), for: .clear, state: .normal)
+        
+        view.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] _ in
+                self?.searchController.searchBar.endEditing(true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setUpBindings() {
-        viewModel.referenceDate
+        plantSearchViewModel.referenceDate
             .bind(to: referenceDateLabel.rx.text)
             .disposed(by: disposeBag)
     }
@@ -104,7 +104,7 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate {
         popularSearchCollectionView.rx.setDelegate(self)
             .disposed(by: disposeBag)
         
-        viewModel.plantSearchObservable
+        plantSearchViewModel.plantSearchObservable
             .bind(to: popularSearchCollectionView.rx.items(cellIdentifier: PopularSearchCollectionViewCell.identifier, cellType: PopularSearchCollectionViewCell.self)) { _, element, cell in
                 cell.setAttributes(with: element)
             }
@@ -112,8 +112,7 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate {
     }
 }
 
-
-// MARK: - CategoryCollectionView
+// MARK: - Category CollectionView
 extension PlantSearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     private func setCategoryCollectionView() {
         self.plantCategoryCollectionView.dataSource = self
@@ -136,9 +135,6 @@ extension PlantSearchViewController: UICollectionViewDataSource, UICollectionVie
 // MARK: - UI
 extension PlantSearchViewController {
     private func setAttributes() {
-        titleLable.text = "식물 정보"
-        titleLable.font = .bodyM1
-        
         borderLineView.backgroundColor = .gray2
         
         contentView.backgroundColor = .white
@@ -157,36 +153,19 @@ extension PlantSearchViewController {
     }
     
     private func setConstraints() {
-        [titleLable, customNavigationBar, borderLineView, scrollView, emptyView].forEach {
+        [scrollView, emptyView].forEach {
             view.addSubview($0)
         }
         
         scrollView.addSubview(contentView)
-        
+        searchController.searchBar.addSubview(borderLineView)
+
         [plantCategoryCollectionView, popularSearchWordLabel, referenceDateLabel, popularSearchCollectionView].forEach {
             contentView.addSubview($0)
         }
         
-        titleLable.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
-            $0.height.equalTo(24)
-        }
-        
-        customNavigationBar.snp.makeConstraints {
-            $0.left.equalToSuperview().offset(10)
-            $0.right.equalToSuperview().offset(-10)
-            $0.top.equalTo(titleLable)
-        }
-        
-        borderLineView.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.left.right.equalToSuperview()
-            $0.top.equalTo(customNavigationBar.snp.bottom)
-        }
-        
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(borderLineView.snp.bottom)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide)
             $0.left.right.equalTo(view.safeAreaLayoutGuide)
         }
         
@@ -196,6 +175,13 @@ extension PlantSearchViewController {
             $0.bottom.equalTo(self.view)
             $0.height.equalTo(MainTabBarController.tabBarHeight)
         }
+        
+        borderLineView.snp.makeConstraints {
+            $0.bottom.equalTo(searchController.searchBar)
+            $0.left.equalTo(searchController.searchBar)
+            $0.right.equalTo(searchController.searchBar)
+            $0.height.equalTo(1)
+          }
         
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
@@ -228,19 +214,5 @@ extension PlantSearchViewController {
             $0.right.equalTo(contentView).offset(-20)
             $0.bottom.equalTo(contentView)
         }
-    }
-}
-
-
-
-
-
-
-
-import SwiftUI
-
-struct Preview1: PreviewProvider {
-    static var previews: some View {
-        MainTabBarController().toPreview()
     }
 }
