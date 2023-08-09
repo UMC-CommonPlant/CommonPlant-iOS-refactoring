@@ -1,5 +1,5 @@
 //
-//  PopularSearchTableViewCell.swift
+//  PopularSearchCollectionViewCell.swift
 //  CommonPlant
 //
 //  Created by 이예원 on 2023/08/01.
