@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=초보집사.png",
+      "filename" : "Beginner.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=초보집사@2x.png",
+      "filename" : "Beginner@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=초보집사@3x.png",
+      "filename" : "Beginner@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

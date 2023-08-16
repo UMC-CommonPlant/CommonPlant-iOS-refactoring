@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=인테리어.png",
+      "filename" : "Interior.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=인테리어@2x.png",
+      "filename" : "Interior@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=인테리어@3x.png",
+      "filename" : "Interior@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

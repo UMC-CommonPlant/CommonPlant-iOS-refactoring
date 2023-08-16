@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=햇빛.png",
+      "filename" : "Sunlight.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=햇빛@2x.png",
+      "filename" : "Sunlight@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=햇빛@3x.png",
+      "filename" : "Sunlight@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

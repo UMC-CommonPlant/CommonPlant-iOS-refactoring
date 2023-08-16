@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=물뿌리개.png",
+      "filename" : "WateringPot.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=물뿌리개@2x.png",
+      "filename" : "WateringPot@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=물뿌리개@3x.png",
+      "filename" : "WateringPot@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
