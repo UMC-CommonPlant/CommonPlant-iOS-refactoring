@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02322B52A6AB6BE004D78CC /* WithdrwalViewModel.swift */; };
 		C02322B82A6AC0D6004D78CC /* EditUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02322B72A6AC0D6004D78CC /* EditUserInfoViewModel.swift */; };
+		C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */; };
+		C027A0942A909CDC009289E9 /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */; };
+		C027A0952A909CDC009289E9 /* ImagePickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */; };
 		C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */; };
 		C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */; };
 		C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */; };
@@ -47,7 +50,7 @@
 		F93404022A81F9F400F0267B /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */; };
 		F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404032A8207B000F0267B /* SearchResultViewModel.swift */; };
 		F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404052A8207F300F0267B /* SearchResultModel.swift */; };
-		F9447DA32A76CA3100903C28 /* UIViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA52A583456006D688C /* UIViewController + Extension.swift */; };
+		F9447DA32A76CA3100903C28 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA52A7795DF00903C28 /* PlantSearchViewModel.swift */; };
 		F9447DA82A77A71700903C28 /* PlantSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA72A77A71700903C28 /* PlantSearchCollectionViewCell.swift */; };
 		F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */; };
@@ -55,7 +58,6 @@
 		F9A1FB1A2A619F2300F346DE /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = F9A1FB192A619F2300F346DE /* RxMoya */; };
 		F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB242A664F4300F346DE /* MainViewModel.swift */; };
 		F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB282A67B03400F346DE /* MainModel.swift */; };
-		F9A1FB302A6E047A00F346DE /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = F9A1FB172A619F2300F346DE /* Moya */; };
 		F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */; };
 		F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA12A583432006D688C /* MainTabBarController.swift */; };
 		F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA32A583442006D688C /* MainViewController.swift */; };
@@ -66,6 +68,9 @@
 /* Begin PBXFileReference section */
 		C02322B52A6AB6BE004D78CC /* WithdrwalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrwalViewModel.swift; sourceTree = "<group>"; };
 		C02322B72A6AC0D6004D78CC /* EditUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewModel.swift; sourceTree = "<group>"; };
+		C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewModel.swift; sourceTree = "<group>"; };
+		C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
+		C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +136,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C027A0882A909BB0009289E9 /* ImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				C027A0912A909CDC009289E9 /* View */,
+				C027A0892A909BB0009289E9 /* ViewModel */,
+			);
+			path = ImagePicker;
+			sourceTree = "<group>";
+		};
+		C027A0892A909BB0009289E9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C027A0912A909CDC009289E9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */,
+				C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		C07DF86E2A59440400CDC5CC /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,9 +309,9 @@
 		F91E47A12A53EFAC008E07A9 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				C027A0882A909BB0009289E9 /* ImagePicker */,
 				C085BFBA2A71488B00188C02 /* Authentication */,
 				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
-				F9D0CCA52A583456006D688C /* UIViewController + Extension.swift */,
 				F9A1FB312A6E531300F346DE /* PlantSearch */,
 				C07DF86E2A59440400CDC5CC /* MyPage */,
 				F91E47A82A53F8B2008E07A9 /* Main */,
@@ -506,7 +537,7 @@
 				F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */,
 				C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */,
 				F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */,
-				F9447DA32A76CA3100903C28 /* UIViewController + Extension.swift in Sources */,
+				F9447DA32A76CA3100903C28 /* (null) in Sources */,
 				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
 				C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */,
 				F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */,
@@ -539,12 +570,15 @@
 				F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */,
 				F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */,
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
+				C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */,
 				F9D0CCA82A584025006D688C /* MainMyPlaceCollectionViewCell.swift in Sources */,
 				F91E47B02A569681008E07A9 /* empty2.swift in Sources */,
 				C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */,
 				C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */,
 				C06299802A7A87FB00985171 /* UIImageView+Extension.swift in Sources */,
+				C027A0942A909CDC009289E9 /* ImagePickerViewController.swift in Sources */,
 				C07DF87E2A597A8600CDC5CC /* WithdrwalViewController.swift in Sources */,
+				C027A0952A909CDC009289E9 /* ImagePickerCollectionViewCell.swift in Sources */,
 				C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */,
 				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
