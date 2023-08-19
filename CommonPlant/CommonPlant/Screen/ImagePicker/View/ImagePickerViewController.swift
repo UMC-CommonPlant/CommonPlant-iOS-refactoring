@@ -68,9 +68,9 @@ class ImagePickerViewController: UIViewController, UICollectionViewDelegate, UIC
 
         do {
             let accessImages = try viewModel.accessImageURLs.value()
-            let selectedImageURL = accessImages[indexPath.row]
+            let imageURL = accessImages[indexPath.row]
             
-            cell.imageView.kf.setImage(with: selectedImageURL)
+            cell.imageView.kf.setImage(with: imageURL)
         } catch {
             print("Error getting the value of accessImageURLs")
         }

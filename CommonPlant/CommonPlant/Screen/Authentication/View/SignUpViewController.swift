@@ -362,7 +362,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                                     }
                                         
                                     ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
-                                        guard let self = self else { return }
+                                        guard self != nil else { return }
                                         SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
                                     }
                                 case .limited:
