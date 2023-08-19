@@ -29,7 +29,9 @@ class ImagePickerViewController: UIViewController, UICollectionViewDelegate, UIC
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpCollectionView()
+        viewModel.loadImages { [weak self] in
+            self?.setUpCollectionView()
+        }
     }
     
     func setUpCollectionView() {

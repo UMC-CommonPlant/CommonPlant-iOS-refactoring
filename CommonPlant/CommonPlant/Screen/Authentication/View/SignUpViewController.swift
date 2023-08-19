@@ -366,7 +366,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                                         SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
                                     }
                                 case .limited:
-                                    break
+                                    let imagePickerVC = ImagePickerViewController()
+                                    
+                                    self.present(imagePickerVC, animated: true)
+                                    
+                                    imagePickerVC.didSelectImage = { [weak self] imageString in
+                                        guard self != nil else { return }
+                                        SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
+                                    }
                                 default:
                                     print("\(state)")
                                 }
