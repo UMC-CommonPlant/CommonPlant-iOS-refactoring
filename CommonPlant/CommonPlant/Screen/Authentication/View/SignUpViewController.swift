@@ -356,7 +356,15 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                                 case .denied:
                                     self.moveToSetting()
                                 case .authorized:
-                                    break
+                                    DispatchQueue.main.async { [weak self] in
+                                        guard let self = self else { return }
+                                        ImagePickerViewController.shared.showPhotoPicker(viewController: self)
+                                    }
+                                        
+                                    ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                                        guard let self = self else { return }
+                                        SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
+                                    }
                                 case .limited:
                                     break
                                 default:
