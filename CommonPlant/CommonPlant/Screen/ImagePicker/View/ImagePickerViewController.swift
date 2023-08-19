@@ -85,3 +85,36 @@ class ImagePickerViewController: UIViewController, UICollectionViewDelegate, UIC
         }
     }
 }
+
+extension ImagePickerViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
+        let itemProvider = results.first?.itemProvider
+
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadFileRepresentation(forTypeIdentifier: "public.item") { (url, error) in
+                if error != nil {
+                    print("\(String(describing: error))")
+                } else {
+                    if let url = url {
+                        self.didSelectImage?(url.absoluteString)
+                    }
+                }
+            }
+        }
+    }
+    
+    func showPhotoPicker(viewController: UIViewController) {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        configuration.selectionLimit = 1
+        
+        let picker = PHPickerViewController(configuration: configuration)
+
+        picker.delegate = self
+
+        viewController.present(picker, animated: true, completion: nil)
+    }
+}
