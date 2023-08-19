@@ -9,11 +9,13 @@ import UIKit
 import PhotosUI
 
 class ImagePickerViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    // MARK: Properties
     static let shared = ImagePickerViewController()
     let viewModel = ImagePickerViewModel()
     let identifier = ImagePickerCollectionViewCell.identifier
     var didSelectImage: ((String) -> Void)?
     
+    // MARK: UIComponents
     lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -27,6 +29,7 @@ class ImagePickerViewController: UIViewController, UICollectionViewDelegate, UIC
         return view
     }()
     
+    // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.loadImages { [weak self] in
@@ -34,6 +37,7 @@ class ImagePickerViewController: UIViewController, UICollectionViewDelegate, UIC
         }
     }
     
+    // MARK: Custom Methods
     func setUpCollectionView() {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -46,6 +50,7 @@ class ImagePickerViewController: UIViewController, UICollectionViewDelegate, UIC
         collectionView.register(ImagePickerCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
     }
     
+    // MARK: - UICollectionViewDelegate & UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         do {
             let accessImages = try viewModel.accessImageURLs.value()
@@ -88,6 +93,7 @@ class ImagePickerViewController: UIViewController, UICollectionViewDelegate, UIC
     }
 }
 
+// MARK: - PHPickerViewControllerDelegate
 extension ImagePickerViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)

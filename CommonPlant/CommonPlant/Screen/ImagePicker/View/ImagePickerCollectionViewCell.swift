@@ -10,8 +10,10 @@ import UIKit
 class ImagePickerCollectionViewCell: UICollectionViewCell {
     static let identifier = "ImagePickerCollectionViewCell"
     
+    // MARK: UIComponents
     var imageView = UIImageView()
     
+    // MARK: Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setConfigure()
@@ -22,6 +24,7 @@ class ImagePickerCollectionViewCell: UICollectionViewCell {
         fatalError("init(\(coder) has not been implemented")
     }
     
+    // MARK: Custom Methods
     func setConfigure() {
         imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
