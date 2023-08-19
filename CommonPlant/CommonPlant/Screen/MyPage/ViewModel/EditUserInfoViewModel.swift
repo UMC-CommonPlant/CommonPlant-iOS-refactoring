@@ -18,6 +18,7 @@ enum buttonType: String {
 class EditUserInfoViewModel {
     var nickNameState = BehaviorRelay<buttonType>(value: .normal)
     var profileImgState = BehaviorRelay<buttonType>(value: .normal)
+    var profileImgURL = BehaviorSubject<String>(value: "")
     var textCount = BehaviorRelay<Int>(value: 0)
     
     func checkNickNameCount(_ nickName: String) -> Int {

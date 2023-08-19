@@ -346,8 +346,46 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         profileImageView.rx.tapGesture()
             .when(.recognized)
-            .subscribe(onNext: { _ in
-                self.showSettingProfileAlert()
+            .subscribe(onNext: { [self] _ in
+                self.showImageSettingAlert { selectedOption in
+                    switch selectedOption {
+                    case .newImage:
+                        ImagePickerViewModel.shared.checkPermissionState() { state in
+                            DispatchQueue.main.async {
+                                switch state {
+                                case .denied:
+                                    self.moveToSetting()
+                                case .authorized:
+                                    DispatchQueue.main.async { [weak self] in
+                                        guard let self = self else { return }
+                                        ImagePickerViewController.shared.showPhotoPicker(viewController: self)
+                                    }
+                                        
+                                    ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                                        guard self != nil else { return }
+                                        SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
+                                    }
+                                case .limited:
+                                    let imagePickerVC = ImagePickerViewController()
+                                    
+                                    self.present(imagePickerVC, animated: true)
+                                    
+                                    imagePickerVC.didSelectImage = { [weak self] imageString in
+                                        guard self != nil else { return }
+                                        SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
+                                    }
+                                default:
+                                    print("\(state)")
+                                }
+
+                            }
+                        }
+                    case .defaultImage:
+                        SignUpViewModel.shared.userProfileImgURL.onNext("")
+                    case .cancle:
+                        break
+                    }
+                }
             })
             .disposed(by: disposeBag)
         
@@ -383,92 +421,5 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 userNickNameTextFiled.resignFirstResponder()
             })
             .disposed(by: disposeBag)
-    }
-}
-
-extension SignUpViewController: PHPickerViewControllerDelegate {
-    func showSettingProfileAlert() {
-        let actionSheet = UIAlertController(title: "프로필 사진 설정", message: nil, preferredStyle: .actionSheet)
-        
-        actionSheet.addAction(UIAlertAction(title: "앨범에서 사진 선택", style: .default, handler: {(ACTION:UIAlertAction) in
-            self.checkPermissionState()
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: "기본 이미지로 변경", style: .default, handler: {(ACTION:UIAlertAction) in
-            SignUpViewModel.shared.userProfileImgURL.onNext("")
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        
-        self.present(actionSheet, animated: true, completion: nil)
-    }
-    
-    func checkPermissionState() {
-        let requiredAccessLevel: PHAccessLevel = .readWrite
-        PHPhotoLibrary.requestAuthorization(for: requiredAccessLevel) { authorizationStatus in
-            DispatchQueue.main.async {
-                switch authorizationStatus {
-                case .authorized, .limited:
-                    self.showPhotoPicker()
-                case .denied:
-                    self.moveToSetting()
-                default:
-                    print("Unimplemented")
-                }
-            }
-        }
-    }
-    
-    func showPhotoPicker() {
-        var configuration = PHPickerConfiguration()
-        configuration.filter = .images
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        
-        picker.delegate = self
-        
-        self.present(picker, animated: true, completion: nil)
-    }
-    
-    func moveToSetting() {
-        let alertController = UIAlertController(title: "사진 접근 권한이 없습니다.", message: "설정으로 이동하여 권한 설정을 해주세요.", preferredStyle: UIAlertController.Style.alert)
-        
-        let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-            
-            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
-                return
-            }
-            
-            if UIApplication.shared.canOpenURL(settingsUrl) {
-                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                    print("Settings opened: \(success)")
-                })
-            }
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        
-        alertController.addAction(okAction)
-        alertController.addAction(cancelAction)
-        
-        self.present(alertController, animated: false, completion: nil)
-    }
-    
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        
-        let itemProvider = results.first?.itemProvider
-        
-        if let itemProvider = itemProvider,
-           itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadFileRepresentation(forTypeIdentifier: "public.item") { (url, error) in
-                if error != nil {
-                    // Error handling
-                } else {
-                    if let url = url {
-                        SignUpViewModel.shared.userProfileImgURL.onNext(url.absoluteString)
-                    }
-                }
-            }
-        }
     }
 }

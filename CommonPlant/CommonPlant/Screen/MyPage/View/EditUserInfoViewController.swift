@@ -104,6 +104,21 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         messageLabel.font = .captionM2
         messageLabel.textAlignment = .left
         
+        viewModel.profileImgURL.subscribe(onNext: { [weak self] imageURL in
+            guard let self = self else { return }
+            if imageURL.isEmpty {
+                profileImageView.image = UIImage(named: "ProfileGreen")
+            } else {
+                if let imageURL = URL(string: imageURL) {
+                    DispatchQueue.main.async {
+                        self.profileImageView.load(url: imageURL)
+                        self.profileImageView.contentMode = .scaleAspectFill
+                        self.profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
+                    }
+                }
+            }
+        }).disposed(by: disposeBag)
+        
         viewModel.nickNameState.map { state -> (UIColor, UIColor, UIColor, Bool) in
             self.messageLabel.isHidden = false
             self.messageLabel.text = state.rawValue
@@ -255,14 +270,45 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         profileImageView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { gesture in
-                var configuration = PHPickerConfiguration()
-                configuration.filter = .images
-                
-                let picker = PHPickerViewController(configuration: configuration)
-                
-                picker.delegate = self
-                
-                self.present(picker, animated: true, completion: nil)
+                self.showImageSettingAlert { selectedOption in
+                    switch selectedOption {
+                    case .newImage:
+                        ImagePickerViewModel.shared.checkPermissionState() { state in
+                            DispatchQueue.main.async {
+                                switch state {
+                                case .denied:
+                                    self.moveToSetting()
+                                case .authorized:
+                                    DispatchQueue.main.async { [weak self] in
+                                        guard let self = self else { return }
+                                        ImagePickerViewController.shared.showPhotoPicker(viewController: self)
+                                    }
+                                        
+                                    ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                                        guard let self = self else { return }
+                                        viewModel.profileImgURL.onNext(imageString)
+                                    }
+                                case .limited:
+                                    let imagePickerVC = ImagePickerViewController()
+                                    
+                                    self.present(imagePickerVC, animated: true)
+                                    
+                                    imagePickerVC.didSelectImage = { [weak self] imageString in
+                                        guard self != nil else { return }
+                                        self?.viewModel.profileImgURL.onNext(imageString)
+                                    }
+                                default:
+                                    print("\(state)")
+                                }
+
+                            }
+                        }
+                    case .defaultImage:
+                        self.viewModel.profileImgURL.onNext("")
+                    case .cancle:
+                        break
+                    }
+                }
             })
             .disposed(by: disposeBag)
         
