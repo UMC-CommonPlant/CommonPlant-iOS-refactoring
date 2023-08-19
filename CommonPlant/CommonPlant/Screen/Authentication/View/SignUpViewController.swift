@@ -346,8 +346,31 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         profileImageView.rx.tapGesture()
             .when(.recognized)
-            .subscribe(onNext: { _ in
-                self.showSettingProfileAlert()
+            .subscribe(onNext: { [self] _ in
+                self.showImageSettingAlert { selectedOption in
+                    switch selectedOption {
+                    case .newImage:
+                        ImagePickerViewModel.shared.checkPermissionState() { state in
+                            DispatchQueue.main.async {
+                                switch state {
+                                case .denied:
+                                    self.moveToSetting()
+                                case .authorized:
+                                    break
+                                case .limited:
+                                    break
+                                default:
+                                    print("\(state)")
+                                }
+
+                            }
+                        }
+                    case .defaultImage:
+                        SignUpViewModel.shared.userProfileImgURL.onNext("")
+                    case .cancle:
+                        break
+                    }
+                }
             })
             .disposed(by: disposeBag)
         

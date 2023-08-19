@@ -66,4 +66,11 @@ class ImagePickerViewModel {
             }
         })
     }
+    
+    func checkPermissionState(completion: @escaping (PHAuthorizationStatus) -> Void) {
+        let requiredAccessLevel: PHAccessLevel = .readWrite
+        PHPhotoLibrary.requestAuthorization(for: requiredAccessLevel) { authorizationStatus in
+            completion(authorizationStatus)
+        }
+    }
 }
