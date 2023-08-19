@@ -12,6 +12,7 @@
 		C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */; };
 		C027A0942A909CDC009289E9 /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */; };
 		C027A0952A909CDC009289E9 /* ImagePickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */; };
+		C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */; };
 		C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */; };
 		C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */; };
 		C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */; };
@@ -71,6 +72,7 @@
 		C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewModel.swift; sourceTree = "<group>"; };
 		C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
 		C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerCollectionViewCell.swift; sourceTree = "<group>"; };
+		C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewController.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 		F91E47A22A53F0B6008E07A9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */,
 				F91E47A92A569128008E07A9 /* UIColor+Extension.swift */,
 				C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */,
 				C07DF8832A59844400CDC5CC /* UIView+Extension.swift */,
@@ -572,6 +575,7 @@
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
 				C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */,
 				F9D0CCA82A584025006D688C /* MainMyPlaceCollectionViewCell.swift in Sources */,
+				C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */,
 				F91E47B02A569681008E07A9 /* empty2.swift in Sources */,
 				C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */,
 				C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */,
