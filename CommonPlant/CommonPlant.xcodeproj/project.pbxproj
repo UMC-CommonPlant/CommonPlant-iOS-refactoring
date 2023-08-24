@@ -36,6 +36,7 @@
 		C0A5AFFB2A6CF2AE00C8248D /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = C0A5AFFA2A6CF2AE00C8248D /* RxGesture */; };
 		C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */; };
 		C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */; };
+		C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
 		F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */; };
 		F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */; };
@@ -94,6 +95,7 @@
 		C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
 		C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantModel.swift; sourceTree = "<group>"; };
 		C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewModel.swift; sourceTree = "<group>"; };
+		C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewController.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 		C0A6DCE62A978847001A2E11 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -577,6 +580,7 @@
 			files = (
 				F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */,
 				C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */,
+				C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */,
 				F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */,
 				F9447DA32A76CA3100903C28 /* (null) in Sources */,
 				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
