@@ -34,6 +34,7 @@
 		C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4E12A73EAE200426514 /* PrivacyViewModel.swift */; };
 		C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */; };
 		C0A5AFFB2A6CF2AE00C8248D /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = C0A5AFFA2A6CF2AE00C8248D /* RxGesture */; };
+		C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
 		F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */; };
 		F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */; };
@@ -90,6 +91,7 @@
 		C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
 		C0A0D4E12A73EAE200426514 /* PrivacyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewModel.swift; sourceTree = "<group>"; };
 		C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
+		C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantModel.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -241,6 +243,38 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		C0A6DCE52A97883D001A2E11 /* MyPlant */ = {
+			isa = PBXGroup;
+			children = (
+				C0A6DCE72A97884E001A2E11 /* Model */,
+				C0A6DCE82A978854001A2E11 /* ViewModel */,
+				C0A6DCE62A978847001A2E11 /* View */,
+			);
+			path = MyPlant;
+			sourceTree = "<group>";
+		};
+		C0A6DCE62A978847001A2E11 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C0A6DCE72A97884E001A2E11 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C0A6DCE82A978854001A2E11 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		F91E47732A53E3C8008E07A9 = {
 			isa = PBXGroup;
 			children = (
@@ -311,9 +345,10 @@
 		F91E47A12A53EFAC008E07A9 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
+				C0A6DCE52A97883D001A2E11 /* MyPlant */,
 				C027A0882A909BB0009289E9 /* ImagePicker */,
 				C085BFBA2A71488B00188C02 /* Authentication */,
-				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
 				F9A1FB312A6E531300F346DE /* PlantSearch */,
 				C07DF86E2A59440400CDC5CC /* MyPage */,
 				F91E47A82A53F8B2008E07A9 /* Main */,
@@ -575,6 +610,7 @@
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
 				C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */,
 				F9D0CCA82A584025006D688C /* MainMyPlaceCollectionViewCell.swift in Sources */,
+				C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */,
 				C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */,
 				F91E47B02A569681008E07A9 /* empty2.swift in Sources */,
 				C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */,
