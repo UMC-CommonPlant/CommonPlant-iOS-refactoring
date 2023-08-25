@@ -9,11 +9,6 @@ import UIKit
 import RxSwift
 class MyPlantViewController: UIViewController {
     // MARK: Properties
-    var countDate: Int = 0
-    var wateringCycle: Int = 0
-    var minTemperature: Int = 0
-    var maxTemperature: Int = 0
-    
     let viewModel = MyPlantViewModel()
     let disposeBag = DisposeBag()
     
