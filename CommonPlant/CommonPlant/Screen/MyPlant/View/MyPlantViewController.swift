@@ -78,6 +78,8 @@ class MyPlantViewController: UIViewController {
         var nextBtnConfig = UIButton.Configuration.plain()
         var addBtnConfig = UIButton.Configuration.plain()
         
+        stackView.backgroundColor = .white
+        
         plantImageView.load(url: URL(string: plantData.imgURL)!)
         
         placeView.backgroundColor = .seaGreenDark3
@@ -188,5 +190,39 @@ class MyPlantViewController: UIViewController {
         humidityInfoLabel.textColor = .gray6
         humidityInfoLabel.font = .captionM1
         humidityInfoLabel.textAlignment = .left
+    }
+    
+    func setHierarchy() {
+        view.addSubview(scrollView)
+        
+        scrollView.addSubview(stackView)
+        
+        [plantProfileView, dateInfoView, memoView, plantInfoView].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        
+        [menuButton, plantImageView, placeView, nickNameLabel, scientificNameLabel].forEach {
+            plantProfileView.addSubview($0)
+        }
+        
+        [placeImageView, placeNameLabel].forEach {
+            placeView.addSubview($0)
+        }
+        
+        [countingMessageLabel, wateringImageView, waterDayLabel, metMessageLabel, metDateLabel, lastWateringMessageLabel, lastWateringDateLabel].forEach {
+            dateInfoView.addSubview($0)
+        }
+        
+        [memoTitleLabel, nextButton, memoCollectionView, addMemoButton].forEach {
+            memoView.addSubview($0)
+        }
+        
+        [infoTitleLabel, backgroundView].forEach {
+            plantInfoView.addSubview($0)
+        }
+        
+        [wateringCycleImage, wateringCycleLabel, cautionLabel, sunlightImageView, sunlightInfoLabel, temperatureImageView, temperatureLabel, humidityInfoImageView, humidityInfoLabel].forEach {
+            backgroundView.addSubview($0)
+        }
     }
 }
