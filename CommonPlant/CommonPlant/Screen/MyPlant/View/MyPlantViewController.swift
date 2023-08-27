@@ -7,6 +7,8 @@
 
 import UIKit
 import RxSwift
+import SnapKit
+
 class MyPlantViewController: UIViewController {
     // MARK: Properties
     let viewModel = MyPlantViewModel()
@@ -26,8 +28,12 @@ class MyPlantViewController: UIViewController {
     var scientificNameLabel = UILabel()
     var dateInfoView = UIView()
     var countingMessageLabel = UILabel()
+    var wateringView = UIView()
     var wateringImageView = UIImageView()
     var waterDayLabel = UILabel()
+    var infoView = UIView()
+    var messageView = UIView()
+    var dateView = UIView()
     var metMessageLabel = UILabel()
     var metDateLabel = UILabel()
     var lastWateringMessageLabel = UILabel()
@@ -204,8 +210,23 @@ class MyPlantViewController: UIViewController {
             placeView.addSubview($0)
         }
         
-        [countingMessageLabel, wateringImageView, waterDayLabel, metMessageLabel, metDateLabel, lastWateringMessageLabel, lastWateringDateLabel].forEach {
+        [countingMessageLabel, wateringView, infoView].forEach {
             dateInfoView.addSubview($0)
+        }
+        [wateringImageView, waterDayLabel].forEach {
+            wateringView.addSubview($0)
+        }
+        
+        [messageView, dateView].forEach {
+            infoView.addSubview($0)
+        }
+        
+        [metMessageLabel, lastWateringMessageLabel].forEach {
+            messageView.addSubview($0)
+        }
+        
+        [metDateLabel, lastWateringDateLabel].forEach {
+            dateView.addSubview($0)
         }
         
         [memoTitleLabel, nextButton, memoCollectionView, addMemoButton].forEach {
@@ -218,6 +239,215 @@ class MyPlantViewController: UIViewController {
         
         [wateringCycleImage, wateringCycleLabel, cautionLabel, sunlightImageView, sunlightInfoLabel, temperatureImageView, temperatureLabel, humidityInfoImageView, humidityInfoLabel].forEach {
             backgroundView.addSubview($0)
+        }
+    }
+    
+    func setConstraints() {
+        scrollView.snp.makeConstraints { make in
+            make.top.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.left.right.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        stackView.snp.makeConstraints { make in
+            make.top.left.right.bottom.equalTo(scrollView)
+            make.width.equalToSuperview()
+            make.height.greaterThanOrEqualToSuperview().priority(.low)
+        }
+        
+        plantProfileView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(322)
+        }
+        
+        menuButton.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(32)
+        }
+        
+        plantImageView.snp.makeConstraints { make in
+            make.top.equalTo(menuButton.snp.bottom).offset(4)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(20)
+            make.height.equalTo(208)
+        }
+        
+        placeView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(32)
+        }
+        
+        placeImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(24)
+            make.leading.equalToSuperview().offset(10)
+        }
+        
+        placeNameLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(placeImageView.snp.trailing).offset(4)
+            make.trailing.equalToSuperview().offset(16)
+        }
+        
+        nickNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(plantImageView.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+        }
+        
+        scientificNameLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(16)
+            make.centerX.equalToSuperview()
+        }
+        
+        dateInfoView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(172)
+        }
+        
+        countingMessageLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(24)
+            make.centerX.equalToSuperview()
+        }
+        
+        wateringView.snp.makeConstraints { make in
+            make.top.equalTo(countingMessageLabel.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(36)
+        }
+        
+        wateringImageView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
+        waterDayLabel.snp.makeConstraints { make in
+            make.left.equalTo(wateringImageView.snp.right).offset(8)
+            make.centerY.equalToSuperview()
+        }
+        
+        infoView.snp.makeConstraints { make in
+            make.top.equalTo(wateringView.snp.bottom).offset(16)
+            make.centerX.equalToSuperview()
+        }
+        
+        messageView.snp.makeConstraints { make in
+            make.top.leading.bottom.equalToSuperview()
+        }
+        
+        dateView.snp.makeConstraints { make in
+            make.top.trailing.bottom.equalToSuperview()
+            make.left.equalTo(messageView.snp.trailing).offset(34)
+        }
+        
+        metMessageLabel.snp.makeConstraints { make in
+            make.top.centerX.equalToSuperview()
+        }
+        
+        lastWateringMessageLabel.snp.makeConstraints { make in
+            make.top.equalTo(metMessageLabel.snp.bottom)
+            make.bottom.centerX.equalToSuperview()
+        }
+        
+        metDateLabel.snp.makeConstraints { make in
+            make.top.centerX.equalToSuperview()
+        }
+        
+        lastWateringDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(metDateLabel.snp.bottom)
+            make.bottom.centerX.equalToSuperview()
+        }
+        
+        memoView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(316)
+        }
+        
+        nextButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.trailing.equalToSuperview().offset(-20)
+            make.width.height.equalTo(48)
+        }
+        
+        memoTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(nextButton.snp.leading)
+        }
+        
+        memoCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(memoTitleLabel.snp.bottom).offset(8)
+            make.width.equalToSuperview()
+            make.height.equalTo(174)
+        }
+        
+        addMemoButton.snp.makeConstraints { make in
+            make.top.equalTo(memoCollectionView.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(42)
+        }
+        
+        plantInfoView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(274)
+        }
+        
+        infoTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+        }
+        
+        backgroundView.snp.makeConstraints { make in
+            make.top.equalTo(infoTitleLabel.snp.bottom)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(188)
+        }
+        
+        wateringCycleImage.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview().offset(16)
+        }
+        
+        wateringCycleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(18)
+            make.leading.equalTo(wateringCycleImage.snp.trailing).offset(8)
+        }
+        
+        cautionLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(46)
+            make.top.equalTo(wateringCycleLabel.snp.bottom).offset(6)
+        }
+        
+        sunlightImageView.snp.makeConstraints { make in
+            make.top.equalTo(cautionLabel.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(16)
+        }
+        
+        sunlightInfoLabel.snp.makeConstraints { make in
+            make.top.equalTo(sunlightImageView.snp.top).offset(2)
+            make.leading.equalTo(sunlightImageView.snp.trailing).offset(8)
+        }
+        
+        temperatureImageView.snp.makeConstraints { make in
+            make.top.equalTo(sunlightImageView.snp.bottom).offset(12)
+            make.leading.equalToSuperview().offset(16)
+        }
+        
+        temperatureLabel.snp.makeConstraints { make in
+            make.top.equalTo(temperatureImageView.snp.top).offset(2)
+            make.leading.equalTo(temperatureImageView.snp.trailing).offset(8)
+        }
+        
+        humidityInfoImageView.snp.makeConstraints { make in
+            make.top.equalTo(temperatureImageView.snp.bottom).offset(12)
+            make.leading.equalToSuperview().offset(16)
+        }
+        
+        humidityInfoLabel.snp.makeConstraints { make in
+            make.top.equalTo(humidityInfoImageView.snp.top).offset(2)
+            make.leading.equalTo(humidityInfoImageView.snp.trailing).offset(8)
         }
     }
 }
