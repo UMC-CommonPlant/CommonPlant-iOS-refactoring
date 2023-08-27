@@ -191,6 +191,7 @@ class MyPlantViewController: UIViewController {
         infoTitleLabel.padding = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 0)
         
         backgroundView.backgroundColor = .seaGreen
+        backgroundView.makeRound(radius: 16)
         
         wateringCycleImage.image = UIImage(named: "WateringPot")
         
