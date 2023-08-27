@@ -80,6 +80,8 @@ class MyPlantViewController: UIViewController {
     // MARK: Custom Methods
     func setAttributes() {
         let plantData = viewModel.myPlant
+        
+        var menuBtnConfig = UIButton.Configuration.plain()
         var nextBtnConfig = UIButton.Configuration.plain()
         var addBtnConfig = UIButton.Configuration.plain()
         
@@ -95,9 +97,13 @@ class MyPlantViewController: UIViewController {
             plantImageView.image = UIImage(named: "plant1")
         }
         
+        menuBtnConfig.image = UIImage(named: "Menu")
+        menuButton.configuration = menuBtnConfig
+        
         plantProfileView.backgroundColor = .white
         
         placeView.backgroundColor = .seaGreenDark3
+        placeView.makeRound(radius: 8)
         
         placeImageView.image = UIImage(named: "Place")
         
@@ -162,8 +168,8 @@ class MyPlantViewController: UIViewController {
         
         var addMemoAttr = AttributedString.init("작성하기")
         addMemoAttr.font = .bodyB3
-        addMemoAttr.foregroundColor = .white
         addBtnConfig.attributedTitle = addMemoAttr
+        addBtnConfig.baseForegroundColor = .white
         
         addMemoButton.configuration = addBtnConfig
         addMemoButton.contentHorizontalAlignment = .center
@@ -282,7 +288,7 @@ class MyPlantViewController: UIViewController {
         }
         
         menuButton.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.top.trailing.equalToSuperview()
             make.height.equalTo(32)
         }
         
@@ -393,7 +399,7 @@ class MyPlantViewController: UIViewController {
         
         memoTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(4)
-            make.leading.equalToSuperview()
+            make.leading.equalToSuperview().offset(20)
             make.trailing.equalTo(nextButton.snp.leading)
         }
         
