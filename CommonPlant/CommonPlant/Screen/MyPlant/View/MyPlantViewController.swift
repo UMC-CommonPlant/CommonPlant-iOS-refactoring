@@ -68,9 +68,13 @@ class MyPlantViewController: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .gray1
+        self.view.backgroundColor = .white
         self.navigationItem.title = "My Plant"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1, .foregroundColor: UIColor.gray6 as Any]
+        
+        setAttributes()
+        setHierarchy()
+        setConstraints()
     }
     
     // MARK: Custom Methods
@@ -79,9 +83,19 @@ class MyPlantViewController: UIViewController {
         var nextBtnConfig = UIButton.Configuration.plain()
         var addBtnConfig = UIButton.Configuration.plain()
         
-        stackView.backgroundColor = .white
+        stackView.backgroundColor = .gray1
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 8
         
-        plantImageView.load(url: URL(string: plantData.imgURL)!)
+        if let imageURL = URL(string: plantData.imgURL) {
+            plantImageView.load(url: imageURL)
+        } else {
+            plantImageView.image = UIImage(named: "plant1")
+        }
+        
+        plantProfileView.backgroundColor = .white
         
         placeView.backgroundColor = .seaGreenDark3
         
@@ -100,6 +114,8 @@ class MyPlantViewController: UIViewController {
         scientificNameLabel.textColor = .gray6
         scientificNameLabel.font = .bodyM2
         scientificNameLabel.textAlignment = .center
+        
+        dateInfoView.backgroundColor = .white
         
         countingMessageLabel.text = "\(plantData.nickname)와(과) 함께한지 \(plantData.countDate)일이 지났어요!"
         countingMessageLabel.partiallyChanged(targetString: "\(plantData.countDate)일", font: .bodyB1, color: .gray6)
@@ -134,6 +150,8 @@ class MyPlantViewController: UIViewController {
         lastWateringDateLabel.font = .captionM1
         lastWateringDateLabel.textAlignment = .center
         
+        memoView.backgroundColor = .white
+        
         memoTitleLabel.text = "Memo"
         memoTitleLabel.textColor = .gray4
         memoTitleLabel.font = .bodyB1
@@ -151,6 +169,8 @@ class MyPlantViewController: UIViewController {
         addMemoButton.contentHorizontalAlignment = .center
         addMemoButton.backgroundColor = .seaGreenDark1
         addMemoButton.makeRound(radius: 8)
+        
+        plantInfoView.backgroundColor = .white
         
         infoTitleLabel.text = "식물정보"
         infoTitleLabel.textColor = .gray4
@@ -213,6 +233,7 @@ class MyPlantViewController: UIViewController {
         [countingMessageLabel, wateringView, infoView].forEach {
             dateInfoView.addSubview($0)
         }
+        
         [wateringImageView, waterDayLabel].forEach {
             wateringView.addSubview($0)
         }
@@ -245,11 +266,11 @@ class MyPlantViewController: UIViewController {
     func setConstraints() {
         scrollView.snp.makeConstraints { make in
             make.top.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.left.right.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
         
         stackView.snp.makeConstraints { make in
-            make.top.left.right.bottom.equalTo(scrollView)
+            make.top.leading.trailing.bottom.equalTo(scrollView)
             make.width.equalToSuperview()
             make.height.greaterThanOrEqualToSuperview().priority(.low)
         }
@@ -268,12 +289,12 @@ class MyPlantViewController: UIViewController {
         plantImageView.snp.makeConstraints { make in
             make.top.equalTo(menuButton.snp.bottom).offset(4)
             make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(208)
         }
         
         placeView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
+            make.top.equalTo(plantImageView.snp.top).offset(8)
             make.centerX.equalToSuperview()
             make.height.equalTo(32)
         }
@@ -287,16 +308,17 @@ class MyPlantViewController: UIViewController {
         placeNameLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(placeImageView.snp.trailing).offset(4)
-            make.trailing.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
         }
         
         nickNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(plantImageView.snp.bottom).offset(8)
+            make.top.equalTo(plantImageView.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
+            make.height.equalTo(32)
         }
         
         scientificNameLabel.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(16)
+            make.bottom.equalToSuperview().offset(-16)
             make.centerX.equalToSuperview()
         }
         
@@ -317,13 +339,13 @@ class MyPlantViewController: UIViewController {
         }
         
         wateringImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
+            make.leading.equalToSuperview()
             make.centerY.equalToSuperview()
         }
         
         waterDayLabel.snp.makeConstraints { make in
-            make.left.equalTo(wateringImageView.snp.right).offset(8)
-            make.centerY.equalToSuperview()
+            make.leading.equalTo(wateringImageView.snp.trailing).offset(8)
+            make.centerY.trailing.equalToSuperview()
         }
         
         infoView.snp.makeConstraints { make in
@@ -337,25 +359,25 @@ class MyPlantViewController: UIViewController {
         
         dateView.snp.makeConstraints { make in
             make.top.trailing.bottom.equalToSuperview()
-            make.left.equalTo(messageView.snp.trailing).offset(34)
+            make.leading.equalTo(messageView.snp.trailing).offset(34)
         }
         
         metMessageLabel.snp.makeConstraints { make in
-            make.top.centerX.equalToSuperview()
+            make.top.leading.centerX.equalToSuperview()
         }
         
         lastWateringMessageLabel.snp.makeConstraints { make in
             make.top.equalTo(metMessageLabel.snp.bottom)
-            make.bottom.centerX.equalToSuperview()
+            make.leading.bottom.centerX.equalToSuperview()
         }
         
         metDateLabel.snp.makeConstraints { make in
-            make.top.centerX.equalToSuperview()
+            make.top.trailing.centerX.equalToSuperview()
         }
         
         lastWateringDateLabel.snp.makeConstraints { make in
             make.top.equalTo(metDateLabel.snp.bottom)
-            make.bottom.centerX.equalToSuperview()
+            make.trailing.bottom.centerX.equalToSuperview()
         }
         
         memoView.snp.makeConstraints { make in
