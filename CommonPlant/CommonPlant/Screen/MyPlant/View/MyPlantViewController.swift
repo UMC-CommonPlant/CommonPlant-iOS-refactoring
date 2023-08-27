@@ -8,11 +8,13 @@
 import UIKit
 import RxSwift
 import SnapKit
+import Kingfisher
 
 class MyPlantViewController: UIViewController {
     // MARK: Properties
     let viewModel = MyPlantViewModel()
     let disposeBag = DisposeBag()
+    let identifier = MemoCollectionViewCell.identifier
     
     // MARK: UIComponents
     var scrollView = UIScrollView()
@@ -43,10 +45,11 @@ class MyPlantViewController: UIViewController {
     var nextButton = UIButton()
     lazy var memoCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.minimumInteritemSpacing = 8
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 8
+        flowLayout.minimumInteritemSpacing = 0
         flowLayout.itemSize = CGSize(width: 250, height: 174)
+        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 0, right: 20)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.backgroundColor = .clear
         return view
@@ -71,6 +74,8 @@ class MyPlantViewController: UIViewController {
         self.view.backgroundColor = .white
         self.navigationItem.title = "My Plant"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1, .foregroundColor: UIColor.gray6 as Any]
+        self.memoCollectionView.delegate = self
+        self.memoCollectionView.dataSource = self
         
         setAttributes()
         setHierarchy()
@@ -165,6 +170,8 @@ class MyPlantViewController: UIViewController {
         
         nextBtnConfig.image = UIImage(named: "Next")
         nextButton.configuration = nextBtnConfig
+        
+        memoCollectionView.register(MemoCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
         
         var addMemoAttr = AttributedString.init("작성하기")
         addMemoAttr.font = .bodyB3
@@ -404,13 +411,13 @@ class MyPlantViewController: UIViewController {
         }
         
         memoCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(memoTitleLabel.snp.bottom).offset(8)
+            make.top.equalTo(memoTitleLabel.snp.bottom).offset(4)
             make.width.equalToSuperview()
-            make.height.equalTo(174)
+            make.height.equalTo(182)
         }
         
         addMemoButton.snp.makeConstraints { make in
-            make.top.equalTo(memoCollectionView.snp.bottom).offset(16)
+            make.top.equalTo(memoCollectionView.snp.bottom).offset(12)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(42)
@@ -477,5 +484,35 @@ class MyPlantViewController: UIViewController {
             make.top.equalTo(humidityInfoImageView.snp.top).offset(2)
             make.leading.equalTo(humidityInfoImageView.snp.trailing).offset(8)
         }
+    }
+}
+
+extension MyPlantViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        viewModel.myPlant.memoList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! MemoCollectionViewCell
+
+        let memo = viewModel.myPlant.memoList[indexPath.row]
+        
+        if let profileURL = URL(string: memo.userImgURL) {
+            cell.profileView.kf.setImage(with: profileURL)
+        }
+        
+        cell.nickNameLabel.text = memo.userNickName
+        
+        cell.contentLabel.text = memo.content
+        
+        if let imageURLString = memo.imgURL {
+            if let imageURL = URL(string: imageURLString) {
+                cell.imageView.kf.setImage(with: imageURL)
+            }
+        }
+        
+        cell.dateLabel.text = memo.createdAt
+        
+        return cell
     }
 }

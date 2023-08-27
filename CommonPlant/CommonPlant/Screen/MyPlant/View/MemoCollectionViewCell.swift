@@ -22,6 +22,9 @@ class MemoCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setAttributes()
+        setHierarchy()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -30,6 +33,9 @@ class MemoCollectionViewCell: UICollectionViewCell {
     
     // MARK: Custom Methods
     func setAttributes() {
+        self.makeShadow()
+        self.backgroundColor = .white
+        
         memoCardView.makeRound(radius: 16)
         memoCardView.layer.borderWidth = 1
         memoCardView.layer.borderColor = UIColor.gray2?.cgColor
