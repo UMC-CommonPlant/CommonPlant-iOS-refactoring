@@ -72,17 +72,23 @@ class MyPlantViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        self.navigationItem.title = "My Plant"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1, .foregroundColor: UIColor.gray6 as Any]
+        
         self.memoCollectionView.delegate = self
         self.memoCollectionView.dataSource = self
         
+        setNavigationBar()
         setAttributes()
         setHierarchy()
         setConstraints()
     }
     
     // MARK: Custom Methods
+    func setNavigationBar() {
+        self.navigationItem.title = "My Plant"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
+        self.navigationController?.navigationBar.barTintColor = .white
+    }
+    
     func setAttributes() {
         let plantData = viewModel.myPlant
         
