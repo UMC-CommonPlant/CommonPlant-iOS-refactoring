@@ -46,7 +46,7 @@ class MyPlantViewController: UIViewController {
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 0
         flowLayout.minimumInteritemSpacing = 8
-        flowLayout.itemSize = CGSize(width: self.view.bounds.width, height: 174)
+        flowLayout.itemSize = CGSize(width: 250, height: 174)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.backgroundColor = .clear
         return view
