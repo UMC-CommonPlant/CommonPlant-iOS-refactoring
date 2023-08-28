@@ -12,4 +12,12 @@ extension UIView {
         layer.cornerRadius = radius
         clipsToBounds = true
     }
+    
+    func makeShadow() {
+        layer.shadowColor = UIColor.gray5?.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.shadowOpacity = 0.25
+        layer.shadowRadius = 2
+        layer.cornerRadius = 16
+    }
 }
