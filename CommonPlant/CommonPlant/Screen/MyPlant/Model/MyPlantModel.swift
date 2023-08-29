@@ -19,11 +19,3 @@ struct MyPlant {
     let humidity: String
     let memoList: [Memo]
 }
-
-struct Memo {
-    let userNickName: String
-    let userImgURL: String
-    let content: String
-    let imgURL: String?
-    let createdAt: String
-}
