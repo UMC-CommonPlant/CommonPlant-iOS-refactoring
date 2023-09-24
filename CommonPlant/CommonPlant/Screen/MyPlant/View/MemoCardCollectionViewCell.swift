@@ -20,7 +20,7 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
     var postImageView = UIImageView()
     var contentLabel = UILabel()
     var dateLabel = UILabel()
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         setHierarchy()
