@@ -7,10 +7,11 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
-class MemoTableViewCell: UITableViewCell {
+class MemoCardCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
-    static let identifier = "MomoTableViewCell"
+    static let identifier = "MemoCardCollectionViewCell"
     
     // MARK: - UI Components
     var profileImageView = UIImageView()
@@ -20,9 +21,8 @@ class MemoTableViewCell: UITableViewCell {
     var contentLabel = UILabel()
     var dateLabel = UILabel()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setAttributes()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setHierarchy()
         setConstraints()
     }
@@ -30,21 +30,22 @@ class MemoTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(\(coder) has not been implemented")
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-    }
     
     // MARK: - Custom Methods
-    func setAttributes() {
+    func setAttributes(with model: Memo) {
         self.backgroundColor = .white
         
         var moreBtnConfig = UIButton.Configuration.plain()
         
-        profileImageView.makeRound(radius: 16)
-        profileImageView.contentMode = .scaleAspectFill
+        if let profileImageURL = URL(string: model.userImgURL) {
+            profileImageView.load(url: profileImageURL) {
+                
+            }
+            profileImageView.makeRound(radius: 16)
+            profileImageView.contentMode = .scaleAspectFit
+        }
         
+        nickNameLabel.text = model.userNickName
         nickNameLabel.font = .bodyM2
         nickNameLabel.textColor = .gray6
         
@@ -52,13 +53,44 @@ class MemoTableViewCell: UITableViewCell {
         moreButton.configuration = moreBtnConfig
         
         postImageView.makeRound(radius: 8)
-        postImageView.contentMode = .scaleAspectFill
+        postImageView.contentMode = .scaleAspectFit
         
+        if let postImageString = model.imgURL {
+            if let postImageURL = URL(string: postImageString) {
+                postImageView.kf.setImage(with: postImageURL) { result in
+                    switch result {
+                    case .success(let value):
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            
+                            let image = value.image
+                            let aspectRatio = image.size.width / image.size.height
+                            let width = self.contentView.frame.width - 40
+                            postImageView.snp.remakeConstraints { make in
+                                make.top.equalTo(self.profileImageView.snp.bottom).offset(16)
+                                make.leading.equalToSuperview().offset(20)
+                                make.trailing.equalToSuperview().offset(-20)
+                                make.height.equalTo(width/aspectRatio)
+                            }
+                            
+                            if let collectionView = self.superview as? UICollectionView {
+                                collectionView.performBatchUpdates(nil)
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+        }
+        
+        contentLabel.text = model.content
         contentLabel.font = .bodyM2
         contentLabel.textColor = .gray6
         contentLabel.numberOfLines = 0
         contentLabel.lineBreakMode = .byCharWrapping
         
+        dateLabel.text = model.createdAt
         dateLabel.font = .captionM1
         dateLabel.textColor = .gray4
     }
@@ -70,9 +102,13 @@ class MemoTableViewCell: UITableViewCell {
     }
     
     func setConstraints() {
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         profileImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
-            make.leading.equalToSuperview().offset(20)
+            make.top.equalTo(contentView).offset(16)
+            make.leading.equalTo(contentView).offset(20)
             make.width.height.equalTo(32)
         }
         
@@ -84,25 +120,26 @@ class MemoTableViewCell: UITableViewCell {
         moreButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-20)
             make.centerY.equalTo(profileImageView.snp.centerY)
-            make.width.height.equalTo(28)
         }
         
         postImageView.snp.makeConstraints { make in
             make.top.equalTo(profileImageView.snp.bottom).offset(16)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
-            make.height.equalTo(242)
+            make.height.equalTo(0)
         }
         
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(postImageView.snp.bottom).offset(16)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
+            make.bottom.equalToSuperview().offset(-44)
         }
         
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(contentLabel.snp.bottom).offset(8)
-            make.trailing.equalTo(-20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.bottom.equalToSuperview().offset(-16)
         }
     }
 }
