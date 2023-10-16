@@ -120,6 +120,7 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
         moreButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-20)
             make.centerY.equalTo(profileImageView.snp.centerY)
+            make.width.height.equalTo(28)
         }
         
         postImageView.snp.makeConstraints { make in

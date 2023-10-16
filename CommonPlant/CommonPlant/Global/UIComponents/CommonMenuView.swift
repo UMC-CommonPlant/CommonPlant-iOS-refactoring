@@ -31,6 +31,7 @@ class CommonMenuView: UIView {
     
     func setAttributes() {
         self.backgroundColor = .white
+        self.makeRound(radius: 16)
         
         editLabel.text = "수정하기"
         editLabel.font = .bodyM2
@@ -69,6 +70,7 @@ class CommonMenuView: UIView {
         
         editView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(63.75)
         }
         
         editImageView.snp.makeConstraints { make in
@@ -86,12 +88,13 @@ class CommonMenuView: UIView {
         divisionView.snp.makeConstraints { make in
             make.top.equalTo(editView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(0.5)
+            make.height.equalTo(1)
         }
         
         deleteView.snp.makeConstraints { make in
             make.top.equalTo(divisionView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(63.75)
         }
         
         deleteImageView.snp.makeConstraints { make in
