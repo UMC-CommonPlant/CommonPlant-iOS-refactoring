@@ -13,7 +13,6 @@ import RxGesture
 class MemoViewController: UIViewController {
     // MARK: - Properties
     var viewModel = MemoViewModel()
-    let disposeBag = DisposeBag()
     let identifier = MemoCardCollectionViewCell.identifier
     
     // MARK: - UI Components
@@ -84,55 +83,68 @@ class MemoViewController: UIViewController {
             .bind(to: memoCollectionView.rx.items(cellIdentifier: identifier, cellType: MemoCardCollectionViewCell.self)) { id, data, cell in
                 
                 cell.moreButton.rx.tap
-                    .subscribe(onNext: {
-                        self.memoCollectionView.addSubview(self.menuView)
+                    .subscribe(onNext: { [weak self] in
+                        guard let self = self else { return }
+                        print("moreButton is tapped.")
+                        //self.memoCollectionView.addSubview(self.menuView)
+                        self.view.addSubview(self.menuView)
                         self.backgroundView.isHidden = false
+                        
                         self.showMenu(forCellAt: IndexPath(row: id, section: 0))
-                    })
-                    .disposed(by: self.disposeBag)
+                    }).disposed(by: self.viewModel.disposeBag)
+                
                 cell.setAttributes(with: data)
-            }
-            .disposed(by: disposeBag)
+            }.disposed(by: viewModel.disposeBag)
     }
     
     private func showMenu(forCellAt indexPath: IndexPath) {
         guard let cell = memoCollectionView.cellForItem(at: indexPath) as? MemoCardCollectionViewCell else { return }
+        let moreButtonFrameInSuperview = cell.moreButton.convert(cell.moreButton.bounds, to: self.view)
+
+        let menuTopOffset: CGFloat = 22
+        let moreButtonBottomY = moreButtonFrameInSuperview.origin.y + moreButtonFrameInSuperview.height
         
-        let moreButtonFrameInSuperview = cell.moreButton.convert(cell.moreButton.bounds, to: memoCollectionView)
-        let menuTopOffset: CGFloat = 18
+        let menuTopY = menuTopOffset + moreButtonBottomY
+        let menuViewHeight: CGFloat = 128
+        let menuBottomY = menuTopY + menuViewHeight
+        let bottomSafeAreaInset = self.view.safeAreaInsets.bottom
+        let screenBottomY = self.view.bounds.height - bottomSafeAreaInset
+        let necessaryScrollOffset = max(0, menuBottomY - screenBottomY)
+        let scrollOffset: CGFloat = 4
         
-        let moreButtonBottomY = moreButtonFrameInSuperview.origin.y + moreButtonFrameInSuperview.size.height
+        print("necessaryScrollOffset: \(necessaryScrollOffset), scrollOffset: \(scrollOffset)")
+
+//        self.view.addSubview(menuView)
         
-        self.view.addSubview(menuView)
-        
-        let necessaryScrollOffset = menuTopOffset + 128
-        
-        if moreButtonBottomY + necessaryScrollOffset > self.view.bounds.size.height {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.memoCollectionView.contentOffset.y += moreButtonBottomY + necessaryScrollOffset
-            }) { _ in
-                self.menuView.snp.remakeConstraints { make in
-                    make.top.equalTo(moreButtonBottomY + menuTopOffset + necessaryScrollOffset)
-                    make.trailing.equalTo(self.memoCollectionView.safeAreaLayoutGuide.snp.trailing).offset(-20)
-                    make.width.equalTo(228)
-                    make.height.equalTo(128)
-                }
+        if necessaryScrollOffset > 0 {
+            print("menuTopY: \(menuTopY), moreButtonBottomY: \(moreButtonBottomY), memoCollectionView.contentOffset.y: \(memoCollectionView.contentOffset.y)")
+            UIView.animate(withDuration: 0.1) {
+                let newOffset = self.memoCollectionView.contentOffset.y + necessaryScrollOffset + scrollOffset
+                self.memoCollectionView.setContentOffset(CGPoint(x: 0, y: newOffset), animated: false)
+            }
+            
+            self.menuView.snp.remakeConstraints { make in
+                make.top.equalTo(menuTopY - necessaryScrollOffset - scrollOffset)
+                make.trailing.equalTo(self.memoCollectionView.safeAreaLayoutGuide.snp.trailing).offset(-24)
+                make.width.equalTo(228)
+                make.height.equalTo(128)
             }
         } else {
             self.menuView.snp.remakeConstraints { make in
-                make.top.equalTo(moreButtonBottomY)
-                make.trailing.equalTo(self.memoCollectionView.safeAreaLayoutGuide.snp.trailing).offset(-20)
+                make.top.equalTo(menuTopY)
+                make.trailing.equalTo(self.memoCollectionView.safeAreaLayoutGuide.snp.trailing).offset(-24)
                 make.width.equalTo(228)
                 make.height.equalTo(128)
             }
         }
-        
+
+
         menuView.editView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { gesture in
                 self.menuView.isHidden = true
                 self.backgroundView.isHidden = true
-            }).disposed(by: disposeBag)
+            }).disposed(by: viewModel.disposeBag)
         
         menuView.isHidden = false
     }

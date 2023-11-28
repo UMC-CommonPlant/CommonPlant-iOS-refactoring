@@ -20,6 +20,7 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
     var postImageView = UIImageView()
     var contentLabel = UILabel()
     var dateLabel = UILabel()
+    //var menuView = CommonMenuView()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,7 +35,6 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
     // MARK: - Custom Methods
     func setAttributes(with model: Memo) {
         self.backgroundColor = .white
-        
         var moreBtnConfig = UIButton.Configuration.plain()
         
         if let profileImageURL = URL(string: model.userImgURL) {
@@ -57,22 +57,22 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
         
         if let postImageString = model.imgURL {
             if let postImageURL = URL(string: postImageString) {
-                postImageView.kf.setImage(with: postImageURL) { result in
+                postImageView.kf.setImage(with: postImageURL) { [weak self] result in
+                    guard let self = self else { return }
+                    
                     switch result {
                     case .success(let value):
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-                            
+                        DispatchQueue.main.async {
                             let image = value.image
                             let aspectRatio = image.size.width / image.size.height
                             let width = self.contentView.frame.width - 40
-                            postImageView.snp.remakeConstraints { make in
+                            self.postImageView.snp.remakeConstraints { make in
                                 make.top.equalTo(self.profileImageView.snp.bottom).offset(16)
                                 make.leading.equalToSuperview().offset(20)
                                 make.trailing.equalToSuperview().offset(-20)
-                                make.height.equalTo(width/aspectRatio)
+                                make.height.equalTo(width / aspectRatio)
                             }
-                            
+
                             if let collectionView = self.superview as? UICollectionView {
                                 collectionView.performBatchUpdates(nil)
                             }
@@ -82,7 +82,16 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
                     }
                 }
             }
+        } else {
+            postImageView.image = nil
+            postImageView.snp.remakeConstraints { make in  // 이미지 URL이 nil인 경우 이미지 뷰의 높이를 0으로 설정
+                make.top.equalTo(profileImageView.snp.bottom).offset(16)
+                make.leading.equalToSuperview().offset(20)
+                make.trailing.equalToSuperview().offset(-20)
+                make.height.equalTo(0)
+            }
         }
+
         
         contentLabel.text = model.content
         contentLabel.font = .bodyM2
@@ -122,6 +131,13 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
             make.centerY.equalTo(profileImageView.snp.centerY)
             make.width.height.equalTo(28)
         }
+        
+//        menuView.snp.makeConstraints { make in
+//            make.top.equalTo(moreButton.snp.bottom).offset(20)
+//            make.trailing.equalToSuperview().offset(-20)
+//            make.width.equalTo(228)
+//            make.height.equalTo(128)
+//        }
         
         postImageView.snp.makeConstraints { make in
             make.top.equalTo(profileImageView.snp.bottom).offset(16)
