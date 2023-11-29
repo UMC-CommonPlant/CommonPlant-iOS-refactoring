@@ -136,6 +136,15 @@ class MemoViewController: UIViewController {
         menuView.editView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { gesture in
+                // TODO: 메모 수정 로직
+                self.menuView.isHidden = true
+                self.backgroundView.isHidden = true
+            }).disposed(by: viewModel.disposeBag)
+        
+        menuView.deleteView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { gesture in
+                // TODO: 메모 삭제 로직
                 self.menuView.isHidden = true
                 self.backgroundView.isHidden = true
             }).disposed(by: viewModel.disposeBag)
