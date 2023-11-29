@@ -20,7 +20,6 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
     var postImageView = UIImageView()
     var contentLabel = UILabel()
     var dateLabel = UILabel()
-    //var menuView = CommonMenuView()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -72,9 +71,9 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
                                 make.trailing.equalToSuperview().offset(-20)
                                 make.height.equalTo(width / aspectRatio)
                             }
-
+                            
                             if let collectionView = self.superview as? UICollectionView {
-                                collectionView.performBatchUpdates(nil)
+                                collectionView.collectionViewLayout.invalidateLayout()
                             }
                         }
                     case .failure(let error):
@@ -131,13 +130,6 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
             make.centerY.equalTo(profileImageView.snp.centerY)
             make.width.height.equalTo(28)
         }
-        
-//        menuView.snp.makeConstraints { make in
-//            make.top.equalTo(moreButton.snp.bottom).offset(20)
-//            make.trailing.equalToSuperview().offset(-20)
-//            make.width.equalTo(228)
-//            make.height.equalTo(128)
-//        }
         
         postImageView.snp.makeConstraints { make in
             make.top.equalTo(profileImageView.snp.bottom).offset(16)

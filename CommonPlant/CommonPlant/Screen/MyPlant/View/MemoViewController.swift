@@ -26,7 +26,6 @@ class MemoViewController: UIViewController {
     }()
     
     private func createLayout() -> UICollectionViewLayout {
-        
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let itme = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -112,10 +111,6 @@ class MemoViewController: UIViewController {
         let necessaryScrollOffset = max(0, menuBottomY - screenBottomY)
         let scrollOffset: CGFloat = 4
         
-        print("necessaryScrollOffset: \(necessaryScrollOffset), scrollOffset: \(scrollOffset)")
-
-//        self.view.addSubview(menuView)
-        
         if necessaryScrollOffset > 0 {
             print("menuTopY: \(menuTopY), moreButtonBottomY: \(moreButtonBottomY), memoCollectionView.contentOffset.y: \(memoCollectionView.contentOffset.y)")
             UIView.animate(withDuration: 0.1) {
@@ -137,7 +132,6 @@ class MemoViewController: UIViewController {
                 make.height.equalTo(128)
             }
         }
-
 
         menuView.editView.rx.tapGesture()
             .when(.recognized)
