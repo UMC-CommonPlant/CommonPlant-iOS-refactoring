@@ -61,42 +61,50 @@ class MemoViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        setMemoCollectionView()
-        setBackgroundView()
+        setAttributes()
+        setConstraints()
+        bind()
     }
     
     // MARK: - Custom Methods
-    func setBackgroundView() {
+    func setAttributes() {
         backgroundView.backgroundColor = .black
         backgroundView.layer.opacity = 0.7
         backgroundView.isHidden = true
         
-        backgroundView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-    
-    func setMemoCollectionView() {
         memoCollectionView.backgroundColor = .gray1
         memoCollectionView.bounces = false
-        
+        memoCollectionView.register(MemoCardCollectionViewCell.self, forCellWithReuseIdentifier: MemoCardCollectionViewCell.identifier)
+    }
+    
+    func setConstraints() {
         [memoCollectionView, backgroundView, menuView, deleteAlertView].forEach {
             view.addSubview($0)
+        }
+        
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         memoCollectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
-        memoCollectionView.register(MemoCardCollectionViewCell.self, forCellWithReuseIdentifier: MemoCardCollectionViewCell.identifier)
-        
+        deleteAlertView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(52.5)
+            make.trailing.equalToSuperview().offset(-52.5)
+            make.height.equalTo(148)
+        }
+    }
+    
+    func bind() {
         viewModel.memoObservable
             .bind(to: memoCollectionView.rx.items(cellIdentifier: identifier, cellType: MemoCardCollectionViewCell.self)) { id, data, cell in
                 
                 cell.moreButton.rx.tap
                     .subscribe(onNext: { [weak self] in
                         guard let self = self else { return }
-                        print("moreButton is tapped.")
                         
                         self.backgroundView.isHidden = false
                         
@@ -105,21 +113,27 @@ class MemoViewController: UIViewController {
                 
                 cell.setAttributes(with: data)
             }.disposed(by: viewModel.disposeBag)
-    }
-    
-    func showDeleteAlertView() {
-        deleteAlertView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(52.5)
-            make.trailing.equalToSuperview().offset(-52.5)
-            make.height.equalTo(148)
-        }
         
         deleteAlertView.cancleButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             deleteAlertView.isHidden = true
             backgroundView.isHidden = true
         }).disposed(by: viewModel.disposeBag)
+        
+        menuView.editView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { gesture in
+                // TODO: 메모 수정 로직
+                self.menuView.isHidden = true
+                self.backgroundView.isHidden = true
+            }).disposed(by: viewModel.disposeBag)
+        
+        menuView.deleteView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { gesture in
+                self.deleteAlertView.isHidden = false
+                self.menuView.isHidden = true
+            }).disposed(by: viewModel.disposeBag)
     }
     
     private func showMenu(forCellAt indexPath: IndexPath) {
@@ -158,22 +172,6 @@ class MemoViewController: UIViewController {
                 make.height.equalTo(128)
             }
         }
-
-        menuView.editView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { gesture in
-                // TODO: 메모 수정 로직
-                self.menuView.isHidden = true
-                self.backgroundView.isHidden = true
-            }).disposed(by: viewModel.disposeBag)
-        
-        menuView.deleteView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { gesture in
-                self.deleteAlertView.isHidden = false
-                self.menuView.isHidden = true
-                self.showDeleteAlertView()
-            }).disposed(by: viewModel.disposeBag)
         
         menuView.isHidden = false
     }
