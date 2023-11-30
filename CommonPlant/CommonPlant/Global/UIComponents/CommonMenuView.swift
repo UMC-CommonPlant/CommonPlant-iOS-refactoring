@@ -39,7 +39,7 @@ class CommonMenuView: UIView {
         
         editImageView.image = UIImage(named: "Pen")
         
-        deleteLabel.text = "수정하기"
+        deleteLabel.text = "삭제하기"
         deleteLabel.font = .bodyM2
         deleteLabel.textColor = .black
         
