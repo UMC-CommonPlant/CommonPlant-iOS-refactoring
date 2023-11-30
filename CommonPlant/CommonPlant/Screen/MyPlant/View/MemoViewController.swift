@@ -17,7 +17,19 @@ class MemoViewController: UIViewController {
     
     // MARK: - UI Components
     var backgroundView = UIView()
-    var menuView = CommonMenuView()
+    var deleteAlertView: CommonAlertView = {
+        let view = CommonAlertView()
+        view.setTitle("게시물 삭제")
+        view.setMessage("해당 게시물을 삭제하시겠습니까?")
+        view.setActionButton(title: "삭제")
+        view.isHidden = true
+        return view
+    }()
+    var menuView: CommonMenuView = {
+        let view = CommonMenuView()
+        view.isHidden = true
+        return view
+    }()
     lazy var memoCollectionView: UICollectionView = {let view = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
         
         view.backgroundColor = .clear
@@ -59,8 +71,6 @@ class MemoViewController: UIViewController {
         backgroundView.layer.opacity = 0.7
         backgroundView.isHidden = true
         
-        view.addSubview(backgroundView)
-        
         backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -70,7 +80,9 @@ class MemoViewController: UIViewController {
         memoCollectionView.backgroundColor = .gray1
         memoCollectionView.bounces = false
         
-        view.addSubview(memoCollectionView)
+        [memoCollectionView, backgroundView, menuView, deleteAlertView].forEach {
+            view.addSubview($0)
+        }
         
         memoCollectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
@@ -85,8 +97,7 @@ class MemoViewController: UIViewController {
                     .subscribe(onNext: { [weak self] in
                         guard let self = self else { return }
                         print("moreButton is tapped.")
-                        //self.memoCollectionView.addSubview(self.menuView)
-                        self.view.addSubview(self.menuView)
+                        
                         self.backgroundView.isHidden = false
                         
                         self.showMenu(forCellAt: IndexPath(row: id, section: 0))
@@ -94,6 +105,21 @@ class MemoViewController: UIViewController {
                 
                 cell.setAttributes(with: data)
             }.disposed(by: viewModel.disposeBag)
+    }
+    
+    func showDeleteAlertView() {
+        deleteAlertView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(52.5)
+            make.trailing.equalToSuperview().offset(-52.5)
+            make.height.equalTo(148)
+        }
+        
+        deleteAlertView.cancleButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            deleteAlertView.isHidden = true
+            backgroundView.isHidden = true
+        }).disposed(by: viewModel.disposeBag)
     }
     
     private func showMenu(forCellAt indexPath: IndexPath) {
@@ -144,9 +170,9 @@ class MemoViewController: UIViewController {
         menuView.deleteView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { gesture in
-                // TODO: 메모 삭제 로직
+                self.deleteAlertView.isHidden = false
                 self.menuView.isHidden = true
-                self.backgroundView.isHidden = true
+                self.showDeleteAlertView()
             }).disposed(by: viewModel.disposeBag)
         
         menuView.isHidden = false
