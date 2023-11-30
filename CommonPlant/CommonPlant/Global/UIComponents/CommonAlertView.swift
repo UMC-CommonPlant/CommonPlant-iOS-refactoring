@@ -35,10 +35,10 @@ class CommonAlertView: UIView {
         var attribute = AttributedString.init("취소")
         attribute.font = .bodyM2
         config.attributedTitle = attribute
-        config.baseBackgroundColor = .white
         config.baseForegroundColor = .gray5
         config.background.cornerRadius = 0
         button.configuration = config
+        button.backgroundColor = .white
         return button
     }()
     var actionButton = UIButton()
@@ -46,6 +46,8 @@ class CommonAlertView: UIView {
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .white
+        self.makeRound(radius: 14)
         setConstraints()
     }
     
@@ -75,36 +77,33 @@ class CommonAlertView: UIView {
         
         buttonView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(104)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(44)
         }
         
         cancleButton.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.width.equalTo(self.frame.width/2 - 0.25)
             make.height.equalTo(43.5)
         }
-        
+
         actionButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.width.equalTo(self.frame.width/2 - 0.25)
+            make.leading.equalTo(cancleButton.snp.trailing).offset(1)
+            make.trailing.bottom.equalToSuperview()
+            make.width.equalTo(cancleButton.snp.width)
             make.height.equalTo(43.5)
         }
     }
     
     func setActionButton(title: String) {
         var config = UIButton.Configuration.plain()
-        var attribute = AttributedString.init("title")
+        var attribute = AttributedString.init(title)
         attribute.font = .bodyB2
         config.attributedTitle = attribute
-        config.baseBackgroundColor = .white
         config.baseForegroundColor = .seaGreenDark3
         config.background.cornerRadius = 0
         actionButton.configuration = config
+        actionButton.backgroundColor = .white
     }
     
     func setTitle(_ title: String) {
