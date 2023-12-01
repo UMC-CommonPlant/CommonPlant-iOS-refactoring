@@ -13,7 +13,7 @@ import RxGesture
 class MemoViewController: UIViewController {
     // MARK: - Properties
     var viewModel = MemoViewModel()
-    let identifier = MemoCardCollectionViewCell.identifier
+    let identifier = MemoCollectionViewCell.identifier
     
     // MARK: - UI Components
     var backgroundView = UIView()
@@ -74,7 +74,7 @@ class MemoViewController: UIViewController {
         
         memoCollectionView.backgroundColor = .gray1
         memoCollectionView.bounces = false
-        memoCollectionView.register(MemoCardCollectionViewCell.self, forCellWithReuseIdentifier: MemoCardCollectionViewCell.identifier)
+        memoCollectionView.register(MemoCollectionViewCell.self, forCellWithReuseIdentifier: MemoCollectionViewCell.identifier)
     }
     
     func setConstraints() {
@@ -100,7 +100,7 @@ class MemoViewController: UIViewController {
     
     func bind() {
         viewModel.memoObservable
-            .bind(to: memoCollectionView.rx.items(cellIdentifier: identifier, cellType: MemoCardCollectionViewCell.self)) { id, data, cell in
+            .bind(to: memoCollectionView.rx.items(cellIdentifier: identifier, cellType: MemoCollectionViewCell.self)) { id, data, cell in
                 
                 cell.moreButton.rx.tap
                     .subscribe(onNext: { [weak self] in
@@ -137,7 +137,7 @@ class MemoViewController: UIViewController {
     }
     
     private func showMenu(forCellAt indexPath: IndexPath) {
-        guard let cell = memoCollectionView.cellForItem(at: indexPath) as? MemoCardCollectionViewCell else { return }
+        guard let cell = memoCollectionView.cellForItem(at: indexPath) as? MemoCollectionViewCell else { return }
         let moreButtonFrameInSuperview = cell.moreButton.convert(cell.moreButton.bounds, to: self.view)
 
         let menuTopOffset: CGFloat = 22

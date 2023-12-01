@@ -14,7 +14,7 @@ class MyPlantViewController: UIViewController {
     // MARK: Properties
     let viewModel = MyPlantViewModel()
     let disposeBag = DisposeBag()
-    let identifier = MemoCollectionViewCell.identifier
+    let identifier = MemoCardCollectionViewCell.identifier
     
     // MARK: UIComponents
     var scrollView = UIScrollView()
@@ -177,7 +177,7 @@ class MyPlantViewController: UIViewController {
         nextBtnConfig.image = UIImage(named: "Next")
         nextButton.configuration = nextBtnConfig
         
-        memoCollectionView.register(MemoCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
+        memoCollectionView.register(MemoCardCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
         
         var addMemoAttr = AttributedString.init("작성하기")
         addMemoAttr.font = .bodyB3
@@ -500,7 +500,7 @@ extension MyPlantViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! MemoCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! MemoCardCollectionViewCell
 
         let memo = viewModel.myPlant.memoList[indexPath.row]
         
