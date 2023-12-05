@@ -10,8 +10,10 @@ import UIKit
 class AddMemoViewController: UIViewController {
     // MARK: - Properties
     var textCount: Int = 0
+    var imageCount: Int = 0
     
     // MARK: - UI Components
+    let imageSelectView = UIView()
     let cameraButtonView: UIView = {
         let view = UIView()
         view.makeRound(radius: 8)
@@ -24,9 +26,19 @@ class AddMemoViewController: UIViewController {
         view.image = UIImage(named: "Camera")
         return view
     }()
-    let imageCountLabel: UILabel = {
+    let imageView = UIImageView()
+    let deleteButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Camera")
+        config.imagePadding = 10
+        button.configuration = config
+        button.isHidden = true
+        return button
+    }()
+    lazy var imageCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "0/1"
+        label.text = "\(imageCount)/1"
         label.textColor = .gray5
         label.font = .bodyB3
         label.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
