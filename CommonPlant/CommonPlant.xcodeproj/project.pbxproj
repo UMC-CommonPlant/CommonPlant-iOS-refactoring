@@ -43,6 +43,7 @@
 		C0B1BDE92A9E21A200DD7E04 /* MemoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDE82A9E21A200DD7E04 /* MemoModel.swift */; };
 		C0B1BDEB2A9E21F200DD7E04 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDEA2A9E21F200DD7E04 /* MemoViewController.swift */; };
 		C0B1BDED2A9E23F100DD7E04 /* MemoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */; };
+		C0BDF2E52B1EFD7A002C7FD7 /* AddMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BDF2E42B1EFD7A002C7FD7 /* AddMemoViewController.swift */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
 		C0EE4A012B182D4000592185 /* CommonAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EE4A002B182D4000592185 /* CommonAlertView.swift */; };
 		F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */; };
@@ -109,6 +110,7 @@
 		C0B1BDE82A9E21A200DD7E04 /* MemoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoModel.swift; sourceTree = "<group>"; };
 		C0B1BDEA2A9E21F200DD7E04 /* MemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
 		C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCollectionViewCell.swift; sourceTree = "<group>"; };
+		C0BDF2E42B1EFD7A002C7FD7 /* AddMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemoViewController.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		C0EE4A002B182D4000592185 /* CommonAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonAlertView.swift; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,6 +282,7 @@
 				C0B1BDEA2A9E21F200DD7E04 /* MemoViewController.swift */,
 				C005D3632A9B3870004CD53F /* MemoCardCollectionViewCell.swift */,
 				C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */,
+				C0BDF2E42B1EFD7A002C7FD7 /* AddMemoViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -658,6 +661,7 @@
 				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
 				C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */,
+				C0BDF2E52B1EFD7A002C7FD7 /* AddMemoViewController.swift in Sources */,
 				F9D0CCAA2A586208006D688C /* MainMyPlantCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
