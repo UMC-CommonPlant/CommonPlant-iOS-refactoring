@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 struct MemoViewModel {
     var memoObservable = BehaviorSubject<[Memo]>(value: [])
@@ -22,6 +23,43 @@ struct MemoViewModel {
         ]
         
         memoObservable.onNext(memoList)
+    }
+    
+    enum ButtonState {
+        case enable
+        case disable
+        case click
+    }
+    
+    struct Input {
+        let isSelectImage: Observable<Bool>
+        let completeButtonDidTap: Observable<Void>
+        let messageTextField: Observable<String>
+    }
+    
+    struct Output {
+        let imageCount: Driver<Bool>
+        let messageCount: Driver<Int>
+        let buttonState: Driver<ButtonState>
+    }
+    
+    func transform(input: Input) -> Output {
+        let messageCount = BehaviorRelay(value: 0)
+        let buttonState = BehaviorRelay(value: ButtonState.enable)
+        
+        input.messageTextField.bind { msg in
+            messageCount.accept(msg.count)
+            if 1...200 ~= msg.count {
+                buttonState.accept(.disable)
+            }
+        }.disposed(by: disposeBag)
+        
+        let imageCount = BehaviorRelay(value: false)
+        input.isSelectImage.bind { isSeleted in
+            imageCount.accept(isSeleted)
+        }.disposed(by: disposeBag)
+        
+        return Output(imageCount: imageCount.asDriver(), messageCount: messageCount.asDriver(), buttonState: buttonState.asDriver())
     }
     
     func getMemoList() -> [Memo] {
