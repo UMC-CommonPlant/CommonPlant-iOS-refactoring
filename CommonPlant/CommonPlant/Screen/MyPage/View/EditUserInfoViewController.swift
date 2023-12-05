@@ -62,7 +62,7 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         if let profileImage = MyPageViewModel.shared.editProfileRelay.value ?? MyPageViewModel.shared.infoProfileRelay.value {
             profileImageView.image = profileImage
         }
-        cameraImage = UIImage(named: "Camera")!
+        cameraImage = UIImage(named: "CameraMark")!
         cameraImageView.image = cameraImage
         
         MyPageViewModel.shared.userSubject.subscribe(onNext: { [weak self] userInfo in
