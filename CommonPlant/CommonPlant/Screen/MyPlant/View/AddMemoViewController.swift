@@ -6,11 +6,16 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class AddMemoViewController: UIViewController {
     // MARK: - Properties
     var textCount: Int = 0
     var imageCount: Int = 0
+    let viewModel = MemoViewModel()
+    lazy var isImageSelected = BehaviorRelay(value: selectImageView.image != nil)
+    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), isSelectedImage: isImageSelected.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), messageTextFieldText: contentTextField.rx.text.orEmpty.asObservable(), messageTextFieldDidTap: contentTextField.rx.controlEvent([.editingChanged, .editingDidEnd]))
     
     // MARK: - UI Components
     let imageSelectView = UIView()

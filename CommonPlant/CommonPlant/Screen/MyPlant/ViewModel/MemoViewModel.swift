@@ -32,13 +32,17 @@ struct MemoViewModel {
     }
     
     struct Input {
-        let isSelectImage: Observable<Bool>
+        let cameraButtonDidtap: Observable<Void>
+        let isSelectedImage: Observable<Bool>
         let completeButtonDidTap: Observable<Void>
-        let messageTextField: Observable<String>
+        let messageTextFieldText: Observable<String>
+        let messageTextFieldDidTap: ControlEvent<Void>
     }
     
     struct Output {
-        let imageCount: Driver<Bool>
+        let showImagePicker: Driver<Bool>
+        let imageCount: Driver<Int>
+        let isImageHidden: Driver<Bool>
         let messageCount: Driver<Int>
         let buttonState: Driver<ButtonState>
     }
@@ -47,19 +51,27 @@ struct MemoViewModel {
         let messageCount = BehaviorRelay(value: 0)
         let buttonState = BehaviorRelay(value: ButtonState.enable)
         
-        input.messageTextField.bind { msg in
-            messageCount.accept(msg.count)
+        input.messageTextFieldText.bind { msg in
             if 1...200 ~= msg.count {
                 buttonState.accept(.disable)
+                messageCount.accept(msg.count)
             }
         }.disposed(by: disposeBag)
         
-        let imageCount = BehaviorRelay(value: false)
-        input.isSelectImage.bind { isSeleted in
-            imageCount.accept(isSeleted)
+        let imageCount = BehaviorRelay(value: 0)
+        let isImgHidden = BehaviorRelay(value: true)
+        input.isSelectedImage.bind { isSeleted in
+            imageCount.accept(isSeleted ? 1 : 0)
+            isImgHidden.accept(!isSeleted)
         }.disposed(by: disposeBag)
         
-        return Output(imageCount: imageCount.asDriver(), messageCount: messageCount.asDriver(), buttonState: buttonState.asDriver())
+        let isShowingAlbum = BehaviorRelay(value: false)
+        
+        input.cameraButtonDidtap.bind {
+            isShowingAlbum.accept(true)
+        }.disposed(by: disposeBag)
+        
+        return Output(showImagePicker: isShowingAlbum.asDriver(), imageCount: imageCount.asDriver(), isImageHidden: isImgHidden.asDriver(), messageCount: messageCount.asDriver(), buttonState: buttonState.asDriver())
     }
     
     func getMemoList() -> [Memo] {
