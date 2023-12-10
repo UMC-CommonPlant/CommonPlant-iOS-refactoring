@@ -16,6 +16,7 @@ class AddMemoViewController: UIViewController {
     let viewModel = MemoViewModel()
     lazy var isImageSelected = BehaviorRelay(value: selectImageView.image != nil)
     private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), isSelectedImage: isImageSelected.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), messageTextFieldText: contentTextField.rx.text.orEmpty.asObservable(), messageTextFieldDidTap: contentTextField.rx.controlEvent([.editingChanged, .editingDidEnd]))
+    private lazy var output = viewModel.transform(input: input)
     
     // MARK: - UI Components
     let imageSelectView = UIView()
@@ -93,6 +94,55 @@ class AddMemoViewController: UIViewController {
         self.view.backgroundColor = .white
         setHierarchy()
         setConstraints()
+        bind()
+    }
+    
+    func bind() {
+        output.buttonState.drive { [weak self] state in
+            guard let self = self else { return }
+            switch state {
+            case .enable:
+                completeButton.backgroundColor = .gray1
+                completeButton.configuration?.baseForegroundColor = .gray3
+                completeButton.isEnabled = true
+            case .disable:
+                completeButton.backgroundColor = .seaGreenDark1
+                completeButton.configuration?.baseForegroundColor = .white
+                completeButton.isEnabled = true
+            case .click:
+                completeButton.backgroundColor = .seaGreenDark3
+                completeButton.configuration?.baseForegroundColor = .white
+            }
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.imageCount.drive { [weak self] count in
+            guard let self = self else { return }
+            
+            self.imageCountLabel.text = "\(count)/1"
+            self.imageCountLabel.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
+            
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.isImageHidden.drive { [weak self] isHidden in
+            guard let self = self else { return }
+            
+            self.deleteButton.isHidden = isHidden
+            
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.contentTextMessage.drive { [weak self] text in
+            guard let self = self else { return }
+            self.contentTextField.text = text
+            self.textCountLabel.text = "\(text.count)/200"
+            self.textCountLabel.partiallyChanged(targetString: "/200", font: .bodyM3, color: .gray5)
+            
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showImagePicker.drive { [weak self] isShowing in
+            guard let self = self else { return }
+            print("showing")
+            
+        }.disposed(by: viewModel.disposeBag)
     }
     
     func setHierarchy() {
@@ -171,5 +221,16 @@ class AddMemoViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
             make.height.equalTo(48)
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxLength = 200
+        guard let text = textField.text else { return true }
+        let newlength = text.count + string.count - range.length
+        return newlength < maxLength
     }
 }
