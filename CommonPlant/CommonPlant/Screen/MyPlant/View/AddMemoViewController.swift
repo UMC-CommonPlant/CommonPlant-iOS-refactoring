@@ -241,15 +241,4 @@ class AddMemoViewController: UIViewController {
             make.height.equalTo(48)
         }
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let maxLength = 200
-        guard let text = textField.text else { return true }
-        let newlength = text.count + string.count - range.length
-        return newlength < maxLength
-    }
 }
