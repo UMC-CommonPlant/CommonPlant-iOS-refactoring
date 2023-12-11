@@ -15,7 +15,7 @@ class AddMemoViewController: UIViewController {
     var imageCount: Int = 0
     let viewModel = MemoViewModel()
     lazy var isImageSelected = BehaviorRelay(value: selectImageView.image != nil)
-    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), isSelectedImage: isImageSelected.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), messageTextFieldText: contentTextField.rx.text.orEmpty.asObservable(), messageTextFieldDidTap: contentTextField.rx.controlEvent([.editingChanged, .editingDidEnd]))
+    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), isSelectedImage: isImageSelected.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable())
     private lazy var output = viewModel.transform(input: input)
     
     // MARK: - UI Components
@@ -50,17 +50,26 @@ class AddMemoViewController: UIViewController {
         label.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
         return label
     }()
-    let contentTextField: UITextField = {
-        let textfield = UITextField()
-        textfield.borderStyle = .none
-        textfield.textColor = .gray6
-        textfield.tintColor = .gray6
-        textfield.textAlignment = .left
-        textfield.font = .bodyM2
-        textfield.returnKeyType = .done
-        textfield.clearButtonMode = .whileEditing
-        textfield.attributedPlaceholder = NSAttributedString(string: "메모 내용을 입력해 주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray3 as Any, NSAttributedString.Key.font : UIFont.bodyM2])
-        return textfield
+    let contentTextView: UITextView = {
+        let view = UITextView()
+        view.textColor = .gray6
+        view.tintColor = .gray6
+        view.textAlignment = .left
+        view.font = .bodyM2
+        view.returnKeyType = .done
+        view.isEditable = true
+        view.backgroundColor = .clear
+        view.isScrollEnabled = false
+        view.textContainerInset = .zero
+        return view
+    }()
+    let placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "메모 내용을 입력해 주세요"
+        label.textColor = .gray3
+        label.font = .bodyM1
+        label.textAlignment = .left
+        return label
     }()
     let underLineView: UIView = {
         let view = UIView()
@@ -130,12 +139,14 @@ class AddMemoViewController: UIViewController {
             
         }.disposed(by: viewModel.disposeBag)
         
-        output.contentTextMessage.drive { [weak self] text in
+        output.contentTextView.drive { [weak self] text in
             guard let self = self else { return }
-            self.contentTextField.text = text
+            self.placeholderLabel.text = text.isEmpty ? " 메모 내용을 입력해 주세요" : ""
+            self.contentTextView.text = text
             self.textCountLabel.text = "\(text.count)/200"
             self.textCountLabel.partiallyChanged(targetString: "/200", font: .bodyM3, color: .gray5)
-            
+            let size = CGSize(width: self.contentTextView.frame.width, height: .infinity)
+            self.contentTextView.sizeThatFits(size)
         }.disposed(by: viewModel.disposeBag)
         
         output.showImagePicker.drive { [weak self] isShowing in
@@ -146,7 +157,7 @@ class AddMemoViewController: UIViewController {
     }
     
     func setHierarchy() {
-        [imageSelectView, contentTextField, underLineView, textCountLabel, completeButton].forEach {
+        [imageSelectView, placeholderLabel, contentTextView, underLineView, textCountLabel, completeButton].forEach {
             view.addSubview($0)
         }
         
@@ -196,15 +207,23 @@ class AddMemoViewController: UIViewController {
             make.trailing.equalTo(selectImageView.snp.trailing).offset(15)
         }
         
-        contentTextField.snp.makeConstraints { make in
+        placeholderLabel.snp.makeConstraints { make in
             make.top.equalTo(imageSelectView.snp.bottom).offset(35)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(22)
+        }
+        
+        contentTextView.snp.makeConstraints { make in
+            make.top.equalTo(placeholderLabel.snp.top)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(placeholderLabel.snp.height).priority(.low)
         }
         
         underLineView.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.top.equalTo(contentTextField.snp.bottom).offset(15)
+            make.top.equalTo(contentTextView.textInputView.snp.bottom).offset(15)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
         }
