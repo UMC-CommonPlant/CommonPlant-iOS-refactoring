@@ -37,7 +37,7 @@ class AddMemoViewController: UIViewController {
     let deleteButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
-        config.image = UIImage(named: "Camera")
+        config.image = UIImage(named: "Delete")
         config.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
         button.configuration = config
         button.isHidden = true
