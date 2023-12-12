@@ -8,18 +8,19 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 class AddMemoViewController: UIViewController {
     // MARK: - Properties
     var textCount: Int = 0
     var imageCount: Int = 0
     let viewModel = MemoViewModel()
-    lazy var isImageSelected = BehaviorRelay(value: selectImageView.image != nil)
-    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), isSelectedImage: isImageSelected.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable())
+    var selectedImageString = BehaviorRelay<String?>(value: nil)
+    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), selectedImage: selectedImageString.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable())
     private lazy var output = viewModel.transform(input: input)
     
     // MARK: - UI Components
-    let imageSelectView = UIView()
+    var imageSelectView = UIView()
     let cameraButtonView: UIView = {
         let view = UIView()
         view.makeRound(radius: 8)
@@ -124,21 +125,6 @@ class AddMemoViewController: UIViewController {
             }
         }.disposed(by: viewModel.disposeBag)
         
-        output.imageCount.drive { [weak self] count in
-            guard let self = self else { return }
-            
-            self.imageCountLabel.text = "\(count)/1"
-            self.imageCountLabel.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
-            
-        }.disposed(by: viewModel.disposeBag)
-        
-        output.isImageHidden.drive { [weak self] isHidden in
-            guard let self = self else { return }
-            
-            self.deleteButton.isHidden = isHidden
-            
-        }.disposed(by: viewModel.disposeBag)
-        
         output.contentTextView.drive { [weak self] text in
             guard let self = self else { return }
             self.placeholderLabel.text = text.isEmpty ? " 메모 내용을 입력해 주세요" : ""
@@ -149,9 +135,54 @@ class AddMemoViewController: UIViewController {
             self.contentTextView.sizeThatFits(size)
         }.disposed(by: viewModel.disposeBag)
         
+        output.selectedImage.drive { [weak self] imgString in
+            guard let self = self else { return }
+            guard let imgString = imgString else { return }
+            
+            self.imageCountLabel.text = "1/1"
+            self.imageCountLabel.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
+            self.deleteButton.isHidden = false
+            selectImageView.kf.setImage(with: URL(string: imgString))
+            selectImageView.contentMode = .scaleAspectFit
+            selectImageView.makeRound(radius: 8)
+        }.disposed(by: viewModel.disposeBag)
+        
         output.showImagePicker.drive { [weak self] isShowing in
             guard let self = self else { return }
-            print("showing")
+            
+            if isShowing {
+                ImagePickerViewModel.shared.checkPermissionState() { state in
+                    DispatchQueue.main.async {
+                        switch state {
+                        case .denied:
+                            self.moveToSetting()
+                        case .authorized:
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
+                                ImagePickerViewController.shared.showPhotoPicker(viewController: self)
+                            }
+                                
+                            ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                                guard let self = self else { return }
+                                selectedImageString.accept(imageString)
+                                //self.selectImageView.kf.setImage(with: URL(string: imageString))
+                            }
+                        case .limited:
+                            let imagePickerVC = ImagePickerViewController()
+                            
+                            self.present(imagePickerVC, animated: true)
+                            
+                            imagePickerVC.didSelectImage = { [weak self] imageString in
+                                guard self != nil else { return }
+                                self?.selectedImageString.accept(imageString)
+                                //self.selectImageView.kf.setImage(with: imageString)
+                            }
+                        default:
+                            print("\(state)")
+                        }
+                    }
+                }
+            }
             
         }.disposed(by: viewModel.disposeBag)
     }
@@ -197,7 +228,7 @@ class AddMemoViewController: UIViewController {
         selectImageView.snp.makeConstraints { make in
             make.height.width.equalTo(80)
             make.top.equalToSuperview().offset(15)
-            make.leading.equalToSuperview().offset(20)
+            make.leading.equalTo(cameraButtonView.snp.trailing).offset(20)
         }
         
         deleteButton.snp.makeConstraints { make in
