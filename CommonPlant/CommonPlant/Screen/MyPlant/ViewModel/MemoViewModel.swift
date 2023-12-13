@@ -40,7 +40,7 @@ struct MemoViewModel {
     }
     
     struct Output {
-        let showImagePicker: Driver<Bool>
+        let showImagePicker: Driver<Void>
         //let imageCount: Driver<Int>
         let selectedImage: Driver<String?>
         //let isImageHidden: Driver<Bool>
@@ -62,28 +62,16 @@ struct MemoViewModel {
             buttonState.accept( 1...200 ~= msg.count ? .disable : .enable)
         }.disposed(by: disposeBag)
         
-//        input.messageTextFieldDidTap.bind { event in
-//            
-//        }.disposed(by: disposeBag)
-        
-        //let imageCount = BehaviorRelay(value: 0)
-        //let isImgHidden = BehaviorRelay(value: true)
-//        input.isSelectedImage.bind { isSeleted in
-//            imageCount.accept(isSeleted ? 1 : 0)
-//            isImgHidden.accept(!isSeleted)
-//        }.disposed(by: disposeBag)
         let imageString = PublishRelay<String?>()
         input.selectedImage.bind { imgString in
             imageString.accept(imgString)
         }.disposed(by: disposeBag)
         
-        let isShowingAlbum = PublishRelay<Bool>()
+        let showingPicker = PublishRelay<Void>()
         
-        input.cameraButtonDidtap.bind {
-            isShowingAlbum.accept(true)
-        }.disposed(by: disposeBag)
+        input.cameraButtonDidtap.bind(to: showingPicker).disposed(by: disposeBag)
         
-        return Output(showImagePicker: isShowingAlbum.asDriver(onErrorJustReturn: false), selectedImage: imageString.asDriver(onErrorJustReturn: nil), contentTextView: message.asDriver(), buttonState: buttonState.asDriver())
+        return Output(showImagePicker: showingPicker.asDriver(onErrorJustReturn: ()), selectedImage: imageString.asDriver(onErrorJustReturn: nil), contentTextView: message.asDriver(), buttonState: buttonState.asDriver())
     }
     
     func getMemoList() -> [Memo] {

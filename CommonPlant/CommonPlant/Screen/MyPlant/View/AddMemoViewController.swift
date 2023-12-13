@@ -135,55 +135,50 @@ class AddMemoViewController: UIViewController {
             self.contentTextView.sizeThatFits(size)
         }.disposed(by: viewModel.disposeBag)
         
-        output.selectedImage.drive { [weak self] imgString in
+        output.selectedImage.drive(onNext: { [weak self] _ in
             guard let self = self else { return }
-            guard let imgString = imgString else { return }
             
             self.imageCountLabel.text = "1/1"
             self.imageCountLabel.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
             self.deleteButton.isHidden = false
-            selectImageView.kf.setImage(with: URL(string: imgString))
-            selectImageView.contentMode = .scaleAspectFit
-            selectImageView.makeRound(radius: 8)
-        }.disposed(by: viewModel.disposeBag)
+            self.selectImageView.contentMode = .scaleAspectFill
+            self.selectImageView.makeRound(radius: 8)
+        }).disposed(by: viewModel.disposeBag)
         
-        output.showImagePicker.drive { [weak self] isShowing in
+        output.showImagePicker.drive { [weak self] _ in
             guard let self = self else { return }
             
-            if isShowing {
-                ImagePickerViewModel.shared.checkPermissionState() { state in
-                    DispatchQueue.main.async {
-                        switch state {
-                        case .denied:
-                            self.moveToSetting()
-                        case .authorized:
-                            DispatchQueue.main.async { [weak self] in
-                                guard let self = self else { return }
-                                ImagePickerViewController.shared.showPhotoPicker(viewController: self)
-                            }
-                                
-                            ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
-                                guard let self = self else { return }
-                                selectedImageString.accept(imageString)
-                                //self.selectImageView.kf.setImage(with: URL(string: imageString))
-                            }
-                        case .limited:
-                            let imagePickerVC = ImagePickerViewController()
-                            
-                            self.present(imagePickerVC, animated: true)
-                            
-                            imagePickerVC.didSelectImage = { [weak self] imageString in
-                                guard self != nil else { return }
-                                self?.selectedImageString.accept(imageString)
-                                //self.selectImageView.kf.setImage(with: imageString)
-                            }
-                        default:
-                            print("\(state)")
+            ImagePickerViewModel.shared.checkPermissionState() { state in
+                DispatchQueue.main.async {
+                    switch state {
+                    case .denied:
+                        self.moveToSetting()
+                    case .authorized:
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            ImagePickerViewController.shared.showPhotoPicker(viewController: self)
                         }
+                        
+                        ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                            guard let self = self else { return }
+                            selectedImageString.accept(imageString)
+                            selectImageView.load(url: URL(string: imageString)!)
+                        }
+                    case .limited:
+                        let imagePickerVC = ImagePickerViewController()
+                        
+                        self.present(imagePickerVC, animated: true)
+                        
+                        imagePickerVC.didSelectImage = { [weak self] imageString in
+                            guard self != nil else { return }
+                            self?.selectedImageString.accept(imageString)
+                            self?.selectImageView.load(url: URL(string: imageString)!)
+                        }
+                    default:
+                        print("\(state)")
                     }
                 }
             }
-            
         }.disposed(by: viewModel.disposeBag)
     }
     
