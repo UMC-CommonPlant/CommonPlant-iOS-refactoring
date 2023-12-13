@@ -16,7 +16,7 @@ class AddMemoViewController: UIViewController {
     var imageCount: Int = 0
     let viewModel = MemoViewModel()
     var selectedImageString = BehaviorRelay<String?>(value: nil)
-    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), selectedImage: selectedImageString.asObservable(), deleteButtonDidTap: deleteButton.rx.tap.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable())
+    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), selectedImage: selectedImageString.asObservable(), deleteButtonDidTap: deleteButton.rx.tap.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable(), hideKeyboard: view.rx.tapGesture().map { _ in }.asObservable())
     private lazy var output = viewModel.transform(input: input)
     
     // MARK: - UI Components
@@ -135,6 +135,11 @@ class AddMemoViewController: UIViewController {
             self.contentTextView.sizeThatFits(size)
         }.disposed(by: viewModel.disposeBag)
         
+        output.endEditing.drive { [weak self] isEnd in
+            guard let self = self else { return }
+            
+            view.endEditing(isEnd)
+        }.disposed(by: viewModel.disposeBag)
         output.selectedImage.drive(onNext: { [weak self] _ in
             guard let self = self else { return }
             

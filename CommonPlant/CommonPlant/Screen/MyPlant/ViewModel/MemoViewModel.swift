@@ -37,6 +37,7 @@ struct MemoViewModel {
         let deleteButtonDidTap: Observable<Void>
         let completeButtonDidTap: Observable<Void>
         let contentTextView: Observable<String>
+        let hideKeyboard: Observable<Void>
         //let messageTextFieldDidTap: ControlEvent<Void>
     }
     
@@ -47,21 +48,34 @@ struct MemoViewModel {
         let deleteImage: Driver<Void>
         //let isImageHidden: Driver<Bool>
         let contentTextView: Driver<String>
+        let endEditing: Driver<Bool>
         let buttonState: Driver<ButtonState>
     }
     
     func transform(input: Input) -> Output {
         let message = BehaviorRelay(value: "")
         let buttonState = BehaviorRelay(value: ButtonState.enable)
+        let isEndEditing = BehaviorRelay(value: false)
+        
+        input.hideKeyboard.bind {
+            isEndEditing.accept(true)
+        }.disposed(by: disposeBag)
         
         input.contentTextView.bind { msg in
             var msg = msg
+            
+            if msg.contains("\n") {
+                isEndEditing.accept(true)
+                msg.removeLast()
+            }
             if msg.count > 200 {
                 let index = msg.index(msg.startIndex, offsetBy: 200)
                 msg = String(msg[..<index])
             }
+            
             message.accept(msg)
             buttonState.accept( 1...200 ~= msg.count ? .disable : .enable)
+            
         }.disposed(by: disposeBag)
         
         let imageString = PublishRelay<String?>()
@@ -75,7 +89,7 @@ struct MemoViewModel {
         let deleteImage = PublishSubject<Void>()
         input.deleteButtonDidTap.bind(to: deleteImage).disposed(by: disposeBag)
         
-        return Output(showImagePicker: showingPicker.asDriver(onErrorJustReturn: ()), selectedImage: imageString.asDriver(onErrorJustReturn: nil), deleteImage: deleteImage.asDriver(onErrorJustReturn: ()), contentTextView: message.asDriver(), buttonState: buttonState.asDriver())
+        return Output(showImagePicker: showingPicker.asDriver(onErrorJustReturn: ()), selectedImage: imageString.asDriver(onErrorJustReturn: nil), deleteImage: deleteImage.asDriver(onErrorJustReturn: ()), contentTextView: message.asDriver(), endEditing: isEndEditing.asDriver(), buttonState: buttonState.asDriver())
     }
     
     func getMemoList() -> [Memo] {
