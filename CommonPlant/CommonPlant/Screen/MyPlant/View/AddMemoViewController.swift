@@ -12,8 +12,6 @@ import Kingfisher
 
 class AddMemoViewController: UIViewController {
     // MARK: - Properties
-    var textCount: Int = 0
-    var imageCount: Int = 0
     let viewModel = MemoViewModel()
     var selectedImageString = BehaviorRelay<String?>(value: nil)
     private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), selectedImage: selectedImageString.asObservable(), deleteButtonDidTap: deleteButton.rx.tap.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable(), hideKeyboard: view.rx.tapGesture().map { _ in }.asObservable())
@@ -33,7 +31,12 @@ class AddMemoViewController: UIViewController {
         view.image = UIImage(named: "Camera")
         return view
     }()
-    let selectImageView = UIImageView()
+    let selectImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.makeRound(radius: 8)
+        return view
+    }()
     let deleteButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
@@ -45,7 +48,7 @@ class AddMemoViewController: UIViewController {
     }()
     lazy var imageCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(imageCount)/1"
+        label.text = "0/1"
         label.textColor = .gray5
         label.font = .bodyB3
         label.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
@@ -55,13 +58,13 @@ class AddMemoViewController: UIViewController {
         let view = UITextView()
         view.textColor = .gray6
         view.tintColor = .gray6
-        view.textAlignment = .left
         view.font = .bodyM2
+        view.textAlignment = .left
         view.returnKeyType = .done
-        view.isEditable = true
+        view.textContainerInset = .zero
         view.backgroundColor = .clear
         view.isScrollEnabled = false
-        view.textContainerInset = .zero
+        view.isEditable = true
         return view
     }()
     let placeholderLabel: UILabel = {
@@ -79,7 +82,7 @@ class AddMemoViewController: UIViewController {
     }()
     lazy var textCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(textCount)/0"
+        label.text = "0/0"
         label.textColor = .gray5
         label.font = .bodyB3
         label.partiallyChanged(targetString: "/0", font: .bodyM3, color: .gray5)
@@ -140,14 +143,13 @@ class AddMemoViewController: UIViewController {
             
             view.endEditing(isEnd)
         }.disposed(by: viewModel.disposeBag)
+        
         output.selectedImage.drive(onNext: { [weak self] _ in
             guard let self = self else { return }
             
-            self.imageCountLabel.text = "1/1"
-            self.imageCountLabel.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
-            self.deleteButton.isHidden = false
-            self.selectImageView.contentMode = .scaleAspectFill
-            self.selectImageView.makeRound(radius: 8)
+            imageCountLabel.text = "1/1"
+            imageCountLabel.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
+            deleteButton.isHidden = false
         }).disposed(by: viewModel.disposeBag)
         
         output.deleteImage.drive { [weak self] _ in

@@ -38,28 +38,32 @@ struct MemoViewModel {
         let completeButtonDidTap: Observable<Void>
         let contentTextView: Observable<String>
         let hideKeyboard: Observable<Void>
-        //let messageTextFieldDidTap: ControlEvent<Void>
     }
     
     struct Output {
         let showImagePicker: Driver<Void>
-        //let imageCount: Driver<Int>
         let selectedImage: Driver<String?>
         let deleteImage: Driver<Void>
-        //let isImageHidden: Driver<Bool>
         let contentTextView: Driver<String>
         let endEditing: Driver<Bool>
         let buttonState: Driver<ButtonState>
     }
     
     func transform(input: Input) -> Output {
+        let showingPicker = PublishRelay<Void>()
+        let imageString = PublishRelay<String?>()
+        let deleteImage = PublishSubject<Void>()
         let message = BehaviorRelay(value: "")
-        let buttonState = BehaviorRelay(value: ButtonState.enable)
         let isEndEditing = BehaviorRelay(value: false)
+        let buttonState = BehaviorRelay(value: ButtonState.enable)
         
-        input.hideKeyboard.bind {
-            isEndEditing.accept(true)
+        input.cameraButtonDidtap.bind(to: showingPicker).disposed(by: disposeBag)
+        
+        input.selectedImage.bind { imgString in
+            imageString.accept(imgString)
         }.disposed(by: disposeBag)
+        
+        input.deleteButtonDidTap.bind(to: deleteImage).disposed(by: disposeBag)
         
         input.contentTextView.bind { msg in
             var msg = msg
@@ -83,16 +87,9 @@ struct MemoViewModel {
             buttonState.accept(.onClick)
         }.disposed(by: disposeBag)
         
-        let imageString = PublishRelay<String?>()
-        input.selectedImage.bind { imgString in
-            imageString.accept(imgString)
+        input.hideKeyboard.bind {
+            isEndEditing.accept(true)
         }.disposed(by: disposeBag)
-        
-        let showingPicker = PublishRelay<Void>()
-        input.cameraButtonDidtap.bind(to: showingPicker).disposed(by: disposeBag)
-        
-        let deleteImage = PublishSubject<Void>()
-        input.deleteButtonDidTap.bind(to: deleteImage).disposed(by: disposeBag)
         
         return Output(showImagePicker: showingPicker.asDriver(onErrorJustReturn: ()), selectedImage: imageString.asDriver(onErrorJustReturn: nil), deleteImage: deleteImage.asDriver(onErrorJustReturn: ()), contentTextView: message.asDriver(), endEditing: isEndEditing.asDriver(), buttonState: buttonState.asDriver())
     }
