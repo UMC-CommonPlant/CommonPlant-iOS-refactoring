@@ -34,6 +34,7 @@ struct MemoViewModel {
     struct Input {
         let cameraButtonDidtap: Observable<Void>
         let selectedImage: Observable<String?>
+        let deleteButtonDidTap: Observable<Void>
         let completeButtonDidTap: Observable<Void>
         let contentTextView: Observable<String>
         //let messageTextFieldDidTap: ControlEvent<Void>
@@ -43,6 +44,7 @@ struct MemoViewModel {
         let showImagePicker: Driver<Void>
         //let imageCount: Driver<Int>
         let selectedImage: Driver<String?>
+        let deleteImage: Driver<Void>
         //let isImageHidden: Driver<Bool>
         let contentTextView: Driver<String>
         let buttonState: Driver<ButtonState>
@@ -68,10 +70,12 @@ struct MemoViewModel {
         }.disposed(by: disposeBag)
         
         let showingPicker = PublishRelay<Void>()
-        
         input.cameraButtonDidtap.bind(to: showingPicker).disposed(by: disposeBag)
         
-        return Output(showImagePicker: showingPicker.asDriver(onErrorJustReturn: ()), selectedImage: imageString.asDriver(onErrorJustReturn: nil), contentTextView: message.asDriver(), buttonState: buttonState.asDriver())
+        let deleteImage = PublishSubject<Void>()
+        input.deleteButtonDidTap.bind(to: deleteImage).disposed(by: disposeBag)
+        
+        return Output(showImagePicker: showingPicker.asDriver(onErrorJustReturn: ()), selectedImage: imageString.asDriver(onErrorJustReturn: nil), deleteImage: deleteImage.asDriver(onErrorJustReturn: ()), contentTextView: message.asDriver(), buttonState: buttonState.asDriver())
     }
     
     func getMemoList() -> [Memo] {
