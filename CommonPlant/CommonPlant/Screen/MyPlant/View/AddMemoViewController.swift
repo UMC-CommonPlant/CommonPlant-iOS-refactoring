@@ -114,12 +114,12 @@ class AddMemoViewController: UIViewController {
             case .enable:
                 completeButton.backgroundColor = .gray1
                 completeButton.configuration?.baseForegroundColor = .gray3
-                completeButton.isEnabled = true
+                completeButton.isEnabled = false
             case .disable:
                 completeButton.backgroundColor = .seaGreenDark1
                 completeButton.configuration?.baseForegroundColor = .white
                 completeButton.isEnabled = true
-            case .click:
+            case .onClick:
                 completeButton.backgroundColor = .seaGreenDark3
                 completeButton.configuration?.baseForegroundColor = .white
             }

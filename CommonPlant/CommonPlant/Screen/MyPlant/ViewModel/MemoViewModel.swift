@@ -28,7 +28,7 @@ struct MemoViewModel {
     enum ButtonState {
         case enable
         case disable
-        case click
+        case onClick
     }
     
     struct Input {
@@ -76,6 +76,11 @@ struct MemoViewModel {
             message.accept(msg)
             buttonState.accept( 1...200 ~= msg.count ? .disable : .enable)
             
+        }.disposed(by: disposeBag)
+        
+        input.completeButtonDidTap.bind {
+            // TODO: 네트워크
+            buttonState.accept(.onClick)
         }.disposed(by: disposeBag)
         
         let imageString = PublishRelay<String?>()
