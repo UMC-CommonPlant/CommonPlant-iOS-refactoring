@@ -147,14 +147,14 @@ class AddMemoViewController: UIViewController {
         output.selectedImage.drive(onNext: { [weak self] _ in
             guard let self = self else { return }
             
-            imageCountLabel.text = "1/1"
-            imageCountLabel.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
+            updateImageCountLabel(1)
             deleteButton.isHidden = false
         }).disposed(by: viewModel.disposeBag)
         
         output.deleteImage.drive { [weak self] _ in
             guard let self = self else { return }
             
+            updateImageCountLabel(0)
             deleteButton.isHidden = true
             selectImageView.image = nil
         }.disposed(by: viewModel.disposeBag)
@@ -280,5 +280,10 @@ class AddMemoViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
             make.height.equalTo(48)
         }
+    }
+    
+    func updateImageCountLabel(_ count: Int) {
+        imageCountLabel.text = "\(count)/1"
+        imageCountLabel.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
     }
 }
