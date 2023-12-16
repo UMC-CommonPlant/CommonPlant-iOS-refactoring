@@ -102,10 +102,12 @@ class MyPlantViewController: UIViewController {
         stackView.distribution = .equalSpacing
         stackView.spacing = 8
         
-        if let imageURL = URL(string: plantData.imgURL) {
+        if let imageUrlString = plantData.imgURL, let imageURL = URL(string: imageUrlString) {
             plantImageView.load(url: imageURL)
+            plantImageView.contentMode = .scaleAspectFill
+            plantImageView.makeRound(radius: 16)
         } else {
-            plantImageView.image = UIImage(named: "plant1")
+            plantImageView.image = UIImage(named: "MyPlant")
         }
         
         menuBtnConfig.image = UIImage(named: "Menu")

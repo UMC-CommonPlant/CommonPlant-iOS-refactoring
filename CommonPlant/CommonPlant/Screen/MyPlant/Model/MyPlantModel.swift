@@ -10,7 +10,7 @@ import Foundation
 struct MyPlant {
     let nickname, scientificName: String
     let place: String
-    let imgURL: String
+    let imgURL: String?
     let countDate, remainderDate: Int
     let createdAt, wateredDate: String
     let waterDay: Int
