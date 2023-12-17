@@ -16,6 +16,7 @@ class AddMemoViewController: UIViewController {
     var selectedImageString = BehaviorRelay<String?>(value: nil)
     private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), selectedImage: selectedImageString.asObservable(), deleteButtonDidTap: deleteButton.rx.tap.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable(), hideKeyboard: view.rx.tapGesture().map { _ in }.asObservable())
     private lazy var output = viewModel.transform(input: input)
+    let memo: Memo?
     
     // MARK: - UI Components
     var imageSelectView = UIView()
@@ -31,31 +32,37 @@ class AddMemoViewController: UIViewController {
         view.image = UIImage(named: "Camera")
         return view
     }()
-    let selectImageView: UIImageView = {
+    lazy var selectImageView: UIImageView = {
         let view = UIImageView()
+        if let urlString = memo?.imgURL, let url = URL(string: urlString) {
+            view.load(url: url)
+        }
         view.contentMode = .scaleAspectFill
         view.makeRound(radius: 8)
+        
         return view
     }()
-    let deleteButton: UIButton = {
+    lazy var deleteButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "Delete")
         config.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
         button.configuration = config
-        button.isHidden = true
+        button.isHidden = memo?.imgURL == nil ? true : false
         return button
     }()
     lazy var imageCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "0/1"
+        let count = memo?.imgURL == nil ? 0 : 1
+        label.text = "\(count)/1"
         label.textColor = .gray5
         label.font = .bodyB3
         label.partiallyChanged(targetString: "/1", font: .bodyM3, color: .gray5)
         return label
     }()
-    let contentTextView: UITextView = {
+    lazy var contentTextView: UITextView = {
         let view = UITextView()
+        view.text = memo?.content
         view.textColor = .gray6
         view.tintColor = .gray6
         view.font = .bodyM2
@@ -67,9 +74,10 @@ class AddMemoViewController: UIViewController {
         view.isEditable = true
         return view
     }()
-    let placeholderLabel: UILabel = {
+    lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "메모 내용을 입력해 주세요"
+        let content = memo?.content
+        label.text = content == nil ? "메모 내용을 입력해 주세요" : ""
         label.textColor = .gray3
         label.font = .bodyM1
         label.textAlignment = .left
@@ -82,10 +90,11 @@ class AddMemoViewController: UIViewController {
     }()
     lazy var textCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "0/0"
+        let count = memo?.content.count ?? 0
+        label.text = "\(count)/200"
         label.textColor = .gray5
         label.font = .bodyB3
-        label.partiallyChanged(targetString: "/0", font: .bodyM3, color: .gray5)
+        label.partiallyChanged(targetString: "/200", font: .bodyM3, color: .gray5)
         return label
     }()
     let completeButton: UIButton = {
@@ -108,6 +117,15 @@ class AddMemoViewController: UIViewController {
         setHierarchy()
         setConstraints()
         bind()
+    }
+    
+    init(memo: Memo) {
+        self.memo = memo
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func bind() {
