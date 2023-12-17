@@ -22,6 +22,8 @@ class MyPlantViewController: UIViewController {
     var backButton = UIButton()
     var plantProfileView = UIView()
     var menuButton = UIButton()
+    let backgroundView = UIView()
+    let menuView = CommonMenuView()
     var plantImageView = UIImageView()
     var placeView = UIView()
     var placeImageView = UIImageView()
@@ -57,7 +59,7 @@ class MyPlantViewController: UIViewController {
     var addMemoButton = UIButton()
     var plantInfoView = UIView()
     var infoTitleLabel = CommonLabel()
-    var backgroundView = UIView()
+    var infoBackgroundView = UIView()
     var wateringCycleImage = UIImageView()
     var wateringCycleLabel = UILabel()
     var cautionLabel = UILabel()
@@ -112,6 +114,12 @@ class MyPlantViewController: UIViewController {
         
         menuBtnConfig.image = UIImage(named: "Menu")
         menuButton.configuration = menuBtnConfig
+        
+        backgroundView.backgroundColor = .black
+        backgroundView.layer.opacity = 0.4
+        backgroundView.isHidden = true
+        
+        menuView.isHidden = true
         
         plantProfileView.backgroundColor = .white
         
@@ -198,8 +206,8 @@ class MyPlantViewController: UIViewController {
         infoTitleLabel.font = .bodyB1
         infoTitleLabel.padding = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 0)
         
-        backgroundView.backgroundColor = .seaGreen
-        backgroundView.makeRound(radius: 16)
+        infoBackgroundView.backgroundColor = .seaGreen
+        infoBackgroundView.makeRound(radius: 16)
         
         wateringCycleImage.image = UIImage(named: "WateringPot")
         
@@ -236,7 +244,9 @@ class MyPlantViewController: UIViewController {
     }
     
     func setHierarchy() {
-        view.addSubview(scrollView)
+        [scrollView, backgroundView, menuView].forEach {
+            view.addSubview($0)
+        }
         
         scrollView.addSubview(stackView)
         
@@ -276,12 +286,12 @@ class MyPlantViewController: UIViewController {
             memoView.addSubview($0)
         }
         
-        [infoTitleLabel, backgroundView].forEach {
+        [infoTitleLabel, infoBackgroundView].forEach {
             plantInfoView.addSubview($0)
         }
         
         [wateringCycleImage, wateringCycleLabel, cautionLabel, sunlightImageView, sunlightInfoLabel, temperatureImageView, temperatureLabel, humidityInfoImageView, humidityInfoLabel].forEach {
-            backgroundView.addSubview($0)
+            infoBackgroundView.addSubview($0)
         }
     }
     
@@ -308,11 +318,22 @@ class MyPlantViewController: UIViewController {
             make.height.equalTo(32)
         }
         
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalTo(view.snp.edges)
+        }
+        
         plantImageView.snp.makeConstraints { make in
             make.top.equalTo(menuButton.snp.bottom).offset(4)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(208)
+        }
+        
+        menuView.snp.makeConstraints { make in
+            make.top.equalTo(menuButton.snp.bottom).offset(4)
+            make.trailing.equalToSuperview().offset(-20)
+            make.width.equalTo(228)
+            make.height.equalTo(128)
         }
         
         placeView.snp.makeConstraints { make in
@@ -443,7 +464,7 @@ class MyPlantViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-20)
         }
         
-        backgroundView.snp.makeConstraints { make in
+        infoBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(infoTitleLabel.snp.bottom)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
