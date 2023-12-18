@@ -1,5 +1,5 @@
 //
-//  AddMemoViewController.swift
+//  EditMemoViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 12/5/23.
@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-class AddMemoViewController: UIViewController {
+class EditMemoViewController: UIViewController {
     // MARK: - Properties
     let viewModel = MemoViewModel()
     let imageChanged = BehaviorRelay<UIImage?>(value: nil)

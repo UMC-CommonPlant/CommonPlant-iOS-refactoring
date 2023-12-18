@@ -1,5 +1,5 @@
 //
-//  MemoViewController.swift
+//  MemoListViewController.swift
 //  CommonPlant
 //
 //  Created by 아라 on 2023/08/29.
@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import RxGesture
 
-class MemoViewController: UIViewController {
+class MemoListViewController: UIViewController {
     // MARK: - Properties
     var viewModel = MemoViewModel()
     let identifier = MemoCollectionViewCell.identifier
