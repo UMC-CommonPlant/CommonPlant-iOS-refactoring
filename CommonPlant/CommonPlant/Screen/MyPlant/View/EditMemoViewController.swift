@@ -126,6 +126,11 @@ class EditMemoViewController: UIViewController {
         bind()
     }
     
+    init() {
+        self.memo = nil
+        super.init(nibName: nil, bundle: nil)
+    }
+    
     init(memo: Memo) {
         self.memo = memo
         super.init(nibName: nil, bundle: nil)
