@@ -33,7 +33,8 @@ struct MemoViewModel {
     
     struct Input {
         let cameraButtonDidtap: Observable<Void>
-        let selectedImage: Observable<String?>
+        let imageChanged: Observable<Void>
+        let isChaged: Observable<Bool>
         let deleteButtonDidTap: Observable<Void>
         let completeButtonDidTap: Observable<Void>
         let contentTextView: Observable<String>
@@ -42,7 +43,7 @@ struct MemoViewModel {
     
     struct Output {
         let showImagePicker: Driver<Void>
-        let selectedImage: Driver<String?>
+        let selectImageChanged: Driver<Void>
         let deleteImage: Driver<Void>
         let contentTextView: Driver<String>
         let endEditing: Driver<Bool>
@@ -51,19 +52,21 @@ struct MemoViewModel {
     
     func transform(input: Input) -> Output {
         let showingPicker = PublishRelay<Void>()
-        let imageString = PublishRelay<String?>()
+        let imageChaged = PublishRelay<Void>()
         let deleteImage = PublishSubject<Void>()
         let message = BehaviorRelay(value: "")
         let isEndEditing = BehaviorRelay(value: false)
-        let buttonState = BehaviorRelay(value: ButtonState.enable)
+        let buttonState = PublishRelay<ButtonState>()
         
         input.cameraButtonDidtap.bind(to: showingPicker).disposed(by: disposeBag)
         
-        input.selectedImage.bind { imgString in
-            imageString.accept(imgString)
-        }.disposed(by: disposeBag)
+        input.imageChanged.bind(to: imageChaged).disposed(by: disposeBag)
         
         input.deleteButtonDidTap.bind(to: deleteImage).disposed(by: disposeBag)
+        
+        input.isChaged.bind{ isChanged in
+            buttonState.accept(isChanged ? .enable : .disable)
+        }.disposed(by: disposeBag)
         
         input.contentTextView.bind { msg in
             var msg = msg
@@ -78,7 +81,7 @@ struct MemoViewModel {
             }
             
             message.accept(msg)
-            buttonState.accept( 1...200 ~= msg.count ? .disable : .enable)
+            buttonState.accept( 1...200 ~= msg.count ? .enable : .disable)
             
         }.disposed(by: disposeBag)
         
@@ -91,7 +94,7 @@ struct MemoViewModel {
             isEndEditing.accept(true)
         }.disposed(by: disposeBag)
         
-        return Output(showImagePicker: showingPicker.asDriver(onErrorJustReturn: ()), selectedImage: imageString.asDriver(onErrorJustReturn: nil), deleteImage: deleteImage.asDriver(onErrorJustReturn: ()), contentTextView: message.asDriver(), endEditing: isEndEditing.asDriver(), buttonState: buttonState.asDriver())
+        return Output(showImagePicker: showingPicker.asDriver(onErrorJustReturn: ()), selectImageChanged: imageChaged.asDriver(onErrorJustReturn: ()), deleteImage: deleteImage.asDriver(onErrorJustReturn: ()), contentTextView: message.asDriver(), endEditing: isEndEditing.asDriver(), buttonState: buttonState.asDriver(onErrorJustReturn: .disable))
     }
     
     func getMemoList() -> [Memo] {

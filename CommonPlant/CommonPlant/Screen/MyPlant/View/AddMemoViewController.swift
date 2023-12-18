@@ -13,12 +13,17 @@ import Kingfisher
 class AddMemoViewController: UIViewController {
     // MARK: - Properties
     let viewModel = MemoViewModel()
-    var selectedImageString = BehaviorRelay<String?>(value: nil)
-    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), selectedImage: selectedImageString.asObservable(), deleteButtonDidTap: deleteButton.rx.tap.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable(), hideKeyboard: view.rx.tapGesture().map { _ in }.asObservable())
+    let imageChanged = BehaviorRelay<UIImage?>(value: nil)
+    lazy var isChangedData = Observable.combineLatest(imageChanged, contentTextView.rx.text.orEmpty)
+        .map { image, text in
+            return image != self.initImage.image || text != self.memo?.content
+        }
+    private lazy var input = MemoViewModel.Input(cameraButtonDidtap: cameraButtonView.rx.tapGesture().map { _ in }.asObservable(), imageChanged: imageChanged.map { _ in }.asObservable(), isChaged: isChangedData, deleteButtonDidTap: deleteButton.rx.tap.asObservable(), completeButtonDidTap: completeButton.rx.tap.asObservable(), contentTextView: contentTextView.rx.text.orEmpty.asObservable(), hideKeyboard: view.rx.tapGesture().map { _ in }.asObservable())
     private lazy var output = viewModel.transform(input: input)
     let memo: Memo?
     
     // MARK: - UI Components
+    let initImage = UIImageView()
     var imageSelectView = UIView()
     let cameraButtonView: UIView = {
         let view = UIView()
@@ -35,7 +40,9 @@ class AddMemoViewController: UIViewController {
     lazy var selectImageView: UIImageView = {
         let view = UIImageView()
         if let urlString = memo?.imgURL, let url = URL(string: urlString) {
-            view.load(url: url)
+            view.load(url: url) {
+                self.initImage.image = view.image
+            }
         }
         view.contentMode = .scaleAspectFill
         view.makeRound(radius: 8)
@@ -133,13 +140,13 @@ class AddMemoViewController: UIViewController {
             guard let self = self else { return }
             switch state {
             case .enable:
-                completeButton.backgroundColor = .gray1
-                completeButton.configuration?.baseForegroundColor = .gray3
-                completeButton.isEnabled = false
-            case .disable:
                 completeButton.backgroundColor = .seaGreenDark1
                 completeButton.configuration?.baseForegroundColor = .white
                 completeButton.isEnabled = true
+            case .disable:
+                completeButton.backgroundColor = .gray1
+                completeButton.configuration?.baseForegroundColor = .gray3
+                completeButton.isEnabled = false
             case .onClick:
                 completeButton.backgroundColor = .seaGreenDark3
                 completeButton.configuration?.baseForegroundColor = .white
@@ -162,11 +169,11 @@ class AddMemoViewController: UIViewController {
             view.endEditing(isEnd)
         }.disposed(by: viewModel.disposeBag)
         
-        output.selectedImage.drive(onNext: { [weak self] _ in
+        output.selectImageChanged.drive(onNext: { [weak self] _ in
             guard let self = self else { return }
             
-            updateImageCountLabel(1)
-            deleteButton.isHidden = false
+            updateImageCountLabel(selectImageView.image == nil ? 0 : 1)
+            deleteButton.isHidden = selectImageView.image == nil
         }).disposed(by: viewModel.disposeBag)
         
         output.deleteImage.drive { [weak self] _ in
@@ -175,6 +182,7 @@ class AddMemoViewController: UIViewController {
             updateImageCountLabel(0)
             deleteButton.isHidden = true
             selectImageView.image = nil
+            imageChanged.accept(nil)
         }.disposed(by: viewModel.disposeBag)
         
         output.showImagePicker.drive { [weak self] _ in
@@ -193,8 +201,9 @@ class AddMemoViewController: UIViewController {
                         
                         ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
                             guard let self = self else { return }
-                            selectedImageString.accept(imageString)
-                            selectImageView.load(url: URL(string: imageString)!)
+                            selectImageView.load(url: URL(string: imageString)!) {
+                                self.imageChanged.accept(self.selectImageView.image)
+                            }
                         }
                     case .limited:
                         let imagePickerVC = ImagePickerViewController()
@@ -203,8 +212,9 @@ class AddMemoViewController: UIViewController {
                         
                         imagePickerVC.didSelectImage = { [weak self] imageString in
                             guard self != nil else { return }
-                            self?.selectedImageString.accept(imageString)
-                            self?.selectImageView.load(url: URL(string: imageString)!)
+                            self?.selectImageView.load(url: URL(string: imageString)!) {
+                                self?.imageChanged.accept(self?.selectImageView.image)
+                            }
                         }
                     default:
                         print("\(state)")
