@@ -10,7 +10,7 @@ import Foundation
 struct MyPlant {
     let nickname, scientificName: String
     let place: String
-    let imgURL: String
+    let imgURL: String?
     let countDate, remainderDate: Int
     let createdAt, wateredDate: String
     let waterDay: Int
@@ -18,12 +18,4 @@ struct MyPlant {
     let tempMin, tempMax: Int
     let humidity: String
     let memoList: [Memo]
-}
-
-struct Memo {
-    let userNickName: String
-    let userImgURL: String
-    let content: String
-    let imgURL: String?
-    let createdAt: String
 }

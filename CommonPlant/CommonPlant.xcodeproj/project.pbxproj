@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C005D3642A9B3870004CD53F /* MemoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C005D3632A9B3870004CD53F /* MemoCollectionViewCell.swift */; };
+		C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C005D3632A9B3870004CD53F /* MemoCardCollectionViewCell.swift */; };
 		C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02322B52A6AB6BE004D78CC /* WithdrwalViewModel.swift */; };
 		C02322B82A6AC0D6004D78CC /* EditUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02322B72A6AC0D6004D78CC /* EditUserInfoViewModel.swift */; };
 		C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */; };
@@ -19,6 +19,7 @@
 		C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */; };
 		C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2722A5AA995005C0449 /* UILabel+Extension.swift */; };
 		C06299802A7A87FB00985171 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */; };
+		C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */; };
 		C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */; };
 		C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8732A59463E00CDC5CC /* SettingViewController.swift */; };
 		C07DF8762A5947C400CDC5CC /* CommonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8752A5947C400CDC5CC /* CommonLabel.swift */; };
@@ -38,7 +39,13 @@
 		C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */; };
 		C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */; };
 		C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */; };
+		C0B1BDE72A9E1ECA00DD7E04 /* MemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDE62A9E1ECA00DD7E04 /* MemoViewModel.swift */; };
+		C0B1BDE92A9E21A200DD7E04 /* MemoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDE82A9E21A200DD7E04 /* MemoModel.swift */; };
+		C0B1BDEB2A9E21F200DD7E04 /* MemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDEA2A9E21F200DD7E04 /* MemoListViewController.swift */; };
+		C0B1BDED2A9E23F100DD7E04 /* MemoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */; };
+		C0BDF2E52B1EFD7A002C7FD7 /* EditMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
+		C0EE4A012B182D4000592185 /* CommonAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EE4A002B182D4000592185 /* CommonAlertView.swift */; };
 		F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */; };
 		F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */; };
 		F91E47892A53E3CA008E07A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F91E47882A53E3CA008E07A9 /* Assets.xcassets */; };
@@ -71,7 +78,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C005D3632A9B3870004CD53F /* MemoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCollectionViewCell.swift; sourceTree = "<group>"; };
+		C005D3632A9B3870004CD53F /* MemoCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCardCollectionViewCell.swift; sourceTree = "<group>"; };
 		C02322B52A6AB6BE004D78CC /* WithdrwalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrwalViewModel.swift; sourceTree = "<group>"; };
 		C02322B72A6AC0D6004D78CC /* EditUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewModel.swift; sourceTree = "<group>"; };
 		C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewModel.swift; sourceTree = "<group>"; };
@@ -83,6 +90,7 @@
 		C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewController.swift; sourceTree = "<group>"; };
 		C059A2722A5AA995005C0449 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMenuView.swift; sourceTree = "<group>"; };
 		C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C07DF8732A59463E00CDC5CC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		C07DF8752A5947C400CDC5CC /* CommonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonLabel.swift; sourceTree = "<group>"; };
@@ -98,7 +106,13 @@
 		C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantModel.swift; sourceTree = "<group>"; };
 		C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewModel.swift; sourceTree = "<group>"; };
 		C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewController.swift; sourceTree = "<group>"; };
+		C0B1BDE62A9E1ECA00DD7E04 /* MemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewModel.swift; sourceTree = "<group>"; };
+		C0B1BDE82A9E21A200DD7E04 /* MemoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoModel.swift; sourceTree = "<group>"; };
+		C0B1BDEA2A9E21F200DD7E04 /* MemoListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoListViewController.swift; sourceTree = "<group>"; };
+		C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCollectionViewCell.swift; sourceTree = "<group>"; };
+		C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoViewController.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
+		C0EE4A002B182D4000592185 /* CommonAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonAlertView.swift; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -197,6 +211,8 @@
 			isa = PBXGroup;
 			children = (
 				C07DF8752A5947C400CDC5CC /* CommonLabel.swift */,
+				C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */,
+				C0EE4A002B182D4000592185 /* CommonAlertView.swift */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -263,7 +279,10 @@
 			isa = PBXGroup;
 			children = (
 				C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */,
-				C005D3632A9B3870004CD53F /* MemoCollectionViewCell.swift */,
+				C0B1BDEA2A9E21F200DD7E04 /* MemoListViewController.swift */,
+				C005D3632A9B3870004CD53F /* MemoCardCollectionViewCell.swift */,
+				C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */,
+				C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -272,6 +291,7 @@
 			isa = PBXGroup;
 			children = (
 				C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */,
+				C0B1BDE82A9E21A200DD7E04 /* MemoModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -280,6 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */,
+				C0B1BDE62A9E1ECA00DD7E04 /* MemoViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -584,11 +605,15 @@
 				F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */,
 				C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */,
 				C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */,
+				C0B1BDED2A9E23F100DD7E04 /* MemoCollectionViewCell.swift in Sources */,
+				C0EE4A012B182D4000592185 /* CommonAlertView.swift in Sources */,
 				F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */,
 				F9447DA32A76CA3100903C28 /* (null) in Sources */,
 				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
 				C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */,
 				F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */,
+				C0B1BDEB2A9E21F200DD7E04 /* MemoListViewController.swift in Sources */,
+				C0B1BDE72A9E1ECA00DD7E04 /* MemoViewModel.swift in Sources */,
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
 				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */,
@@ -608,15 +633,17 @@
 				F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */,
 				F93404022A81F9F400F0267B /* SearchResultTableViewCell.swift in Sources */,
 				C0A0D4DD2A73E96800426514 /* SignUpViewModel.swift in Sources */,
+				C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */,
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
-				C005D3642A9B3870004CD53F /* MemoCollectionViewCell.swift in Sources */,
+				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
 				C085BFBC2A7148D500188C02 /* LogInViewController.swift in Sources */,
 				C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */,
 				C07DF8762A5947C400CDC5CC /* CommonLabel.swift in Sources */,
 				F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */,
+				C0B1BDE92A9E21A200DD7E04 /* MemoModel.swift in Sources */,
 				F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */,
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
 				C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */,
@@ -634,6 +661,7 @@
 				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
 				C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */,
+				C0BDF2E52B1EFD7A002C7FD7 /* EditMemoViewController.swift in Sources */,
 				F9D0CCAA2A586208006D688C /* MainMyPlantCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
