@@ -67,6 +67,7 @@
 		F9447DA82A77A71700903C28 /* PlantSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA72A77A71700903C28 /* PlantSearchCollectionViewCell.swift */; };
 		F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */; };
 		F9447DAD2A78E52200903C28 /* PopularSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */; };
+		F94BB2672B57E62900CB3504 /* CommonTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94BB2662B57E62900CB3504 /* CommonTextButton.swift */; };
 		F9A1FB1A2A619F2300F346DE /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = F9A1FB192A619F2300F346DE /* RxMoya */; };
 		F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB242A664F4300F346DE /* MainViewModel.swift */; };
 		F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB282A67B03400F346DE /* MainModel.swift */; };
@@ -133,6 +134,7 @@
 		F9447DA72A77A71700903C28 /* PlantSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoplularSearchModel.swift; sourceTree = "<group>"; };
 		F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularSearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		F94BB2662B57E62900CB3504 /* CommonTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTextButton.swift; sourceTree = "<group>"; };
 		F9A1FB242A664F4300F346DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F9A1FB282A67B03400F346DE /* MainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModel.swift; sourceTree = "<group>"; };
 		F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewController.swift; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 				C07DF8752A5947C400CDC5CC /* CommonLabel.swift */,
 				C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */,
 				C0EE4A002B182D4000592185 /* CommonAlertView.swift */,
+				F94BB2662B57E62900CB3504 /* CommonTextButton.swift */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -444,7 +447,7 @@
 			children = (
 				F9A1FB262A665E5C00F346DE /* Model */,
 				F9A1FB212A650B8300F346DE /* ViewModel */,
-				F9D0CCB12A5BB635006D688C /* ViewController */,
+				F9D0CCB12A5BB635006D688C /* View */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -470,12 +473,12 @@
 			children = (
 				F9A1FB342A6E533500F346DE /* Model */,
 				F9A1FB332A6E532E00F346DE /* ViewModel */,
-				F9A1FB322A6E532800F346DE /* ViewController */,
+				F9A1FB322A6E532800F346DE /* View */,
 			);
 			path = PlantSearch;
 			sourceTree = "<group>";
 		};
-		F9A1FB322A6E532800F346DE /* ViewController */ = {
+		F9A1FB322A6E532800F346DE /* View */ = {
 			isa = PBXGroup;
 			children = (
 				F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */,
@@ -484,7 +487,7 @@
 				F93403FF2A81F89300F0267B /* SearchResultViewController.swift */,
 				F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */,
 			);
-			path = ViewController;
+			path = View;
 			sourceTree = "<group>";
 		};
 		F9A1FB332A6E532E00F346DE /* ViewModel */ = {
@@ -505,7 +508,7 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		F9D0CCB12A5BB635006D688C /* ViewController */ = {
+		F9D0CCB12A5BB635006D688C /* View */ = {
 			isa = PBXGroup;
 			children = (
 				F9D0CCA12A583432006D688C /* MainTabBarController.swift */,
@@ -513,7 +516,7 @@
 				F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */,
 				F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */,
 			);
-			path = ViewController;
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -617,6 +620,7 @@
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
 				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */,
+				F94BB2672B57E62900CB3504 /* CommonTextButton.swift in Sources */,
 				C0A0D4DE2A73E96800426514 /* LogInViewModel.swift in Sources */,
 				F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */,
 				F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */,
