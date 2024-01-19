@@ -24,6 +24,8 @@ class AddPlantFirstViewController: UIViewController {
         tf.placeholder = "식물을 입력해주세요"
         tf.font = .bodyM1
         tf.textColor = .black
+        tf.tintColor = .black
+        tf.returnKeyType = .search
         tf.clearButtonMode = .whileEditing
         return tf
     }()
@@ -42,6 +44,15 @@ class AddPlantFirstViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
+        setNavigationBar()
+        setConstraints()
+    }
+    
+    func setNavigationBar() {
+        self.navigationItem.title = "식물 등록(1/2)"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
+        self.navigationController?.navigationBar.barTintColor = .white
     }
     
     private func setConstraints() {
@@ -54,7 +65,7 @@ class AddPlantFirstViewController: UIViewController {
         }
         
         searchView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(64)
         }
@@ -62,6 +73,7 @@ class AddPlantFirstViewController: UIViewController {
         magnifierImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().inset(20)
+            make.width.height.equalTo(24)
         }
         
         searchTextField.snp.makeConstraints { make in
