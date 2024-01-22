@@ -13,6 +13,17 @@ class AddPlantFirstViewModel {
     let disposeBag = DisposeBag()
     var searchResultList = BehaviorRelay<[SearchResultModel]>(value: [])
     
+    init() {
+        let sampleData1 = SearchResultModel(plantImage: "plant1", plantName: "몬스테라", scientificName: "Monstera deliciosa")
+        let sampleData2 = SearchResultModel(plantImage: "plant2", plantName: "몬카스테라", scientificName: "Monstera deliciosa")
+        let sampleData3 = SearchResultModel(plantImage: "plant3", plantName: "카스", scientificName: "Monstera deliciosa")
+        let sampleData4 = SearchResultModel(plantImage: "plant4", plantName: "테라", scientificName: "Monstera deliciosa")
+        
+        let list = [sampleData1, sampleData2, sampleData3, sampleData4]
+        
+        searchResultList.accept(list)
+    }
+    
     struct Input {
         let searchBtnDidTap: Observable<String>
         let selectedPlant: Observable<IndexPath>

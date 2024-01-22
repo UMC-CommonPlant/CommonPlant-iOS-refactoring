@@ -9,6 +9,11 @@ import UIKit
 import SnapKit
 
 class AddPlantFirstViewController: UIViewController {
+    // MARK: - Properties
+    private let viewModel = AddPlantFirstViewModel()
+    private lazy var input = AddPlantFirstViewModel.Input(searchBtnDidTap: searchTextField.rx.controlEvent([.editingDidEndOnExit]).withLatestFrom(searchTextField.rx.value.orEmpty), selectedPlant: searchResultTableView.rx.itemSelected.asObservable())
+    private lazy var output = viewModel.transform(input: input)
+    
     // MARK: - UI Components
     private let searchView: UIView = {
         let view = UIView()
@@ -38,6 +43,7 @@ class AddPlantFirstViewController: UIViewController {
         let view = UITableView()
         view.separatorStyle = .none
         view.rowHeight = 92
+        view.register(SearchResultTableViewCell.self, forCellReuseIdentifier: "SearchResultTableViewCell")
         return view
     }()
     
@@ -47,6 +53,19 @@ class AddPlantFirstViewController: UIViewController {
         view.backgroundColor = .white
         setNavigationBar()
         setConstraints()
+        bind()
+    }
+    
+    func bind() {
+        viewModel.searchResultList.bind(to: searchResultTableView.rx.items(cellIdentifier: SearchResultTableViewCell.identifier, cellType: SearchResultTableViewCell.self)) { (_, result, cell) in
+            cell.setAttributes(with: result)
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.transigionNextStep.drive { [ weak self ] result in
+            guard let self = self else { return }
+            // TODO: 식물 등록(2/2) 화면 전환
+            print(result)
+        }.disposed(by: viewModel.disposeBag)
     }
     
     func setNavigationBar() {
