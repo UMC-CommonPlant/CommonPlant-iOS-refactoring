@@ -42,6 +42,93 @@ class AddPlantSecondViewModel {
         let submitPlant: Driver<Void>
         let submitBtnState: Driver<SubmitState>
     }
+    
+    func transform(input: Input) -> Output {
+        let submitBtnState = BehaviorRelay(value: SubmitState.disable)
+        let showImgSettingAlert = input.imageDidTap
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+        let showImagePicker = input.selectedNewImage
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+        let changeDefaultImage = input.selectedDefaultImage
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+        let cancleSelectImage = input.selectedCancle
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+        let nicknameState = input.editingNickname
+            .map { name in
+                var name = name
+                
+                if name.contains("\n") {
+                    name.removeLast()
+                }
+                
+                if name.count > 10 {
+                    let index = name.index(name.startIndex, offsetBy: 10)
+                    name = String(name[..<index])
+                }
+                
+                if name.count > 0 {
+                    submitBtnState.accept(.enable)
+                }
+                
+                return name
+            }
+            .asDriver(onErrorJustReturn: "")
+        let showPlaceList = input.placeDidTap
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+        let selectPlace = input.selectedPlace
+            .map { index in
+                // TODO: 해당 인덱스 장소 리턴하기
+                return ""
+            }
+            .asDriver(onErrorJustReturn: "")
+        let resetPlace = input.deletePlaceBtnDidTap
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+        let showDatePicker = input.dateDidTap
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+        let selectedWateredDate = input.selectedDate
+            .map { [ weak self] date in
+                guard let self = self else { return "ERROR" }
+                return self.dateToString(date)
+            }
+            .asDriver(onErrorJustReturn: "")
+        let cancleAddPlant = input.cancleBtnDidTap
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+        let submitPlant = input.submitBtnDidTap
+            .map { _ in ()
+                // TODO: 네트워킹
+                submitBtnState.accept(.onClick)
+            }
+            .asDriver(onErrorDriveWith: .empty())
+        
+        return Output(showImgSettingAlert: showImgSettingAlert,
+               showImagePicker: showImagePicker,
+               changeDefaultImage: changeDefaultImage,
+               cancleSelectImage: cancleSelectImage,
+               nicknameState: nicknameState,
+               showPlaceList: showPlaceList,
+               selectPlace: selectPlace,
+               resetPlace: resetPlace,
+               showDatePicker: showDatePicker,
+               selectedWateredDate: selectedWateredDate,
+               cancleAddPlant: cancleAddPlant,
+               submitPlant: submitPlant,
+               submitBtnState: submitBtnState.asDriver(onErrorJustReturn: .disable))
+    }
+    
+    func dateToString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        
+        return dateFormatter.string(from: date)
+    }
 }
 
 extension AddPlantSecondViewModel {
