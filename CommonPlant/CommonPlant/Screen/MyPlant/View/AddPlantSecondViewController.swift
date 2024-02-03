@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class AddPlantSecondViewController: UIViewController {
     private let scrollView: UIView = {
@@ -120,13 +121,13 @@ class AddPlantSecondViewController: UIViewController {
         label.textColor = .gray6
         return label
     }()
-    private let datePickerBackgroundView: UIView = {
+    private let selectedDateBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray1
         view.makeRound(radius: 6)
         return view
     }()
-    private let dateLabel: UILabel = {
+    private let selectedDateLabel: UILabel = {
         let label = UILabel()
         label.font = .bodyM1
         label.textColor = .gray6
@@ -225,4 +226,32 @@ class AddPlantSecondViewController: UIViewController {
         super.viewDidLoad()
     }
     
+    func setHierarchy() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        [plantView, nameBackgroundView, nicknameView, placeBackgroundView, placeCollectionView, dateView, calendarView, cancleButton, submitButton].forEach {
+            contentView.addSubview($0)
+        }
+        
+        [plantImageView, cameraImageView].forEach{ plantView.addSubview($0)}
+        
+        [nameLabel, nameUnderlineView].forEach { nameBackgroundView.addSubview($0)}
+        
+        [nicknameTextField, nicknameCountLabel, nicknameUnderlineView].forEach {
+            nicknameView.addSubview($0)
+        }
+        
+        [placeChoiceLabel, selectedPlaceLabel, nextImageView, placeUnderlineView].forEach {
+            placeBackgroundView.addSubview($0)
+        }
+        
+        [lastWateredDayLabel, selectedDateBackgroundView, selectedDateLabel, dateUnderlineView].forEach {
+            dateView.addSubview($0)
+        }
+        
+        [selectedMonthLabel, previousButton, nextButton, weekStackView, datePickerCollectionView, messageLabel].forEach {
+            calendarView.addSubview($0)
+        }
+    }
 }
