@@ -13,16 +13,19 @@ class AddPlantSecondViewController: UIViewController {
         view.showsHorizontalScrollIndicator = false
         return view
     }()
+    private let contentView = UIView()
     private let plantView: UIView = {
         let view = UIView()
         return view
     }()
     private let plantImageView: UIImageView = {
         let view = UIImageView()
+        view.image = UIImage(named: "AddPlant")
         return view
     }()
     private let cameraImageView: UIImageView = {
         let view = UIImageView()
+        view.image = UIImage(named: "CameraMark")
         return view
     }()
     private let nameBackgroundView: UIView = {
@@ -51,6 +54,7 @@ class AddPlantSecondViewController: UIViewController {
         tf.font = .bodyM1
         tf.textColor = .black
         tf.placeholder = "식물 애칭을 입력해주세요"
+        tf.clearButtonMode = .whileEditing
         tf.returnKeyType = .done
         return tf
     }()
@@ -79,8 +83,15 @@ class AddPlantSecondViewController: UIViewController {
         label.textColor = .gray6
         return label
     }()
+    private let selectedPlaceLabel: UILabel = {
+        let label = UILabel()
+        label.font = .bodyM1
+        label.textColor = .gray6
+        return label
+    }()
     private let nextImageView: UIImageView = {
         let view = UIImageView()
+        view.image = UIImage(named: "Next")
         return view
     }()
     private let placeUnderlineView: UIView = {
@@ -112,6 +123,7 @@ class AddPlantSecondViewController: UIViewController {
     private let datePickerBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray1
+        view.makeRound(radius: 6)
         return view
     }()
     private let dateLabel: UILabel = {
