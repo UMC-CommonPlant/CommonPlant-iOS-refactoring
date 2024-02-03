@@ -125,7 +125,58 @@ class AddPlantSecondViewController: UIViewController {
         view.backgroundColor = .gray2
         return view
     }()
-    //private let datePicker
+    private let calendarView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    private let selectedMonthLabel: UILabel = {
+        let label = UILabel()
+        label.font = .bodyB1
+        label.textColor = .gray6
+        return label
+    }()
+    private let previousButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Previous")
+        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+        button.configuration = config
+        return button
+    }()
+    private let nextButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Previous")
+        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+        button.configuration = config
+        return button
+    }()
+    private let weekStackView: UIStackView = {
+        let view = UIStackView()
+        
+        view.axis = .horizontal
+        view.spacing = 4
+        
+        ["일", "월", "화", "수", "목", "금", "토"].forEach {
+            let label = UILabel()
+            label.text = $0
+            label.font = .bodyM3
+            label.textColor = .gray5
+            
+            view.addArrangedSubview(label)
+        }
+        return view
+    }()
+    private let datePickerCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 4
+        flowLayout.minimumInteritemSpacing = 0
+        flowLayout.itemSize = CGSize(width: 40, height: 40)
+        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 0, right: 20)
+        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return view
+    }()
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.text = "선택하지 않을 시, 등록일을 기준으로 설정합니다"
