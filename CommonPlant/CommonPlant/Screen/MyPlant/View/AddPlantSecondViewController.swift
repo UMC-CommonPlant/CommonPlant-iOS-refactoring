@@ -90,6 +90,15 @@ class AddPlantSecondViewController: UIViewController {
         label.textColor = .gray6
         return label
     }()
+    private let deleteButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Delete")?.withTintColor(.gray3!)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        button.configuration = config
+        button.isHidden = true
+        return button
+    }()
     private let nextImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "Next")
@@ -242,7 +251,7 @@ class AddPlantSecondViewController: UIViewController {
             nicknameView.addSubview($0)
         }
         
-        [placeChoiceLabel, selectedPlaceLabel, nextImageView, placeUnderlineView].forEach {
+        [placeChoiceLabel, selectedPlaceLabel, nextImageView, deleteButton, placeUnderlineView].forEach {
             placeBackgroundView.addSubview($0)
         }
         
