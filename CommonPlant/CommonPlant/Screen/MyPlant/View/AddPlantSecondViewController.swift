@@ -130,16 +130,13 @@ class AddPlantSecondViewController: UIViewController {
         label.textColor = .gray6
         return label
     }()
-    private let selectedDateBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .gray1
-        view.makeRound(radius: 6)
-        return view
-    }()
-    private let selectedDateLabel: UILabel = {
-        let label = UILabel()
+    private let selectedDateLabel: PaddingLabel = {
+        let label = PaddingLabel()
         label.font = .bodyM1
         label.textColor = .gray6
+        label.padding = UIEdgeInsets(top: 8, left: 6, bottom: 8, right: 6)
+        label.backgroundColor = .gray1
+        label.makeRound(radius: 6)
         return label
     }()
     private let dateUnderlineView: UIView = {
@@ -255,7 +252,7 @@ class AddPlantSecondViewController: UIViewController {
             placeBackgroundView.addSubview($0)
         }
         
-        [lastWateredDayLabel, selectedDateBackgroundView, selectedDateLabel, dateUnderlineView].forEach {
+        [lastWateredDayLabel, selectedDateLabel, dateUnderlineView].forEach {
             dateView.addSubview($0)
         }
         

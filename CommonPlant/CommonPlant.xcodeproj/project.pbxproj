@@ -26,7 +26,7 @@
 		C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */; };
 		C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */; };
 		C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8732A59463E00CDC5CC /* SettingViewController.swift */; };
-		C07DF8762A5947C400CDC5CC /* CommonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8752A5947C400CDC5CC /* CommonLabel.swift */; };
+		C07DF8762A5947C400CDC5CC /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */; };
 		C07DF87E2A597A8600CDC5CC /* WithdrwalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF87D2A597A8600CDC5CC /* WithdrwalViewController.swift */; };
 		C07DF8842A59844400CDC5CC /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8832A59844400CDC5CC /* UIView+Extension.swift */; };
 		C085BFB82A71462B00188C02 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = F9A1FB172A619F2300F346DE /* Moya */; };
@@ -101,7 +101,7 @@
 		C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMenuView.swift; sourceTree = "<group>"; };
 		C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C07DF8732A59463E00CDC5CC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
-		C07DF8752A5947C400CDC5CC /* CommonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonLabel.swift; sourceTree = "<group>"; };
+		C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		C07DF87D2A597A8600CDC5CC /* WithdrwalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrwalViewController.swift; sourceTree = "<group>"; };
 		C07DF8832A59844400CDC5CC /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		C085BFBB2A7148D500188C02 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
@@ -218,7 +218,7 @@
 		C07DF8782A59492A00CDC5CC /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
-				C07DF8752A5947C400CDC5CC /* CommonLabel.swift */,
+				C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */,
 				C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */,
 				C0EE4A002B182D4000592185 /* CommonAlertView.swift */,
 			);
@@ -657,7 +657,7 @@
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
 				C085BFBC2A7148D500188C02 /* LogInViewController.swift in Sources */,
 				C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */,
-				C07DF8762A5947C400CDC5CC /* CommonLabel.swift in Sources */,
+				C07DF8762A5947C400CDC5CC /* PaddingLabel.swift in Sources */,
 				F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */,
 				C0B1BDE92A9E21A200DD7E04 /* MemoModel.swift in Sources */,
 				F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */,
