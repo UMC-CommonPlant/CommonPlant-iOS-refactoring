@@ -11,7 +11,58 @@ import RxCocoa
 
 class AddPlantSecondViewModel {
     let disposeBag = DisposeBag()
+    let calendar = Calendar.current
     
+    let placeList = BehaviorRelay<[Place]>(value: [])
+    let selectedDate = BehaviorRelay<String>(value: "")
+    let currentMonth = BehaviorRelay<String>(value: "")
+    let days = BehaviorRelay<[String]>(value: [])
+    var calendarDate = Date()
+    
+    init() {
+        selectedDate.accept(dateToString(Date()))
+        currentMonth.accept(dateToMonthString(Date()))
+        updateDays()
+        
+        let list = [Place(placeImage: "", placeName: "스윗 홈_거실"),
+        Place(placeImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/ceb7bd36-86b4-4ab1-b2df-24862db128f8..jpg", placeName: "낫 스윗_회사")]
+        placeList.accept(list)
+    }
+    
+    func dateToString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy. MM. dd"
+        
+        return dateFormatter.string(from: date)
+    }
+    
+    func dateToMonthString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 M월"
+        
+        return dateFormatter.string(from: date)
+    }
+    
+    func updateDays() {
+        let startOfMonth = calendar.startOfDay(for: calendarDate)
+        let weekdayOfFirstDay = calendar.component(.weekday, from: startOfMonth)
+        guard let numberOfDays = calendar.range(of: .day, in: .month, for: calendarDate)?.count else { return }
+        let empty = Array(repeating: "", count: weekdayOfFirstDay)
+        let days = (1...numberOfDays).map { String($0) }
+
+        self.days.accept(empty + days)
+    }
+}
+
+extension AddPlantSecondViewModel {
+    enum SubmitState {
+        case enable
+        case disable
+        case onClick
+    }
+}
+
+extension AddPlantSecondViewModel {
     struct Input {
         let imageDidTap: Observable<Void>
         let selectedNewImage: Observable<Void>
@@ -22,7 +73,9 @@ class AddPlantSecondViewModel {
         let selectedPlace: Observable<IndexPath>
         let deletePlaceBtnDidTap: Observable<Void>
         let dateDidTap: Observable<Void>
-        let selectedDate: Observable<Date>
+        let previousMonthBtnDidTap: Observable<Void>
+        let nextMonthBtnDidTap: Observable<Void>
+        let selectedDate: Observable<IndexPath>
         let cancleBtnDidTap: Observable<Void>
         let submitBtnDidTap: Observable<Void>
     }
@@ -37,7 +90,6 @@ class AddPlantSecondViewModel {
         let selectPlace: Driver<String>
         let resetPlace: Driver<Void>
         let showDatePicker: Driver<Void>
-        let selectedWateredDate: Driver<String>
         let cancleAddPlant: Driver<Void>
         let submitPlant: Driver<Void>
         let submitBtnState: Driver<SubmitState>
@@ -92,12 +144,40 @@ class AddPlantSecondViewModel {
         let showDatePicker = input.dateDidTap
             .map { _ in () }
             .asDriver(onErrorDriveWith: .empty())
-        let selectedWateredDate = input.selectedDate
-            .map { [ weak self] date in
-                guard let self = self else { return "ERROR" }
-                return self.dateToString(date)
-            }
-            .asDriver(onErrorJustReturn: "")
+        
+        input.selectedDate
+            .bind { [weak self] index in
+                guard let self = self else { return }
+                guard let newDay = Int(days.value[index.row]) else { return }
+                
+                var dateComponents = calendar.dateComponents([.year, .month], from: calendarDate)
+                dateComponents.day = newDay
+                
+                guard let newDate = calendar.date(from: dateComponents) else { return }
+                
+                selectedDate.accept(dateToString(newDate))
+            }.disposed(by: disposeBag)
+        
+        input.previousMonthBtnDidTap
+            .bind { [weak self] () in
+                guard let self = self else { return }
+                guard let preMonthDate = calendar.date(byAdding: .month, value: -1, to: calendarDate) else { return }
+                
+                calendarDate = preMonthDate
+                currentMonth.accept(dateToMonthString(calendarDate))
+                updateDays()
+            }.disposed(by: disposeBag)
+        
+        input.nextMonthBtnDidTap
+            .bind { [weak self] () in
+                guard let self = self else { return }
+                guard let preMonthDate = calendar.date(byAdding: .month, value: 1, to: calendarDate) else { return }
+                
+                calendarDate = preMonthDate
+                currentMonth.accept(dateToMonthString(calendarDate))
+                updateDays()
+            }.disposed(by: disposeBag)
+        
         let cancleAddPlant = input.cancleBtnDidTap
             .map { _ in () }
             .asDriver(onErrorDriveWith: .empty())
@@ -117,24 +197,8 @@ class AddPlantSecondViewModel {
                selectPlace: selectPlace,
                resetPlace: resetPlace,
                showDatePicker: showDatePicker,
-               selectedWateredDate: selectedWateredDate,
                cancleAddPlant: cancleAddPlant,
                submitPlant: submitPlant,
                submitBtnState: submitBtnState.asDriver(onErrorJustReturn: .disable))
-    }
-    
-    func dateToString(_ date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
-        
-        return dateFormatter.string(from: date)
-    }
-}
-
-extension AddPlantSecondViewModel {
-    enum SubmitState {
-        case enable
-        case disable
-        case onClick
     }
 }
