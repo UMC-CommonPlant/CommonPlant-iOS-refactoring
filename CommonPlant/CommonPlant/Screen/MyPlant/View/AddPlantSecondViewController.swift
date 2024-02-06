@@ -7,8 +7,31 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxRelay
 
 class AddPlantSecondViewController: UIViewController {
+    private let viewModel = AddPlantSecondViewModel()
+    private lazy var input = AddPlantSecondViewModel
+        .Input(imageDidTap: plantImageView.rx.tapGesture().map { _ in }.asObservable(),
+               selectedNewImage: selectNewImage.asObservable(),
+               selectedDefaultImage: changeToDefaultImage.asObservable(),
+               selectedCancle: cancelImageSetting.asObservable(),
+               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
+               placeDidTap: placeBackgroundView.rx.tapGesture().map { _ in }.asObservable(),
+               selectedPlace: placeCollectionView.rx.itemSelected.asObservable(),
+               deletePlaceBtnDidTap: deleteButton.rx.tap.asObservable(),
+               dateDidTap: selectedDateLabel.rx.tapGesture().map { _ in }.asObservable(),
+               previousMonthBtnDidTap: previousButton.rx.tap.asObservable(),
+               nextMonthBtnDidTap: nextButton.rx.tap.asObservable(),
+               selectedDate: datePickerCollectionView.rx.itemSelected.asObservable(),
+               cancleBtnDidTap: cancleButton.rx.tap.asObservable(),
+               submitBtnDidTap: submitButton.rx.tap.asObservable())
+    private lazy var output = viewModel.transform(input: input)
+    private let selectNewImage = PublishRelay<Void>()
+    private let changeToDefaultImage = PublishRelay<Void>()
+    private let cancelImageSetting = PublishRelay<Void>()
+    
     private let scrollView: UIView = {
         let view = UIScrollView()
         view.showsHorizontalScrollIndicator = false
@@ -235,6 +258,111 @@ class AddPlantSecondViewController: UIViewController {
         view.backgroundColor = .white
         setHierarchy()
         setConstraints()
+    }
+    
+    func bind() {
+        viewModel.currentMonth.bind { [weak self] month in
+            guard let self = self else { return }
+            
+            selectedMonthLabel.text = month
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.selectedDate.bind { [weak self] date in
+            guard let self = self else { return }
+            
+            selectedDateLabel.text = date
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showImgSettingAlert.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.showImageSettingAlert { state in
+                switch state {
+                case .newImage:
+                    self.selectNewImage.accept(())
+                case .defaultImage:
+                    self.changeToDefaultImage.accept(())
+                case .cancle:
+                    self.cancelImageSetting.accept(())
+                }
+            }
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showImagePicker.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.changeDefaultImage.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            plantImageView.image = UIImage(named: "MyPlant")
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.cancleSelectImage.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.nicknameState.drive { [weak self] nickname in
+            guard let self = self else { return }
+            
+            nicknameTextField.text = nickname
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showPlaceList.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            placeCollectionView.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.selectPlace.drive { [weak self] place in
+            guard let self = self else { return }
+            
+            placeChoiceLabel.text = "장소"
+            selectedPlaceLabel.text = place
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.resetPlace.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            placeChoiceLabel.text = "장소 선택"
+            selectedPlaceLabel.text = ""
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showDatePicker.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            datePickerCollectionView.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.cancleAddPlant.drive { [weak self] _ in
+            guard let self = self else { return }
+            // TODO: navigation pop
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.submitPlant.drive { [weak self] _ in
+            guard let self = self else { return }
+            // TODO: navigation pop
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.submitBtnState.drive { [weak self] state in
+            guard let self = self else { return }
+            
+            switch state {
+            case .enable:
+                submitButton.isEnabled = true
+                submitButton.backgroundColor = .gray1
+                submitButton.configuration?.baseForegroundColor = .gray3
+            case .disable:
+                submitButton.isEnabled = true
+                submitButton.backgroundColor = .seaGreenDark1
+                submitButton.configuration?.baseForegroundColor = .white
+            case .onClick:
+                submitButton.backgroundColor = .seaGreenDark3
+                submitButton.configuration?.baseForegroundColor = .white
+            }
+        }.disposed(by: viewModel.disposeBag)
     }
     
     func setHierarchy() {
