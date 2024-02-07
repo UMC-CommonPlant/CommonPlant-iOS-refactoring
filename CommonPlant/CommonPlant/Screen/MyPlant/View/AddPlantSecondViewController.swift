@@ -77,6 +77,7 @@ class AddPlantSecondViewController: UIViewController {
         let tf = UITextField()
         tf.font = .bodyM1
         tf.textColor = .black
+        tf.tintColor = .black
         tf.placeholder = "식물 애칭을 입력해주세요"
         tf.clearButtonMode = .whileEditing
         tf.returnKeyType = .done
@@ -92,6 +93,7 @@ class AddPlantSecondViewController: UIViewController {
         label.text = "0/10"
         label.font = .captionB1
         label.textColor = .gray5
+        label.textAlignment = .right
         label.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
         return label
     }()
@@ -158,7 +160,7 @@ class AddPlantSecondViewController: UIViewController {
         let label = PaddingLabel()
         label.font = .bodyM1
         label.textColor = .gray6
-        label.padding = UIEdgeInsets(top: 8, left: 6, bottom: 8, right: 6)
+        label.padding = UIEdgeInsets(top: 10, left: 6, bottom: 8, right: 6)
         label.backgroundColor = .gray1
         label.makeRound(radius: 6)
         return label
@@ -246,16 +248,27 @@ class AddPlantSecondViewController: UIViewController {
         var attribute = AttributedString.init("등록")
         attribute.font = .bodyM3
         config.attributedTitle = attribute
-        config.baseForegroundColor = .white
+        config.baseForegroundColor = .gray3
         button.configuration = config
-        button.backgroundColor = .seaGreenDark1
+        button.backgroundColor = .gray1
         button.makeRound(radius: 4)
+        button.isEnabled = true
         return button
     }()
+    
+    init(name: String) {
+        nameLabel.text = name
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        bind()
         setHierarchy()
         setConstraints()
     }
@@ -296,7 +309,7 @@ class AddPlantSecondViewController: UIViewController {
         output.changeDefaultImage.drive { [weak self] _ in
             guard let self = self else { return }
             
-            plantImageView.image = UIImage(named: "MyPlant")
+            plantImageView.image = UIImage(named: "AddPlant")
         }.disposed(by: viewModel.disposeBag)
         
         output.cancleSelectImage.drive { [weak self] _ in
@@ -308,6 +321,9 @@ class AddPlantSecondViewController: UIViewController {
             guard let self = self else { return }
             
             nicknameTextField.text = nickname
+            nicknameCountLabel.text = "\(nickname.count)/10"
+            nicknameCountLabel.textColor = nickname.count > 0 ? .black : .gray5
+            nicknameCountLabel.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
         }.disposed(by: viewModel.disposeBag)
         
         output.showPlaceList.drive { [weak self] _ in
@@ -320,7 +336,7 @@ class AddPlantSecondViewController: UIViewController {
             guard let self = self else { return }
             
             placeChoiceLabel.text = "장소"
-            selectedPlaceLabel.text = place
+            selectedPlaceLabel.text = place.placeName
         }.disposed(by: viewModel.disposeBag)
         
         output.resetPlace.drive { [weak self] _ in
@@ -352,12 +368,12 @@ class AddPlantSecondViewController: UIViewController {
             switch state {
             case .enable:
                 submitButton.isEnabled = true
-                submitButton.backgroundColor = .gray1
-                submitButton.configuration?.baseForegroundColor = .gray3
-            case .disable:
-                submitButton.isEnabled = true
                 submitButton.backgroundColor = .seaGreenDark1
                 submitButton.configuration?.baseForegroundColor = .white
+            case .disable:
+                submitButton.isEnabled = true
+                submitButton.backgroundColor = .gray1
+                submitButton.configuration?.baseForegroundColor = .gray3
             case .onClick:
                 submitButton.backgroundColor = .seaGreenDark3
                 submitButton.configuration?.baseForegroundColor = .white
@@ -446,12 +462,15 @@ class AddPlantSecondViewController: UIViewController {
         
         nicknameTextField.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(nicknameCountLabel.snp.leading).offset(-5)
         }
         
         nicknameCountLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
+            make.leading.equalTo(nicknameTextField.snp.trailing).offset(5)
             make.trailing.equalToSuperview()
+            make.width.equalTo(35)
         }
         
         nicknameUnderlineView.snp.makeConstraints { make in

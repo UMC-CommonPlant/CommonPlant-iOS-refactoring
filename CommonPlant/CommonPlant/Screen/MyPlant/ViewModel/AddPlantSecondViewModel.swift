@@ -87,7 +87,7 @@ extension AddPlantSecondViewModel {
         let cancleSelectImage: Driver<Void>
         let nicknameState: Driver<String>
         let showPlaceList: Driver<Void>
-        let selectPlace: Driver<String>
+        let selectPlace: Driver<Place>
         let resetPlace: Driver<Void>
         let showDatePicker: Driver<Void>
         let cancleAddPlant: Driver<Void>
@@ -97,53 +97,50 @@ extension AddPlantSecondViewModel {
     
     func transform(input: Input) -> Output {
         let submitBtnState = BehaviorRelay(value: SubmitState.disable)
-        let showImgSettingAlert = input.imageDidTap
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        let showImagePicker = input.selectedNewImage
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        let changeDefaultImage = input.selectedDefaultImage
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        let cancleSelectImage = input.selectedCancle
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        let nicknameState = input.editingNickname
-            .map { name in
-                var name = name
-                
-                if name.contains("\n") {
-                    name.removeLast()
-                }
-                
-                if name.count > 10 {
-                    let index = name.index(name.startIndex, offsetBy: 10)
-                    name = String(name[..<index])
-                }
-                
-                if name.count > 0 {
-                    submitBtnState.accept(.enable)
-                }
-                
-                return name
+        
+        let showImgSettingAlert = PublishRelay<Void>()
+        input.imageDidTap.bind(to: showImgSettingAlert).disposed(by: disposeBag)
+        let showImagePicker = PublishRelay<Void>()
+        input.selectedNewImage.bind(to: showImagePicker).disposed(by: disposeBag)
+        let changeDefaultImage = PublishRelay<Void>()
+        input.selectedDefaultImage.bind(to: changeDefaultImage).disposed(by: disposeBag)
+        let cancleSelectImage = PublishRelay<Void>()
+        input.selectedCancle.bind(to: cancleSelectImage).disposed(by: disposeBag)
+        let nicknameState = PublishRelay<String>()
+        input.editingNickname.bind { [weak self] name in
+            guard let self = self else { return }
+            var name = name
+            
+            if name.contains("\n") {
+                name.removeLast()
             }
-            .asDriver(onErrorJustReturn: "")
-        let showPlaceList = input.placeDidTap
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        let selectPlace = input.selectedPlace
-            .map { index in
-                // TODO: 해당 인덱스 장소 리턴하기
-                return ""
+            
+            if name.count > 10 {
+                let index = name.index(name.startIndex, offsetBy: 10)
+                name = String(name[..<index])
             }
-            .asDriver(onErrorJustReturn: "")
-        let resetPlace = input.deletePlaceBtnDidTap
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        let showDatePicker = input.dateDidTap
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
+            
+            if name.count > 0 {
+                submitBtnState.accept(.enable)
+            }
+            
+            nicknameState.accept(name)
+        }.disposed(by: disposeBag)
+        
+        let showPlaceList = PublishRelay<Void>()
+        input.placeDidTap.bind(to: showPlaceList).disposed(by: disposeBag)
+        
+        let selectPlace = PublishRelay<Place>()
+        input.selectedPlace.bind { [weak self] indexPath in
+            guard let self = self else { return }
+            selectPlace.accept(placeList.value[indexPath.row])
+        }.disposed(by: disposeBag)
+        
+        let resetPlace = PublishRelay<Void>()
+        input.deletePlaceBtnDidTap.bind(to: resetPlace).disposed(by: disposeBag)
+        
+        let showDatePicker = PublishRelay<Void>()
+        input.dateDidTap.bind(to: showDatePicker).disposed(by: disposeBag)
         
         input.selectedDate
             .bind { [weak self] index in
@@ -188,17 +185,17 @@ extension AddPlantSecondViewModel {
             }
             .asDriver(onErrorDriveWith: .empty())
         
-        return Output(showImgSettingAlert: showImgSettingAlert,
-               showImagePicker: showImagePicker,
-               changeDefaultImage: changeDefaultImage,
-               cancleSelectImage: cancleSelectImage,
-               nicknameState: nicknameState,
-               showPlaceList: showPlaceList,
-               selectPlace: selectPlace,
-               resetPlace: resetPlace,
-               showDatePicker: showDatePicker,
-               cancleAddPlant: cancleAddPlant,
-               submitPlant: submitPlant,
-               submitBtnState: submitBtnState.asDriver(onErrorJustReturn: .disable))
+        return Output(showImgSettingAlert: showImgSettingAlert.asDriver(onErrorJustReturn: ()),
+                      showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()),
+                      changeDefaultImage: changeDefaultImage.asDriver(onErrorJustReturn: ()),
+                      cancleSelectImage: cancleSelectImage.asDriver(onErrorJustReturn: ()),
+                      nicknameState: nicknameState.asDriver(onErrorJustReturn: ""),
+                      showPlaceList: showPlaceList.asDriver(onErrorJustReturn: ()),
+                      selectPlace: selectPlace.asDriver(onErrorJustReturn: Place(placeImage: "", placeName: "")),
+                      resetPlace: resetPlace.asDriver(onErrorJustReturn: ()),
+                      showDatePicker: showDatePicker.asDriver(onErrorJustReturn: ()),
+                      cancleAddPlant: cancleAddPlant,
+                      submitPlant: submitPlant,
+                      submitBtnState: submitBtnState.asDriver(onErrorJustReturn: .disable))
     }
 }

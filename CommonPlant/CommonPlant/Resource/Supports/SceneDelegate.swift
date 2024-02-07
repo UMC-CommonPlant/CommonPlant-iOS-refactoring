@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         // 뷰 확인하기
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: AddPlantSecondViewController())
+        window?.rootViewController = UINavigationController(rootViewController: AddPlantSecondViewController(name: "몬스테라"))
         window?.makeKeyAndVisible()
     }
     
