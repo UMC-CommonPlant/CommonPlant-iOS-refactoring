@@ -24,6 +24,7 @@
 		C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2722A5AA995005C0449 /* UILabel+Extension.swift */; };
 		C06299802A7A87FB00985171 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */; };
 		C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */; };
+		C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */; };
 		C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */; };
 		C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8732A59463E00CDC5CC /* SettingViewController.swift */; };
 		C07DF8762A5947C400CDC5CC /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */; };
@@ -99,6 +100,7 @@
 		C059A2722A5AA995005C0449 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMenuView.swift; sourceTree = "<group>"; };
+		C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollectionViewCell.swift; sourceTree = "<group>"; };
 		C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C07DF8732A59463E00CDC5CC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */,
 				C007F63A2B59198E00CD6252 /* AddPlantFirstViewController.swift */,
 				C007F6462B62562200CD6252 /* AddPlantSecondViewController.swift */,
+				C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -676,6 +679,7 @@
 				C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */,
 				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
+				C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */,
 				C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */,
 				C0BDF2E52B1EFD7A002C7FD7 /* EditMemoViewController.swift in Sources */,
 				F9D0CCAA2A586208006D688C /* MainMyPlantCollectionViewCell.swift in Sources */,

@@ -140,8 +140,8 @@ class AddPlantSecondViewController: UIViewController {
         flowLayout.minimumLineSpacing = 8
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.itemSize = CGSize(width: 250, height: 156)
-        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 0, right: 20)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.register(PlaceCollectionViewCell.self, forCellWithReuseIdentifier: PlaceCollectionViewCell.identifier)
         view.isHidden = true
         return view
     }()
@@ -286,6 +286,11 @@ class AddPlantSecondViewController: UIViewController {
             selectedDateLabel.text = date
         }.disposed(by: viewModel.disposeBag)
         
+        viewModel.placeList.bind(to: placeCollectionView.rx.items(cellIdentifier: PlaceCollectionViewCell.identifier, cellType: PlaceCollectionViewCell.self)) { (_, result, cell) in
+            
+            cell.setConfigure(with: result)
+        }.disposed(by: viewModel.disposeBag)
+        
         output.showImgSettingAlert.drive { [weak self] _ in
             guard let self = self else { return }
             
@@ -330,6 +335,12 @@ class AddPlantSecondViewController: UIViewController {
             guard let self = self else { return }
             
             placeCollectionView.isHidden = false
+            
+            dateView.snp.remakeConstraints { make in
+                make.top.equalTo(self.placeCollectionView.snp.bottom).offset(32)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(56)
+            }
         }.disposed(by: viewModel.disposeBag)
         
         output.selectPlace.drive { [weak self] place in
@@ -337,6 +348,15 @@ class AddPlantSecondViewController: UIViewController {
             
             placeChoiceLabel.text = "장소"
             selectedPlaceLabel.text = place.placeName
+            deleteButton.isHidden = false
+            nextImageView.isHidden = true
+            placeCollectionView.isHidden = true
+            dateView.snp.remakeConstraints { make in
+                make.top.equalTo(self.placeBackgroundView.snp.bottom).offset(32)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(56)
+            }
+            view.layoutIfNeeded()
         }.disposed(by: viewModel.disposeBag)
         
         output.resetPlace.drive { [weak self] _ in
@@ -344,6 +364,8 @@ class AddPlantSecondViewController: UIViewController {
             
             placeChoiceLabel.text = "장소 선택"
             selectedPlaceLabel.text = ""
+            deleteButton.isHidden = true
+            nextImageView.isHidden = false
         }.disposed(by: viewModel.disposeBag)
         
         output.showDatePicker.drive { [weak self] _ in
@@ -489,15 +511,14 @@ class AddPlantSecondViewController: UIViewController {
             make.leading.equalToSuperview()
         }
         
-        nextButton.snp.makeConstraints { make in
+        nextImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.width.height.equalTo(24)
+            make.trailing.equalToSuperview().inset(-12)
         }
         
         deleteButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(0)
             make.width.height.equalTo(40)
         }
         
@@ -514,11 +535,12 @@ class AddPlantSecondViewController: UIViewController {
         placeCollectionView.snp.makeConstraints { make in
             make.top.equalTo(placeBackgroundView.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview()
+            make.height.equalTo(156)
         }
         
         dateView.snp.makeConstraints { make in
-            make.top.equalTo(placeCollectionView.isHidden ? placeBackgroundView.snp.bottom : placeCollectionView.snp.bottom).offset(32)
-            make.leading.trailing.equalToSuperview() // TODO: safeArea에 맞춘거랑 비교해보기
+            make.top.equalTo(placeBackgroundView.snp.bottom).offset(32)
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(56)
         }
         
