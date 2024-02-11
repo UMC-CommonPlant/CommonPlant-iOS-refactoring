@@ -45,6 +45,7 @@ class AddPlantSecondViewController: UIViewController {
     private let plantImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "AddPlant")
+        view.makeRound(radius: 16)
         return view
     }()
     private let cameraImageView: UIImageView = {
@@ -329,6 +330,35 @@ class AddPlantSecondViewController: UIViewController {
         output.showImagePicker.drive { [weak self] _ in
             guard let self = self else { return }
             
+            ImagePickerViewModel.shared.checkPermissionState() { state in
+                DispatchQueue.main.async {
+                    switch state {
+                    case .denied:
+                        self.moveToSetting()
+                    case .authorized:
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            ImagePickerViewController.shared.showPhotoPicker(viewController: self)
+                        }
+                        
+                        ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                            guard let self = self else { return }
+                            plantImageView.load(url: URL(string: imageString)!)
+                        }
+                    case .limited:
+                        let imagePickerVC = ImagePickerViewController()
+                        
+                        self.present(imagePickerVC, animated: true)
+                        
+                        imagePickerVC.didSelectImage = { [weak self] imageString in
+                            guard self != nil else { return }
+                            self?.plantImageView.load(url: URL(string: imageString)!)
+                        }
+                    default:
+                        print("\(state)")
+                    }
+                }
+            }
         }.disposed(by: viewModel.disposeBag)
         
         output.changeDefaultImage.drive { [weak self] _ in
@@ -342,7 +372,7 @@ class AddPlantSecondViewController: UIViewController {
             
         }.disposed(by: viewModel.disposeBag)
         
-        output.nicknameState.drive { [weak self] nickname in
+        output.nicknameText.drive { [weak self] nickname in
             guard let self = self else { return }
             
             nicknameTextField.text = nickname

@@ -19,6 +19,8 @@ class AddPlantSecondViewModel {
     let days = BehaviorRelay<[String]>(value: [])
     let todayDate = Date()
     var calendarDate = Date()
+    var nicknameState: SubmitState = .disable
+    var placeState: SubmitState = .disable
     
     init() {
         selectedDate.accept(dateToString(Date()))
@@ -120,7 +122,7 @@ extension AddPlantSecondViewModel {
         let showImagePicker: Driver<Void>
         let changeDefaultImage: Driver<Void>
         let cancleSelectImage: Driver<Void>
-        let nicknameState: Driver<String>
+        let nicknameText: Driver<String>
         let showPlaceList: Driver<Void>
         let selectPlace: Driver<Place>
         let resetPlace: Driver<Void>
@@ -142,7 +144,7 @@ extension AddPlantSecondViewModel {
         input.selectedDefaultImage.bind(to: changeDefaultImage).disposed(by: disposeBag)
         let cancleSelectImage = PublishRelay<Void>()
         input.selectedCancle.bind(to: cancleSelectImage).disposed(by: disposeBag)
-        let nicknameState = PublishRelay<String>()
+        let nicknameText = PublishRelay<String>()
         input.editingNickname.bind { [weak self] name in
             guard let self = self else { return }
             var name = name
@@ -157,10 +159,11 @@ extension AddPlantSecondViewModel {
             }
             
             if name.count > 0 {
-                submitBtnState.accept(.enable)
+                nicknameState = .enable
+                submitBtnState.accept(placeState)
             }
             
-            nicknameState.accept(name)
+            nicknameText.accept(name)
         }.disposed(by: disposeBag)
         
         let showPlaceList = PublishRelay<Void>()
@@ -170,10 +173,19 @@ extension AddPlantSecondViewModel {
         input.selectedPlace.bind { [weak self] indexPath in
             guard let self = self else { return }
             selectPlace.accept(placeList.value[indexPath.row])
+            
+            placeState = .enable
+            submitBtnState.accept(nicknameState)
         }.disposed(by: disposeBag)
         
         let resetPlace = PublishRelay<Void>()
-        input.deletePlaceBtnDidTap.bind(to: resetPlace).disposed(by: disposeBag)
+        input.deletePlaceBtnDidTap.bind { [weak self] indexPath in
+            guard let self = self else { return }
+            resetPlace.accept(())
+            
+            placeState = .disable
+            submitBtnState.accept(.disable)
+        }.disposed(by: disposeBag)
         
         let showDatePicker = PublishRelay<Void>()
         input.dateDidTap.bind(to: showDatePicker).disposed(by: disposeBag)
@@ -227,7 +239,7 @@ extension AddPlantSecondViewModel {
                       showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()),
                       changeDefaultImage: changeDefaultImage.asDriver(onErrorJustReturn: ()),
                       cancleSelectImage: cancleSelectImage.asDriver(onErrorJustReturn: ()),
-                      nicknameState: nicknameState.asDriver(onErrorJustReturn: ""),
+                      nicknameText: nicknameText.asDriver(onErrorJustReturn: ""),
                       showPlaceList: showPlaceList.asDriver(onErrorJustReturn: ()),
                       selectPlace: selectPlace.asDriver(onErrorJustReturn: Place(placeImage: "", placeName: "")),
                       resetPlace: resetPlace.asDriver(onErrorJustReturn: ()),
