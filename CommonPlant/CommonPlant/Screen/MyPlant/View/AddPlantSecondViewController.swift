@@ -16,7 +16,6 @@ class AddPlantSecondViewController: UIViewController {
         .Input(imageDidTap: plantImageView.rx.tapGesture().map { _ in }.asObservable(),
                selectedNewImage: selectNewImage.asObservable(),
                selectedDefaultImage: changeToDefaultImage.asObservable(),
-               selectedCancle: cancelImageSetting.asObservable(),
                editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
                placeDidTap: placeBackgroundView.rx.tapGesture().map { _ in }.asObservable(),
                selectedPlace: placeCollectionView.rx.itemSelected.asObservable(),
@@ -367,11 +366,6 @@ class AddPlantSecondViewController: UIViewController {
             plantImageView.image = UIImage(named: "AddPlant")
         }.disposed(by: viewModel.disposeBag)
         
-        output.cancleSelectImage.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-        }.disposed(by: viewModel.disposeBag)
-        
         output.nicknameText.drive { [weak self] nickname in
             guard let self = self else { return }
             
@@ -657,24 +651,23 @@ class AddPlantSecondViewController: UIViewController {
         }
         
         messageLabel.snp.makeConstraints { make in
-            make.top.equalTo(dateView.snp.bottom).offset(1)
+            make.top.equalTo(dateView.snp.bottom).offset(2)
             make.leading.equalToSuperview()
+            make.height.equalTo(16)
         }
         
         cancleButton.snp.makeConstraints { make in
-            make.top.equalTo(messageLabel.snp.bottom).offset(90)
+            make.top.greaterThanOrEqualTo(messageLabel.snp.bottom).offset(90)
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview().inset(16)
             make.height.equalTo(40)
         }
         
         submitButton.snp.makeConstraints { make in
-            make.top.equalTo(messageLabel.snp.bottom).offset(90)
+            make.top.bottom.equalTo(cancleButton)
             make.leading.equalTo(cancleButton.snp.trailing).offset(8)
             make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(16)
-            make.width.equalTo(cancleButton.snp.width)
-            make.height.equalTo(40)
+            make.width.height.equalTo(cancleButton)
         }
     }
     

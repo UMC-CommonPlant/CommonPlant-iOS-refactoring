@@ -65,6 +65,8 @@ class AddPlantFirstViewController: UIViewController {
             guard let self = self else { return }
             // TODO: 식물 등록(2/2) 화면 전환
             print(result)
+            let nextVC = AddPlantSecondViewController(name: result.plantName)
+            self.navigationController?.pushViewController(nextVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
     }
     

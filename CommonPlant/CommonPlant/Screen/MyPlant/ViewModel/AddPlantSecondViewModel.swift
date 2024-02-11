@@ -104,7 +104,6 @@ extension AddPlantSecondViewModel {
         let imageDidTap: Observable<Void>
         let selectedNewImage: Observable<Void>
         let selectedDefaultImage: Observable<Void>
-        let selectedCancle: Observable<Void>
         let editingNickname: Observable<String>
         let placeDidTap: Observable<Void>
         let selectedPlace: Observable<IndexPath>
@@ -121,7 +120,6 @@ extension AddPlantSecondViewModel {
         let showImgSettingAlert: Driver<Void>
         let showImagePicker: Driver<Void>
         let changeDefaultImage: Driver<Void>
-        let cancleSelectImage: Driver<Void>
         let nicknameText: Driver<String>
         let showPlaceList: Driver<Void>
         let selectPlace: Driver<Place>
@@ -142,8 +140,6 @@ extension AddPlantSecondViewModel {
         input.selectedNewImage.bind(to: showImagePicker).disposed(by: disposeBag)
         let changeDefaultImage = PublishRelay<Void>()
         input.selectedDefaultImage.bind(to: changeDefaultImage).disposed(by: disposeBag)
-        let cancleSelectImage = PublishRelay<Void>()
-        input.selectedCancle.bind(to: cancleSelectImage).disposed(by: disposeBag)
         let nicknameText = PublishRelay<String>()
         input.editingNickname.bind { [weak self] name in
             guard let self = self else { return }
@@ -238,7 +234,6 @@ extension AddPlantSecondViewModel {
         return Output(showImgSettingAlert: showImgSettingAlert.asDriver(onErrorJustReturn: ()),
                       showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()),
                       changeDefaultImage: changeDefaultImage.asDriver(onErrorJustReturn: ()),
-                      cancleSelectImage: cancleSelectImage.asDriver(onErrorJustReturn: ()),
                       nicknameText: nicknameText.asDriver(onErrorJustReturn: ""),
                       showPlaceList: showPlaceList.asDriver(onErrorJustReturn: ()),
                       selectPlace: selectPlace.asDriver(onErrorJustReturn: Place(placeImage: "", placeName: "")),
