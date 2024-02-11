@@ -17,6 +17,7 @@ class AddPlantSecondViewModel {
     let selectedDate = BehaviorRelay<String>(value: "")
     let currentMonth = BehaviorRelay<String>(value: "")
     let days = BehaviorRelay<[String]>(value: [])
+    let todayDate = Date()
     var calendarDate = Date()
     
     init() {
@@ -27,6 +28,13 @@ class AddPlantSecondViewModel {
         let list = [Place(placeImage: "", placeName: "스윗 홈_거실"),
         Place(placeImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/ceb7bd36-86b4-4ab1-b2df-24862db128f8..jpg", placeName: "낫 스윗_회사")]
         placeList.accept(list)
+    }
+    
+    func stringToDate(_ string: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy. MM. dd"
+        
+        return dateFormatter.date(from: string)
     }
     
     func dateToString(_ date: Date) -> String {
@@ -44,13 +52,40 @@ class AddPlantSecondViewModel {
     }
     
     func updateDays() {
-        let startOfMonth = calendar.startOfDay(for: calendarDate)
-        let weekdayOfFirstDay = calendar.component(.weekday, from: startOfMonth)
+        let dateComponents = calendar.dateComponents([.year, .month], from: calendarDate)
+        guard let firstDayOfMonth = calendar.date(from: dateComponents) else { return }
+        let weekdayOfFirstDay = calendar.component(.weekday, from: firstDayOfMonth)
         guard let numberOfDays = calendar.range(of: .day, in: .month, for: calendarDate)?.count else { return }
-        let empty = Array(repeating: "", count: weekdayOfFirstDay)
+        let empty = Array(repeating: "", count: weekdayOfFirstDay - 1)
         let days = (1...numberOfDays).map { String($0) }
-
+        
         self.days.accept(empty + days)
+    }
+    
+    func checkToday(day: String) -> Bool {
+        guard let day = Int(day) else { return false }
+        guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
+        
+        let today = dateToString(todayDate)
+        let target = dateToString(newDate)
+        
+        return today == target
+    }
+    
+    func checkSelectedDay(day: String) -> Bool {
+        guard let day = Int(day) else { return false }
+        guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
+        
+        let target = dateToString(newDate)
+        return selectedDate.value == target
+    }
+    
+    func checkMonth() -> Bool {
+        guard let selectedDate = stringToDate(selectedDate.value) else { return false }
+        let selectYearAndMonth = calendar.dateComponents([.year, .month], from: selectedDate)
+        let currentYearAndMonth = calendar.dateComponents([.year, .month], from: calendarDate)
+        
+        return selectYearAndMonth == currentYearAndMonth
     }
 }
 
@@ -90,6 +125,7 @@ extension AddPlantSecondViewModel {
         let selectPlace: Driver<Place>
         let resetPlace: Driver<Void>
         let showDatePicker: Driver<Void>
+        let selectDate: Driver<IndexPath>
         let cancleAddPlant: Driver<Void>
         let submitPlant: Driver<Void>
         let submitBtnState: Driver<SubmitState>
@@ -142,18 +178,20 @@ extension AddPlantSecondViewModel {
         let showDatePicker = PublishRelay<Void>()
         input.dateDidTap.bind(to: showDatePicker).disposed(by: disposeBag)
         
-        input.selectedDate
-            .bind { [weak self] index in
-                guard let self = self else { return }
-                guard let newDay = Int(days.value[index.row]) else { return }
-                
-                var dateComponents = calendar.dateComponents([.year, .month], from: calendarDate)
-                dateComponents.day = newDay
-                
-                guard let newDate = calendar.date(from: dateComponents) else { return }
-                
-                selectedDate.accept(dateToString(newDate))
-            }.disposed(by: disposeBag)
+        let selectDate = PublishRelay<IndexPath>()
+        input.selectedDate.bind { [weak self] index in
+            guard let self = self else { return }
+            guard let newDay = Int(days.value[index.row]) else { return }
+            
+            var dateComponents = calendar.dateComponents([.year, .month], from: calendarDate)
+            dateComponents.day = newDay
+            
+            guard let newDate = calendar.date(from: dateComponents) else { return }
+            
+            selectDate.accept(index)
+            selectedDate.accept(dateToString(newDate))
+            calendarDate = newDate
+        }.disposed(by: disposeBag)
         
         input.previousMonthBtnDidTap
             .bind { [weak self] () in
@@ -168,9 +206,9 @@ extension AddPlantSecondViewModel {
         input.nextMonthBtnDidTap
             .bind { [weak self] () in
                 guard let self = self else { return }
-                guard let preMonthDate = calendar.date(byAdding: .month, value: 1, to: calendarDate) else { return }
+                guard let nextMonthDate = calendar.date(byAdding: .month, value: 1, to: calendarDate) else { return }
                 
-                calendarDate = preMonthDate
+                calendarDate = nextMonthDate
                 currentMonth.accept(dateToMonthString(calendarDate))
                 updateDays()
             }.disposed(by: disposeBag)
@@ -193,7 +231,7 @@ extension AddPlantSecondViewModel {
                       showPlaceList: showPlaceList.asDriver(onErrorJustReturn: ()),
                       selectPlace: selectPlace.asDriver(onErrorJustReturn: Place(placeImage: "", placeName: "")),
                       resetPlace: resetPlace.asDriver(onErrorJustReturn: ()),
-                      showDatePicker: showDatePicker.asDriver(onErrorJustReturn: ()),
+                      showDatePicker: showDatePicker.asDriver(onErrorJustReturn: ()), selectDate: selectDate.asDriver(onErrorJustReturn: IndexPath()),
                       cancleAddPlant: cancleAddPlant,
                       submitPlant: submitPlant,
                       submitBtnState: submitBtnState.asDriver(onErrorJustReturn: .disable))

@@ -201,26 +201,30 @@ class AddPlantSecondViewController: UIViewController {
         let view = UIStackView()
         
         view.axis = .horizontal
-        view.spacing = 4
-        
+        view.distribution = .equalSpacing
         ["일", "월", "화", "수", "목", "금", "토"].forEach {
             let label = UILabel()
             label.text = $0
             label.font = .bodyM3
             label.textColor = .gray5
+            label.textAlignment = .center
             
             view.addArrangedSubview(label)
+            
+            label.snp.makeConstraints { make in
+                make.width.height.equalTo(40)
+            }
         }
         return view
     }()
     private let datePickerCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 4
-        flowLayout.minimumInteritemSpacing = 0
+        flowLayout.minimumLineSpacing = 0
+        flowLayout.minimumInteritemSpacing = 4
         flowLayout.itemSize = CGSize(width: 40, height: 40)
-        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 0, right: 20)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.isScrollEnabled = false
+        view.register(DatePickerCollectionViewCell.self, forCellWithReuseIdentifier: DatePickerCollectionViewCell.identifier)
         return view
     }()
     private let messageLabel: UILabel = {
@@ -291,6 +295,15 @@ class AddPlantSecondViewController: UIViewController {
             cell.setConfigure(with: result)
         }.disposed(by: viewModel.disposeBag)
         
+        viewModel.days.bind(to: datePickerCollectionView.rx.items(cellIdentifier: DatePickerCollectionViewCell.identifier, cellType: DatePickerCollectionViewCell.self)) { [weak self] (_, result, cell) in
+            guard let self = self else { return }
+            
+            let isSelectedDay = viewModel.checkSelectedDay(day: result)
+            let isToday = viewModel.checkToday(day: result)
+            
+            cell.setConfigure(with: result, isSelected: isSelectedDay, isToday: isToday)
+        }.disposed(by: viewModel.disposeBag)
+        
         output.showImgSettingAlert.drive { [weak self] _ in
             guard let self = self else { return }
             
@@ -356,7 +369,6 @@ class AddPlantSecondViewController: UIViewController {
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(56)
             }
-            view.layoutIfNeeded()
         }.disposed(by: viewModel.disposeBag)
         
         output.resetPlace.drive { [weak self] _ in
@@ -371,7 +383,18 @@ class AddPlantSecondViewController: UIViewController {
         output.showDatePicker.drive { [weak self] _ in
             guard let self = self else { return }
             
-            datePickerCollectionView.isHidden = false
+            calendarView.isHidden = false
+            
+            messageLabel.snp.remakeConstraints { make in
+                make.top.equalTo(self.calendarView.snp.bottom).offset(4)
+                make.leading.equalToSuperview()
+            }
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.selectDate.drive { [weak self] indexPath in
+            guard let self = self else { return }
+            
+            setCalendar(indexPath)
         }.disposed(by: viewModel.disposeBag)
         
         output.cancleAddPlant.drive { [weak self] _ in
@@ -585,18 +608,19 @@ class AddPlantSecondViewController: UIViewController {
         weekStackView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(selectedMonthLabel.snp.bottom).offset(4)
+            make.leading.trailing.equalToSuperview().inset(7.5)
             make.height.equalTo(40)
-            make.bottom.equalToSuperview()
         }
         
         datePickerCollectionView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.top.equalTo(weekStackView.snp.bottom)
+            make.leading.trailing.equalToSuperview().inset(7.5)
             make.bottom.equalToSuperview()
+            make.height.greaterThanOrEqualTo(200)
         }
         
         messageLabel.snp.makeConstraints { make in
-            make.top.equalTo(calendarView.isHidden ? dateView.snp.bottom : calendarView.snp.bottom).offset(1)
+            make.top.equalTo(dateView.snp.bottom).offset(1)
             make.leading.equalToSuperview()
         }
         
@@ -615,5 +639,18 @@ class AddPlantSecondViewController: UIViewController {
             make.width.equalTo(cancleButton.snp.width)
             make.height.equalTo(40)
         }
+    }
+    
+    func setCalendar(_ indexPath: IndexPath) {
+        for cell in datePickerCollectionView.visibleCells {
+            guard let cell = cell as? DatePickerCollectionViewCell else { return }
+            guard let day = cell.dayLabel.text else { return }
+            cell.circleView.isHidden = true
+            cell.dayLabel.textColor = viewModel.checkToday(day: day) ? .seaGreenDark2 : .black
+        }
+        
+        guard let selectDay = datePickerCollectionView.cellForItem(at: indexPath) as? DatePickerCollectionViewCell else { return }
+        selectDay.circleView.isHidden = false
+        selectDay.dayLabel.textColor = .gray2
     }
 }
