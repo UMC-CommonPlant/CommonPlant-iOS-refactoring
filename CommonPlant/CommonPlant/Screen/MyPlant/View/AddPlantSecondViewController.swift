@@ -34,7 +34,7 @@ class AddPlantSecondViewController: UIViewController {
     
     private let scrollView: UIView = {
         let view = UIScrollView()
-        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     private let contentView = UIView()
@@ -184,7 +184,7 @@ class AddPlantSecondViewController: UIViewController {
     private let previousButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
-        config.image = UIImage(named: "Previous")
+        config.image = UIImage(named: "PreMonth")
         config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
         button.configuration = config
         return button
@@ -192,7 +192,7 @@ class AddPlantSecondViewController: UIViewController {
     private let nextButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
-        config.image = UIImage(named: "Previous")
+        config.image = UIImage(named: "NextMonth")
         config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
         button.configuration = config
         return button
@@ -272,9 +272,16 @@ class AddPlantSecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setNavigationBar()
         bind()
         setHierarchy()
         setConstraints()
+    }
+    
+    func setNavigationBar() {
+        self.navigationItem.title = "식물 등록(2/2)"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
+        self.navigationController?.navigationBar.barTintColor = .white
     }
     
     func bind() {
@@ -416,7 +423,7 @@ class AddPlantSecondViewController: UIViewController {
                 submitButton.backgroundColor = .seaGreenDark1
                 submitButton.configuration?.baseForegroundColor = .white
             case .disable:
-                submitButton.isEnabled = true
+                submitButton.isEnabled = false
                 submitButton.backgroundColor = .gray1
                 submitButton.configuration?.baseForegroundColor = .gray3
             case .onClick:
