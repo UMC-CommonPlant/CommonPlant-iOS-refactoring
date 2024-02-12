@@ -29,7 +29,6 @@ class AddPlantSecondViewController: UIViewController {
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
-    private let cancelImageSetting = PublishRelay<Void>()
     
     private let scrollView: UIView = {
         let view = UIScrollView()
@@ -321,7 +320,7 @@ class AddPlantSecondViewController: UIViewController {
                 case .defaultImage:
                     self.changeToDefaultImage.accept(())
                 case .cancle:
-                    self.cancelImageSetting.accept(())
+                    break
                 }
             }
         }.disposed(by: viewModel.disposeBag)
