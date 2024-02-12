@@ -18,6 +18,7 @@
 		C027A0942A909CDC009289E9 /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */; };
 		C027A0952A909CDC009289E9 /* ImagePickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */; };
 		C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */; };
+		C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039A8612B79000B00673CCC /* EditPlantViewModel.swift */; };
 		C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */; };
 		C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */; };
 		C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */; };
@@ -95,6 +96,7 @@
 		C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
 		C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		C039A8612B79000B00673CCC /* EditPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlantViewModel.swift; sourceTree = "<group>"; };
 		C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewController.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				C0B1BDE62A9E1ECA00DD7E04 /* MemoViewModel.swift */,
 				C007F63E2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift */,
 				C007F6442B5F712200CD6252 /* AddPlantSecondViewModel.swift */,
+				C039A8612B79000B00673CCC /* EditPlantViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -656,6 +659,7 @@
 				C0A0D4DD2A73E96800426514 /* SignUpViewModel.swift in Sources */,
 				C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */,
 				C007F6472B62562200CD6252 /* AddPlantSecondViewController.swift in Sources */,
+				C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */,
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
