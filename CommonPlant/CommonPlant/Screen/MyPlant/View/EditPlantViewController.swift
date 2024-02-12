@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class EditPlantViewController: UIViewController {
     private let viewModel = EditPlantViewModel()
@@ -14,8 +15,13 @@ class EditPlantViewController: UIViewController {
         let view = UIView()
         return view
     }()
-    private let plantImageView: UIImageView = {
+    private lazy var plantImageView: UIImageView = {
         let view = UIImageView()
+        if let imageUrl = URL(string: viewModel.initPlant.plantImage) {
+            view.load(url: imageUrl)
+        } else {
+            view.image = UIImage(named: "AddPlant")
+        }
         view.makeRound(radius: 16)
         return view
     }()
@@ -44,9 +50,9 @@ class EditPlantViewController: UIViewController {
         view.backgroundColor = .black
         return view
     }()
-    private let nicknameCountLabel: UILabel = {
+    private lazy var nicknameCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "0/10"
+        label.text = "\(viewModel.initPlant.plantName.count)/10"
         label.font = .captionB1
         label.textColor = .gray5
         label.textAlignment = .right
@@ -69,5 +75,60 @@ class EditPlantViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
+        setConstraints()
+    }
+    
+    func setConstraints() {
+        [plantView, nicknameView, completeButton].forEach {
+            view.addSubview($0)
+        }
+        
+        [plantImageView, cameraImageView].forEach {
+            plantView.addSubview($0)
+        }
+        
+        [nicknameTextField, nicknameCountLabel, underlineView].forEach {
+            nicknameView.addSubview($0)
+        }
+        
+        plantView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            make.width.height.equalTo(120)
+        }
+        
+        plantImageView.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+            make.width.height.equalTo(100)
+        }
+        
+        cameraImageView.snp.makeConstraints { make in
+            make.trailing.bottom.equalToSuperview()
+            make.width.height.equalTo(40)
+        }
+        
+        nicknameView.snp.makeConstraints { make in
+            make.top.equalTo(plantView.snp.bottom).offset(32)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(56)
+        }
+        
+        nicknameTextField.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(nicknameCountLabel.snp.leading).offset(-5)
+        }
+        
+        nicknameCountLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(nicknameTextField.snp.trailing).offset(5)
+            make.trailing.equalToSuperview()
+        }
+        
+        underlineView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
     }
 }
