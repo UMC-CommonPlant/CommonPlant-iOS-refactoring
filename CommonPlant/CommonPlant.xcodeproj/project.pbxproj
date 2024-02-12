@@ -19,6 +19,7 @@
 		C027A0952A909CDC009289E9 /* ImagePickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */; };
 		C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */; };
 		C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039A8612B79000B00673CCC /* EditPlantViewModel.swift */; };
+		C039A8672B79E5CD00673CCC /* EditPlantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039A8662B79E5CD00673CCC /* EditPlantViewController.swift */; };
 		C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */; };
 		C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */; };
 		C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */; };
@@ -97,6 +98,7 @@
 		C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		C039A8612B79000B00673CCC /* EditPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlantViewModel.swift; sourceTree = "<group>"; };
+		C039A8662B79E5CD00673CCC /* EditPlantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlantViewController.swift; sourceTree = "<group>"; };
 		C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewController.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 				C007F6462B62562200CD6252 /* AddPlantSecondViewController.swift */,
 				C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */,
 				C073EBE22B738F9E006980BB /* DatePickerCollectionViewCell.swift */,
+				C039A8662B79E5CD00673CCC /* EditPlantViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -631,6 +634,7 @@
 				F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */,
 				F9447DA32A76CA3100903C28 /* (null) in Sources */,
 				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
+				C039A8672B79E5CD00673CCC /* EditPlantViewController.swift in Sources */,
 				C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */,
 				F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */,
 				C0B1BDEB2A9E21F200DD7E04 /* MemoListViewController.swift in Sources */,
