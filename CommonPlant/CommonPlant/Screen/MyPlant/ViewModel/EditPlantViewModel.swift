@@ -13,12 +13,12 @@ class EditPlantViewModel {
     let disposeBag = DisposeBag()
     
     let initPlant: Plant
-    let currentPlant = PublishRelay<Plant>()
+    //let currentPlant = PublishRelay<Plant>()
     var imageState: ButtonState = .disable
     
     init() {
-        currentPlant.accept(Plant(plantImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/72e88997-7dcc-4a72-8a38-348d7754076b..jpeg", plantName: "몬테"))
-        initPlant = Plant(plantImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/72e88997-7dcc-4a72-8a38-348d7754076b..jpeg", plantName: "몬테")
+        //currentPlant.accept(Plant(plantImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/72e88997-7dcc-4a72-8a38-348d7754076b..jpeg", plantName: "몬테"))
+        initPlant = Plant(plantImage: "", plantName: "몬테")
     }
     
     struct Input {
@@ -50,7 +50,7 @@ class EditPlantViewModel {
         input.selectedDefaultImage.bind(to: changeDefaultImage).disposed(by: disposeBag)
         
         input.changedImage.bind { [weak self] isChanged in
-            guard let self = self else { return }
+            guard self != nil else { return }
             guard let isChanged = isChanged else { return }
             
             buttonState.accept(isChanged ? .enable : buttonState.value)

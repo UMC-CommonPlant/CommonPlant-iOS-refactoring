@@ -7,9 +7,25 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class EditPlantViewController: UIViewController {
     private let viewModel = EditPlantViewModel()
+    private lazy var input = EditPlantViewModel
+        .Input(imageDidTap: plantView.rx.tapGesture().map { _ in }.asObservable(),
+               selectedNewImage: selectNewImage.asObservable(),
+               selectedDefaultImage: changeToDefaultImage.asObservable(),
+               changedImage: currentImage.map { [weak self] currentImage in
+            guard let initialImage = self?.initialImage.value else { return nil }
+            return currentImage?.pngData() != initialImage.pngData()
+        },
+               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable())
+    private lazy var output = viewModel.transform(input: input)
+    private let selectNewImage = PublishRelay<Void>()
+    private let changeToDefaultImage = PublishRelay<Void>()
+    private let currentImage = PublishRelay<UIImage?>()
+    private let initialImage = BehaviorRelay<UIImage?>(value: nil)
     
     private let plantView: UIView = {
         let view = UIView()
@@ -18,9 +34,12 @@ class EditPlantViewController: UIViewController {
     private lazy var plantImageView: UIImageView = {
         let view = UIImageView()
         if let imageUrl = URL(string: viewModel.initPlant.plantImage) {
-            view.load(url: imageUrl)
+            view.load(url: imageUrl) {
+                self.initialImage.accept(view.image)
+            }
         } else {
             view.image = UIImage(named: "AddPlant")
+            initialImage.accept(UIImage(named: "AddPlant"))
         }
         view.makeRound(radius: 16)
         return view
@@ -47,7 +66,7 @@ class EditPlantViewController: UIViewController {
     }()
     private let underlineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = .gray2
         return view
     }()
     private lazy var nicknameCountLabel: UILabel = {
@@ -77,6 +96,98 @@ class EditPlantViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setConstraints()
+        bind()
+    }
+    
+    func bind() {
+        output.showImgSettingAlert.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            showImageSettingAlert { state in
+                switch state {
+                case .newImage:
+                    self.selectNewImage.accept(())
+                case .defaultImage:
+                    self.changeToDefaultImage.accept(())
+                case .cancle:
+                    break
+                }
+            }
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showImagePicker.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            ImagePickerViewModel.shared.checkPermissionState() { state in
+                DispatchQueue.main.async {
+                    switch state {
+                    case .denied:
+                        self.moveToSetting()
+                    case .authorized:
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            ImagePickerViewController.shared.showPhotoPicker(viewController: self)
+                        }
+                        
+                        ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                            guard let self = self else { return }
+                            
+                            plantImageView.load(url: URL(string: imageString)!) {
+                                self.currentImage.accept(self.plantImageView.image)
+                            }
+                        }
+                    case .limited:
+                        let imagePickerVC = ImagePickerViewController()
+                        
+                        self.present(imagePickerVC, animated: true)
+                        
+                        imagePickerVC.didSelectImage = { [weak self] imageString in
+                            guard self != nil else { return }
+                            self?.plantImageView.load(url: URL(string: imageString)!) {
+                                self?.currentImage.accept(self?.plantImageView.image)
+                            }
+                        }
+                    default:
+                        print("\(state)")
+                    }
+                }
+            }
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.changeDefaultImage.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            plantImageView.image = UIImage(named: "AddPlant")
+            currentImage.accept(UIImage(named: "AddPlant"))
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.newNickname.drive { [weak self] nickname in
+            guard let self = self else { return }
+            
+            nicknameTextField.text = nickname
+            nicknameCountLabel.text = "\(nickname.count)/10"
+            nicknameCountLabel.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
+            nicknameCountLabel.textColor = nickname.count > 0 ? .black : .gray5
+            underlineView.backgroundColor = nickname.count > 0 ? .black : .gray2
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.buttonState.drive { [weak self] state in
+            guard let self = self else { return }
+            
+            switch state {
+            case .enable:
+                completeButton.isEnabled = true
+                completeButton.backgroundColor = .seaGreenDark1
+                completeButton.configuration?.baseForegroundColor = .white
+            case .disable:
+                completeButton.isEnabled = false
+                completeButton.backgroundColor = .gray1
+                completeButton.configuration?.baseForegroundColor = .gray3
+            case .onClick:
+                completeButton.backgroundColor = .seaGreenDark3
+                completeButton.configuration?.baseForegroundColor = .white
+            }
+        }.disposed(by: viewModel.disposeBag)
     }
     
     func setConstraints() {
@@ -129,6 +240,12 @@ class EditPlantViewController: UIViewController {
         underlineView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(1)
+        }
+        
+        completeButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+            make.height.equalTo(48)
         }
     }
 }
