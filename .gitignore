@@ -86,6 +86,9 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+# Provisioning profiles
+*.mobileprovision
+
 ### macOS ###
 **/.DS_Store
 
