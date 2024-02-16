@@ -8,21 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C005D3632A9B3870004CD53F /* MemoCardCollectionViewCell.swift */; };
+		C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C007F63A2B59198E00CD6252 /* AddPlantFirstViewController.swift */; };
+		C007F63F2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C007F63E2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift */; };
+		C007F6452B5F712200CD6252 /* AddPlantSecondViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C007F6442B5F712200CD6252 /* AddPlantSecondViewModel.swift */; };
+		C007F6472B62562200CD6252 /* AddPlantSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C007F6462B62562200CD6252 /* AddPlantSecondViewController.swift */; };
 		C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02322B52A6AB6BE004D78CC /* WithdrwalViewModel.swift */; };
 		C02322B82A6AC0D6004D78CC /* EditUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02322B72A6AC0D6004D78CC /* EditUserInfoViewModel.swift */; };
 		C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */; };
 		C027A0942A909CDC009289E9 /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */; };
 		C027A0952A909CDC009289E9 /* ImagePickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */; };
 		C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */; };
+		C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039A8612B79000B00673CCC /* EditPlantViewModel.swift */; };
+		C039A8672B79E5CD00673CCC /* EditPlantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039A8662B79E5CD00673CCC /* EditPlantViewController.swift */; };
 		C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */; };
 		C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */; };
 		C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */; };
 		C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2722A5AA995005C0449 /* UILabel+Extension.swift */; };
 		C06299802A7A87FB00985171 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */; };
 		C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */; };
+		C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */; };
+		C073EBE32B738F9E006980BB /* DatePickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C073EBE22B738F9E006980BB /* DatePickerCollectionViewCell.swift */; };
 		C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */; };
 		C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8732A59463E00CDC5CC /* SettingViewController.swift */; };
-		C07DF8762A5947C400CDC5CC /* CommonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8752A5947C400CDC5CC /* CommonLabel.swift */; };
+		C07DF8762A5947C400CDC5CC /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */; };
 		C07DF87E2A597A8600CDC5CC /* WithdrwalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF87D2A597A8600CDC5CC /* WithdrwalViewController.swift */; };
 		C07DF8842A59844400CDC5CC /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8832A59844400CDC5CC /* UIView+Extension.swift */; };
 		C085BFB82A71462B00188C02 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = F9A1FB172A619F2300F346DE /* Moya */; };
@@ -79,21 +87,29 @@
 
 /* Begin PBXFileReference section */
 		C005D3632A9B3870004CD53F /* MemoCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCardCollectionViewCell.swift; sourceTree = "<group>"; };
+		C007F63A2B59198E00CD6252 /* AddPlantFirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlantFirstViewController.swift; sourceTree = "<group>"; };
+		C007F63E2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlantFirstViewModel.swift; sourceTree = "<group>"; };
+		C007F6442B5F712200CD6252 /* AddPlantSecondViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlantSecondViewModel.swift; sourceTree = "<group>"; };
+		C007F6462B62562200CD6252 /* AddPlantSecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlantSecondViewController.swift; sourceTree = "<group>"; };
 		C02322B52A6AB6BE004D78CC /* WithdrwalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrwalViewModel.swift; sourceTree = "<group>"; };
 		C02322B72A6AC0D6004D78CC /* EditUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewModel.swift; sourceTree = "<group>"; };
 		C027A08A2A909BB0009289E9 /* ImagePickerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewModel.swift; sourceTree = "<group>"; };
 		C027A0922A909CDC009289E9 /* ImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
 		C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		C039A8612B79000B00673CCC /* EditPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlantViewModel.swift; sourceTree = "<group>"; };
+		C039A8662B79E5CD00673CCC /* EditPlantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlantViewController.swift; sourceTree = "<group>"; };
 		C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewController.swift; sourceTree = "<group>"; };
 		C059A2722A5AA995005C0449 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMenuView.swift; sourceTree = "<group>"; };
+		C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollectionViewCell.swift; sourceTree = "<group>"; };
+		C073EBE22B738F9E006980BB /* DatePickerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C07DF8732A59463E00CDC5CC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
-		C07DF8752A5947C400CDC5CC /* CommonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonLabel.swift; sourceTree = "<group>"; };
+		C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		C07DF87D2A597A8600CDC5CC /* WithdrwalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrwalViewController.swift; sourceTree = "<group>"; };
 		C07DF8832A59844400CDC5CC /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		C085BFBB2A7148D500188C02 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
@@ -210,7 +226,7 @@
 		C07DF8782A59492A00CDC5CC /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
-				C07DF8752A5947C400CDC5CC /* CommonLabel.swift */,
+				C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */,
 				C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */,
 				C0EE4A002B182D4000592185 /* CommonAlertView.swift */,
 			);
@@ -283,6 +299,11 @@
 				C005D3632A9B3870004CD53F /* MemoCardCollectionViewCell.swift */,
 				C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */,
 				C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */,
+				C007F63A2B59198E00CD6252 /* AddPlantFirstViewController.swift */,
+				C007F6462B62562200CD6252 /* AddPlantSecondViewController.swift */,
+				C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */,
+				C073EBE22B738F9E006980BB /* DatePickerCollectionViewCell.swift */,
+				C039A8662B79E5CD00673CCC /* EditPlantViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -301,6 +322,9 @@
 			children = (
 				C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */,
 				C0B1BDE62A9E1ECA00DD7E04 /* MemoViewModel.swift */,
+				C007F63E2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift */,
+				C007F6442B5F712200CD6252 /* AddPlantSecondViewModel.swift */,
+				C039A8612B79000B00673CCC /* EditPlantViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -610,6 +634,7 @@
 				F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */,
 				F9447DA32A76CA3100903C28 /* (null) in Sources */,
 				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
+				C039A8672B79E5CD00673CCC /* EditPlantViewController.swift in Sources */,
 				C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */,
 				F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */,
 				C0B1BDEB2A9E21F200DD7E04 /* MemoListViewController.swift in Sources */,
@@ -621,6 +646,8 @@
 				F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */,
 				F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */,
 				C07DF8842A59844400CDC5CC /* UIView+Extension.swift in Sources */,
+				C007F63F2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift in Sources */,
+				C007F6452B5F712200CD6252 /* AddPlantSecondViewModel.swift in Sources */,
 				C02322B82A6AC0D6004D78CC /* EditUserInfoViewModel.swift in Sources */,
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
 				F9447DAD2A78E52200903C28 /* PopularSearchCollectionViewCell.swift in Sources */,
@@ -631,17 +658,21 @@
 				F9447DA82A77A71700903C28 /* PlantSearchCollectionViewCell.swift in Sources */,
 				C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */,
 				F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */,
+				C073EBE32B738F9E006980BB /* DatePickerCollectionViewCell.swift in Sources */,
 				F93404022A81F9F400F0267B /* SearchResultTableViewCell.swift in Sources */,
 				C0A0D4DD2A73E96800426514 /* SignUpViewModel.swift in Sources */,
 				C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */,
+				C007F6472B62562200CD6252 /* AddPlantSecondViewController.swift in Sources */,
+				C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */,
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
+				C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
 				C085BFBC2A7148D500188C02 /* LogInViewController.swift in Sources */,
 				C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */,
-				C07DF8762A5947C400CDC5CC /* CommonLabel.swift in Sources */,
+				C07DF8762A5947C400CDC5CC /* PaddingLabel.swift in Sources */,
 				F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */,
 				C0B1BDE92A9E21A200DD7E04 /* MemoModel.swift in Sources */,
 				F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */,
@@ -660,6 +691,7 @@
 				C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */,
 				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
+				C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */,
 				C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */,
 				C0BDF2E52B1EFD7A002C7FD7 /* EditMemoViewController.swift in Sources */,
 				F9D0CCAA2A586208006D688C /* MainMyPlantCollectionViewCell.swift in Sources */,
@@ -799,9 +831,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = X3SZJ2WYSU;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9HP6SS4WYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CommonPlant/Resource/Supports/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "프로필 사진, 장소, 식물을 등록하거나, 식물에 관한 메모를 등록할 때 사용합니다.";
@@ -816,8 +851,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yaewon.CommonPlant;
+				PRODUCT_BUNDLE_IDENTIFIER = com.plant.common;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CommonPlant Debug";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -832,9 +869,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = X3SZJ2WYSU;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9HP6SS4WYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CommonPlant/Resource/Supports/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "프로필 사진, 장소, 식물을 등록하거나, 식물에 관한 메모를 등록할 때 사용합니다.";
@@ -849,8 +889,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yaewon.CommonPlant;
+				PRODUCT_BUNDLE_IDENTIFIER = com.plant.common;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "CommonPlant Release";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

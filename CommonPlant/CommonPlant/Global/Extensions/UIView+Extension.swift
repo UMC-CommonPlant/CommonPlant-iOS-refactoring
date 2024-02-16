@@ -20,4 +20,21 @@ extension UIView {
         layer.shadowRadius = 2
         layer.cornerRadius = 16
     }
+    
+    func makeGradation() {
+        self.layer.sublayers?.forEach { if $0 is CAGradientLayer { $0.removeFromSuperlayer() } }
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: 250, height: 156)
+        let colors: [CGColor] = [
+            UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0).cgColor,
+            UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0).cgColor
+        ]
+        gradientLayer.colors = colors
+        gradientLayer.locations = [0.3, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        
+        self.layer.addSublayer(gradientLayer)
+    }
 }

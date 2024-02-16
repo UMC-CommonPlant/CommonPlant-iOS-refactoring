@@ -43,7 +43,7 @@ class MyPlantViewController: UIViewController {
     var lastWateringMessageLabel = UILabel()
     var lastWateringDateLabel = UILabel()
     var memoView = UIView()
-    var memoTitleLabel = CommonLabel()
+    var memoTitleLabel = PaddingLabel()
     var nextButton = UIButton()
     lazy var memoCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -58,7 +58,7 @@ class MyPlantViewController: UIViewController {
     }()
     var addMemoButton = UIButton()
     var plantInfoView = UIView()
-    var infoTitleLabel = CommonLabel()
+    var infoTitleLabel = PaddingLabel()
     var infoBackgroundView = UIView()
     var wateringCycleImage = UIImageView()
     var wateringCycleLabel = UILabel()
