@@ -57,6 +57,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         configureUI()
         view.layoutIfNeeded()
         setGradient()
+        addTargets()
         bindCollectionView()
     }
     
@@ -65,7 +66,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         self.navigationController?.isNavigationBarHidden = true
         self.view.backgroundColor = UIColor(red: 0.95, green: 0.96, blue: 0.96, alpha: 1)
     }
-        
+    
+    // MARK: - Custom Method
+    private func addTargets() {
+        addPlaceButton.addTarget(self, action: #selector(addPlaceButtonTapped), for: .touchUpInside)
+    }
+    
     // MARK: - CollectionView
     private func bindCollectionView() {
         viewModel.mainObservable
@@ -98,6 +104,13 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         myPlaceCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
         myPlantCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
     }
+    
+    // MARK: - @objc
+    @objc private func addPlaceButtonTapped() {
+        let registerPlaceVC = RegisterPlaceViewController()
+        self.navigationController?.pushViewController(registerPlaceVC, animated: true)
+    }
+    
 }
 
 // MARK: - UI
