@@ -70,12 +70,14 @@
 		F93404022A81F9F400F0267B /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */; };
 		F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404032A8207B000F0267B /* SearchResultViewModel.swift */; };
 		F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404052A8207F300F0267B /* SearchResultModel.swift */; };
+		F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */; };
 		F9447DA32A76CA3100903C28 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA52A7795DF00903C28 /* PlantSearchViewModel.swift */; };
 		F9447DA82A77A71700903C28 /* PlantSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA72A77A71700903C28 /* PlantSearchCollectionViewCell.swift */; };
 		F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */; };
 		F9447DAD2A78E52200903C28 /* PopularSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */; };
-		F94BB2672B57E62900CB3504 /* CommonTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94BB2662B57E62900CB3504 /* CommonTextButton.swift */; };
+		F94BB2672B57E62900CB3504 /* CommonCTAButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94BB2662B57E62900CB3504 /* CommonCTAButton.swift */; };
+		F9595C172B7F5F1600B8785D /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = F9595C162B7F5F1600B8785D /* Then */; };
 		F9A1FB1A2A619F2300F346DE /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = F9A1FB192A619F2300F346DE /* RxMoya */; };
 		F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB242A664F4300F346DE /* MainViewModel.swift */; };
 		F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB282A67B03400F346DE /* MainModel.swift */; };
@@ -146,11 +148,12 @@
 		F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		F93404032A8207B000F0267B /* SearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewModel.swift; sourceTree = "<group>"; };
 		F93404052A8207F300F0267B /* SearchResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultModel.swift; sourceTree = "<group>"; };
+		F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPlaceViewController.swift; sourceTree = "<group>"; };
 		F9447DA52A7795DF00903C28 /* PlantSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewModel.swift; sourceTree = "<group>"; };
 		F9447DA72A77A71700903C28 /* PlantSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoplularSearchModel.swift; sourceTree = "<group>"; };
 		F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularSearchCollectionViewCell.swift; sourceTree = "<group>"; };
-		F94BB2662B57E62900CB3504 /* CommonTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTextButton.swift; sourceTree = "<group>"; };
+		F94BB2662B57E62900CB3504 /* CommonCTAButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCTAButton.swift; sourceTree = "<group>"; };
 		F9A1FB242A664F4300F346DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F9A1FB282A67B03400F346DE /* MainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModel.swift; sourceTree = "<group>"; };
 		F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewController.swift; sourceTree = "<group>"; };
@@ -168,6 +171,7 @@
 				C085BFB82A71462B00188C02 /* Moya in Frameworks */,
 				F91E479B2A53EE31008E07A9 /* Kingfisher in Frameworks */,
 				C086A08F2A62322000F1560D /* RxSwift in Frameworks */,
+				F9595C172B7F5F1600B8785D /* Then in Frameworks */,
 				C086A08D2A62322000F1560D /* RxCocoa in Frameworks */,
 				C0A5AFFB2A6CF2AE00C8248D /* RxGesture in Frameworks */,
 				F91E47982A53EDFF008E07A9 /* SnapKit in Frameworks */,
@@ -231,7 +235,7 @@
 				C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */,
 				C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */,
 				C0EE4A002B182D4000592185 /* CommonAlertView.swift */,
-				F94BB2662B57E62900CB3504 /* CommonTextButton.swift */,
+				F94BB2662B57E62900CB3504 /* CommonCTAButton.swift */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -403,6 +407,7 @@
 			isa = PBXGroup;
 			children = (
 				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
+				F94BB2682B58FE8500CB3504 /* MyPlace */,
 				C0A6DCE52A97883D001A2E11 /* MyPlant */,
 				C027A0882A909BB0009289E9 /* ImagePicker */,
 				C085BFBA2A71488B00188C02 /* Authentication */,
@@ -474,6 +479,30 @@
 				F9D0CCB12A5BB635006D688C /* View */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		F93792902B5902B300CD0BCF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F93792912B5903A200CD0BCF /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F94BB2682B58FE8500CB3504 /* MyPlace */ = {
+			isa = PBXGroup;
+			children = (
+				F93792912B5903A200CD0BCF /* ViewModel */,
+				F93792902B5902B300CD0BCF /* View */,
+			);
+			path = MyPlace;
 			sourceTree = "<group>";
 		};
 		F9A1FB212A650B8300F346DE /* ViewModel */ = {
@@ -567,6 +596,7 @@
 				C086A08C2A62322000F1560D /* RxCocoa */,
 				C086A08E2A62322000F1560D /* RxSwift */,
 				C0A5AFFA2A6CF2AE00C8248D /* RxGesture */,
+				F9595C162B7F5F1600B8785D /* Then */,
 			);
 			productName = CommonPlant;
 			productReference = F91E477C2A53E3C9008E07A9 /* CommonPlant.app */;
@@ -602,6 +632,7 @@
 				F9A1FB162A619F2300F346DE /* XCRemoteSwiftPackageReference "Moya" */,
 				C086A08B2A62322000F1560D /* XCRemoteSwiftPackageReference "RxSwift" */,
 				C0A5AFF92A6CF2AE00C8248D /* XCRemoteSwiftPackageReference "RxGesture" */,
+				F9595C152B7F5F1600B8785D /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			productRefGroup = F91E477D2A53E3C9008E07A9 /* Products */;
 			projectDirPath = "";
@@ -645,7 +676,7 @@
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
 				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */,
-				F94BB2672B57E62900CB3504 /* CommonTextButton.swift in Sources */,
+				F94BB2672B57E62900CB3504 /* CommonCTAButton.swift in Sources */,
 				C0A0D4DE2A73E96800426514 /* LogInViewModel.swift in Sources */,
 				F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */,
 				F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */,
@@ -671,6 +702,7 @@
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
+				F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
 				C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
@@ -862,9 +894,10 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -873,7 +906,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -900,9 +932,10 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -962,6 +995,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		F9595C152B7F5F1600B8785D /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		F9A1FB162A619F2300F346DE /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya.git";
@@ -997,6 +1038,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F91E47992A53EE31008E07A9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		F9595C162B7F5F1600B8785D /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9595C152B7F5F1600B8785D /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
 		};
 		F9A1FB172A619F2300F346DE /* Moya */ = {
 			isa = XCSwiftPackageProductDependency;
