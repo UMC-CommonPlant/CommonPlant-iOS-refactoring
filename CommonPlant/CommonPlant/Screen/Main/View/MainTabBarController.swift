@@ -24,7 +24,7 @@ class MainTabBarController: UITabBarController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.selectedIndex = 0
+        self.selectedIndex = 2
     }
     
     override func viewDidLayoutSubviews() {
