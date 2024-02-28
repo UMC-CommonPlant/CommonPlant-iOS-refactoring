@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import RxSwift
+import AuthenticationServices
 
 class LogInViewController: UIViewController {
     // MARK: Properties
@@ -138,16 +139,8 @@ class LogInViewController: UIViewController {
             .when(.recognized)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let scenes = UIApplication.shared.connectedScenes
-                let windowScene = scenes.first as? UIWindowScene
-                let window = windowScene?.windows.first
                 
-                let mainVC = MainTabBarController()
-                
-
-                UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                    window?.rootViewController = mainVC
-                }, completion: nil)
+                viewModel.performAppleSignIn(scope: [.fullName, .email], on: self.view.window!)
             })
             .disposed(by: disposeBag)
     }

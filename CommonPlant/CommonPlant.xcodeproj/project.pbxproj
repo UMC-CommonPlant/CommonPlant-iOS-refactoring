@@ -53,6 +53,7 @@
 		C0B1BDED2A9E23F100DD7E04 /* MemoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */; };
 		C0BDF2E52B1EFD7A002C7FD7 /* EditMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
+		C0D2129B2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D2129A2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift */; };
 		C0EE4A012B182D4000592185 /* CommonAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EE4A002B182D4000592185 /* CommonAlertView.swift */; };
 		F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */; };
 		F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */; };
@@ -128,6 +129,7 @@
 		C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoViewController.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
+		C0D2129A2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxASAuthorizationControllerProxy.swift; sourceTree = "<group>"; };
 		C0E442F92B7FAB4900A7AD99 /* CommonPlant.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CommonPlant.entitlements; sourceTree = "<group>"; };
 		C0EE4A002B182D4000592185 /* CommonAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonAlertView.swift; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,6 +239,7 @@
 		C085BFBA2A71488B00188C02 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				C0D212992B8E0639003AB202 /* Delegate */,
 				C0A0D4D82A73E96800426514 /* ViewModel */,
 				C085BFBD2A71490400188C02 /* View */,
 			);
@@ -328,6 +331,14 @@
 				C039A8612B79000B00673CCC /* EditPlantViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C0D212992B8E0639003AB202 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				C0D2129A2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift */,
+			);
+			path = Delegate;
 			sourceTree = "<group>";
 		};
 		F91E47732A53E3C8008E07A9 = {
@@ -666,6 +677,7 @@
 				C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */,
 				C007F6472B62562200CD6252 /* AddPlantSecondViewController.swift in Sources */,
 				C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */,
+				C0D2129B2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift in Sources */,
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
