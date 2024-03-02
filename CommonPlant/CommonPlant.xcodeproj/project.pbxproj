@@ -134,6 +134,7 @@
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		C0D2129A2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxASAuthorizationControllerProxy.swift; sourceTree = "<group>"; };
 		C0E442F92B7FAB4900A7AD99 /* CommonPlant.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CommonPlant.entitlements; sourceTree = "<group>"; };
+		C0EBDD292B9306F1004FF4D4 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		C0EE4A002B182D4000592185 /* CommonAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonAlertView.swift; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -256,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				C085BFBB2A7148D500188C02 /* LogInViewController.swift */,
+				C0EBDD292B9306F1004FF4D4 /* Secrets.xcconfig */,
 				C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */,
 				C085BFBE2A71686E00188C02 /* SignUpViewController.swift */,
 			);
@@ -852,6 +854,7 @@
 		};
 		F91E47912A53E3CA008E07A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C0EBDD292B9306F1004FF4D4 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -891,6 +894,7 @@
 		};
 		F91E47922A53E3CA008E07A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C0EBDD292B9306F1004FF4D4 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
