@@ -10,6 +10,13 @@ import SnapKit
 import RxSwift
 import AuthenticationServices
 
+import RxKakaoSDKAuth
+import RxKakaoSDKUser
+import RxKakaoSDKCommon
+import KakaoSDKAuth
+import KakaoSDKUser
+import KakaoSDKCommon
+
 class LogInViewController: UIViewController {
     // MARK: Properties
     var viewModel = LogInViewModel()
@@ -124,14 +131,36 @@ class LogInViewController: UIViewController {
     }
     
     func setAction() {
+        UserApi.shared.rx.loginWithKakaoAccount()
+            .subscribe(onNext:{ (oauthToken) in
+                print("loginWithKakaoAccount() success.")
+                _ = oauthToken
+            }, onError: {error in
+                print(error)
+            })
+            .disposed(by: disposeBag)
+        
         kakaoLoginView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
-                let signUpVC = SignUpViewController()
-                
-                self.present(signUpVC, animated: true)
+                print("click")
+                if (UserApi.isKakaoTalkLoginAvailable()) {
+                    UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                        if let error = error {
+                            print(error)
+                        }
+                        else {
+                            print("loginWithKakaoTalk() success.")
+                            
+                            _ = oauthToken
+                        }
+                    }
+                }
+//                let signUpVC = SignUpViewController()
+//                
+//                self.present(signUpVC, animated: true)
             })
             .disposed(by: disposeBag)
         
