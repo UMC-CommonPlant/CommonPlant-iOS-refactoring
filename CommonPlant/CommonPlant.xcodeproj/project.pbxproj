@@ -257,7 +257,6 @@
 			isa = PBXGroup;
 			children = (
 				C085BFBB2A7148D500188C02 /* LogInViewController.swift */,
-				C0EBDD292B9306F1004FF4D4 /* Secrets.xcconfig */,
 				C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */,
 				C085BFBE2A71686E00188C02 /* SignUpViewController.swift */,
 			);
@@ -410,6 +409,7 @@
 		F91E47A02A53EF91008E07A9 /* Supports */ = {
 			isa = PBXGroup;
 			children = (
+				C0EBDD292B9306F1004FF4D4 /* Secrets.xcconfig */,
 				F91E478D2A53E3CA008E07A9 /* Info.plist */,
 				F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */,
 				F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */,
