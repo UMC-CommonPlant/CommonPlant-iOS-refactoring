@@ -145,7 +145,6 @@ class LogInViewController: UIViewController {
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
-                print("click")
                 if (UserApi.isKakaoTalkLoginAvailable()) {
                     UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
                         if let error = error {
@@ -154,13 +153,11 @@ class LogInViewController: UIViewController {
                         else {
                             print("loginWithKakaoTalk() success.")
                             
-                            _ = oauthToken
+                            guard let oauthToken = oauthToken else { return }
+                            let accessToken = oauthToken.accessToken
                         }
                     }
                 }
-//                let signUpVC = SignUpViewController()
-//                
-//                self.present(signUpVC, animated: true)
             })
             .disposed(by: disposeBag)
         
