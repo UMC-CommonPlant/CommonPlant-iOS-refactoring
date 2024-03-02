@@ -98,6 +98,7 @@ iOSInjectionProject/
 
 ### Xcode Patch ###
 *.xcodeproj/*
+*.xcconfig
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcodeproj/project.xcworkspace/
