@@ -101,7 +101,7 @@ class CalendarViewController: UIViewController {
         flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 16, bottom: 0, right: 16)
         flowLayout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        
+        view.register(CalendarPlantCollectionViewCell.self, forCellWithReuseIdentifier: CalendarPlantCollectionViewCell.identifier)
         view.isScrollEnabled = true
         
         return view
