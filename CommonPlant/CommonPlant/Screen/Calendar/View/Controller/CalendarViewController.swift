@@ -77,7 +77,7 @@ class CalendarViewController: UIViewController {
         flowLayout.itemSize = CGSize(width: 40, height: 40)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.isScrollEnabled = false
-        
+        view.register(CalendarCollectionViewCell.self, forCellWithReuseIdentifier: CalendarCollectionViewCell.identifier)
         return view
     }()
     private let placeCollectionView: UICollectionView = {
