@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class CalendarViewController: UIViewController {
     // MARK: - UI Components
@@ -17,7 +18,10 @@ class CalendarViewController: UIViewController {
     private let contentView = UIView()
     private let calendarView: UIView = {
         let view = UIView()
-        view.isHidden = true
+        return view
+    }()
+    private let wholeMonthView: UIView = {
+        let view = UIView()
         return view
     }()
     private let selectedMonthLabel: UILabel = {
@@ -26,13 +30,10 @@ class CalendarViewController: UIViewController {
         label.textColor = .gray6
         return label
     }()
-    private let wholeMonthButton: UIButton = {
-        let button = UIButton()
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage(named: "NextMonth")
-        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
-        button.configuration = config
-        return button
+    private let wholeMonthImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "NextMonth")
+        return view
     }()
     private let previousButton: UIButton = {
         let button = UIButton()
@@ -108,6 +109,7 @@ class CalendarViewController: UIViewController {
     }()
     private let messageView: UIView = {
         let view = UIView()
+        view.isHidden = true
         return view
     }()
     private let firstMetView: UIView = {
@@ -154,7 +156,140 @@ class CalendarViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .white
+        setConstraints()
+    }
+    
+    func setConstraints() {
+        view.addSubview(scrollView)
+        
+        scrollView.addSubview(contentView)
+        
+        [calendarView, placeCollectionView, plantCollectionView, messageView, divisionView, memoCollectionView].forEach {
+            contentView.addSubview($0)
+        }
+        
+        [wholeMonthView, previousButton, nextButton, weekStackView, calendarCollectionView].forEach {
+            calendarView.addSubview($0)
+        }
+        
+        [selectedMonthLabel, wholeMonthImageView].forEach {
+            wholeMonthView.addSubview($0)
+        }
+        
+        [firstMetView, firstMetLabel, waterView, waterLabel].forEach {
+            messageView.addSubview($0)
+        }
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalTo(scrollView.snp.width)
+            make.height.greaterThanOrEqualToSuperview().priority(.low)
+        }
+        
+        calendarView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(4)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        wholeMonthView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(8)
+            make.leading.equalToSuperview().offset(11)
+            make.height.equalTo(44)
+        }
+        
+        selectedMonthLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().inset(5)
+        }
+        
+        wholeMonthImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(selectedMonthLabel.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().inset(5)
+            make.width.equalTo(6.98)
+            make.height.equalTo(11.68)
+        }
+        
+        previousButton.snp.makeConstraints { make in
+            make.centerY.equalTo(selectedMonthLabel.snp.centerY)
+            make.trailing.equalTo(nextButton.snp.leading).offset(-6)
+            make.width.height.equalTo(36)
+        }
+        
+        nextButton.snp.makeConstraints { make in
+            make.centerY.equalTo(selectedMonthLabel.snp.centerY)
+            make.trailing.equalToSuperview().inset(7.5)
+            make.width.height.equalTo(36)
+        }
+        
+        weekStackView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(wholeMonthView.snp.bottom).offset(4)
+            make.leading.trailing.equalToSuperview().inset(7.5)
+            make.height.equalTo(40)
+        }
+        
+        calendarCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(weekStackView.snp.bottom)
+            make.leading.trailing.equalToSuperview().inset(7.5)
+            make.bottom.equalToSuperview()
+            make.height.greaterThanOrEqualTo(200)
+        }
+        
+        placeCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(calendarView.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview()
+            make.width.equalTo(40)
+        }
+        
+        plantCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(placeCollectionView.snp.bottom).offset(21)
+            make.leading.trailing.equalToSuperview()
+            make.width.equalTo(124)
+        }
+        
+        messageView.snp.makeConstraints { make in
+            make.top.equalTo(plantCollectionView.snp.bottom).offset(24)
+            make.leading.trailing.equalToSuperview().inset(26)
+            make.height.equalTo(44)
+        }
+        
+        firstMetView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(7)
+            make.leading.equalToSuperview()
+        }
+        
+        firstMetLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(firstMetView.snp.centerY)
+            make.leading.equalTo(firstMetView.snp.trailing).offset(19)
+        }
+        
+        waterView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(7)
+            make.leading.equalToSuperview()
+        }
+        
+        waterLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(waterView.snp.centerY)
+            make.leading.equalTo(waterView.snp.trailing).offset(19)
+        }
+        
+        divisionView.snp.makeConstraints { make in
+            make.top.equalTo(messageView.snp.bottom).offset(24)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(2)
+        }
+        
+        memoCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(divisionView.snp.bottom).offset(24)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview()
+        }
     }
 }
