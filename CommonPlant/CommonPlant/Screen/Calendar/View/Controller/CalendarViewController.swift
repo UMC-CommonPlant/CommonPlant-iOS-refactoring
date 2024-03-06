@@ -145,7 +145,7 @@ class CalendarViewController: UIViewController {
         flowLayout.minimumInteritemSpacing = 16
         flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 16, right: 20)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        
+        view.register(CalendarMemoCollectionViewCell.self, forCellWithReuseIdentifier: CalendarMemoCollectionViewCell.identifier)
         view.isScrollEnabled = false
         
         return view
