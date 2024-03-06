@@ -112,22 +112,26 @@ class CalendarViewController: UIViewController {
     }()
     private let firstMetView: UIView = {
         let view = UIView()
+        view.backgroundColor = .sunflowerYellow
         return view
     }()
     private let firstMetLabel: UILabel = {
         let label = UILabel()
         label.text = "처음 데려온 날이에요"
         label.font = .bodyB3
+        label.textColor = .activeOrange
         return label
     }()
     private let waterView: UIView = {
         let view = UIView()
+        view.backgroundColor = .aquaBlue
         return view
     }()
     private let waterLabel: UILabel = {
         let label = UILabel()
         label.text = "물 주는 날이에요"
         label.font = .bodyB3
+        label.textColor = .activeBlue
         return label
     }()
     private let divisionView: UIView = {

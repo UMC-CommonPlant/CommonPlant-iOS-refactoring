@@ -15,6 +15,10 @@ extension UIColor {
     class var seaGreenDark3: UIColor? { return UIColor(named: "SeaGreenDark3") }
     class var seaGreenLight: UIColor? { return UIColor(named: "SeaGreenLight") }
     
+    // Secondary Color
+    class var aquaBlue: UIColor? { return UIColor(named: "Aqua")}
+    class var sunflowerYellow: UIColor? { return UIColor(named: "Sunflower")}
+    
     // Gray Scale
     class var gray1: UIColor? { return UIColor(named: "Gray1") }
     class var gray2: UIColor? { return UIColor(named: "Gray2") }
@@ -26,4 +30,5 @@ extension UIColor {
     // Active Color
     class var activeBlue: UIColor? { return UIColor(named: "ActiveBlue") }
     class var activeRed: UIColor? { return UIColor(named: "ActiveRed") }
+    class var activeOrange: UIColor? { return UIColor(named: "ActiveOrange")}
 }
