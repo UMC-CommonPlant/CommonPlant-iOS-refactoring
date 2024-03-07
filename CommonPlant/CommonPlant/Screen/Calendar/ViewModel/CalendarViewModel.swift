@@ -81,7 +81,7 @@ extension CalendarViewModel {
     }
     
     func transform(input: Input) -> Output {
-        let showWholeMonth = BehaviorRelay<Void>(value: ())
+        let showWholeMonth = PublishRelay<Void>()
         input.wholeMonthBtnDidTap.bind(to: showWholeMonth).disposed(by: disposeBag)
         
         input.selectedMonth.subscribe { [ weak self ] date in
