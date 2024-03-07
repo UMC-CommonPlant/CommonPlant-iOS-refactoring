@@ -81,6 +81,16 @@ class CalendarViewController: UIViewController {
         view.register(CalendarCollectionViewCell.self, forCellWithReuseIdentifier: CalendarCollectionViewCell.identifier)
         return view
     }()
+    private let datePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .wheels
+        picker.locale = Locale(identifier: "ko_KR")
+        picker.backgroundColor = .seaGreen
+        picker.makeRound(radius: 12)
+        picker.isHidden = true
+        return picker
+    }()
     private let placeCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 16
@@ -169,7 +179,7 @@ class CalendarViewController: UIViewController {
             contentView.addSubview($0)
         }
         
-        [wholeMonthView, previousButton, nextButton, weekStackView, calendarCollectionView].forEach {
+        [wholeMonthView, previousButton, nextButton, weekStackView, calendarCollectionView, datePicker].forEach {
             calendarView.addSubview($0)
         }
         
@@ -203,6 +213,10 @@ class CalendarViewController: UIViewController {
             make.height.equalTo(44)
         }
         
+        datePicker.snp.makeConstraints { make in
+            make.top.equalTo(wholeMonthView.snp.bottom)
+            make.leading.equalToSuperview().offset(14)
+        }
         selectedMonthLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().inset(5)
