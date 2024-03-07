@@ -18,10 +18,10 @@ class CalendarViewModel {
     
     let currentMonth = BehaviorRelay<String>(value: "")
     let days = BehaviorRelay<[String]>(value: [])
-    let placeList = BehaviorRelay<[Place]>(value: [])
-    let plantList = BehaviorRelay<[Plant]>(value: [])
+    let placeList = BehaviorRelay<[CalendarPlace]>(value: [])
+    let plantList = BehaviorRelay<[CalendarPlant]>(value: [])
     let messageList = BehaviorRelay<[String]>(value: [])
-    let memoList = BehaviorRelay<[Memo]>(value: [])
+    let memoList = BehaviorRelay<[CalendarMemo]>(value: [])
     
     func dateToMonthString(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
