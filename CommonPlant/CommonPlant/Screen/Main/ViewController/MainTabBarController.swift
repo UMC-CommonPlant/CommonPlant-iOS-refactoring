@@ -42,7 +42,7 @@ class MainTabBarController: UITabBarController {
     private func configureUI() {
         tabBar.backgroundColor = .white
         let plantSearchViewController = UINavigationController(rootViewController: PlantSearchViewController())
-        let calenderViewController = PlantSearchViewController()
+        let calenderViewController = CalendarViewController()
         let mainViewController = UINavigationController(rootViewController: MainViewController())
         let profileViewController = MyPageViewController()
         
