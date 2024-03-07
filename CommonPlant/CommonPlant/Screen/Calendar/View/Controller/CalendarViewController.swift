@@ -67,14 +67,14 @@ class CalendarViewController: UIViewController {
         ["일", "월", "화", "수", "목", "금", "토"].forEach {
             let label = UILabel()
             label.text = $0
-            label.font = .bodyM3
+            label.font = .bodyM1
             label.textColor = .gray5
             label.textAlignment = .center
             
             view.addArrangedSubview(label)
             
             label.snp.makeConstraints { make in
-                make.width.height.equalTo(40)
+                make.width.height.equalTo(44)
             }
         }
         return view
@@ -82,8 +82,8 @@ class CalendarViewController: UIViewController {
     private let calendarCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0
-        flowLayout.minimumInteritemSpacing = 4
-        flowLayout.itemSize = CGSize(width: 40, height: 40)
+        flowLayout.minimumInteritemSpacing = 6
+        flowLayout.itemSize = CGSize(width: 44, height: 44)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.isScrollEnabled = false
         view.register(CalendarCollectionViewCell.self, forCellWithReuseIdentifier: CalendarCollectionViewCell.identifier)
@@ -189,7 +189,7 @@ class CalendarViewController: UIViewController {
         viewModel.days.bind(to: calendarCollectionView.rx.items(cellIdentifier: CalendarCollectionViewCell.identifier, cellType: CalendarCollectionViewCell.self)) { [weak self] (_, result, cell) in
             guard let self = self else { return }
             
-            cell.setConfigure(with: result, isSelected: false, isToday: false)
+            cell.setConfigure(with: result, isSelected: viewModel.checkSelectedDay(day: result), isToday: viewModel.checkToday(day: result))
         }.disposed(by: viewModel.disposeBag)
         
         viewModel.placeList.bind(to: placeCollectionView.rx.items(cellIdentifier: CalendarPlaceCollectionViewCell.identifier, cellType: CalendarPlaceCollectionViewCell.self)) { [weak self] (_, result, cell) in
@@ -221,6 +221,10 @@ class CalendarViewController: UIViewController {
             
             datePicker.isHidden = false
         }.disposed(by: viewModel.disposeBag)
+        
+        output.selectedDate.subscribe(onNext: { [weak self] _ in
+            self?.calendarCollectionView.reloadData()
+        }).disposed(by: viewModel.disposeBag)
         
         output.showMemoDetail.drive { [weak self] _ in
             guard let self = self else { return }

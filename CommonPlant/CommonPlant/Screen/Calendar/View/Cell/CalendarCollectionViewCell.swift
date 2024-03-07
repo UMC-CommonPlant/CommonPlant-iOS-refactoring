@@ -13,7 +13,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
     
     let dayLabel: UILabel = {
         let label = UILabel()
-        label.font = .bodyM2
+        label.font = .bodyM1
         label.textColor = .gray6
         label.textAlignment = .center
         return label
@@ -69,6 +69,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
     }
     
     func setConfigure(with data: String, isSelected: Bool, isToday: Bool) {
+        dayLabel.font = isToday ? .bodyB1 : isSelected ? .bodyB1 : .bodyM1
         dayLabel.text = data
         dayLabel.textColor = isToday ? .seaGreenDark2 : .gray6
         selectedView.isHidden = !isSelected
@@ -86,7 +87,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
         selectedView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().inset(1)
-            make.width.height.equalTo(40)
+            make.width.height.equalTo(44)
         }
         
         stackView.snp.makeConstraints { make in

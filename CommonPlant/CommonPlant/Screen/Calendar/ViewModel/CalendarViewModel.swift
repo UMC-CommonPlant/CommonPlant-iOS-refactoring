@@ -40,6 +40,26 @@ class CalendarViewModel {
         
         self.days.accept(empty + days)
     }
+    
+    func checkToday(day: String) -> Bool {
+        guard let day = Int(day) else { return false }
+        guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
+        
+        let todayComponents = calendar.dateComponents([.year, .month, .day], from: todayDate)
+        let newDateComponents = calendar.dateComponents([.year, .month, .day], from: newDate)
+        
+        return todayComponents == newDateComponents
+    }
+    
+    func checkSelectedDay(day: String) -> Bool {
+        guard let day = Int(day) else { return false }
+        guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
+        
+        let selectedComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
+        let newDateComponents = calendar.dateComponents([.year, .month, .day], from: newDate)
+        
+        return selectedComponents == newDateComponents
+    }
 }
 
 extension CalendarViewModel {
@@ -56,6 +76,7 @@ extension CalendarViewModel {
     
     struct Output {
         let showWholeMonth: Driver<Void>
+        let selectedDate: Observable<Void>
         let showMemoDetail: Driver<IndexPath>
     }
     
@@ -91,7 +112,7 @@ extension CalendarViewModel {
                 updateDays()
             }.disposed(by: disposeBag)
         
-        let selectDate = PublishRelay<IndexPath>()
+        let selectDate = PublishRelay<Void>()
         input.selectedDate.bind { [weak self] index in
             guard let self = self else { return }
             guard let newDay = Int(days.value[index.row]) else { return }
@@ -101,7 +122,7 @@ extension CalendarViewModel {
             
             guard let newDate = calendar.date(from: dateComponents) else { return }
             
-            selectDate.accept(index)
+            selectDate.accept(())
             selectedDate = newDate
         }.disposed(by: disposeBag)
         
@@ -126,6 +147,7 @@ extension CalendarViewModel {
         }.disposed(by: disposeBag)
         
         return Output(showWholeMonth: showWholeMonth.asDriver(onErrorJustReturn: ()),
+                      selectedDate: selectDate.asObservable(),
                       showMemoDetail: showMemoDetail.asDriver(onErrorDriveWith: .empty()))
     }
 }
