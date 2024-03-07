@@ -43,6 +43,10 @@ class CalendarPlaceCollectionViewCell: UICollectionViewCell {
         titleLabel.text = nil
     }
     
+    func setConfigure(whit data: CalendarPlace) {
+        titleLabel.text = data.title
+    }
+    
     func setConstraints() {
         [borderView, titleLabel].forEach {
             contentView.addSubview($0)

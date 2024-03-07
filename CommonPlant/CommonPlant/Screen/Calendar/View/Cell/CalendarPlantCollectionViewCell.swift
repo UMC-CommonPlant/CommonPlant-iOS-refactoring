@@ -50,6 +50,17 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
         nameLabel.text = nil
     }
     
+    func setConfigure(whit data: CalendarPlant) {
+        if let imgUrl = URL(string: data.imageString) {
+            plantImageView.load(url: imgUrl)
+        } else {
+            // TODO: 기본 이미지로
+        }
+        
+        nicknameLabel.text = data.nickname
+        nameLabel.text = data.name
+    }
+    
     func setConstraints() {
         [plantImageView, nicknameLabel, nameLabel].forEach {
             contentView.addSubview($0)

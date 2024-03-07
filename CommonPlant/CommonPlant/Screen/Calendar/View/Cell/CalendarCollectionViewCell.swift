@@ -68,8 +68,14 @@ class CalendarCollectionViewCell: UICollectionViewCell {
         dayLabel.text = nil
     }
     
+    func setConfigure(with data: String, isSelected: Bool, isToday: Bool) {
+        dayLabel.text = data
+        dayLabel.textColor = isToday ? .seaGreenDark2 : .gray6
+        selectedView.isHidden = !isSelected
+    }
+    
     func setConstraints() {
-        [selectedView, dayLabel].forEach {
+        [selectedView, dayLabel, stackView].forEach {
             contentView.addSubview($0)
         }
         

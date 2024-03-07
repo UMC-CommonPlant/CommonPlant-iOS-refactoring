@@ -63,6 +63,17 @@ class CalendarMemoCollectionViewCell: UICollectionViewCell {
         contentLabel.text = nil
     }
     
+    func setConfigure(with data: CalendarMemo) {
+        if let imgUrl = URL(string: data.userProfileImageString) {
+            userImageView.load(url: imgUrl)
+        } else {
+            // TODO: 기본 이미지로
+        }
+        
+        nicknameLabel.text = data.userNickname
+        contentLabel.text = data.content
+    }
+    
     func setConstraints() {
         [userImageView, nicknameLabel, dateLabel, contentLabel, moreLabel].forEach {
             contentView.addSubview($0)

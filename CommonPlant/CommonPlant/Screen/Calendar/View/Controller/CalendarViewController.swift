@@ -7,8 +7,16 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxRelay
 
 class CalendarViewController: UIViewController {
+    // MARK: - Properties
+    private let viewModel = CalendarViewModel()
+    private lazy var input = CalendarViewModel.Input(wholeMonthBtnDidTap: wholeMonthView.rx.tapGesture().map { _ in }.asObservable(), selectedMonth: selectedMonth.asObservable(), previousMonthBtnDidTap: previousButton.rx.tap.asObservable(), nextMonthBtnDidTap: nextButton.rx.tap.asObservable(), selectedDate: calendarCollectionView.rx.itemSelected.asObservable(), selectedPlace: placeCollectionView.rx.itemSelected.asObservable(), selectedPlant: plantCollectionView.rx.itemSelected.asObservable(), selectedMemo: memoCollectionView.rx.itemSelected.asObservable())
+    private lazy var output = viewModel.transform(input: input)
+    private lazy var selectedMonth = BehaviorRelay<Date>(value: Date())
+    
     // MARK: - UI Components
     private let scrollView: UIView = {
         let view = UIScrollView()
@@ -167,7 +175,58 @@ class CalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        bind()
         setConstraints()
+    }
+    
+    func bind() {
+        viewModel.currentMonth.subscribe { [weak self] month in
+            guard let self = self else { return }
+            
+            selectedMonthLabel.text = month
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.days.bind(to: calendarCollectionView.rx.items(cellIdentifier: CalendarCollectionViewCell.identifier, cellType: CalendarCollectionViewCell.self)) { [weak self] (_, result, cell) in
+            guard let self = self else { return }
+            
+            cell.setConfigure(with: result, isSelected: false, isToday: false)
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.placeList.bind(to: placeCollectionView.rx.items(cellIdentifier: CalendarPlaceCollectionViewCell.identifier, cellType: CalendarPlaceCollectionViewCell.self)) { [weak self] (_, result, cell) in
+            guard let self = self else { return }
+            
+            cell.setConfigure(whit: result)
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.plantList.bind(to: plantCollectionView.rx.items(cellIdentifier: CalendarPlantCollectionViewCell.identifier, cellType: CalendarPlantCollectionViewCell.self)) { [weak self] (_, result, cell) in
+            guard let self = self else { return }
+            
+            cell.setConfigure(whit: result)
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.messageList.subscribe { [weak self] _ in
+            guard let self = self else { return }
+            
+            
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.memoList.bind(to: memoCollectionView.rx.items(cellIdentifier: CalendarMemoCollectionViewCell.identifier, cellType: CalendarMemoCollectionViewCell.self)) { [weak self] (_, result, cell) in
+            guard let self = self else { return }
+            
+            cell.setConfigure(with: result)
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showWholeMonth.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            datePicker.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showMemoDetail.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            // TODO: 화면 전환 및 해당 메모 포커싱
+        }.disposed(by: viewModel.disposeBag)
     }
     
     func setConstraints() {
