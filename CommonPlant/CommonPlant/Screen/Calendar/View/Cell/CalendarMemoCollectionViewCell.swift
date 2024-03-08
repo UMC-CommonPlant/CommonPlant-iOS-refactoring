@@ -87,11 +87,11 @@ class CalendarMemoCollectionViewCell: UICollectionViewCell {
         nextImageView.snp.makeConstraints { make in
             make.centerY.equalTo(userImageView.snp.centerY)
             make.trailing.equalToSuperview()
-            make.width.height.equalTo(30)
+            make.width.height.equalTo(48)
         }
         
         contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(userImageView.snp.bottom).offset(4)
+            make.top.equalTo(nextImageView.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview().inset(10)
             make.bottom.equalToSuperview().inset(4)
         }

@@ -165,16 +165,16 @@ class CalendarViewController: UIViewController {
         view.backgroundColor = .seaGreen
         return view
     }()
-    private let memoCollectionView: UICollectionView = {
+    private lazy var memoCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0
-        flowLayout.minimumInteritemSpacing = 16
-        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 16, right: 0)
-        flowLayout.estimatedItemSize = CGSize(width: 300, height: 250)
+        flowLayout.minimumInteritemSpacing = 15
+        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 16, right: 20)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(CalendarMemoCollectionViewCell.self, forCellWithReuseIdentifier: CalendarMemoCollectionViewCell.identifier)
         view.isScrollEnabled = false
         
+        view.rx.setDelegate(self).disposed(by: viewModel.disposeBag)
         return view
     }()
     
@@ -375,8 +375,14 @@ class CalendarViewController: UIViewController {
         
         memoCollectionView.snp.makeConstraints { make in
             make.top.equalTo(divisionView.snp.bottom).offset(24)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
     }
+}
+
+extension CalendarViewController: UIScrollViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.view.frame.width - 38, height: collectionView.frame.height)
+        }
 }
