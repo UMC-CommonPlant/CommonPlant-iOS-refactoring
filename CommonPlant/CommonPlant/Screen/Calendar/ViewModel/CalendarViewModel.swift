@@ -23,6 +23,12 @@ class CalendarViewModel {
     let messageList = BehaviorRelay<[String]>(value: [])
     let memoList = BehaviorRelay<[CalendarMemo]>(value: [])
     
+    init() {
+        placeList.accept([CalendarPlace(title: "스윗홈_거실"), CalendarPlace(title: "낫스윗회사_가든"), CalendarPlace(title: "스윗홈_욕실"), CalendarPlace(title: "본가_거실")])
+        plantList.accept([CalendarPlant(imageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", nickname: "몬테", name: "몬스테라"),CalendarPlant(imageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", nickname: "몬테", name: "몬스테라"),CalendarPlant(imageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", nickname: "몬테", name: "몬스테라"),CalendarPlant(imageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", nickname: "몬테", name: "몬스테라"),CalendarPlant(imageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", nickname: "몬테", name: "몬스테라")])
+        memoList.accept([CalendarMemo(userProfileImageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", userNickname: "커먼", content: "잎상태가 매우 좋다 커먼아 앱에서 알려준 물주기의 주기가 아주 딱 맞는 것 같구나. 요즘 내가 물구기 누르는 거 자꾸 깜빡깜빡하니 커먼이 네가 조금 더 신경써주길 바란다."), CalendarMemo(userProfileImageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", userNickname: "커먼", content: "잎상태가 매우 좋다 커먼아 앱에서 알려준 물주기의 주기가 아주 딱 맞는 것 같구나. 요즘 내가 물구기 누르는 거 자꾸 깜빡깜빡하니 커먼이 네가 조금 더 신경써주길 바란다."), CalendarMemo(userProfileImageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", userNickname: "커먼", content: "잎상태가 매우 좋다 커먼아 앱에서 알려준 물주기의 주기가 아주 딱 맞는 것 같구나. 요즘 내가 물구기 누르는 거 자꾸 깜빡깜빡하니 커먼이 네가 조금 더 신경써주길 바란다."),CalendarMemo(userProfileImageString: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/cf3ab1cb-71e2-4361-bf4d-23078ffd8531..png", userNickname: "커먼", content: "잎상태가 매우 좋다 커먼아 앱에서 알려준 물주기의 주기가 아주 딱 맞는 것 같구나. 요즘 내가 물구기 누르는 거 자꾸 깜빡깜빡하니 커먼이 네가 조금 더 신경써주길 바란다.")])
+    }
+    
     func dateToMonthString(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy년 M월"

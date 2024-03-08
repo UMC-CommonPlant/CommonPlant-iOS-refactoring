@@ -10,6 +10,10 @@ import SnapKit
 import RxSwift
 import RxRelay
 
+#Preview {
+    CalendarViewController()
+}
+
 class CalendarViewController: UIViewController {
     // MARK: - Properties
     private let viewModel = CalendarViewModel()
@@ -20,7 +24,8 @@ class CalendarViewController: UIViewController {
     // MARK: - UI Components
     private let scrollView: UIView = {
         let view = UIScrollView()
-        view.showsVerticalScrollIndicator = false
+        view.isScrollEnabled = true
+        //view.showsVerticalScrollIndicator = false
         return view
     }()
     private let contentView = UIView()
@@ -103,12 +108,13 @@ class CalendarViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 16
         flowLayout.minimumInteritemSpacing = 0
-        flowLayout.itemSize = CGSize(width: 40, height: 40)
+        flowLayout.estimatedItemSize = CGSize(width: 40, height: 40)
         flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 0, right: 20)
         flowLayout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(CalendarPlaceCollectionViewCell.self, forCellWithReuseIdentifier: CalendarPlaceCollectionViewCell.identifier)
         view.isScrollEnabled = true
+        view.showsHorizontalScrollIndicator = false
         
         return view
     }()
@@ -122,12 +128,12 @@ class CalendarViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(CalendarPlantCollectionViewCell.self, forCellWithReuseIdentifier: CalendarPlantCollectionViewCell.identifier)
         view.isScrollEnabled = true
+        view.showsHorizontalScrollIndicator = false
         
         return view
     }()
     private let messageView: UIView = {
         let view = UIView()
-        view.isHidden = true
         return view
     }()
     private let firstMetView: UIView = {
@@ -163,7 +169,8 @@ class CalendarViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0
         flowLayout.minimumInteritemSpacing = 16
-        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 16, right: 20)
+        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 16, right: 0)
+        flowLayout.estimatedItemSize = CGSize(width: 300, height: 250)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(CalendarMemoCollectionViewCell.self, forCellWithReuseIdentifier: CalendarMemoCollectionViewCell.identifier)
         view.isScrollEnabled = false
@@ -316,19 +323,19 @@ class CalendarViewController: UIViewController {
             make.top.equalTo(weekStackView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(7.5)
             make.bottom.equalToSuperview()
-            make.height.greaterThanOrEqualTo(200)
+            make.height.lessThanOrEqualTo(264).priority(.low)
         }
         
         placeCollectionView.snp.makeConstraints { make in
             make.top.equalTo(calendarView.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview()
-            make.width.equalTo(40)
+            make.height.equalTo(40)
         }
         
         plantCollectionView.snp.makeConstraints { make in
             make.top.equalTo(placeCollectionView.snp.bottom).offset(21)
             make.leading.trailing.equalToSuperview()
-            make.width.equalTo(124)
+            make.height.equalTo(124)
         }
         
         messageView.snp.makeConstraints { make in
@@ -340,6 +347,7 @@ class CalendarViewController: UIViewController {
         firstMetView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(7)
             make.leading.equalToSuperview()
+            make.width.height.equalTo(6)
         }
         
         firstMetLabel.snp.makeConstraints { make in
@@ -348,8 +356,10 @@ class CalendarViewController: UIViewController {
         }
         
         waterView.snp.makeConstraints { make in
+            make.top.equalTo(firstMetView.snp.bottom).offset(18)
             make.bottom.equalToSuperview().inset(7)
             make.leading.equalToSuperview()
+            make.width.height.equalTo(6)
         }
         
         waterLabel.snp.makeConstraints { make in

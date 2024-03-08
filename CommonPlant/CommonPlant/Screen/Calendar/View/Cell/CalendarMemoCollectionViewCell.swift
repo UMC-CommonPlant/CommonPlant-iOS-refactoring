@@ -16,19 +16,13 @@ class CalendarMemoCollectionViewCell: UICollectionViewCell {
         view.makeRound(radius: 16)
         return view
     }()
-    let nicknameLabel: UILabel = {
+    private let nicknameLabel: UILabel = {
         let label = UILabel()
         label.font = .bodyM2
         label.textColor = .gray6
         return label
     }()
-    let dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = .captionM2
-        label.textColor = .gray4
-        return label
-    }()
-    let contentLabel: UILabel = {
+    private let contentLabel: UILabel = {
         let label = UILabel()
         label.font = .bodyM2
         label.textColor = .gray6
@@ -36,11 +30,10 @@ class CalendarMemoCollectionViewCell: UICollectionViewCell {
         label.lineBreakMode = .byTruncatingTail
         return label
     }()
-    let moreLabel: UILabel = {
-        let label = UILabel()
-        label.font = .captionM1
-        label.textColor = .gray3
-        return label
+    private let nextImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "Next")
+        return view
     }()
     
     override init(frame: CGRect) {
@@ -59,8 +52,8 @@ class CalendarMemoCollectionViewCell: UICollectionViewCell {
         
         userImageView.image = nil
         nicknameLabel.text = nil
-        dateLabel.text = nil
         contentLabel.text = nil
+        nextImageView.image = nil
     }
     
     func setConfigure(with data: CalendarMemo) {
@@ -72,10 +65,12 @@ class CalendarMemoCollectionViewCell: UICollectionViewCell {
         
         nicknameLabel.text = data.userNickname
         contentLabel.text = data.content
+        contentLabel.sizeToFit()
+        self.layoutIfNeeded()
     }
     
     func setConstraints() {
-        [userImageView, nicknameLabel, dateLabel, contentLabel, moreLabel].forEach {
+        [userImageView, nicknameLabel, nextImageView, contentLabel].forEach {
             contentView.addSubview($0)
         }
         
@@ -89,20 +84,16 @@ class CalendarMemoCollectionViewCell: UICollectionViewCell {
             make.leading.equalTo(userImageView.snp.trailing).offset(8)
         }
         
-        dateLabel.snp.makeConstraints { make in
+        nextImageView.snp.makeConstraints { make in
             make.centerY.equalTo(userImageView.snp.centerY)
-            make.trailing.equalToSuperview().inset(10)
+            make.trailing.equalToSuperview()
+            make.width.height.equalTo(30)
         }
         
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(userImageView.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview().inset(10)
-        }
-        
-        moreLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentLabel.snp.bottom).offset(7)
-            make.trailing.equalToSuperview().inset(10)
-            make.bottom.equalToSuperview().inset(6)
+            make.bottom.equalToSuperview().inset(4)
         }
     }
 }
