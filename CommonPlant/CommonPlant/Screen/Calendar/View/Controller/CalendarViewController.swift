@@ -21,6 +21,8 @@ class CalendarViewController: UIViewController {
     private lazy var output = viewModel.transform(input: input)
     private lazy var selectedMonth = BehaviorRelay<Date>(value: Date())
     
+    private lazy var cellWidth = (self.view.frame.width - 89) / 7
+    
     // MARK: - UI Components
     private let scrollView: UIView = {
         let view = UIScrollView()
@@ -84,11 +86,12 @@ class CalendarViewController: UIViewController {
         }
         return view
     }()
-    private let calendarCollectionView: UICollectionView = {
+    private lazy var calendarCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
+        let cellHeight = cellWidth
         flowLayout.minimumLineSpacing = 0
         flowLayout.minimumInteritemSpacing = 6
-        flowLayout.itemSize = CGSize(width: 44, height: 44)
+        flowLayout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.isScrollEnabled = false
         view.register(CalendarCollectionViewCell.self, forCellWithReuseIdentifier: CalendarCollectionViewCell.identifier)
@@ -193,7 +196,16 @@ class CalendarViewController: UIViewController {
             selectedMonthLabel.text = month
         }.disposed(by: viewModel.disposeBag)
         
-        viewModel.days.bind(to: calendarCollectionView.rx.items(cellIdentifier: CalendarCollectionViewCell.identifier, cellType: CalendarCollectionViewCell.self)) { [weak self] (_, result, cell) in
+        viewModel.days
+            .do(onNext: { [weak self] days in
+                guard let self = self else { return }
+                let numberOfRow = days.count / 7
+                let newHeight = cellWidth * CGFloat(numberOfRow + (days.count % 7 > 0 ? 1 : 0))
+                calendarCollectionView.snp.updateConstraints { make in
+                    make.height.equalTo(newHeight)
+                }
+            })
+            .bind(to: calendarCollectionView.rx.items(cellIdentifier: CalendarCollectionViewCell.identifier, cellType: CalendarCollectionViewCell.self)) { [weak self] (_, result, cell) in
             guard let self = self else { return }
             
             cell.setConfigure(with: result, isSelected: viewModel.checkSelectedDay(day: result), isToday: viewModel.checkToday(day: result))
@@ -262,8 +274,7 @@ class CalendarViewController: UIViewController {
         }
         
         scrollView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { make in
@@ -313,7 +324,6 @@ class CalendarViewController: UIViewController {
         }
         
         weekStackView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.top.equalTo(wholeMonthView.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview().inset(7.5)
             make.height.equalTo(40)
