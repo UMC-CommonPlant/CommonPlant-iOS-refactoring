@@ -59,10 +59,13 @@ class CalendarViewModel {
     
     func checkSelectedDay(day: String) -> Bool {
         guard let day = Int(day) else { return false }
-        guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
+        var components = Calendar.current.dateComponents([.year, .month, .timeZone], from: calendarDate)
+        components.day = day
+        
+        guard let newDate = Calendar.current.date(from: components) else { return false }
+        let newDateComponents = calendar.dateComponents([.year, .month, .day], from: newDate)
         
         let selectedComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
-        let newDateComponents = calendar.dateComponents([.year, .month, .day], from: newDate)
         
         return selectedComponents == newDateComponents
     }
