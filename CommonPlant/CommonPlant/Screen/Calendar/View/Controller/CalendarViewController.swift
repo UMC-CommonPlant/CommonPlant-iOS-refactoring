@@ -27,7 +27,7 @@ class CalendarViewController: UIViewController {
     private let scrollView: UIView = {
         let view = UIScrollView()
         view.isScrollEnabled = true
-        //view.showsVerticalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     private let contentView = UIView()
@@ -170,8 +170,8 @@ class CalendarViewController: UIViewController {
     }()
     private lazy var memoCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.minimumInteritemSpacing = 15
+        flowLayout.minimumLineSpacing = 16
+        flowLayout.minimumInteritemSpacing = 0
         flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 16, right: 20)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(CalendarMemoCollectionViewCell.self, forCellWithReuseIdentifier: CalendarMemoCollectionViewCell.identifier)
@@ -229,11 +229,30 @@ class CalendarViewController: UIViewController {
             
         }.disposed(by: viewModel.disposeBag)
         
-        viewModel.memoList.bind(to: memoCollectionView.rx.items(cellIdentifier: CalendarMemoCollectionViewCell.identifier, cellType: CalendarMemoCollectionViewCell.self)) { [weak self] (_, result, cell) in
-            guard let self = self else { return }
-            
-            cell.setConfigure(with: result)
-        }.disposed(by: viewModel.disposeBag)
+        viewModel.memoList
+            .do(onNext: { [weak self] memos in
+                guard let self = self else { return }
+                
+                var totalHeight: CGFloat = 0.0
+                let contentLabelTop: CGFloat = 52
+                let verticalInset: CGFloat = 20
+                let spacing: CGFloat = 16
+                
+                for memo in memos {
+                    let cellWidth = self.memoCollectionView.frame.width - 38
+                    let cellHeight = self.calculateHeightForText(memo.content, width: cellWidth) + contentLabelTop + verticalInset + spacing
+                    totalHeight += cellHeight
+                }
+                
+                self.memoCollectionView.snp.updateConstraints { make in
+                    make.height.equalTo(totalHeight)
+                }
+            })
+            .bind(to: memoCollectionView.rx.items(cellIdentifier: CalendarMemoCollectionViewCell.identifier, cellType: CalendarMemoCollectionViewCell.self)) { [weak self] (_, result, cell) in
+                guard let self = self else { return }
+                
+                cell.setConfigure(with: result)
+            }.disposed(by: viewModel.disposeBag)
         
         output.showWholeMonth.drive { [weak self] _ in
             guard let self = self else { return }
@@ -393,6 +412,22 @@ class CalendarViewController: UIViewController {
 
 extension CalendarViewController: UIScrollViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.view.frame.width - 38, height: collectionView.frame.height)
-        }
+        let cellWidth = collectionView.frame.width - 38
+        let text = viewModel.memoList.value[indexPath.row].content
+        
+        let contentLabelTop: CGFloat = 52
+        let verticalInset: CGFloat = 20
+        
+        let cellHeight = calculateHeightForText(text, width: cellWidth) + contentLabelTop + verticalInset
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    func calculateHeightForText(_ text: String, width: CGFloat) -> CGFloat {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 3
+        label.text = text
+        label.sizeToFit()
+        
+        return label.frame.height
+    }
 }
