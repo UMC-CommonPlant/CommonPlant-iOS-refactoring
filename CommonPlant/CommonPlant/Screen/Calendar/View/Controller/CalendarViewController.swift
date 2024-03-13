@@ -190,6 +190,17 @@ class CalendarViewController: UIViewController {
     }
     
     func bind() {
+        placeCollectionView.rx.itemSelected.subscribe { [weak self] indexPath in
+            guard let self = self else { return }
+            guard let selectedCell = placeCollectionView.cellForItem(at: indexPath) as? CalendarPlaceCollectionViewCell else { return }
+            guard let deselectedCell = placeCollectionView.cellForItem(at: viewModel.selectedPlace) as? CalendarPlaceCollectionViewCell else { return }
+            
+            selectedCell.setSelectedCell()
+            if selectedCell != deselectedCell {
+                deselectedCell.setDeselectedCell()
+            }
+        }.disposed(by: viewModel.disposeBag)
+        
         viewModel.currentMonth.subscribe { [weak self] month in
             guard let self = self else { return }
             
@@ -211,10 +222,13 @@ class CalendarViewController: UIViewController {
             cell.setConfigure(with: result, isSelected: viewModel.checkSelectedDay(day: result), isToday: viewModel.checkToday(day: result))
         }.disposed(by: viewModel.disposeBag)
         
-        viewModel.placeList.bind(to: placeCollectionView.rx.items(cellIdentifier: CalendarPlaceCollectionViewCell.identifier, cellType: CalendarPlaceCollectionViewCell.self)) { [weak self] (_, result, cell) in
+        viewModel.placeList.bind(to: placeCollectionView.rx.items(cellIdentifier: CalendarPlaceCollectionViewCell.identifier, cellType: CalendarPlaceCollectionViewCell.self)) { [weak self] (row, result, cell) in
             guard let self = self else { return }
             
             cell.setConfigure(whit: result)
+            if row == 0 {
+                cell.setSelectedCell()
+            }
         }.disposed(by: viewModel.disposeBag)
         
         viewModel.plantList.bind(to: plantCollectionView.rx.items(cellIdentifier: CalendarPlantCollectionViewCell.identifier, cellType: CalendarPlantCollectionViewCell.self)) { [weak self] (_, result, cell) in
@@ -266,6 +280,13 @@ class CalendarViewController: UIViewController {
         output.selectedDate.subscribe(onNext: { [weak self] _ in
             self?.calendarCollectionView.reloadData()
         }).disposed(by: viewModel.disposeBag)
+        
+//        output.deselectedPlace.drive { [weak self] indexPath in
+//            guard let self = self else { return }
+//            guard let cell = placeCollectionView.cellForItem(at: indexPath) as? CalendarPlaceCollectionViewCell else { return }
+//            
+//            cell.setDeselectedCell()
+//        }.disposed(by: viewModel.disposeBag)
         
         output.showMemoDetail.drive { [weak self] _ in
             guard let self = self else { return }

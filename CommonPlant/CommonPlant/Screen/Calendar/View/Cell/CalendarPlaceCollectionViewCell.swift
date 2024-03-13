@@ -61,4 +61,14 @@ class CalendarPlaceCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview().inset(12)
         }
     }
+    
+    func setSelectedCell() {
+        titleLabel.textColor = .white
+        contentView.backgroundColor = .seaGreenDark2
+    }
+    
+    func setDeselectedCell() {
+        titleLabel.textColor = .seaGreenDark2
+        contentView.backgroundColor = .white
+    }
 }
