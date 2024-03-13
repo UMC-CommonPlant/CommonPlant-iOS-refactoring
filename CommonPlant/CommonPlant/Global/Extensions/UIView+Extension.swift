@@ -13,12 +13,12 @@ extension UIView {
         clipsToBounds = true
     }
     
-    func makeShadow() {
+    func makeShadow(cornerRadius: CGFloat) {
+        layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
         layer.shadowColor = UIColor.gray5?.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.shadowOffset = CGSize(width: 0, height: 0)
         layer.shadowOpacity = 0.25
         layer.shadowRadius = 2
-        layer.cornerRadius = 16
     }
     
     func makeGradation() {

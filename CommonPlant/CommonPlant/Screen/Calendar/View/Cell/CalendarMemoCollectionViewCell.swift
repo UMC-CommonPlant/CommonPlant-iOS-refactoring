@@ -38,8 +38,9 @@ class CalendarMemoCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.makeShadow()
+        contentView.backgroundColor = .white
         contentView.makeRound(radius: 10)
+        self.makeShadow(cornerRadius: 10)
         setConstraints()
     }
     

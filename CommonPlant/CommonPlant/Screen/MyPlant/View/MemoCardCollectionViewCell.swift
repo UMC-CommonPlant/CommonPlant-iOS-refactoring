@@ -33,7 +33,7 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
     
     // MARK: Custom Methods
     func setAttributes() {
-        self.makeShadow()
+        self.makeShadow(cornerRadius: 16)
         self.backgroundColor = .white
         
         memoCardView.makeRound(radius: 16)
