@@ -126,7 +126,7 @@ class CalendarViewController: UIViewController {
         flowLayout.minimumLineSpacing = 10
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.itemSize = CGSize(width: 106, height: 124)
-        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 16, bottom: 0, right: 16)
+        flowLayout.sectionInset = UIEdgeInsets.init(top: 21, left: 16, bottom: 24, right: 16)
         flowLayout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(CalendarPlantCollectionViewCell.self, forCellWithReuseIdentifier: CalendarPlantCollectionViewCell.identifier)
@@ -172,7 +172,7 @@ class CalendarViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 16
         flowLayout.minimumInteritemSpacing = 0
-        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 16, right: 20)
+        flowLayout.sectionInset = UIEdgeInsets.init(top: 24, left: 20, bottom: 16, right: 20)
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         view.register(CalendarMemoCollectionViewCell.self, forCellWithReuseIdentifier: CalendarMemoCollectionViewCell.identifier)
         view.isScrollEnabled = false
@@ -233,6 +233,9 @@ class CalendarViewController: UIViewController {
             .do(onNext: { [weak self] memos in
                 guard let self = self else { return }
                 
+                let topInset: CGFloat = 24
+                let bottomInset: CGFloat = 16
+                
                 var totalHeight: CGFloat = 0.0
                 let contentLabelTop: CGFloat = 52
                 let verticalInset: CGFloat = 20
@@ -245,7 +248,7 @@ class CalendarViewController: UIViewController {
                 }
                 
                 self.memoCollectionView.snp.updateConstraints { make in
-                    make.height.equalTo(totalHeight)
+                    make.height.equalTo(totalHeight + topInset + bottomInset)
                 }
             })
             .bind(to: memoCollectionView.rx.items(cellIdentifier: CalendarMemoCollectionViewCell.identifier, cellType: CalendarMemoCollectionViewCell.self)) { [weak self] (_, result, cell) in
@@ -362,13 +365,13 @@ class CalendarViewController: UIViewController {
         }
         
         plantCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(placeCollectionView.snp.bottom).offset(21)
+            make.top.equalTo(placeCollectionView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(124)
+            make.height.equalTo(169)
         }
         
         messageView.snp.makeConstraints { make in
-            make.top.equalTo(plantCollectionView.snp.bottom).offset(24)
+            make.top.equalTo(plantCollectionView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(26)
             make.height.equalTo(44)
         }
@@ -403,7 +406,7 @@ class CalendarViewController: UIViewController {
         }
         
         memoCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(divisionView.snp.bottom).offset(24)
+            make.top.equalTo(divisionView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
