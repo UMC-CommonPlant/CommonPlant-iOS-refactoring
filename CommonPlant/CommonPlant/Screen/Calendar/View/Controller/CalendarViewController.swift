@@ -224,6 +224,29 @@ class CalendarViewController: UIViewController {
     }
     
     func bind() {
+        view.rx
+            .tapGesture(configuration: { gestureRecognizer, _ in
+                gestureRecognizer.cancelsTouchesInView = false
+            })
+            .when(.recognized)
+            .subscribe { [weak self] gesture in
+                self?.handleTap(gesture)
+                
+            }.disposed(by: viewModel.disposeBag)
+        
+        cancleButton.rx.tap.subscribe { [weak self] _ in
+            guard let self = self else { return }
+            
+            datePickerView.isHidden = true
+        }.disposed(by: viewModel.disposeBag)
+                                    
+        okButton.rx.tap.subscribe { [weak self] _ in
+            guard let self = self else { return }
+            
+            selectedMonth.accept(datePicker.date)
+            datePickerView.isHidden = true
+        }.disposed(by: viewModel.disposeBag)
+        
         placeCollectionView.rx.itemSelected.subscribe { [weak self] indexPath in
             guard let self = self else { return }
             guard let selectedCell = placeCollectionView.cellForItem(at: indexPath) as? CalendarPlaceCollectionViewCell else { return }
@@ -357,7 +380,7 @@ class CalendarViewController: UIViewController {
             wholeMonthView.addSubview($0)
         }
         
-        [cancleButton, okButton, datePicker].forEach {
+        [datePicker, cancleButton, okButton].forEach {
             datePickerView.addSubview($0)
         }
         
@@ -389,7 +412,7 @@ class CalendarViewController: UIViewController {
         datePickerView.snp.makeConstraints { make in
             make.top.equalTo(wholeMonthView.snp.bottom)
             make.leading.equalToSuperview().offset(14)
-            make.height.equalTo(140)
+            make.height.equalTo(160)
             make.width.equalTo(260)
         }
         
@@ -402,8 +425,8 @@ class CalendarViewController: UIViewController {
         }
         
         datePicker.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(20)
             make.leading.trailing.equalToSuperview().inset(10)
+            make.bottom.equalToSuperview().inset(10)
             make.height.equalTo(116)
             make.width.equalTo(240)
         }
@@ -520,5 +543,14 @@ extension CalendarViewController: UIScrollViewDelegate, UICollectionViewDelegate
         label.sizeToFit()
         
         return label.frame.height
+    }
+    
+    func handleTap(_ gesture: UITapGestureRecognizer) {
+        if datePickerView.isHidden { return }
+        
+        let location = gesture.location(in: datePickerView)
+        if !datePickerView.frame.contains(location) {
+            datePickerView.isHidden = true
+        }
     }
 }

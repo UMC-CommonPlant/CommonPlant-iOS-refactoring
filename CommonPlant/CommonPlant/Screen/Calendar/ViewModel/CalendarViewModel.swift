@@ -99,6 +99,7 @@ extension CalendarViewModel {
             guard let self = self else { return }
             
             calendarDate = date
+            selectedDate = date
             currentMonth.accept(dateToMonthString(calendarDate))
             updateDays()
         }.disposed(by: disposeBag)
