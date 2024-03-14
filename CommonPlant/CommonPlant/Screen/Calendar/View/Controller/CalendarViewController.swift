@@ -97,14 +97,40 @@ class CalendarViewController: UIViewController {
         view.register(CalendarCollectionViewCell.self, forCellWithReuseIdentifier: CalendarCollectionViewCell.identifier)
         return view
     }()
+    private let datePickerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.makeRound(radius: 12)
+        view.layer.borderColor = UIColor.seaGreen?.cgColor
+        view.layer.borderWidth = 2
+        view.isHidden = true
+        return view
+    }()
+    private let cancleButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        var attribute = AttributedString.init("취소")
+        attribute.font = .bodyB2
+        config.attributedTitle = attribute
+        config.baseForegroundColor = .gray5
+        button.configuration = config
+        return button
+    }()
+    private let okButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        var attribute = AttributedString.init("확인")
+        attribute.font = .bodyB2
+        config.attributedTitle = attribute
+        config.baseForegroundColor = .seaGreenDark3
+        button.configuration = config
+        return button
+    }()
     private let datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
         picker.preferredDatePickerStyle = .wheels
         picker.locale = Locale(identifier: "ko_KR")
-        picker.backgroundColor = .seaGreen
-        picker.makeRound(radius: 12)
-        picker.isHidden = true
         return picker
     }()
     private let placeCollectionView: UICollectionView = {
@@ -300,7 +326,7 @@ class CalendarViewController: UIViewController {
         output.showWholeMonth.drive { [weak self] _ in
             guard let self = self else { return }
             
-            datePicker.isHidden = false
+            datePickerView.isHidden = false
         }.disposed(by: viewModel.disposeBag)
         
         output.selectedDate.subscribe(onNext: { [weak self] _ in
@@ -323,12 +349,16 @@ class CalendarViewController: UIViewController {
             contentView.addSubview($0)
         }
         
-        [wholeMonthView, previousButton, nextButton, weekStackView, calendarCollectionView, datePicker].forEach {
+        [wholeMonthView, previousButton, nextButton, weekStackView, calendarCollectionView, datePickerView].forEach {
             calendarView.addSubview($0)
         }
         
         [selectedMonthLabel, wholeMonthImageView].forEach {
             wholeMonthView.addSubview($0)
+        }
+        
+        [cancleButton, okButton, datePicker].forEach {
+            datePickerView.addSubview($0)
         }
         
         [firstMetView, firstMetLabel, waterView, waterLabel].forEach {
@@ -356,10 +386,28 @@ class CalendarViewController: UIViewController {
             make.height.equalTo(44)
         }
         
-        datePicker.snp.makeConstraints { make in
+        datePickerView.snp.makeConstraints { make in
             make.top.equalTo(wholeMonthView.snp.bottom)
             make.leading.equalToSuperview().offset(14)
+            make.height.equalTo(140)
+            make.width.equalTo(260)
         }
+        
+        cancleButton.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview().inset(10)
+        }
+        
+        okButton.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(10)
+        }
+        
+        datePicker.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(20)
+            make.leading.trailing.equalToSuperview().inset(10)
+            make.height.equalTo(116)
+            make.width.equalTo(240)
+        }
+        
         selectedMonthLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().inset(5)
