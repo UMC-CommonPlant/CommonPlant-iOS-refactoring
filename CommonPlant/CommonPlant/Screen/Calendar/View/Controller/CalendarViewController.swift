@@ -292,13 +292,6 @@ class CalendarViewController: UIViewController {
             self?.calendarCollectionView.reloadData()
         }).disposed(by: viewModel.disposeBag)
         
-//        output.deselectedPlace.drive { [weak self] indexPath in
-//            guard let self = self else { return }
-//            guard let cell = placeCollectionView.cellForItem(at: indexPath) as? CalendarPlaceCollectionViewCell else { return }
-//            
-//            cell.setDeselectedCell()
-//        }.disposed(by: viewModel.disposeBag)
-        
         output.showMemoDetail.drive { [weak self] _ in
             guard let self = self else { return }
             
