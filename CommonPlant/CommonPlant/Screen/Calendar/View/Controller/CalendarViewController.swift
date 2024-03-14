@@ -352,8 +352,10 @@ class CalendarViewController: UIViewController {
             datePickerView.isHidden = false
         }.disposed(by: viewModel.disposeBag)
         
-        output.selectedDate.subscribe(onNext: { [weak self] _ in
-            self?.calendarCollectionView.reloadData()
+        output.selectedDate.subscribe(onNext: { [weak self] date in
+            guard let self = self else { return }
+            calendarCollectionView.reloadData()
+            datePicker.date = date
         }).disposed(by: viewModel.disposeBag)
         
         output.showMemoDetail.drive { [weak self] _ in

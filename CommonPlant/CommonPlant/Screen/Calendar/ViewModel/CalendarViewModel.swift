@@ -87,12 +87,14 @@ extension CalendarViewModel {
     
     struct Output {
         let showWholeMonth: Driver<Void>
-        let selectedDate: Observable<Void>
+        let selectedDate: Observable<Date>
         let showMemoDetail: Driver<IndexPath>
     }
     
     func transform(input: Input) -> Output {
         let showWholeMonth = PublishRelay<Void>()
+        let selectDate = PublishRelay<Date>()
+        
         input.wholeMonthBtnDidTap.bind(to: showWholeMonth).disposed(by: disposeBag)
         
         input.selectedMonth.subscribe { [ weak self ] date in
@@ -100,6 +102,7 @@ extension CalendarViewModel {
             
             calendarDate = date
             selectedDate = date
+            selectDate.accept(date)
             currentMonth.accept(dateToMonthString(calendarDate))
             updateDays()
         }.disposed(by: disposeBag)
@@ -124,7 +127,6 @@ extension CalendarViewModel {
                 updateDays()
             }.disposed(by: disposeBag)
         
-        let selectDate = PublishRelay<Void>()
         input.selectedDate.bind { [weak self] index in
             guard let self = self else { return }
             guard let newDay = Int(days.value[index.row]) else { return }
@@ -134,7 +136,7 @@ extension CalendarViewModel {
             
             guard let newDate = calendar.date(from: dateComponents) else { return }
             
-            selectDate.accept(())
+            selectDate.accept(newDate)
             selectedDate = newDate
         }.disposed(by: disposeBag)
         
