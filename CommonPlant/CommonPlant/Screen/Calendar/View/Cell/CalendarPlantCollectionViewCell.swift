@@ -19,7 +19,7 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
     private let nicknameLabel: UILabel = {
         let label = UILabel()
         label.font = .bodyM3
-        label.textColor = .gray5
+        label.textColor = .black
         label.textAlignment = .center
         return label
     }()
@@ -33,9 +33,7 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .white
-        contentView.makeRound(radius: 8)
-        self.makeShadow(cornerRadius: 8)
+        setBorder()
         setConstraints()
     }
     
@@ -51,7 +49,13 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
         nameLabel.text = nil
     }
     
-    func setConfigure(whit data: CalendarPlant) {
+    func setBorder() {
+        contentView.backgroundColor = .white
+        contentView.makeRound(radius: 8)
+        self.makeShadow(cornerRadius: 8)
+    }
+    
+    func setConfigure(whit data: CalendarPlant, index: Int) {
         if let imgUrl = URL(string: data.imageString) {
             plantImageView.load(url: imgUrl)
         } else {
@@ -60,6 +64,8 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
         
         nicknameLabel.text = data.nickname
         nameLabel.text = data.name
+        
+        index > 0 ? setDeselectedCell() : setSelectedCell()
     }
     
     func setConstraints() {
@@ -86,5 +92,13 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview().inset(10)
             make.bottom.equalToSuperview().inset(8)
         }
+    }
+    
+    func setSelectedCell() {
+        contentView.subviews.map { $0.layer.opacity = 1 }
+    }
+    
+    func setDeselectedCell() {
+        contentView.subviews.map { $0.layer.opacity = 0.5 }
     }
 }

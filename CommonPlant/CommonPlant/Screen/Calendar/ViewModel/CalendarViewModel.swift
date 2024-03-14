@@ -16,6 +16,7 @@ class CalendarViewModel {
     var selectedDate = Date()
     var calendarDate = Date()
     var selectedPlace: IndexPath = [0, 0]
+    var selectedPlant: IndexPath = [0, 0]
     
     let currentMonth = BehaviorRelay<String>(value: "")
     let days = BehaviorRelay<[String]>(value: [])
@@ -147,7 +148,7 @@ extension CalendarViewModel {
         input.selectedPlant.subscribe { [weak self] indexPath in
             guard let self = self else { return }
             
-            // TODO: 메세지와 메모 리스트 업데이트
+            selectedPlant = indexPath
         }.disposed(by: disposeBag)
         
         let showMemoDetail = PublishRelay<IndexPath>()

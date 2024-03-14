@@ -201,6 +201,17 @@ class CalendarViewController: UIViewController {
             }
         }.disposed(by: viewModel.disposeBag)
         
+        plantCollectionView.rx.itemSelected.subscribe { [weak self] indexPath in
+            guard let self = self else { return }
+            guard let selectedCell = plantCollectionView.cellForItem(at: indexPath) as? CalendarPlantCollectionViewCell else { return }
+            guard let deselectedCell = plantCollectionView.cellForItem(at: viewModel.selectedPlant) as? CalendarPlantCollectionViewCell else { return }
+            
+            selectedCell.setSelectedCell()
+            if selectedCell != deselectedCell {
+                deselectedCell.setDeselectedCell()
+            }
+        }.disposed(by: viewModel.disposeBag)
+        
         viewModel.currentMonth.subscribe { [weak self] month in
             guard let self = self else { return }
             
@@ -231,10 +242,10 @@ class CalendarViewController: UIViewController {
             }
         }.disposed(by: viewModel.disposeBag)
         
-        viewModel.plantList.bind(to: plantCollectionView.rx.items(cellIdentifier: CalendarPlantCollectionViewCell.identifier, cellType: CalendarPlantCollectionViewCell.self)) { [weak self] (_, result, cell) in
+        viewModel.plantList.bind(to: plantCollectionView.rx.items(cellIdentifier: CalendarPlantCollectionViewCell.identifier, cellType: CalendarPlantCollectionViewCell.self)) { [weak self] (row, result, cell) in
             guard let self = self else { return }
             
-            cell.setConfigure(whit: result)
+            cell.setConfigure(whit: result, index: row)
         }.disposed(by: viewModel.disposeBag)
         
         viewModel.messageList.subscribe { [weak self] _ in
