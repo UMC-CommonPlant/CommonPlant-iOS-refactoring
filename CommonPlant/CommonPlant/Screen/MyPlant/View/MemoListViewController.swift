@@ -14,6 +14,7 @@ class MemoListViewController: UIViewController {
     // MARK: - Properties
     var viewModel = MemoViewModel()
     let identifier = MemoCollectionViewCell.identifier
+    var initialFocus: IndexPath
     
     // MARK: - UI Components
     var backgroundView = UIView()
@@ -34,6 +35,18 @@ class MemoListViewController: UIViewController {
         
         view.backgroundColor = .clear
         
+        return view
+    }()
+    let editLabel: UILabel = {
+        let label = UILabel()
+        label.text = "작성하기"
+        label.font = .bodyM3
+        label.textColor = .seaGreenDark2
+        return label
+    }()
+    let editView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
         return view
     }()
     
@@ -60,13 +73,40 @@ class MemoListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+        setNavigationBar()
         setAttributes()
         setConstraints()
         bind()
     }
     
+    init(focus: IndexPath) {
+        initialFocus = focus
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // TODO: 네트워킹 후 식물 id 값으로 포커스 잡기
+        memoCollectionView.scrollToItem(at: initialFocus, at: .top, animated: true)
+    }
+    
     // MARK: - Custom Methods
+    func setNavigationBar() {
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        
+        self.navigationItem.title = "Memo"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
+        
+        let rightBarItem = UIBarButtonItem(customView: editLabel)
+        self.navigationItem.rightBarButtonItem = rightBarItem
+    }
+    
     func setAttributes() {
         backgroundView.backgroundColor = .black
         backgroundView.layer.opacity = 0.7

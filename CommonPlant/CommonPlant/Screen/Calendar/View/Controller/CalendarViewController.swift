@@ -11,7 +11,7 @@ import RxSwift
 import RxRelay
 
 #Preview {
-    CalendarViewController()
+    UINavigationController(rootViewController: CalendarViewController())
 }
 
 class CalendarViewController: UIViewController {
@@ -185,8 +185,16 @@ class CalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setNavigationBar()
         bind()
         setConstraints()
+    }
+    
+    func setNavigationBar() {
+        self.navigationController?.isNavigationBarHidden = true
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .gray6
+        self.navigationItem.backBarButtonItem = backBarButtonItem
     }
     
     func bind() {
@@ -210,6 +218,13 @@ class CalendarViewController: UIViewController {
             if selectedCell != deselectedCell {
                 deselectedCell.setDeselectedCell()
             }
+        }.disposed(by: viewModel.disposeBag)
+        
+        memoCollectionView.rx.itemSelected.subscribe { [weak self] indexPath in
+            guard let self = self else { return }
+            
+            let nextVC = MemoListViewController(focus: indexPath)
+            self.navigationController?.pushViewController(nextVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
         
         viewModel.currentMonth.subscribe { [weak self] month in
