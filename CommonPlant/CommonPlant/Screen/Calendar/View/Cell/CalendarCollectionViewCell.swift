@@ -29,6 +29,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
         let view = UIStackView()
         view.axis = .horizontal
         view.distribution = .equalSpacing
+        view.spacing = 3
         return view
     }()
     let firstMetView: UIView = {
@@ -47,7 +48,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
     }()
     let memoView: UIView = {
         let view = UIView()
-        view.backgroundColor = .seaGreenLight
+        view.backgroundColor = .mauvePurple
         view.makeRound(radius: 2)
         view.isHidden = true
         return view
@@ -68,6 +69,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
         dayLabel.text = nil
     }
     
+    // TODO: 동그라미 표시 로직 추가하기
     func setConfigure(with data: String, isSelected: Bool, isToday: Bool) {
         dayLabel.font = isToday ? .bodyB1 : isSelected ? .bodyB1 : .bodyM1
         dayLabel.text = data
@@ -78,6 +80,10 @@ class CalendarCollectionViewCell: UICollectionViewCell {
     func setConstraints() {
         [selectedView, dayLabel, stackView].forEach {
             contentView.addSubview($0)
+        }
+        
+        [firstMetView, waterView, memoView].forEach {
+            stackView.addArrangedSubview($0)
         }
         
         dayLabel.snp.makeConstraints { make in
@@ -91,9 +97,21 @@ class CalendarCollectionViewCell: UICollectionViewCell {
         }
         
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(selectedView.snp.bottom).offset(4)
+            make.bottom.equalTo(selectedView.snp.bottom).offset(-7)
             make.centerX.equalToSuperview()
             make.height.equalTo(4)
+        }
+        
+        waterView.snp.makeConstraints { make in
+            make.width.height.equalTo(4)
+        }
+        
+        firstMetView.snp.makeConstraints { make in
+            make.width.height.equalTo(4)
+        }
+        
+        memoView.snp.makeConstraints { make in
+            make.width.height.equalTo(4)
         }
     }
 }

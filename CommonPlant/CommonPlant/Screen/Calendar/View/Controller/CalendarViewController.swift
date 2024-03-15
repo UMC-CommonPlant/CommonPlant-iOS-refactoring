@@ -590,6 +590,7 @@ class CalendarViewController: UIViewController {
         firstMetView.isHidden = true
         waterView.isHidden = true
         
+        // TODO: 네트워크 후 수정하기
         for msg in messages {
             switch msg {
             case "처음 데려온 날이에요" :
