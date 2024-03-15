@@ -21,6 +21,7 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
         label.font = .bodyM3
         label.textColor = .black
         label.textAlignment = .center
+        label.numberOfLines = 1
         return label
     }()
     private let nameLabel: UILabel = {
@@ -28,6 +29,7 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
         label.font = .bodyM3
         label.textColor = .gray5
         label.textAlignment = .center
+        label.numberOfLines = 1
         return label
     }()
     
@@ -84,6 +86,7 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
             make.top.equalTo(plantImageView.snp.bottom).offset(6)
             make.centerX.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(10)
+            make.height.equalTo(20)
         }
         
         nameLabel.snp.makeConstraints { make in
@@ -91,6 +94,7 @@ class CalendarPlantCollectionViewCell: UICollectionViewCell {
             make.centerX.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(10)
             make.bottom.equalToSuperview().inset(8)
+            make.height.equalTo(20)
         }
     }
     
