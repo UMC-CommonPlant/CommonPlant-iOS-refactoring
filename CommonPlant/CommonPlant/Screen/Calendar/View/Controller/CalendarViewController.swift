@@ -161,13 +161,23 @@ class CalendarViewController: UIViewController {
         
         return view
     }()
-    private let messageView: UIView = {
-        let view = UIView()
+    private let messageView: UIStackView = {
+        let view = UIStackView()
+        view.spacing = 4
+        view.axis = .vertical
+        view.distribution = .equalSpacing
+        view.alignment = .fill
         return view
     }()
     private let firstMetView: UIView = {
         let view = UIView()
+        view.isHidden = true
+        return view
+    }()
+    private let firstMetCircleView: UIView = {
+        let view = UIView()
         view.backgroundColor = .sunflowerYellow
+        view.makeRound(radius: 3)
         return view
     }()
     private let firstMetLabel: UILabel = {
@@ -179,14 +189,32 @@ class CalendarViewController: UIViewController {
     }()
     private let waterView: UIView = {
         let view = UIView()
+        view.isHidden = true
+        return view
+    }()
+    private let waterCircleView: UIView = {
+        let view = UIView()
         view.backgroundColor = .aquaBlue
+        view.makeRound(radius: 3)
         return view
     }()
     private let waterLabel: UILabel = {
         let label = UILabel()
-        label.text = "물 주는 날이에요"
         label.font = .bodyB3
         label.textColor = .activeBlue
+        return label
+    }()
+    private let memoView = UIView()
+    private let memoCircleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .mauvePurple
+        view.makeRound(radius: 3)
+        return view
+    }()
+    private let memoLabel: UILabel = {
+        let label = UILabel()
+        label.font = .bodyB3
+        label.textColor = .activePurple
         return label
     }()
     private let divisionView: UIView = {
@@ -214,6 +242,7 @@ class CalendarViewController: UIViewController {
         setNavigationBar()
         bind()
         setConstraints()
+        //checkMessage()
     }
     
     func setNavigationBar() {
@@ -312,10 +341,11 @@ class CalendarViewController: UIViewController {
             cell.setConfigure(whit: result, index: row)
         }.disposed(by: viewModel.disposeBag)
         
-        viewModel.messageList.subscribe { [weak self] _ in
+        viewModel.messageList.subscribe { [weak self] messages in
             guard let self = self else { return }
+            guard let messages = messages.element else { return }
             
-            
+            checkMessage(messages)
         }.disposed(by: viewModel.disposeBag)
         
         viewModel.memoList
@@ -339,6 +369,8 @@ class CalendarViewController: UIViewController {
                 self.memoCollectionView.snp.updateConstraints { make in
                     make.height.equalTo(totalHeight + topInset + bottomInset)
                 }
+                
+                memoLabel.text = "메모가 \(memos.count)개 있어요"
             })
             .bind(to: memoCollectionView.rx.items(cellIdentifier: CalendarMemoCollectionViewCell.identifier, cellType: CalendarMemoCollectionViewCell.self)) { [weak self] (_, result, cell) in
                 guard let self = self else { return }
@@ -386,9 +418,15 @@ class CalendarViewController: UIViewController {
             datePickerView.addSubview($0)
         }
         
-        [firstMetView, firstMetLabel, waterView, waterLabel].forEach {
-            messageView.addSubview($0)
+        [firstMetView, waterView, memoView].forEach {
+            messageView.addArrangedSubview($0)
         }
+        
+        [firstMetCircleView, firstMetLabel].forEach { firstMetView.addSubview($0) }
+        
+        [waterCircleView, waterLabel].forEach { waterView.addSubview($0) }
+        
+        [memoCircleView, memoLabel].forEach { memoView.addSubview($0) }
         
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
@@ -486,30 +524,51 @@ class CalendarViewController: UIViewController {
         messageView.snp.makeConstraints { make in
             make.top.equalTo(plantCollectionView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(26)
-            make.height.equalTo(44)
         }
         
         firstMetView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(7)
+            make.height.equalTo(20)
+        }
+        
+        firstMetCircleView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
             make.leading.equalToSuperview()
             make.width.height.equalTo(6)
         }
         
         firstMetLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(firstMetView.snp.centerY)
-            make.leading.equalTo(firstMetView.snp.trailing).offset(19)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(firstMetCircleView.snp.trailing).offset(19)
         }
         
         waterView.snp.makeConstraints { make in
-            make.top.equalTo(firstMetView.snp.bottom).offset(18)
-            make.bottom.equalToSuperview().inset(7)
+            make.height.equalTo(20)
+        }
+        
+        waterCircleView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
             make.leading.equalToSuperview()
             make.width.height.equalTo(6)
         }
         
         waterLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(waterView.snp.centerY)
-            make.leading.equalTo(waterView.snp.trailing).offset(19)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(waterCircleView.snp.trailing).offset(19)
+        }
+        
+        memoView.snp.makeConstraints { make in
+            make.height.equalTo(20)
+        }
+        
+        memoCircleView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.width.height.equalTo(6)
+        }
+        
+        memoLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(memoCircleView.snp.trailing).offset(19)
         }
         
         divisionView.snp.makeConstraints { make in
@@ -522,6 +581,25 @@ class CalendarViewController: UIViewController {
             make.top.equalTo(divisionView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
+        }
+    }
+    
+    func checkMessage(_ messages : [String]) {
+        firstMetView.isHidden = true
+        waterView.isHidden = true
+        
+        for msg in messages {
+            switch msg {
+            case "처음 데려온 날이에요" :
+                firstMetView.isHidden = false
+            case "물 주는 날이에요" :
+                waterLabel.text = "물 주는 날이에요"
+                waterView.isHidden = false
+            case "물을 줬어요!" :
+                waterLabel.text = "물을 줬어요!"
+                waterView.isHidden = false
+            default : return
+            }
         }
     }
 }
