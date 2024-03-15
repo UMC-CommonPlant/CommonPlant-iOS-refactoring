@@ -82,13 +82,11 @@ extension CalendarViewModel {
         let selectedDate: Observable<IndexPath>
         let selectedPlace: Observable<IndexPath>
         let selectedPlant: Observable<IndexPath>
-        let selectedMemo: Observable<IndexPath>
     }
     
     struct Output {
         let showWholeMonth: Driver<Void>
         let selectedDate: Observable<Date>
-        let showMemoDetail: Driver<IndexPath>
     }
     
     func transform(input: Input) -> Output {
@@ -154,15 +152,7 @@ extension CalendarViewModel {
             selectedPlant = indexPath
         }.disposed(by: disposeBag)
         
-        let showMemoDetail = PublishRelay<IndexPath>()
-        input.selectedMemo.subscribe { [weak self] indexPath in
-            guard let self = self else { return }
-            
-            showMemoDetail.accept(indexPath)
-        }.disposed(by: disposeBag)
-        
         return Output(showWholeMonth: showWholeMonth.asDriver(onErrorJustReturn: ()),
-                      selectedDate: selectDate.asObservable(),
-                      showMemoDetail: showMemoDetail.asDriver(onErrorDriveWith: .empty()))
+                      selectedDate: selectDate.asObservable())
     }
 }

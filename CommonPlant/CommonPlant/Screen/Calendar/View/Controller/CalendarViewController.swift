@@ -17,7 +17,7 @@ import RxRelay
 class CalendarViewController: UIViewController {
     // MARK: - Properties
     private let viewModel = CalendarViewModel()
-    private lazy var input = CalendarViewModel.Input(wholeMonthBtnDidTap: wholeMonthView.rx.tapGesture().map { _ in }.asObservable(), selectedMonth: selectedMonth.asObservable(), previousMonthBtnDidTap: previousButton.rx.tap.asObservable(), nextMonthBtnDidTap: nextButton.rx.tap.asObservable(), selectedDate: calendarCollectionView.rx.itemSelected.asObservable(), selectedPlace: placeCollectionView.rx.itemSelected.asObservable(), selectedPlant: plantCollectionView.rx.itemSelected.asObservable(), selectedMemo: memoCollectionView.rx.itemSelected.asObservable())
+    private lazy var input = CalendarViewModel.Input(wholeMonthBtnDidTap: wholeMonthView.rx.tapGesture().map { _ in }.asObservable(), selectedMonth: selectedMonth.asObservable(), previousMonthBtnDidTap: previousButton.rx.tap.asObservable(), nextMonthBtnDidTap: nextButton.rx.tap.asObservable(), selectedDate: calendarCollectionView.rx.itemSelected.asObservable(), selectedPlace: placeCollectionView.rx.itemSelected.asObservable(), selectedPlant: plantCollectionView.rx.itemSelected.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private lazy var selectedMonth = BehaviorRelay<Date>(value: Date())
     
@@ -242,7 +242,6 @@ class CalendarViewController: UIViewController {
         setNavigationBar()
         bind()
         setConstraints()
-        //checkMessage()
     }
     
     func setNavigationBar() {
@@ -389,12 +388,6 @@ class CalendarViewController: UIViewController {
             calendarCollectionView.reloadData()
             datePicker.date = date
         }).disposed(by: viewModel.disposeBag)
-        
-        output.showMemoDetail.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            // TODO: 화면 전환 및 해당 메모 포커싱
-        }.disposed(by: viewModel.disposeBag)
     }
     
     func setConstraints() {
@@ -584,6 +577,15 @@ class CalendarViewController: UIViewController {
         }
     }
     
+    func handleTap(_ gesture: UITapGestureRecognizer) {
+        if datePickerView.isHidden { return }
+        
+        let location = gesture.location(in: datePickerView)
+        if !datePickerView.frame.contains(location) {
+            datePickerView.isHidden = true
+        }
+    }
+    
     func checkMessage(_ messages : [String]) {
         firstMetView.isHidden = true
         waterView.isHidden = true
@@ -623,14 +625,5 @@ extension CalendarViewController: UIScrollViewDelegate, UICollectionViewDelegate
         label.sizeToFit()
         
         return label.frame.height
-    }
-    
-    func handleTap(_ gesture: UITapGestureRecognizer) {
-        if datePickerView.isHidden { return }
-        
-        let location = gesture.location(in: datePickerView)
-        if !datePickerView.frame.contains(location) {
-            datePickerView.isHidden = true
-        }
     }
 }
