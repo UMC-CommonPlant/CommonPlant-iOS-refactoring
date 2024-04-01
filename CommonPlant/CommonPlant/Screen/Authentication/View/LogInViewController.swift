@@ -8,6 +8,14 @@
 import UIKit
 import SnapKit
 import RxSwift
+import AuthenticationServices
+
+import RxKakaoSDKAuth
+import RxKakaoSDKUser
+import RxKakaoSDKCommon
+import KakaoSDKAuth
+import KakaoSDKUser
+import KakaoSDKCommon
 
 class LogInViewController: UIViewController {
     // MARK: Properties
@@ -123,14 +131,33 @@ class LogInViewController: UIViewController {
     }
     
     func setAction() {
+        UserApi.shared.rx.loginWithKakaoAccount()
+            .subscribe(onNext:{ (oauthToken) in
+                print("loginWithKakaoAccount() success.")
+                _ = oauthToken
+            }, onError: {error in
+                print(error)
+            })
+            .disposed(by: disposeBag)
+        
         kakaoLoginView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
-                let signUpVC = SignUpViewController()
-                
-                self.present(signUpVC, animated: true)
+                if (UserApi.isKakaoTalkLoginAvailable()) {
+                    UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                        if let error = error {
+                            print(error)
+                        }
+                        else {
+                            print("loginWithKakaoTalk() success.")
+                            
+                            guard let oauthToken = oauthToken else { return }
+                            let accessToken = oauthToken.accessToken
+                        }
+                    }
+                }
             })
             .disposed(by: disposeBag)
         
@@ -138,16 +165,8 @@ class LogInViewController: UIViewController {
             .when(.recognized)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let scenes = UIApplication.shared.connectedScenes
-                let windowScene = scenes.first as? UIWindowScene
-                let window = windowScene?.windows.first
                 
-                let mainVC = MainTabBarController()
-                
-
-                UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                    window?.rootViewController = mainVC
-                }, completion: nil)
+                viewModel.performAppleSignIn(scope: [.fullName, .email], on: self.view.window!)
             })
             .disposed(by: disposeBag)
     }
