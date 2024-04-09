@@ -11,7 +11,7 @@ import PhotosUI
 
 class SignUpViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
-    var disposeBag = DisposeBag()
+    var viewModel.disposeBag = DisposeBag()
     let maximumCount = 10
     
     // MARK: UI Components
@@ -134,7 +134,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             } else {
                 checkButton.image = UIImage(named: "UnselectedGray")
             }
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         SignUpViewModel.shared.nickNameState.map { state -> UIColor in
             self.messageLabel.isHidden = false
@@ -153,13 +153,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             
             messageLabel.textColor = color
             underlineView.backgroundColor = color
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         SignUpViewModel.shared.textCount.subscribe(onNext: { [weak self] count in
             guard let self = self else { return }
             countLabel.text = "\(count)/\(maximumCount)"
             countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         Observable.combineLatest(SignUpViewModel.shared.nickNameState, SignUpViewModel.shared.isAgreePolicy) { nickNameState, isAgreePolicy in
             return nickNameState == .usable && isAgreePolicy
@@ -176,7 +176,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             doneButton.configuration = doneBtnConfig
             doneButton.backgroundColor = backgroundColor
             doneButton.isEnabled = isEnable
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
     }
     
     func setHierarchy() {
@@ -300,7 +300,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         backButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             self.dismiss(animated: true)
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
@@ -315,7 +315,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             }
             
             view.endEditing(true)
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         doneButton.rx.tap.subscribe(onNext: {
             let scenes = UIApplication.shared.connectedScenes
@@ -327,7 +327,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
                 window?.rootViewController = mainVC
             }, completion: nil)
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         privacyView.rx.tapGesture()
             .when(.recognized)
@@ -337,12 +337,12 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 let nextVC = PrivacyViewController()
                 self.present(nextVC, animated: true)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: viewModel.disposeBag)
         
         doneButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             doneButton.backgroundColor = .seaGreenDark3
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         profileImageView.rx.tapGesture()
             .when(.recognized)
@@ -387,14 +387,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                     }
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: viewModel.disposeBag)
         
         userNickNameTextFiled.rx.text.orEmpty.map { text -> Int in
                 return text.count
             }
             .subscribe(onNext: { count in
                 SignUpViewModel.shared.textCount.accept(count)
-            }).disposed(by: disposeBag)
+            }).disposed(by: viewModel.disposeBag)
         
         userNickNameTextFiled.rx.controlEvent(.editingDidBegin)
             .subscribe(onNext: { [weak self] in
@@ -410,7 +410,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 messageLabel.isHidden = true
                 countLabel.isHidden = false
                 checkDuplicateButton.isHidden = true
-            }).disposed(by: disposeBag)
+            }).disposed(by: viewModel.disposeBag)
         
         userNickNameTextFiled.rx.controlEvent(.editingDidEndOnExit)
             .subscribe(onNext: { [weak self] in
@@ -420,6 +420,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                 underlineView.backgroundColor = .gray2
                 userNickNameTextFiled.resignFirstResponder()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: viewModel.disposeBag)
     }
 }
