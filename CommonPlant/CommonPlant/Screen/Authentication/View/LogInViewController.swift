@@ -10,17 +10,11 @@ import SnapKit
 import RxSwift
 import AuthenticationServices
 
-import RxKakaoSDKAuth
-import RxKakaoSDKUser
-import RxKakaoSDKCommon
-import KakaoSDKAuth
-import KakaoSDKUser
-import KakaoSDKCommon
-
 class LogInViewController: UIViewController {
     // MARK: Properties
     var viewModel = LogInViewModel()
-    var disposeBag = DisposeBag()
+    lazy var input = LogInViewModel.Input(kakaoBtnDidTap: kakaoLoginView.rx.tapGesture().map { _ in }.asObservable())
+    lazy var output = viewModel.transform(input: input)
     
     // MARK: UI Components
     var textLogoView = UIImageView()
@@ -38,7 +32,7 @@ class LogInViewController: UIViewController {
         setUI()
         setHierarchy()
         setLayout()
-        setAction()
+        bind()
     }
     
     // MARK: Custom Method
@@ -130,36 +124,19 @@ class LogInViewController: UIViewController {
         }
     }
     
-    func setAction() {
-        UserApi.shared.rx.loginWithKakaoAccount()
-            .subscribe(onNext:{ (oauthToken) in
-                print("loginWithKakaoAccount() success.")
-                _ = oauthToken
-            }, onError: {error in
-                print(error)
-            })
-            .disposed(by: disposeBag)
+    func bind() {
+        output.showMainView.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+        }.disposed(by: viewModel.disposeBag)
         
-        kakaoLoginView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                
-                if (UserApi.isKakaoTalkLoginAvailable()) {
-                    UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                        if let error = error {
-                            print(error)
-                        }
-                        else {
-                            print("loginWithKakaoTalk() success.")
-                            
-                            guard let oauthToken = oauthToken else { return }
-                            let accessToken = oauthToken.accessToken
-                        }
-                    }
-                }
-            })
-            .disposed(by: disposeBag)
+        output.showSignUpView.drive { [weak self] email in
+            guard let self = self else { return }
+            
+            let nextVC = SignUpViewController()
+            
+            self.present(nextVC, animated: true)
+        }.disposed(by: viewModel.disposeBag)
         
         appleLoginView.rx.tapGesture()
             .when(.recognized)
@@ -168,6 +145,6 @@ class LogInViewController: UIViewController {
                 
                 viewModel.performAppleSignIn(scope: [.fullName, .email], on: self.view.window!)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: viewModel.disposeBag)
     }
 }
