@@ -7,11 +7,17 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 import PhotosUI
 
 class SignUpViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
-    var viewModel.disposeBag = DisposeBag()
+    let viewModel = SignUpViewModel()
+    lazy var input = SignUpViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(), selectedNewImage: selectNewImage.asObservable(), selectedDefaultImage: changeToDefaultImage.asObservable(), editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(), endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(), duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in }.asObservable(), privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(), submitBtnDidTap: doneButton.rx.tap.asObservable())
+    lazy var output = viewModel.transform(input: input)
+    private let selectNewImage = PublishRelay<Void>()
+    private let changeToDefaultImage = PublishRelay<Void>()
+    
     let maximumCount = 10
     
     // MARK: UI Components
@@ -37,7 +43,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         setUI()
         setHierarchy()
         setLayout()
-        setAction()
+        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -125,7 +131,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                     }
                 }
             }
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         SignUpViewModel.shared.isAgreePolicy.subscribe(onNext: { [weak self] isAgree in
             guard let self = self else { return }
@@ -296,130 +302,130 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func setAction() {
-        backButton.rx.tap.subscribe(onNext: { [weak self] in
+    func bind() {
+        output.dismissView.drive { [weak self] _ in
             guard let self = self else { return }
             self.dismiss(animated: true)
-        }).disposed(by: viewModel.disposeBag)
+        }.disposed(by: viewModel.disposeBag)
         
-        checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
+        output.showImgSettingAlert.drive { [weak self] _ in
             guard let self = self else { return }
             
-            checkDuplicateButton.isHidden = true
-            
-            guard let text = userNickNameTextFiled.text else { return }
-            if text.count > 1 && text.count < 10 {
-                SignUpViewModel.shared.nickNameState.accept(.usable)
-            } else {
-                SignUpViewModel.shared.nickNameState.accept(.unusable)
+            self.showImageSettingAlert { state in
+                switch state {
+                case .newImage:
+                    self.selectNewImage.accept(())
+                case .defaultImage:
+                    self.changeToDefaultImage.accept(())
+                case .cancle:
+                    break
+                }
             }
-            
-            view.endEditing(true)
-        }).disposed(by: viewModel.disposeBag)
+        }.disposed(by: viewModel.disposeBag)
         
-        doneButton.rx.tap.subscribe(onNext: {
-            let scenes = UIApplication.shared.connectedScenes
-            let windowScene = scenes.first as? UIWindowScene
-            let window = windowScene?.windows.first
-            
-            let mainVC = MainTabBarController()
-            
-            UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                window?.rootViewController = mainVC
-            }, completion: nil)
-        }).disposed(by: viewModel.disposeBag)
-        
-        privacyView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                
-                let nextVC = PrivacyViewController()
-                self.present(nextVC, animated: true)
-            })
-            .disposed(by: viewModel.disposeBag)
-        
-        doneButton.rx.tap.subscribe(onNext: { [weak self] in
+        output.showImagePicker.drive { [weak self] _ in
             guard let self = self else { return }
-            doneButton.backgroundColor = .seaGreenDark3
-        }).disposed(by: viewModel.disposeBag)
-        
-        profileImageView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [self] _ in
-                self.showImageSettingAlert { selectedOption in
-                    switch selectedOption {
-                    case .newImage:
-                        ImagePickerViewModel.shared.checkPermissionState() { state in
-                            DispatchQueue.main.async {
-                                switch state {
-                                case .denied:
-                                    self.moveToSetting()
-                                case .authorized:
-                                    DispatchQueue.main.async { [weak self] in
-                                        guard let self = self else { return }
-                                        ImagePickerViewController.shared.showPhotoPicker(viewController: self)
-                                    }
-                                        
-                                    ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
-                                        guard self != nil else { return }
-                                        SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
-                                    }
-                                case .limited:
-                                    let imagePickerVC = ImagePickerViewController()
-                                    
-                                    self.present(imagePickerVC, animated: true)
-                                    
-                                    imagePickerVC.didSelectImage = { [weak self] imageString in
-                                        guard self != nil else { return }
-                                        SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
-                                    }
-                                default:
-                                    print("\(state)")
-                                }
-
-                            }
+            
+            ImagePickerViewModel.shared.checkPermissionState() { state in
+                DispatchQueue.main.async {
+                    switch state {
+                    case .denied:
+                        self.moveToSetting()
+                    case .authorized:
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            ImagePickerViewController.shared.showPhotoPicker(viewController: self)
                         }
-                    case .defaultImage:
-                        SignUpViewModel.shared.userProfileImgURL.onNext("")
-                    case .cancle:
-                        break
+                        
+                        ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                            guard let self = self else { return }
+                            profileImageView.load(url: URL(string: imageString)!)
+                        }
+                    case .limited:
+                        let imagePickerVC = ImagePickerViewController()
+                        
+                        self.present(imagePickerVC, animated: true)
+                        
+                        imagePickerVC.didSelectImage = { [weak self] imageString in
+                            guard self != nil else { return }
+                            self?.profileImageView.load(url: URL(string: imageString)!)
+                        }
+                    default:
+                        print("\(state)")
                     }
                 }
-            })
-            .disposed(by: viewModel.disposeBag)
-        
-        userNickNameTextFiled.rx.text.orEmpty.map { text -> Int in
-                return text.count
             }
-            .subscribe(onNext: { count in
-                SignUpViewModel.shared.textCount.accept(count)
-            }).disposed(by: viewModel.disposeBag)
+        }.disposed(by: viewModel.disposeBag)
         
-        userNickNameTextFiled.rx.controlEvent(.editingDidBegin)
-            .subscribe(onNext: { [weak self] in
-                guard let self = self else { return }
-                SignUpViewModel.shared.nickNameState.accept(.normal)
-                SignUpViewModel.shared.textCount.accept(0)
-                
-                userNickNameTextFiled.placeholder = ""
-                userNickNameTextFiled.text = ""
-                
-                underlineView.backgroundColor = .black
-                
-                messageLabel.isHidden = true
-                countLabel.isHidden = false
-                checkDuplicateButton.isHidden = true
-            }).disposed(by: viewModel.disposeBag)
+        output.changeDefaultImage.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            profileImageView.image = UIImage(named: "ProfileGreen")
+        }.disposed(by: viewModel.disposeBag)
         
-        userNickNameTextFiled.rx.controlEvent(.editingDidEndOnExit)
-            .subscribe(onNext: { [weak self] in
-                guard let self = self else { return }
-                checkDuplicateButton.isHidden = false
-                countLabel.isHidden = true
+        output.nicknameText.drive { [weak self] nickname in
+            guard let self = self else { return }
+            
+            userNickNameTextFiled.text = nickname
+            countLabel.isHidden = false
+            countLabel.text = "\(nickname.count)/\(maximumCount)"
+            countLabel.textColor = nickname.count > 0 ? .black : .gray5
+            countLabel.partiallyChanged(targetString: "\(maximumCount)", font: .bodyM3, color: .gray5)
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showDuplicateBtn.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            messageLabel.isHidden = true
+            countLabel.isHidden = true
+            checkDuplicateButton.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.nicknameState.drive { [weak self] state in
+            guard let self = self else { return }
+            
+            messageLabel.text = state.rawValue
+            
+            switch state {
+            case .normal:
                 underlineView.backgroundColor = .gray2
-                userNickNameTextFiled.resignFirstResponder()
-            })
-            .disposed(by: viewModel.disposeBag)
+            case .unusable:
+                underlineView.backgroundColor = .activeRed
+                messageLabel.textColor = .activeRed
+            case .usable:
+                underlineView.backgroundColor = .activeBlue
+                messageLabel.textColor = .activeBlue
+            }
+            
+            messageLabel.isHidden = false
+            countLabel.isHidden = true
+            checkDuplicateButton.isHidden = true
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showPrivacyView.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            let nextVC = PrivacyViewController()
+            self.present(nextVC, animated: true)
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.submitBtnState.drive { [weak self] state in
+            guard let self = self else { return }
+            
+            switch state {
+            case .enable:
+                doneButton.isEnabled = true
+                doneButton.layer.borderColor = UIColor.seaGreenDark1?.cgColor
+                doneButton.layer.borderWidth = 1
+                doneButton.setTitleColor(.seaGreenDark1, for: .normal)
+            case .disable:
+                doneButton.isEnabled = false
+                doneButton.layer.borderColor = UIColor.gray1?.cgColor
+                doneButton.backgroundColor = .gray1
+                doneButton.setTitleColor(.gray3, for: .normal)
+            case .onClick:
+                doneButton.backgroundColor = .seaGreen
+            }
+        }.disposed(by: viewModel.disposeBag)
     }
 }

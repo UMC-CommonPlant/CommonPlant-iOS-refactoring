@@ -29,6 +29,7 @@ class SignUpViewModel {
 
 extension SignUpViewModel {
     struct Input {
+        let backBtnDidTap: Observable<Void>
         let profileImgDidTap: Observable<Void>
         let selectedNewImage: Observable<Void>
         let selectedDefaultImage: Observable<Void>
@@ -40,18 +41,22 @@ extension SignUpViewModel {
     }
     
     struct Output {
+        let dismissView: Driver<Void>
         let showImgSettingAlert: Driver<Void>
         let showImagePicker: Driver<Void>
         let changeDefaultImage: Driver<Void>
         let nicknameText: Driver<String>
         let showDuplicateBtn: Driver<Void>
         let nicknameState: Driver<ButtonType>
+        let showPrivacyView: Driver<Void>
         let submitBtnState: Driver<SubmitState>
     }
     
     func transform(input: Input) -> Output {
         let submitBtnState = BehaviorRelay(value: SubmitState.disable)
         
+        let dismissView = PublishRelay<Void>()
+        input.backBtnDidTap.bind(to: dismissView).disposed(by: disposeBag)
         let showImgSettingAlert = PublishRelay<Void>()
         input.profileImgDidTap.bind(to: showImgSettingAlert).disposed(by: disposeBag)
         let showImagePicker = PublishRelay<Void>()
@@ -87,7 +92,9 @@ extension SignUpViewModel {
             // TODO: submitBtnState 값도 변경
         }.disposed(by: disposeBag)
         
+        let showPrivacyView = PublishRelay<Void>()
+        input.privacyDidTap.bind(to: showPrivacyView).disposed(by: disposeBag)
         
-        return Output(showImgSettingAlert: showImgSettingAlert.asDriver(onErrorDriveWith: .empty()), showImagePicker: showImagePicker.asDriver(onErrorDriveWith: .empty()), changeDefaultImage: changeDefaultImage.asDriver(onErrorDriveWith: .empty()), nicknameText: nicknameText.asDriver(onErrorJustReturn: ""), showDuplicateBtn: showDuplicateBtn.asDriver(onErrorDriveWith: .empty()), nicknameState: nicknameState.asDriver(), submitBtnState: submitBtnState.asDriver())
+        return Output(dismissView: dismissView.asDriver(onErrorDriveWith: .empty()), showImgSettingAlert: showImgSettingAlert.asDriver(onErrorDriveWith: .empty()), showImagePicker: showImagePicker.asDriver(onErrorDriveWith: .empty()), changeDefaultImage: changeDefaultImage.asDriver(onErrorDriveWith: .empty()), nicknameText: nicknameText.asDriver(onErrorJustReturn: ""), showDuplicateBtn: showDuplicateBtn.asDriver(onErrorDriveWith: .empty()), nicknameState: nicknameState.asDriver(), showPrivacyView: showPrivacyView.asDriver(onErrorDriveWith: .empty()), submitBtnState: submitBtnState.asDriver())
     }
 }
