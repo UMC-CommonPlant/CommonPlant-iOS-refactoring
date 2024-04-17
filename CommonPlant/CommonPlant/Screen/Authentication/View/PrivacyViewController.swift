@@ -11,7 +11,9 @@ import RxSwift
 class PrivacyViewController: UIViewController {
     // MARK: Properties
     var viewModel: PrivacyViewModel
-    var disposeBag = DisposeBag()
+    
+    lazy var input = PrivacyViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), agreeBtnDidTap: checkButton.rx.tap.asObservable(), doneBtnDidTap: doneButton.rx.tap.asObservable())
+    lazy var output = viewModel.transform(input: input)
     
     // MARK: UI Components
     var navigationBarView = UIView()
@@ -37,10 +39,10 @@ class PrivacyViewController: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
         setUI()
         setHierarchy()
         setLayout()
-        setAction()
     }
     
     // MARK: Custom Method
@@ -99,7 +101,7 @@ class PrivacyViewController: UIViewController {
             doneButton.configuration = doneBtnConfig
             doneButton.backgroundColor = backgroundColor
             doneButton.isEnabled = isEnable
-        }).disposed(by: disposeBag)
+        }).disposed(by: viewModel.disposeBag)
     }
     
     func setHierarchy() {
@@ -181,30 +183,17 @@ class PrivacyViewController: UIViewController {
         }
     }
     
-    func setAction() {
-        backButton.rx.tap.subscribe(onNext: { [weak self] in
+    func bind() {
+        output.dismiss.drive { [weak self] _ in
             guard let self = self else { return }
-            viewModel.dissmissView(self)
-        }).disposed(by: disposeBag)
+            
+            self.dismiss(animated: true)
+        }.disposed(by: viewModel.disposeBag)
         
-        checkButton.rx.tap.subscribe(onNext: { [weak self] in
+        viewModel.isAgreePolicy.subscribe { [weak self] isAgree in
             guard let self = self else { return }
-            do {
-                if try viewModel.isAgreePolicy.value() {
-                    viewModel.isAgreePolicy.onNext(false)
-                } else {
-                    viewModel.isAgreePolicy.onNext(true)
-                }
-            } catch {
-                print("\(error)")
-            }
-        }).disposed(by: disposeBag)
-        
-        doneButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else { return }
-            doneButton.backgroundColor = .seaGreenDark3
-            SignUpViewModel.shared.isAgreePolicy.accept(true)
-            viewModel.dissmissView(self)
-        }).disposed(by: disposeBag)
+            
+            checkButton.configuration?.image = isAgree ? UIImage(named: "Selected") : UIImage(named: "Unselected")
+        }.disposed(by: viewModel.disposeBag)
     }
 }
