@@ -8,24 +8,76 @@
 import UIKit
 import RxSwift
 
+#Preview {
+    PrivacyViewController(PrivacyViewModel())
+}
+
 class PrivacyViewController: UIViewController {
     // MARK: Properties
-    var viewModel: PrivacyViewModel
+    private let viewModel: PrivacyViewModel
     
-    lazy var input = PrivacyViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), agreeBtnDidTap: checkButton.rx.tap.asObservable(), doneBtnDidTap: doneButton.rx.tap.asObservable())
+    lazy var input = PrivacyViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), agreeBtnDidTap: privacyView.rx.tapGesture().map { _ in self.doneButton.isEnabled }.asObservable(), doneBtnDidTap: doneButton.rx.tap.asObservable())
     lazy var output = viewModel.transform(input: input)
     
     // MARK: UI Components
-    var navigationBarView = UIView()
-    var backButton = UIButton()
-    var titleLabel = UILabel()
-    var scrollView = UIScrollView()
-    var contentView = UIView()
-    var contentLabel = UILabel()
-    var privacyView = UIView()
-    var checkButton = UIButton()
-    var agreeLabel = UILabel()
-    var doneButton = UIButton()
+    private let navigationBarView = UIView()
+    private let backButton: UIButton = {
+        let button = UIButton()
+        var btnConfig = UIButton.Configuration.plain()
+        
+        btnConfig.image = UIImage(named: "Back")
+        button.configuration = btnConfig
+        return button
+    }()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "개인정보 이용약관"
+        label.font = .bodyB1
+        label.textAlignment = .center
+        label.textColor = .black
+        return label
+    }()
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private let contentLabel: UILabel = {
+        let label = UILabel()
+        label.text = """
+        Lorem ipsum dolor sit amet consectetur. Ut scelerisque aliquet nisl facilisi molestie porttitor risus eget. Erat mattis gravida quis consequat. Leo aenean scelerisque at dolor ultrices pellentesque est fermentum aliquam. Eget viverra risus ac sem lacus sed pellentesque nibh. Neque et vel urna tortor et proin. Sollicitudin at tempor pharetra eget. Faucibus ipsum faucibus risus odio aliquam tristique non enim amet. Quam quam ullamcorper semper proin quis sed velit nunc curabitur. Ultrices ullamcorper nisi sed dignissim amet facilisis viverra tempor in. Mollis facilisi euismod sed ligula euismod duis commodo suspendisse. Commodo tellus convallis ac quis. Lorem ipsum dolor sit amet consectetur. Ut scelerisque aliquet nisl facilisi molestie porttitor risus eget. Erat mattis gravida quis consequat. Leo aenean scelerisque at dolor ultrices pellentesque est fermentum aliquam. Eget viverra risus ac sem lacus sed pellentesque nibh. Neque et vel urna tortor et proin. Sollicitudin at tempor pharetra eget. Faucibus ipsum faucibus risus odio aliquam tristique non enim amet. Quam quam ullamcorper semper proin quis sed velit nunc curabitur. Ultrices ullamcorper nisi sed dignissim amet facilisis viverra tempor in. Mollis facilisi euismod sed ligula euismod duis commodo suspendisse. Commodo tellus convallis ac quis.
+        """
+        label.font = .bodyM2
+        label.textColor = .black
+        label.lineBreakMode = .byCharWrapping
+        label.numberOfLines = 0
+        return label
+    }()
+    private let privacyView = UIView()
+    private var checkButton: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "UnselectedGray")
+        return view
+    }()
+    private let agreeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "동의합니다"
+        label.font = .bodyM2
+        label.textAlignment = .left
+        label.textColor = .black
+        return label
+    }()
+    private let doneButton: UIButton = {
+        let button = UIButton()
+        var btnConfig = UIButton.Configuration.plain()
+        var btnAttr = AttributedString.init("확인")
+        btnAttr.font = .bodyM2
+        btnConfig.attributedTitle = btnAttr
+        btnConfig.baseForegroundColor = .gray3
+        button.contentHorizontalAlignment = .center
+        button.backgroundColor = .gray1
+        button.configuration = btnConfig
+        button.makeRound(radius: 8)
+        button.isEnabled = false
+        return button
+    }()
     
     init(_ viewModel: AnyObject) {
         self.viewModel = viewModel as! PrivacyViewModel
@@ -39,71 +91,13 @@ class PrivacyViewController: UIViewController {
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         bind()
-        setUI()
         setHierarchy()
         setLayout()
     }
     
     // MARK: Custom Method
-    func setUI() {
-        view.backgroundColor = .white
-        
-        var backBtnConfig = UIButton.Configuration.plain()
-        var doneBtnConfig = UIButton.Configuration.plain()
-        var checkBtnConfig = UIButton.Configuration.plain()
-        
-        backBtnConfig.image = UIImage(named: "Back")
-        backButton.configuration = backBtnConfig
-        
-        titleLabel.text = "개인정보 이용약관"
-        titleLabel.font = .bodyB1
-        titleLabel.textAlignment = .center
-        titleLabel.textColor = .black
-        
-        contentLabel.text = """
-        Lorem ipsum dolor sit amet consectetur. Ut scelerisque aliquet nisl facilisi molestie porttitor risus eget. Erat mattis gravida quis consequat. Leo aenean scelerisque at dolor ultrices pellentesque est fermentum aliquam. Eget viverra risus ac sem lacus sed pellentesque nibh. Neque et vel urna tortor et proin. Sollicitudin at tempor pharetra eget. Faucibus ipsum faucibus risus odio aliquam tristique non enim amet. Quam quam ullamcorper semper proin quis sed velit nunc curabitur. Ultrices ullamcorper nisi sed dignissim amet facilisis viverra tempor in. Mollis facilisi euismod sed ligula euismod duis commodo suspendisse. Commodo tellus convallis ac quis. Lorem ipsum dolor sit amet consectetur. Ut scelerisque aliquet nisl facilisi molestie porttitor risus eget. Erat mattis gravida quis consequat. Leo aenean scelerisque at dolor ultrices pellentesque est fermentum aliquam. Eget viverra risus ac sem lacus sed pellentesque nibh. Neque et vel urna tortor et proin. Sollicitudin at tempor pharetra eget. Faucibus ipsum faucibus risus odio aliquam tristique non enim amet. Quam quam ullamcorper semper proin quis sed velit nunc curabitur. Ultrices ullamcorper nisi sed dignissim amet facilisis viverra tempor in. Mollis facilisi euismod sed ligula euismod duis commodo suspendisse. Commodo tellus convallis ac quis.
-        """
-        contentLabel.font = .bodyM2
-        contentLabel.textColor = .black
-        contentLabel.lineBreakMode = .byCharWrapping
-        contentLabel.numberOfLines = 0
-        
-        agreeLabel.text = "동의합니다"
-        agreeLabel.font = .bodyM2
-        agreeLabel.textAlignment = .left
-        agreeLabel.textColor = .black
-        
-        var doneAttr = AttributedString.init("확인")
-        doneAttr.font = .bodyM2
-        doneButton.contentHorizontalAlignment = .center
-        doneButton.makeRound(radius: 8)
-        
-        viewModel.isAgreePolicy.map { isAgree -> ( UIColor, UIColor, Bool) in
-            var buttonConfig: (UIColor, UIColor, Bool)
-            
-            if isAgree {
-                checkBtnConfig.image = UIImage(named: "SelectedGray")
-                buttonConfig = (.white, .seaGreenDark1!, true)
-            } else {
-                checkBtnConfig.image = UIImage(named: "UnselectedGray")
-                buttonConfig = (.gray3!, .gray1!, false)
-            }
-            
-            self.checkButton.configuration = checkBtnConfig
-            return buttonConfig
-        }.subscribe(onNext: { [weak self] foregroundColor, backgroundColor, isEnable in
-            guard let self = self else { return }
-            
-            doneAttr.foregroundColor = foregroundColor
-            doneBtnConfig.attributedTitle = doneAttr
-            
-            doneButton.configuration = doneBtnConfig
-            doneButton.backgroundColor = backgroundColor
-            doneButton.isEnabled = isEnable
-        }).disposed(by: viewModel.disposeBag)
-    }
-    
     func setHierarchy() {
         view.addSubview(navigationBarView)
         view.addSubview(scrollView)
@@ -143,7 +137,7 @@ class PrivacyViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(privacyView.snp.top)
         }
-
+        
         contentView.snp.makeConstraints { make in
             make.top.left.right.bottom.equalTo(scrollView)
             make.width.equalToSuperview()
@@ -168,7 +162,7 @@ class PrivacyViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-16)
             make.width.equalTo(24)
         }
-
+        
         agreeLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(33)
             make.leading.equalTo(checkButton.snp.trailing).offset(12)
@@ -193,7 +187,10 @@ class PrivacyViewController: UIViewController {
         viewModel.isAgreePolicy.subscribe { [weak self] isAgree in
             guard let self = self else { return }
             
-            checkButton.configuration?.image = isAgree ? UIImage(named: "Selected") : UIImage(named: "Unselected")
+            checkButton.image = isAgree ? UIImage(named: "SelectedGray") : UIImage(named: "UnselectedGray")
+            doneButton.configuration?.baseForegroundColor = isAgree ? .white : .gray3
+            doneButton.backgroundColor = isAgree ? .seaGreenDark1 : .gray1
+            doneButton.isEnabled = isAgree
         }.disposed(by: viewModel.disposeBag)
     }
 }

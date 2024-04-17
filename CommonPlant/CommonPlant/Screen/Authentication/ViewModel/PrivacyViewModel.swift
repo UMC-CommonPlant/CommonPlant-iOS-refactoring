@@ -11,11 +11,11 @@ import RxCocoa
 
 class PrivacyViewModel {
     let disposeBag = DisposeBag()
-    var isAgreePolicy = BehaviorSubject<Bool>(value: false)
+    var isAgreePolicy = PublishRelay<Bool>()
 
     struct Input {
         let backBtnDidTap: Observable<Void>
-        let agreeBtnDidTap: Observable<Void>
+        let agreeBtnDidTap: Observable<Bool>
         let doneBtnDidTap: Observable<Void>
     }
     
@@ -35,12 +35,10 @@ class PrivacyViewModel {
             dismiss.accept(())
         }.disposed(by: disposeBag)
         
-        input.agreeBtnDidTap.subscribe { [weak self] _ in
+        input.agreeBtnDidTap.bind { [weak self] isAgree in
             guard let self = self else { return }
-            var isAgree = try? isAgreePolicy.value()
-            if let isAgree = isAgree {
-                isAgreePolicy.onNext(!isAgree)
-            }
+            
+            isAgreePolicy.accept(!isAgree)
         }.disposed(by: disposeBag)
         
         return Output(dismiss: dismiss.asDriver(onErrorDriveWith: .empty()))

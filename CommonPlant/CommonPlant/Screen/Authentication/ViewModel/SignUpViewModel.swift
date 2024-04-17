@@ -20,13 +20,12 @@ class SignUpViewModel {
     let disposeBag = DisposeBag()
     
     let privacyVM = PrivacyViewModel()
-    //let agreeBtnState = BehaviorSubject(value: false)
     
     var userNickName = BehaviorRelay<String>(value: "")
     var userEmail = BehaviorSubject<String>(value: "")
     var userProfileImgURL = BehaviorSubject<String>(value: "")
     var nickNameState = BehaviorRelay<ButtonType>(value: .normal)
-    var isAgreePolicy = BehaviorRelay<Bool>(value: false)
+    var isAgreePolicy = PublishRelay<Bool>()
     var textCount = BehaviorRelay<Int>(value: 0)
     
     init() {
