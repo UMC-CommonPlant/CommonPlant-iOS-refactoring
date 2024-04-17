@@ -89,28 +89,43 @@ class PrivacyViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         bind()
-        setHierarchy()
-        setLayout()
+        setConstraints()
     }
     
     // MARK: Custom Method
-    func setHierarchy() {
-        view.addSubview(navigationBarView)
-        view.addSubview(scrollView)
-        view.addSubview(privacyView)
-        view.addSubview(doneButton)
+    func bind() {
+        output.dismiss.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.dismiss(animated: true)
+        }.disposed(by: viewModel.disposeBag)
         
-        navigationBarView.addSubview(backButton)
-        navigationBarView.addSubview(titleLabel)
+        viewModel.isAgreePolicy.subscribe { [weak self] isAgree in
+            guard let self = self else { return }
+            
+            checkButton.image = isAgree ? UIImage(named: "SelectedGray") : UIImage(named: "UnselectedGray")
+            doneButton.configuration?.baseForegroundColor = isAgree ? .white : .gray3
+            doneButton.backgroundColor = isAgree ? .seaGreenDark1 : .gray1
+            doneButton.isEnabled = isAgree
+        }.disposed(by: viewModel.disposeBag)
+    }
+    
+    func setConstraints() {
+        [navigationBarView, scrollView, privacyView, doneButton].forEach {
+            view.addSubview($0)
+        }
+        
+        [backButton, titleLabel].forEach {
+            navigationBarView.addSubview($0)
+        }
         
         scrollView.addSubview(contentView)
         contentView.addSubview(contentLabel)
         
-        privacyView.addSubview(checkButton)
-        privacyView.addSubview(agreeLabel)
-    }
-    
-    func setLayout() {
+        [checkButton, agreeLabel].forEach {
+            privacyView.addSubview($0)
+        }
+        
         navigationBarView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.left.right.equalToSuperview()
@@ -171,22 +186,5 @@ class PrivacyViewController: UIViewController {
             make.right.equalTo(-20)
             make.height.equalTo(48)
         }
-    }
-    
-    func bind() {
-        output.dismiss.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            self.dismiss(animated: true)
-        }.disposed(by: viewModel.disposeBag)
-        
-        viewModel.isAgreePolicy.subscribe { [weak self] isAgree in
-            guard let self = self else { return }
-            
-            checkButton.image = isAgree ? UIImage(named: "SelectedGray") : UIImage(named: "UnselectedGray")
-            doneButton.configuration?.baseForegroundColor = isAgree ? .white : .gray3
-            doneButton.backgroundColor = isAgree ? .seaGreenDark1 : .gray1
-            doneButton.isEnabled = isAgree
-        }.disposed(by: viewModel.disposeBag)
     }
 }

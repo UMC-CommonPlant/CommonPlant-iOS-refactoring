@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import PhotosUI
 
-class SignUpViewController: UIViewController, UITextFieldDelegate {
+class SignUpViewController: UIViewController {
     // MARK: Properties
     private let viewModel = SignUpViewModel()
     private lazy var privacyVC = PrivacyViewController(viewModel.privacyVM)
@@ -131,44 +131,43 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        userNickNameTextFiled.delegate = self
-        setHierarchy()
-        setLayout()
+        
         bind()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        SignUpViewModel.shared.nickNameState.accept(.normal)
-        SignUpViewModel.shared.userEmail.onNext("")
-        SignUpViewModel.shared.userProfileImgURL.onNext("")
-        SignUpViewModel.shared.nickNameState.accept(.normal)
-        SignUpViewModel.shared.textCount.accept(0)
-        SignUpViewModel.shared.isAgreePolicy.accept(false)
+        setConstraints()
     }
     
     // MARK: Custom Method
     func setHierarchy() {
-        view.addSubview(navigationBarView)
-        view.addSubview(userProfileView)
-        view.addSubview(userNickNameTextFiled)
-        view.addSubview(underlineView)
-        view.addSubview(countLabel)
-        view.addSubview(messageLabel)
-        view.addSubview(checkDuplicateButton)
-        view.addSubview(privacyView)
-        view.addSubview(doneButton)
+        [navigationBarView, userProfileView, userNickNameTextFiled, underlineView, countLabel, messageLabel, checkDuplicateButton, privacyView, doneButton].forEach {
+            view.addSubview($0)
+        }
         
         navigationBarView.addSubview(backButton)
         
-        userProfileView.addSubview(profileImageView)
-        userProfileView.addSubview(addImageView)
+        [profileImageView, addImageView].forEach {
+            userProfileView.addSubview($0)
+        }
         
-        privacyView.addSubview(checkButton)
-        privacyView.addSubview(privacyPolicyLabel)
-        privacyView.addSubview(showButton)
+        [checkButton, privacyPolicyLabel, showButton].forEach {
+            privacyView.addSubview($0)
+        }
     }
     
-    func setLayout() {
+    func setConstraints() {
+        [navigationBarView, userProfileView, userNickNameTextFiled, underlineView, countLabel, messageLabel, checkDuplicateButton, privacyView, doneButton].forEach {
+            view.addSubview($0)
+        }
+        
+        navigationBarView.addSubview(backButton)
+        
+        [profileImageView, addImageView].forEach {
+            userProfileView.addSubview($0)
+        }
+        
+        [checkButton, privacyPolicyLabel, showButton].forEach {
+            privacyView.addSubview($0)
+        }
+        
         navigationBarView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(13)
             make.left.right.equalToSuperview()

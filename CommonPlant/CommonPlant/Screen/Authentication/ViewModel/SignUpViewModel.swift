@@ -16,17 +16,10 @@ class SignUpViewModel {
         case onClick
     }
     
-    static let shared = SignUpViewModel()
     let disposeBag = DisposeBag()
     
     let privacyVM = PrivacyViewModel()
-    
-    var userNickName = BehaviorRelay<String>(value: "")
-    var userEmail = BehaviorSubject<String>(value: "")
-    var userProfileImgURL = BehaviorSubject<String>(value: "")
-    var nickNameState = BehaviorRelay<ButtonType>(value: .normal)
     var isAgreePolicy = PublishRelay<Bool>()
-    var textCount = BehaviorRelay<Int>(value: 0)
     
     init() {
         privacyVM.isAgreePolicy.subscribe { [weak self] isAgree in
