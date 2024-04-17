@@ -26,6 +26,8 @@
 		C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2722A5AA995005C0449 /* UILabel+Extension.swift */; };
 		C06299802A7A87FB00985171 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */; };
 		C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */; };
+		C072D3572BCFA5D6009F1492 /* SignUpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072D3562BCFA5D6009F1492 /* SignUpService.swift */; };
+		C072D35A2BCFA781009F1492 /* PostUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072D3592BCFA781009F1492 /* PostUserRequest.swift */; };
 		C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */; };
 		C073EBE32B738F9E006980BB /* DatePickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C073EBE22B738F9E006980BB /* DatePickerCollectionViewCell.swift */; };
 		C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */; };
@@ -118,6 +120,8 @@
 		C059A2722A5AA995005C0449 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMenuView.swift; sourceTree = "<group>"; };
+		C072D3562BCFA5D6009F1492 /* SignUpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpService.swift; sourceTree = "<group>"; };
+		C072D3592BCFA781009F1492 /* PostUserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostUserRequest.swift; sourceTree = "<group>"; };
 		C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollectionViewCell.swift; sourceTree = "<group>"; };
 		C073EBE22B738F9E006980BB /* DatePickerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
@@ -228,6 +232,14 @@
 				C027A0932A909CDC009289E9 /* ImagePickerCollectionViewCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		C072D3582BCFA768009F1492 /* SignUpRequest */ = {
+			isa = PBXGroup;
+			children = (
+				C072D3592BCFA781009F1492 /* PostUserRequest.swift */,
+			);
+			path = SignUpRequest;
 			sourceTree = "<group>";
 		};
 		C07DF86E2A59440400CDC5CC /* MyPage */ = {
@@ -546,6 +558,7 @@
 		F91E47A52A53F869008E07A9 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				C072D3582BCFA768009F1492 /* SignUpRequest */,
 				C0D6E9022BC3B35D00A352DD /* LoginResponse */,
 			);
 			path = DataModel;
@@ -555,6 +568,7 @@
 			isa = PBXGroup;
 			children = (
 				C0D6E9002BC3A97300A352DD /* LoginService.swift */,
+				C072D3562BCFA5D6009F1492 /* SignUpService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -755,6 +769,7 @@
 				C0A0D4DE2A73E96800426514 /* LogInViewModel.swift in Sources */,
 				F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */,
 				F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */,
+				C072D3572BCFA5D6009F1492 /* SignUpService.swift in Sources */,
 				C07DF8842A59844400CDC5CC /* UIView+Extension.swift in Sources */,
 				C007F63F2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift in Sources */,
 				C007F6452B5F712200CD6252 /* AddPlantSecondViewModel.swift in Sources */,
@@ -807,6 +822,7 @@
 				C027A0952A909CDC009289E9 /* ImagePickerCollectionViewCell.swift in Sources */,
 				C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */,
 				C0E2701A2B98507F006492B0 /* CalendarMemoCollectionViewCell.swift in Sources */,
+				C072D35A2BCFA781009F1492 /* PostUserRequest.swift in Sources */,
 				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
 				C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */,
