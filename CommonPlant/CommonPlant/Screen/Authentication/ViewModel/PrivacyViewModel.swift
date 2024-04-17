@@ -7,8 +7,10 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 class PrivacyViewModel {
+    let disposeBag = DisposeBag()
     var isAgreePolicy = BehaviorSubject<Bool>(value: false)
     
     func dissmissView(_ privacyVC: UIViewController) {

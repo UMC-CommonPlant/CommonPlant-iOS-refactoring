@@ -10,7 +10,7 @@ import RxSwift
 
 class PrivacyViewController: UIViewController {
     // MARK: Properties
-    var viewModel = PrivacyViewModel()
+    var viewModel: PrivacyViewModel
     var disposeBag = DisposeBag()
     
     // MARK: UI Components
@@ -24,6 +24,15 @@ class PrivacyViewController: UIViewController {
     var checkButton = UIButton()
     var agreeLabel = UILabel()
     var doneButton = UIButton()
+    
+    init(_ viewModel: AnyObject) {
+        self.viewModel = viewModel as! PrivacyViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Life Cycle
     override func viewDidLoad() {

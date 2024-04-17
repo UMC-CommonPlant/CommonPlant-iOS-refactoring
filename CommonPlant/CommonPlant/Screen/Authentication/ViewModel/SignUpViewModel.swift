@@ -19,12 +19,22 @@ class SignUpViewModel {
     static let shared = SignUpViewModel()
     let disposeBag = DisposeBag()
     
+    let privacyVM = PrivacyViewModel()
+    //let agreeBtnState = BehaviorSubject(value: false)
+    
     var userNickName = BehaviorRelay<String>(value: "")
     var userEmail = BehaviorSubject<String>(value: "")
     var userProfileImgURL = BehaviorSubject<String>(value: "")
     var nickNameState = BehaviorRelay<ButtonType>(value: .normal)
     var isAgreePolicy = BehaviorRelay<Bool>(value: false)
     var textCount = BehaviorRelay<Int>(value: 0)
+    
+    init() {
+        privacyVM.isAgreePolicy.subscribe { [weak self] isAgree in
+            guard let self = self else { return }
+            isAgreePolicy.accept(isAgree)
+        }.disposed(by: disposeBag)
+    }
 }
 
 extension SignUpViewModel {
@@ -48,7 +58,7 @@ extension SignUpViewModel {
         let nicknameText: Driver<String>
         let showDuplicateBtn: Driver<Void>
         let nicknameState: Driver<ButtonType>
-        let showPrivacyView: Driver<Void>
+        let showPrivacyView: Driver<AnyObject>
         let submitBtnState: Driver<SubmitState>
     }
     
@@ -92,8 +102,12 @@ extension SignUpViewModel {
             // TODO: submitBtnState 값도 변경
         }.disposed(by: disposeBag)
         
-        let showPrivacyView = PublishRelay<Void>()
-        input.privacyDidTap.bind(to: showPrivacyView).disposed(by: disposeBag)
+        let showPrivacyView = PublishRelay<AnyObject>()
+        input.privacyDidTap.subscribe { [weak self] _ in
+            guard let self = self else { return }
+            
+            showPrivacyView.accept(privacyVM)
+        }.disposed(by: disposeBag)
         
         return Output(dismissView: dismissView.asDriver(onErrorDriveWith: .empty()), showImgSettingAlert: showImgSettingAlert.asDriver(onErrorDriveWith: .empty()), showImagePicker: showImagePicker.asDriver(onErrorDriveWith: .empty()), changeDefaultImage: changeDefaultImage.asDriver(onErrorDriveWith: .empty()), nicknameText: nicknameText.asDriver(onErrorJustReturn: ""), showDuplicateBtn: showDuplicateBtn.asDriver(onErrorDriveWith: .empty()), nicknameState: nicknameState.asDriver(), showPrivacyView: showPrivacyView.asDriver(onErrorDriveWith: .empty()), submitBtnState: submitBtnState.asDriver())
     }

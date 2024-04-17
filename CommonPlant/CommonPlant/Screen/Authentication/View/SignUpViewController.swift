@@ -369,7 +369,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         output.showPrivacyView.drive { [weak self] _ in
             guard let self = self else { return }
             
-            let nextVC = PrivacyViewController()
+            let nextVC = PrivacyViewController(viewModel.privacyVM)
             self.present(nextVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
         
@@ -390,6 +390,12 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             case .onClick:
                 doneButton.backgroundColor = .seaGreen
             }
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.isAgreePolicy.subscribe { [weak self] isAgree in
+            guard let self = self else { return }
+            
+            checkButton.image = isAgree ? UIImage(named: "SelectedGray") : UIImage(named: "UnselectedGray")
         }.disposed(by: viewModel.disposeBag)
     }
 }
