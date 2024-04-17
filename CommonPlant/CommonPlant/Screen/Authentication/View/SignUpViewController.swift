@@ -10,13 +10,11 @@ import RxSwift
 import RxCocoa
 import PhotosUI
 
-#Preview {
-    SignUpViewController()
-}
-
 class SignUpViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
     private let viewModel = SignUpViewModel()
+    private lazy var privacyVC = PrivacyViewController(viewModel.privacyVM)
+    
     private lazy var input = SignUpViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(), selectedNewImage: selectNewImage.asObservable(), selectedDefaultImage: changeToDefaultImage.asObservable(), editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(), endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(), duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in }.asObservable(), privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(), submitBtnDidTap: doneButton.rx.tap.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
@@ -369,8 +367,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         output.showPrivacyView.drive { [weak self] _ in
             guard let self = self else { return }
             
-            let nextVC = PrivacyViewController(viewModel.privacyVM)
-            self.present(nextVC, animated: true)
+            self.present(privacyVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
         
         output.submitBtnState.drive { [weak self] state in

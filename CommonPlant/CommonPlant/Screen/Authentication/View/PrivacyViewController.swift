@@ -8,10 +8,6 @@
 import UIKit
 import RxSwift
 
-#Preview {
-    PrivacyViewController(PrivacyViewModel())
-}
-
 class PrivacyViewController: UIViewController {
     // MARK: Properties
     private let viewModel: PrivacyViewModel
