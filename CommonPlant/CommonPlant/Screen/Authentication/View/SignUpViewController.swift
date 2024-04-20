@@ -59,7 +59,11 @@ class SignUpViewController: UIViewController {
         field.clearsOnInsertion = true
         return field
     }()
-    private var underlineView = UIView()
+    private var underlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray2
+        return view
+    }()
     private var countLabel: UILabel = {
         let label = UILabel()
         label.font = .bodyB3
@@ -85,6 +89,7 @@ class SignUpViewController: UIViewController {
     }()
     private var messageLabel: UILabel = {
         let label = UILabel()
+        label.text = ""
         label.font = .captionM2
         label.textAlignment = .left
         return label
@@ -342,26 +347,28 @@ class SignUpViewController: UIViewController {
             checkDuplicateButton.isHidden = false
         }.disposed(by: viewModel.disposeBag)
         
-        output.nicknameState.drive { [weak self] state in
+        viewModel.nicknameState.subscribe(onNext: { [weak self] state in
             guard let self = self else { return }
             
-            messageLabel.text = state.rawValue
-            
             switch state {
-            case .normal:
-                underlineView.backgroundColor = .gray2
-            case .unusable:
+            case .duplicate:
                 underlineView.backgroundColor = .activeRed
                 messageLabel.textColor = .activeRed
-            case .usable:
+                messageLabel.text = "중복된 닉네임입니다"
+            case .unavailable:
+                underlineView.backgroundColor = .activeRed
+                messageLabel.textColor = .activeRed
+                messageLabel.text = "2~10자의 영문, 한글, 숫자를 입력해주세요"
+            case .available:
                 underlineView.backgroundColor = .activeBlue
                 messageLabel.textColor = .activeBlue
+                messageLabel.text = "사용 가능한 닉네임입니다"
             }
             
             messageLabel.isHidden = false
             countLabel.isHidden = true
             checkDuplicateButton.isHidden = true
-        }.disposed(by: viewModel.disposeBag)
+        }).disposed(by: viewModel.disposeBag)
         
         output.showPrivacyView.drive { [weak self] _ in
             guard let self = self else { return }
