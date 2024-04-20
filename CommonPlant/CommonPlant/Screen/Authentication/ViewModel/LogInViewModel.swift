@@ -80,12 +80,8 @@ extension LogInViewModel {
             guard let self = self else { return }
             
             if (UserApi.isKakaoTalkLoginAvailable()) {
-                UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                    if let error = error {
-                        dump(error)
-                    }
-                    else {
-                        guard let oauthToken = oauthToken else { return }
+                UserApi.shared.rx.loginWithKakaoTalk()
+                    .subscribe(onNext:{ (oauthToken) in
                         let accessToken = oauthToken.accessToken
                         
                         LoginAPI.shared.kakao(accessToken).subscribe { result in
@@ -98,8 +94,10 @@ extension LogInViewModel {
                             }
                             
                         }.disposed(by: self.disposeBag)
-                    }
-                }
+                    }, onError: {error in
+                        print(error)
+                    })
+                    .disposed(by: disposeBag)
             }
             
         }.disposed(by: disposeBag)
