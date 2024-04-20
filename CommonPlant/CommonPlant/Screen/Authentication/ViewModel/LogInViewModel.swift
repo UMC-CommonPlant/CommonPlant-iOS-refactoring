@@ -88,7 +88,7 @@ extension LogInViewModel {
                         guard let oauthToken = oauthToken else { return }
                         let accessToken = oauthToken.accessToken
                         
-                        AuthAPI.shared.kakao(accessToken).subscribe { result in
+                        LoginAPI.shared.kakao(accessToken).subscribe { result in
                             
                             guard let response = result.element else { return }
                             switch response.status {
@@ -101,7 +101,7 @@ extension LogInViewModel {
                     }
                 }
             }
-
+            
         }.disposed(by: disposeBag)
         
         return Output(showSignUpView: showSignUpView.asDriver(onErrorDriveWith: .empty()), showMainView: showMainView.asDriver(onErrorDriveWith: .empty()))

@@ -37,7 +37,7 @@ extension SignUpViewModel {
         let selectedDefaultImage: Observable<Void>
         let editingNickname: Observable<String>
         let endEditingNickname: Observable<Void>
-        let duplicateBtnDidTap: Observable<Void>
+        let duplicateBtnDidTap: Observable<String>
         let privacyDidTap: Observable<Void>
         let submitBtnDidTap: Observable<Void>
     }
@@ -69,14 +69,13 @@ extension SignUpViewModel {
         input.editingNickname.bind { [weak self] name in
             guard let self = self else { return }
             var name = name
+
+            if name.count > 10 {
+                name.removeLast()
+            }
             
-            let pattern = "^[가-힣a-zA-Z0-9]*$"
-            
-            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
-                let range = NSRange(location: 0, length: name.utf16.count)
-                if regex.firstMatch(in: name, options: [], range: range) != nil {
-                    name = regex.stringByReplacingMatches(in: name, options: [], range: range, withTemplate: "")
-                }
+            if (name.contains(" ")) || (name.contains("\n")) {
+                name.removeAll { ($0 == " ") || ($0 == "\n") }
             }
             
             nicknameText.accept(name)
@@ -86,9 +85,29 @@ extension SignUpViewModel {
         input.endEditingNickname.bind(to: showDuplicateBtn).disposed(by: disposeBag)
         
         let nicknameState = BehaviorRelay(value: ButtonType.normal)
-        input.duplicateBtnDidTap.bind { [weak self] _ in
+        input.duplicateBtnDidTap.bind { [weak self] nickname in
             guard let self = self else { return }
             
+            let pattern = "^[가-힣a-zA-Z0-9]*$"
+            
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                let range = NSRange(location: 0, length: nickname.utf16.count)
+                
+                if regex.firstMatch(in: nickname, options: [], range: range) == nil {
+                    nicknameState.accept(.unusable)
+                } else {
+                    SignUpAPI.shared.getDuplicateNickname(nickname).subscribe { result in
+                        guard let response = result.element else { return }
+                        
+                        switch response.status {
+                        case 200: nicknameState.accept(.usable)
+                        case 4004: nicknameState.accept(.unusable)
+                        case 4005: nicknameState.accept(.unusable)
+                        default: break
+                        }
+                    }.disposed(by: self.disposeBag)
+                }
+            }
             // TODO: 중복 체크 서버 연동
             // TODO: 결과에 따라 nicknameState accept하기
             // TODO: submitBtnState 값도 변경

@@ -15,7 +15,7 @@ class SignUpViewController: UIViewController {
     private let viewModel = SignUpViewModel()
     private lazy var privacyVC = PrivacyViewController(viewModel.privacyVM)
     
-    private lazy var input = SignUpViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(), selectedNewImage: selectNewImage.asObservable(), selectedDefaultImage: changeToDefaultImage.asObservable(), editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(), endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(), duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in }.asObservable(), privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(), submitBtnDidTap: doneButton.rx.tap.asObservable())
+    private lazy var input = SignUpViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(), selectedNewImage: selectNewImage.asObservable(), selectedDefaultImage: changeToDefaultImage.asObservable(), editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(), endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(), duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in self.userNickNameTextFiled.text ?? "" }.asObservable(), privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(), submitBtnDidTap: doneButton.rx.tap.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
@@ -331,7 +331,7 @@ class SignUpViewController: UIViewController {
             countLabel.isHidden = false
             countLabel.text = "\(nickname.count)/\(maximumCount)"
             countLabel.textColor = nickname.count > 0 ? .black : .gray5
-            countLabel.partiallyChanged(targetString: "\(maximumCount)", font: .bodyM3, color: .gray5)
+            countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
         }.disposed(by: viewModel.disposeBag)
         
         output.showDuplicateBtn.drive { [weak self] _ in
@@ -392,6 +392,14 @@ class SignUpViewController: UIViewController {
             guard let self = self else { return }
             
             checkButton.image = isAgree ? UIImage(named: "SelectedGray") : UIImage(named: "UnselectedGray")
+        }.disposed(by: viewModel.disposeBag)
+        
+        userNickNameTextFiled.rx.controlEvent(.editingDidBegin).subscribe { [weak self] _ in
+            guard let self = self else { return }
+            
+            messageLabel.isHidden = true
+            checkDuplicateButton.isHidden = true
+            underlineView.backgroundColor = .gray2
         }.disposed(by: viewModel.disposeBag)
     }
 }

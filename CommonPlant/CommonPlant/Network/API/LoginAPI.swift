@@ -10,8 +10,8 @@ import Moya
 import RxMoya
 import RxSwift
 
-class AuthAPI {
-    static let shared = AuthAPI()
+class LoginAPI {
+    static let shared = LoginAPI()
     let provider = MoyaProvider<LoginService>()
     let disposeBag = DisposeBag()
     
