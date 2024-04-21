@@ -27,12 +27,20 @@ class SignUpViewModel {
     let privacyVM = PrivacyViewModel()
     let nicknameState = PublishRelay<NicknameState>()
     let isAgreePolicy = PublishRelay<Bool>()
+    let submitBtnState = PublishRelay<SubmitState>()
     
     init() {
-        privacyVM.isAgreePolicy.subscribe { [weak self] isAgree in
+        privacyVM.isAgreePolicy
+            .subscribe { [weak self] isAgree in
             guard let self = self else { return }
             isAgreePolicy.accept(isAgree)
         }.disposed(by: disposeBag)
+        
+        Observable.combineLatest(nicknameState, isAgreePolicy).map { (nicknameState , isAgree) in
+            return (nicknameState == .available && isAgree) ? .enable : .disable
+        }
+        .bind(to: submitBtnState)
+        .disposed(by: disposeBag)
     }
 }
 
@@ -57,12 +65,9 @@ extension SignUpViewModel {
         let nicknameText: Driver<String>
         let showDuplicateBtn: Driver<Void>
         let showPrivacyView: Driver<AnyObject>
-        let submitBtnState: Driver<SubmitState>
     }
     
     func transform(input: Input) -> Output {
-        let submitBtnState = BehaviorRelay(value: SubmitState.disable)
-        
         let dismissView = PublishRelay<Void>()
         input.backBtnDidTap.bind(to: dismissView).disposed(by: disposeBag)
         let showImgSettingAlert = PublishRelay<Void>()
@@ -107,19 +112,10 @@ extension SignUpViewModel {
                         switch response.status {
                         case 200: 
                             nicknameState.accept(.available)
-                            isAgreePolicy.subscribe(onNext: { isAgreed in
-                                if isAgreed {
-                                    submitBtnState.accept(.enable)
-                                } else {
-                                    submitBtnState.accept(.disable)
-                                }
-                            }).disposed(by: disposeBag)
                         case 4004:
                             nicknameState.accept(.duplicate)
-                            submitBtnState.accept(.disable)
                         case 4005:
                             nicknameState.accept(.unavailable)
-                            submitBtnState.accept(.disable)
                         default:
                             break
                         }
@@ -135,6 +131,6 @@ extension SignUpViewModel {
             showPrivacyView.accept(privacyVM)
         }.disposed(by: disposeBag)
         
-        return Output(dismissView: dismissView.asDriver(onErrorDriveWith: .empty()), showImgSettingAlert: showImgSettingAlert.asDriver(onErrorDriveWith: .empty()), showImagePicker: showImagePicker.asDriver(onErrorDriveWith: .empty()), changeDefaultImage: changeDefaultImage.asDriver(onErrorDriveWith: .empty()), nicknameText: nicknameText.asDriver(onErrorJustReturn: ""), showDuplicateBtn: showDuplicateBtn.asDriver(onErrorDriveWith: .empty()), showPrivacyView: showPrivacyView.asDriver(onErrorDriveWith: .empty()), submitBtnState: submitBtnState.asDriver())
+        return Output(dismissView: dismissView.asDriver(onErrorDriveWith: .empty()), showImgSettingAlert: showImgSettingAlert.asDriver(onErrorDriveWith: .empty()), showImagePicker: showImagePicker.asDriver(onErrorDriveWith: .empty()), changeDefaultImage: changeDefaultImage.asDriver(onErrorDriveWith: .empty()), nicknameText: nicknameText.asDriver(onErrorJustReturn: ""), showDuplicateBtn: showDuplicateBtn.asDriver(onErrorDriveWith: .empty()), showPrivacyView: showPrivacyView.asDriver(onErrorDriveWith: .empty()))
     }
 }

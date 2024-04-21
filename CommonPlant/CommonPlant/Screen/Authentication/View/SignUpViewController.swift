@@ -15,7 +15,7 @@ class SignUpViewController: UIViewController {
     private let viewModel = SignUpViewModel()
     private lazy var privacyVC = PrivacyViewController(viewModel.privacyVM)
     
-    private lazy var input = SignUpViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(), selectedNewImage: selectNewImage.asObservable(), selectedDefaultImage: changeToDefaultImage.asObservable(), editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(), endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(), duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in self.userNickNameTextFiled.text ?? "" }.asObservable(), privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(), submitBtnDidTap: doneButton.rx.tap.asObservable())
+    private lazy var input = SignUpViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(), selectedNewImage: selectNewImage.asObservable(), selectedDefaultImage: changeToDefaultImage.asObservable(), editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(), endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(), duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in self.userNickNameTextFiled.text ?? "" }.asObservable(), privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(), submitBtnDidTap: submitButton.rx.tap.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
@@ -119,16 +119,18 @@ class SignUpViewController: UIViewController {
         button.configuration = btnConfig
         return button
     }()
-    private var doneButton: UIButton = {
+    private var submitButton: UIButton = {
         let button = UIButton()
         var btnConfig = UIButton.Configuration.plain()
         var btnAttr = AttributedString.init("완료")
         btnAttr.font = .bodyM2
-        btnAttr.foregroundColor = .gray4
         btnConfig.attributedTitle = btnAttr
-        button.contentHorizontalAlignment = .center
-        button.makeRound(radius: 8)
+        btnConfig.baseForegroundColor = .gray4
         button.configuration = btnConfig
+        button.contentHorizontalAlignment = .center
+        button.backgroundColor = .gray1
+        button.makeRound(radius: 8)
+        button.isEnabled = false
         return button
     }()
     
@@ -143,7 +145,7 @@ class SignUpViewController: UIViewController {
     
     // MARK: Custom Method
     func setHierarchy() {
-        [navigationBarView, userProfileView, userNickNameTextFiled, underlineView, countLabel, messageLabel, checkDuplicateButton, privacyView, doneButton].forEach {
+        [navigationBarView, userProfileView, userNickNameTextFiled, underlineView, countLabel, messageLabel, checkDuplicateButton, privacyView, submitButton].forEach {
             view.addSubview($0)
         }
         
@@ -159,7 +161,7 @@ class SignUpViewController: UIViewController {
     }
     
     func setConstraints() {
-        [navigationBarView, userProfileView, userNickNameTextFiled, underlineView, countLabel, messageLabel, checkDuplicateButton, privacyView, doneButton].forEach {
+        [navigationBarView, userProfileView, userNickNameTextFiled, underlineView, countLabel, messageLabel, checkDuplicateButton, privacyView, submitButton].forEach {
             view.addSubview($0)
         }
         
@@ -237,7 +239,7 @@ class SignUpViewController: UIViewController {
         
         privacyView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(doneButton.snp.top).offset(-16)
+            make.bottom.equalTo(submitButton.snp.top).offset(-16)
             make.height.equalTo(56)
         }
         
@@ -260,7 +262,7 @@ class SignUpViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-17)
         }
         
-        doneButton.snp.makeConstraints { make in
+        submitButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-43)
             make.left.equalTo(20)
             make.right.equalTo(-20)
@@ -376,29 +378,32 @@ class SignUpViewController: UIViewController {
             self.present(privacyVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
         
-        output.submitBtnState.drive { [weak self] state in
-            guard let self = self else { return }
-            
-            switch state {
-            case .enable:
-                doneButton.isEnabled = true
-                doneButton.layer.borderColor = UIColor.seaGreenDark1?.cgColor
-                doneButton.layer.borderWidth = 1
-                doneButton.setTitleColor(.seaGreenDark1, for: .normal)
-            case .disable:
-                doneButton.isEnabled = false
-                doneButton.layer.borderColor = UIColor.gray1?.cgColor
-                doneButton.backgroundColor = .gray1
-                doneButton.setTitleColor(.gray3, for: .normal)
-            case .onClick:
-                doneButton.backgroundColor = .seaGreen
-            }
-        }.disposed(by: viewModel.disposeBag)
-        
         viewModel.isAgreePolicy.subscribe { [weak self] isAgree in
             guard let self = self else { return }
             
             checkButton.image = isAgree ? UIImage(named: "SelectedGray") : UIImage(named: "UnselectedGray")
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.submitBtnState.bind { [weak self] state in
+            guard let self = self else { return }
+            
+            switch state {
+            case .enable:
+                submitButton.isEnabled = true
+                submitButton.layer.borderColor = UIColor.seaGreenDark1?.cgColor
+                submitButton.layer.borderWidth = 1
+                submitButton.configuration?.baseForegroundColor = .seaGreenDark1
+                submitButton.backgroundColor = .white
+            case .disable:
+                submitButton.isEnabled = false
+                submitButton.layer.borderColor = UIColor.gray1?.cgColor
+                submitButton.backgroundColor = .gray1
+                submitButton.setTitleColor(.yellow, for: .normal)
+                submitButton.configuration?.baseForegroundColor = .gray3
+            case .onClick:
+                submitButton.backgroundColor = .seaGreen
+            }
+            
         }.disposed(by: viewModel.disposeBag)
         
         userNickNameTextFiled.rx.controlEvent(.editingDidBegin).subscribe { [weak self] _ in
