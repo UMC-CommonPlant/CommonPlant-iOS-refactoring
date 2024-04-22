@@ -5,7 +5,7 @@
 //  Created by 아라 on 4/17/24.
 //
 
-import Foundation
+import UIKit
 import Moya
 import RxMoya
 import RxSwift
@@ -21,5 +21,12 @@ class SignUpAPI {
             .asObservable()
             .map { try JSONDecoder().decode(GetDuplicateNicknameResponse.self, from: $0.data) }
             
+    }
+    
+    func signUpUser(_ request: PostUserRequest, _ profileImage: UIImage?) -> Observable<PostUserResponse> {
+        
+        return provider.rx.request(.postUser(request: request, image: profileImage))
+            .asObservable()
+            .map { try JSONDecoder().decode(PostUserResponse.self, from: $0.data) }
     }
 }

@@ -5,12 +5,12 @@
 //  Created by 아라 on 4/17/24.
 //
 
-import Foundation
+import UIKit
 import Moya
 
 enum SignUpService {
     case duplicateNickname(nickname: String)
-    case postUser(_ email: String,_ name: String,_ provider: String)
+    case postUser(request: PostUserRequest, image: UIImage?)
 }
 
 extension SignUpService: TargetType {
@@ -38,8 +38,15 @@ extension SignUpService: TargetType {
         switch self {
         case .duplicateNickname :
             return .requestPlain
-        case let .postUser(email, name, provider) :
-            return .requestParameters(parameters: ["email": email, "name": name, "provider": provider], encoding: URLEncoding.default)
+        case let .postUser(request, image) :
+            var multiPartData: [Moya.MultipartFormData] = []
+            
+            if let profileImage = image {
+                let profileImageData = MultipartFormData(provider: .data(profileImage.jpegData(compressionQuality: 1.0) ?? Data()), name: "profileImage", fileName: "profileImage.jpeg", mimeType: "image/jpeg")
+                multiPartData.append(profileImageData)
+            }
+            
+            return .requestParameters(parameters: ["request": request], encoding: URLEncoding.default)
         }
     }
     

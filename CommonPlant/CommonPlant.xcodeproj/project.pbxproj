@@ -20,6 +20,7 @@
 		C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */; };
 		C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039A8612B79000B00673CCC /* EditPlantViewModel.swift */; };
 		C039A8672B79E5CD00673CCC /* EditPlantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039A8662B79E5CD00673CCC /* EditPlantViewController.swift */; };
+		C0409C512BD62D5700F5A002 /* PostUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0409C502BD62D5700F5A002 /* PostUserResponse.swift */; };
 		C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */; };
 		C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */; };
 		C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */; };
@@ -116,6 +117,7 @@
 		C027A0962A90A1D8009289E9 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		C039A8612B79000B00673CCC /* EditPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlantViewModel.swift; sourceTree = "<group>"; };
 		C039A8662B79E5CD00673CCC /* EditPlantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlantViewController.swift; sourceTree = "<group>"; };
+		C0409C502BD62D5700F5A002 /* PostUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostUserResponse.swift; sourceTree = "<group>"; };
 		C044E5A72A65698800A8B3C6 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewController.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				C072D35E2BCFAA40009F1492 /* GetDuplicateNicknameResponse.swift */,
+				C0409C502BD62D5700F5A002 /* PostUserResponse.swift */,
 			);
 			path = SignUpResponse;
 			sourceTree = "<group>";
@@ -799,6 +802,7 @@
 				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */,
 				F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */,
+				C0409C512BD62D5700F5A002 /* PostUserResponse.swift in Sources */,
 				F9447DA82A77A71700903C28 /* PlantSearchCollectionViewCell.swift in Sources */,
 				C0D6E9012BC3A97300A352DD /* LoginService.swift in Sources */,
 				C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */,
