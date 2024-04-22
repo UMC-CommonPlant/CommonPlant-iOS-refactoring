@@ -10,7 +10,7 @@ import Moya
 
 enum SignUpService {
     case duplicateNickname(nickname: String)
-    case postUser(request: PostUserRequest, image: UIImage?)
+    case postUser(request: PostUserRequest)
 }
 
 extension SignUpService: TargetType {
@@ -31,18 +31,23 @@ extension SignUpService: TargetType {
     }
     
     var method: Moya.Method {
-        return .get
+        switch self {
+        case .duplicateNickname(_) :
+            return .get
+        case .postUser(_):
+            return .post
+        }
     }
     
     var task: Moya.Task {
         switch self {
         case .duplicateNickname :
             return .requestPlain
-        case let .postUser(request, image) :
+        case let .postUser(request) :
             var multiPartData: [Moya.MultipartFormData] = []
             
-            if let profileImage = image {
-                let profileImageData = MultipartFormData(provider: .data(profileImage.jpegData(compressionQuality: 1.0) ?? Data()), name: "profileImage", fileName: "profileImage.jpeg", mimeType: "image/jpeg")
+            if let profileImage = request.imgData {
+                let profileImageData = MultipartFormData(provider: .data(profileImage), name: "profileImage", fileName: "profileImage.jpeg", mimeType: "image/jpeg")
                 multiPartData.append(profileImageData)
             }
             

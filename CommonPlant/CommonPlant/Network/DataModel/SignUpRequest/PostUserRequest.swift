@@ -9,4 +9,5 @@ import Foundation
 
 struct PostUserRequest: Codable {
     let email, name, provider: String
+    let imgData: Data?
 }

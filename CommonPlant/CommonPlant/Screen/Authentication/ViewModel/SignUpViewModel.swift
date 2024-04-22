@@ -23,11 +23,14 @@ class SignUpViewModel {
     }
     
     let disposeBag = DisposeBag()
-    
     let privacyVM = PrivacyViewModel()
     let nicknameState = PublishRelay<NicknameState>()
     let isAgreePolicy = PublishRelay<Bool>()
     let submitBtnState = PublishRelay<SubmitState>()
+    
+    var email: String
+    var provider: String
+    var nickname: String = ""
     
     init() {
         privacyVM.isAgreePolicy
@@ -41,6 +44,12 @@ class SignUpViewModel {
         }
         .bind(to: submitBtnState)
         .disposed(by: disposeBag)
+    }
+    
+    convenience init(_ email: String, _ provider: String) {
+        self.init()
+        self.email = email
+        self.provider = provider
     }
 }
 
@@ -69,7 +78,15 @@ extension SignUpViewModel {
     
     func transform(input: Input) -> Output {
         let dismissView = PublishRelay<Void>()
-        input.backBtnDidTap.bind(to: dismissView).disposed(by: disposeBag)
+        input.backBtnDidTap.subscribe { [weak self] _ in
+            guard let self = self else { return }
+            
+            let request = PostUserRequest(email: <#T##String#>, name: <#T##String#>, provider: <#T##String#>)
+            SignUpAPI.shared.signUpUser(<#T##request: PostUserRequest##PostUserRequest#>, <#T##profileImage: UIImage?##UIImage?#>)
+            
+            dismissView.accept(())
+        }.disposed(by: disposeBag)
+        
         let showImgSettingAlert = PublishRelay<Void>()
         input.profileImgDidTap.bind(to: showImgSettingAlert).disposed(by: disposeBag)
         let showImagePicker = PublishRelay<Void>()
@@ -112,6 +129,7 @@ extension SignUpViewModel {
                         switch response.status {
                         case 200: 
                             nicknameState.accept(.available)
+                            self.nickname = nickname
                         case 4004:
                             nicknameState.accept(.duplicate)
                         case 4005:

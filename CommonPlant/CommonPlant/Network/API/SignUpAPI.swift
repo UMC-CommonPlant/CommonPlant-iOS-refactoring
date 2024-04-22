@@ -5,7 +5,7 @@
 //  Created by 아라 on 4/17/24.
 //
 
-import UIKit
+import Foundation
 import Moya
 import RxMoya
 import RxSwift
@@ -23,9 +23,9 @@ class SignUpAPI {
             
     }
     
-    func signUpUser(_ request: PostUserRequest, _ profileImage: UIImage?) -> Observable<PostUserResponse> {
+    func signUpUser(_ request: PostUserRequest) -> Observable<PostUserResponse> {
         
-        return provider.rx.request(.postUser(request: request, image: profileImage))
+        return provider.rx.request(.postUser(request: request))
             .asObservable()
             .map { try JSONDecoder().decode(PostUserResponse.self, from: $0.data) }
     }
