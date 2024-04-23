@@ -28,14 +28,9 @@ class SignUpViewModel {
     let isAgreePolicy = PublishRelay<Bool>()
     let submitBtnState = PublishRelay<SubmitState>()
     
-    var email: String
-    var provider: String
     var nickname: String = ""
     
-    init(_ email: String, _ provider: String) {
-        self.email = email
-        self.provider = provider
-        
+    init() {
         privacyVM.isAgreePolicy
             .subscribe { [weak self] isAgree in
                 guard let self = self else { return }
@@ -60,7 +55,7 @@ extension SignUpViewModel {
         let endEditingNickname: Observable<Void>
         let duplicateBtnDidTap: Observable<String>
         let privacyDidTap: Observable<Void>
-        let submitBtnDidTap: Observable<Data?>
+        let submitBtnDidTap: Observable<(String, String, Data?)>
     }
     
     struct Output {
@@ -139,7 +134,7 @@ extension SignUpViewModel {
             showPrivacyView.accept(privacyVM)
         }.disposed(by: disposeBag)
         
-        input.submitBtnDidTap.subscribe { [weak self] data in
+        input.submitBtnDidTap.subscribe { [weak self] (email, provider, data) in
             guard let self = self else { return }
             
             let request = PostUserRequest(email: email, name: nickname, provider: provider, imgData: data)

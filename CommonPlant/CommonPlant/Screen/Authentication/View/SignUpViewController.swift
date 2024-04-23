@@ -12,7 +12,7 @@ import PhotosUI
 
 class SignUpViewController: UIViewController {
     // MARK: Properties
-    private lazy var viewModel = SignUpViewModel(email, provider)
+    private let viewModel = SignUpViewModel()
     private lazy var privacyVC = PrivacyViewController(viewModel.privacyVM)
     private let email: String
     private let provider: String
@@ -28,9 +28,9 @@ class SignUpViewController: UIViewController {
         privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(),
         submitBtnDidTap: submitButton.rx.tap.map { _ in
             if self.profileImageView.image == UIImage(named: "ProfileGreen") {
-                return nil
+                return (self.email, self.provider, nil)
             }
-            return self.profileImageView.image?.jpegData(compressionQuality: 1.0)}.asObservable())
+            return (self.email, self.provider, self.profileImageView.image?.jpegData(compressionQuality: 1.0))}.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
