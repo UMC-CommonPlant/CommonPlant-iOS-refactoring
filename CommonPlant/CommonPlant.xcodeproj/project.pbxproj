@@ -58,6 +58,7 @@
 		C0B1BDED2A9E23F100DD7E04 /* MemoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */; };
 		C0BDF2E52B1EFD7A002C7FD7 /* EditMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */; };
 		C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */; };
+		C0C3FE452BD78C0700479891 /* NetworkLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C3FE442BD78C0700479891 /* NetworkLogger.swift */; };
 		C0C5C0292B904D1000210017 /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C0C5C0282B904D1000210017 /* RxKakaoSDKAuth */; };
 		C0C5C02B2B904D1000210017 /* RxKakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = C0C5C02A2B904D1000210017 /* RxKakaoSDKCommon */; };
 		C0C5C02D2B904D1000210017 /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = C0C5C02C2B904D1000210017 /* RxKakaoSDKUser */; };
@@ -83,7 +84,6 @@
 		F91E479B2A53EE31008E07A9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F91E479A2A53EE31008E07A9 /* Kingfisher */; };
 		F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47A92A569128008E07A9 /* UIColor+Extension.swift */; };
 		F91E47AC2A569666008E07A9 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47AB2A569666008E07A9 /* empty.swift */; };
-		F91E47B42A569698008E07A9 /* empty4.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47B32A569698008E07A9 /* empty4.swift */; };
 		F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93403FF2A81F89300F0267B /* SearchResultViewController.swift */; };
 		F93404022A81F9F400F0267B /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */; };
 		F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404032A8207B000F0267B /* SearchResultViewModel.swift */; };
@@ -151,6 +151,7 @@
 		C0B1BDEC2A9E23F100DD7E04 /* MemoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0BDF2E42B1EFD7A002C7FD7 /* EditMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoViewController.swift; sourceTree = "<group>"; };
 		C0C104E62A56DD5F00945BD6 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
+		C0C3FE442BD78C0700479891 /* NetworkLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLogger.swift; sourceTree = "<group>"; };
 		C0D2129A2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxASAuthorizationControllerProxy.swift; sourceTree = "<group>"; };
 		C0D6E8F92BBFD72500A352DD /* CalendarMemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarMemo.swift; sourceTree = "<group>"; };
 		C0D6E8FA2BBFD72500A352DD /* CalendarPlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarPlace.swift; sourceTree = "<group>"; };
@@ -175,7 +176,6 @@
 		F91E478D2A53E3CA008E07A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F91E47A92A569128008E07A9 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		F91E47AB2A569666008E07A9 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
-		F91E47B32A569698008E07A9 /* empty4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty4.swift; sourceTree = "<group>"; };
 		F93403FF2A81F89300F0267B /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		F93404032A8207B000F0267B /* SearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewModel.swift; sourceTree = "<group>"; };
@@ -557,7 +557,7 @@
 		F91E47A32A53F84B008E07A9 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				F91E47B32A569698008E07A9 /* empty4.swift */,
+				C0C3FE442BD78C0700479891 /* NetworkLogger.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -781,7 +781,6 @@
 				C0B1BDEB2A9E21F200DD7E04 /* MemoListViewController.swift in Sources */,
 				C0B1BDE72A9E1ECA00DD7E04 /* MemoViewModel.swift in Sources */,
 				F91E47AC2A569666008E07A9 /* empty.swift in Sources */,
-				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				C0D6E8FD2BBFD72500A352DD /* CalendarMemo.swift in Sources */,
 				F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */,
 				C0A0D4DE2A73E96800426514 /* LogInViewModel.swift in Sources */,
@@ -799,7 +798,6 @@
 				F9447DAD2A78E52200903C28 /* PopularSearchCollectionViewCell.swift in Sources */,
 				C0D6E8FF2BBFD72500A352DD /* CalendarPlant.swift in Sources */,
 				C0D6E8FE2BBFD72500A352DD /* CalendarPlace.swift in Sources */,
-				F91E47B42A569698008E07A9 /* empty4.swift in Sources */,
 				C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */,
 				F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */,
 				C0409C512BD62D5700F5A002 /* PostUserResponse.swift in Sources */,
@@ -845,6 +843,7 @@
 				C072D35A2BCFA781009F1492 /* PostUserRequest.swift in Sources */,
 				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
+				C0C3FE452BD78C0700479891 /* NetworkLogger.swift in Sources */,
 				C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */,
 				C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */,
 				C0BDF2E52B1EFD7A002C7FD7 /* EditMemoViewController.swift in Sources */,

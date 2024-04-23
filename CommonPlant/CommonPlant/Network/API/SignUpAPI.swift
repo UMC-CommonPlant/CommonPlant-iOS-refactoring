@@ -12,8 +12,12 @@ import RxSwift
 
 class SignUpAPI {
     static let shared = SignUpAPI()
-    let provider = MoyaProvider<SignUpService>()
+    let provider: MoyaProvider<SignUpService>
     let disposeBag = DisposeBag()
+    
+    init( _ provider: MoyaProvider<SignUpService> = MoyaProvider<SignUpService>(plugins: [NetworkLogger()])) {
+        self.provider = provider
+    }
     
     func getDuplicateNickname(_ nickname: String) -> Observable<GetDuplicateNicknameResponse> {
         
