@@ -82,10 +82,10 @@ class LogInViewController: UIViewController {
             
         }.disposed(by: viewModel.disposeBag)
         
-        output.showSignUpView.drive { [weak self] email in
+        output.showSignUpView.drive { [weak self] (email, provider) in
             guard let self = self else { return }
             
-            let nextVC = SignUpViewController()
+            let nextVC = SignUpViewController(email: email, provider: provider)
             
             self.present(nextVC, animated: true)
         }.disposed(by: viewModel.disposeBag)

@@ -12,10 +12,25 @@ import PhotosUI
 
 class SignUpViewController: UIViewController {
     // MARK: Properties
-    private let viewModel = SignUpViewModel()
+    private lazy var viewModel = SignUpViewModel(email, provider)
     private lazy var privacyVC = PrivacyViewController(viewModel.privacyVM)
+    private let email: String
+    private let provider: String
     
-    private lazy var input = SignUpViewModel.Input(backBtnDidTap: backButton.rx.tap.asObservable(), profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(), selectedNewImage: selectNewImage.asObservable(), selectedDefaultImage: changeToDefaultImage.asObservable(), editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(), endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(), duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in self.userNickNameTextFiled.text ?? "" }.asObservable(), privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(), submitBtnDidTap: submitButton.rx.tap.asObservable())
+    private lazy var input = SignUpViewModel.Input(
+        backBtnDidTap: backButton.rx.tap.asObservable(),
+        profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(),
+        selectedNewImage: selectNewImage.asObservable(),
+        selectedDefaultImage: changeToDefaultImage.asObservable(),
+        editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(),
+        endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(),
+        duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in self.userNickNameTextFiled.text ?? "" }.asObservable(),
+        privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(),
+        submitBtnDidTap: submitButton.rx.tap.map { _ in
+            if self.profileImageView.image == UIImage(named: "ProfileGreen") {
+                return nil
+            }
+            return self.profileImageView.image?.jpegData(compressionQuality: 1.0)}.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
@@ -141,6 +156,16 @@ class SignUpViewController: UIViewController {
         
         bind()
         setConstraints()
+    }
+    
+    init(email: String, provider: String) {
+        self.email = email
+        self.provider = provider
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: Custom Method

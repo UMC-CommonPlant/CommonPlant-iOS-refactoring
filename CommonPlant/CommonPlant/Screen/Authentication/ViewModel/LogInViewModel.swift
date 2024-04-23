@@ -68,12 +68,12 @@ extension LogInViewModel {
     }
     
     struct Output {
-        let showSignUpView: Driver<String>
+        let showSignUpView: Driver<(String, String)>
         let showMainView: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
-        let showSignUpView = PublishRelay<String>()
+        let showSignUpView = PublishRelay<(String, String)>()
         let showMainView = PublishRelay<Void>()
         
         input.kakaoBtnDidTap.bind { [weak self] _ in
@@ -84,12 +84,15 @@ extension LogInViewModel {
                     .subscribe(onNext:{ (oauthToken) in
                         let accessToken = oauthToken.accessToken
                         
-                        LoginAPI.shared.kakao(accessToken).subscribe { result in
+                        LoginAPI.shared.kakao(accessToken).subscribe { [weak self] result in
+                            guard let self = self else { return }
                             
                             guard let response = result.element else { return }
                             switch response.status {
                             case 200: showMainView.accept(())
-                            case 2001: showSignUpView.accept(accessToken)
+                            case 2001: 
+                                guard let email = result.element?.result else { return }
+                                showSignUpView.accept((email, "kakao"))
                             default: break
                             }
                             

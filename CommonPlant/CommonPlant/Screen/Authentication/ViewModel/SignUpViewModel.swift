@@ -32,24 +32,21 @@ class SignUpViewModel {
     var provider: String
     var nickname: String = ""
     
-    init() {
+    init(_ email: String, _ provider: String) {
+        self.email = email
+        self.provider = provider
+        
         privacyVM.isAgreePolicy
             .subscribe { [weak self] isAgree in
-            guard let self = self else { return }
-            isAgreePolicy.accept(isAgree)
-        }.disposed(by: disposeBag)
+                guard let self = self else { return }
+                isAgreePolicy.accept(isAgree)
+            }.disposed(by: disposeBag)
         
         Observable.combineLatest(nicknameState, isAgreePolicy).map { (nicknameState , isAgree) in
             return (nicknameState == .available && isAgree) ? .enable : .disable
         }
         .bind(to: submitBtnState)
         .disposed(by: disposeBag)
-    }
-    
-    convenience init(_ email: String, _ provider: String) {
-        self.init()
-        self.email = email
-        self.provider = provider
     }
 }
 
@@ -63,7 +60,7 @@ extension SignUpViewModel {
         let endEditingNickname: Observable<Void>
         let duplicateBtnDidTap: Observable<String>
         let privacyDidTap: Observable<Void>
-        let submitBtnDidTap: Observable<Void>
+        let submitBtnDidTap: Observable<Data?>
     }
     
     struct Output {
@@ -78,15 +75,7 @@ extension SignUpViewModel {
     
     func transform(input: Input) -> Output {
         let dismissView = PublishRelay<Void>()
-        input.backBtnDidTap.subscribe { [weak self] _ in
-            guard let self = self else { return }
-            
-            let request = PostUserRequest(email: <#T##String#>, name: <#T##String#>, provider: <#T##String#>)
-            SignUpAPI.shared.signUpUser(<#T##request: PostUserRequest##PostUserRequest#>, <#T##profileImage: UIImage?##UIImage?#>)
-            
-            dismissView.accept(())
-        }.disposed(by: disposeBag)
-        
+        input.backBtnDidTap.bind(to: dismissView).disposed(by: disposeBag)
         let showImgSettingAlert = PublishRelay<Void>()
         input.profileImgDidTap.bind(to: showImgSettingAlert).disposed(by: disposeBag)
         let showImagePicker = PublishRelay<Void>()
@@ -97,7 +86,7 @@ extension SignUpViewModel {
         input.editingNickname.bind { [weak self] name in
             guard let self = self else { return }
             var name = name
-
+            
             if name.count > 10 {
                 name.removeLast()
             }
@@ -113,6 +102,7 @@ extension SignUpViewModel {
         input.endEditingNickname.bind(to: showDuplicateBtn).disposed(by: disposeBag)
         
         input.duplicateBtnDidTap.subscribe(onNext: { [weak self] nickname in
+            
             guard let self = self else { return }
             
             let pattern = "^[가-힣a-zA-Z0-9]*$"
@@ -147,6 +137,20 @@ extension SignUpViewModel {
             guard let self = self else { return }
             
             showPrivacyView.accept(privacyVM)
+        }.disposed(by: disposeBag)
+        
+        input.submitBtnDidTap.subscribe { [weak self] data in
+            guard let self = self else { return }
+            
+            let request = PostUserRequest(email: email, name: nickname, provider: provider, imgData: data)
+            
+            SignUpAPI.shared.signUpUser(request).subscribe { [weak self] result in
+                
+                guard let self = self, let response = result.element else { return }
+                
+            }.disposed(by: disposeBag)
+            
+            dismissView.accept(())
         }.disposed(by: disposeBag)
         
         return Output(dismissView: dismissView.asDriver(onErrorDriveWith: .empty()), showImgSettingAlert: showImgSettingAlert.asDriver(onErrorDriveWith: .empty()), showImagePicker: showImagePicker.asDriver(onErrorDriveWith: .empty()), changeDefaultImage: changeDefaultImage.asDriver(onErrorDriveWith: .empty()), nicknameText: nicknameText.asDriver(onErrorJustReturn: ""), showDuplicateBtn: showDuplicateBtn.asDriver(onErrorDriveWith: .empty()), showPrivacyView: showPrivacyView.asDriver(onErrorDriveWith: .empty()))

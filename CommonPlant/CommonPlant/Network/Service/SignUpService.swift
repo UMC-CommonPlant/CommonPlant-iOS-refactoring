@@ -47,15 +47,30 @@ extension SignUpService: TargetType {
             var multiPartData: [Moya.MultipartFormData] = []
             
             if let profileImage = request.imgData {
-                let profileImageData = MultipartFormData(provider: .data(profileImage), name: "profileImage", fileName: "profileImage.jpeg", mimeType: "image/jpeg")
+                let profileImageData = MultipartFormData(provider: .data(profileImage), name: "image", fileName: "image.jpeg", mimeType: "image/jpeg")
                 multiPartData.append(profileImageData)
             }
             
-            return .requestParameters(parameters: ["request": request], encoding: URLEncoding.default)
+            let user: [String: Any] = [
+                "email" : request.email,
+                "name" : request.name,
+                "provider" : request.provider
+            ]
+            
+            if let userData = try? JSONSerialization.data(withJSONObject: user, options: []) {
+                let userFormData = MultipartFormData(provider: .data(userData), name: "user", fileName: "user.json", mimeType: "application/json")
+                multiPartData.append(userFormData)
+            }
+            return .uploadMultipart(multiPartData)
         }
     }
     
     var headers: [String : String]? {
-        return nil
+        switch self {
+        case .duplicateNickname(_):
+            return nil
+        case .postUser(_):
+            return ["Content-Type" : "multipart/form-data"]
+        }
     }
 }
