@@ -12,8 +12,12 @@ import RxSwift
 
 class LoginAPI {
     static let shared = LoginAPI()
-    let provider = MoyaProvider<LoginService>()
+    let provider: MoyaProvider<LoginService>
     let disposeBag = DisposeBag()
+    
+    init( _ provider: MoyaProvider<LoginService> = MoyaProvider<LoginService>(plugins: [NetworkLogger()])) {
+        self.provider = provider
+    }
     
     func kakao(_ token: String) -> Observable<KakaoResponse> {
         

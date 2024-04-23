@@ -27,10 +27,14 @@ class SignUpViewController: UIViewController {
         duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in self.userNickNameTextFiled.text ?? "" }.asObservable(),
         privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(),
         submitBtnDidTap: submitButton.rx.tap.map { _ in
+            var data: Data?
+            
             if self.profileImageView.image == UIImage(named: "ProfileGreen") {
-                return (self.email, self.provider, nil)
+                data = nil
+            } else {
+                data = self.profileImageView.image?.jpegData(compressionQuality: 1.0)
             }
-            return (self.email, self.provider, self.profileImageView.image?.jpegData(compressionQuality: 1.0))}.asObservable())
+            return (self.email, self.provider, data) }.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
