@@ -12,24 +12,11 @@ import AuthenticationServices
 
 import RxKakaoSDKAuth
 import RxKakaoSDKUser
-import RxKakaoSDKCommon
 import KakaoSDKAuth
 import KakaoSDKUser
-import KakaoSDKCommon
 
 class LogInViewModel: NSObject {
     let disposeBag = DisposeBag()
-    
-    override init() {
-        UserApi.shared.rx.loginWithKakaoAccount()
-            .subscribe(onNext:{ (oauthToken) in
-                print("loginWithKakaoAccount() success.")
-                _ = oauthToken
-            }, onError: {error in
-                print(error)
-            })
-            .disposed(by: disposeBag)
-    }
     
     public func performAppleSignIn(scope: [ASAuthorization.Scope]? = nil, on window: UIWindow) {
         let result = ASAuthorizationAppleIDProvider().rx.signInWithApple(scope: scope, on: window)
@@ -60,6 +47,23 @@ class LogInViewModel: NSObject {
         
         // TODO: 회원가입 여부 확인
     }
+    
+    
+    func callLoginAPI(_ token: String, showMainView: PublishRelay<Void>, showSignUpView: PublishRelay<(String, String)>) {
+        LoginAPI.shared.kakao(token).subscribe { [weak self] result in
+            guard let self = self else { return }
+            
+            guard let response = result.element else { return }
+            switch response.status {
+            case 200: showMainView.accept(())
+            case 2001:
+                guard let email = result.element?.result else { return }
+                showSignUpView.accept((email, "kakao"))
+            default: break
+            }
+            
+        }.disposed(by: self.disposeBag)
+    }
 }
 
 extension LogInViewModel {
@@ -76,31 +80,31 @@ extension LogInViewModel {
         let showSignUpView = PublishRelay<(String, String)>()
         let showMainView = PublishRelay<Void>()
         
-        input.kakaoBtnDidTap.bind { [weak self] _ in
+        input.kakaoBtnDidTap.subscribe { [weak self] _ in
             guard let self = self else { return }
             
-            if (UserApi.isKakaoTalkLoginAvailable()) {
+            if UserApi.isKakaoTalkLoginAvailable() {
                 UserApi.shared.rx.loginWithKakaoTalk()
-                    .subscribe(onNext:{ (oauthToken) in
+                    .subscribe(onNext: { [weak self] oauthToken in
+                        guard let self = self else { return }
+                        
                         let accessToken = oauthToken.accessToken
                         
-                        LoginAPI.shared.kakao(accessToken).subscribe { [weak self] result in
-                            guard let self = self else { return }
-                            
-                            guard let response = result.element else { return }
-                            switch response.status {
-                            case 200: showMainView.accept(())
-                            case 2001: 
-                                guard let email = result.element?.result else { return }
-                                showSignUpView.accept((email, "kakao"))
-                            default: break
-                            }
-                            
-                        }.disposed(by: self.disposeBag)
-                    }, onError: {error in
-                        print(error)
-                    })
-                    .disposed(by: disposeBag)
+                        callLoginAPI(accessToken, showMainView: showMainView, showSignUpView: showSignUpView)
+                    }, onError: { error in
+                        // TODO: 에러 처리
+                    }).disposed(by: self.disposeBag)
+            } else {
+                UserApi.shared.rx.loginWithKakaoAccount()
+                    .subscribe(onNext: { [weak self] oauthToken in
+                        guard let self = self else { return }
+                        
+                        let accessToken = oauthToken.accessToken
+                        
+                        callLoginAPI(accessToken, showMainView: showMainView, showSignUpView: showSignUpView)
+                    }, onError: { error in
+                        // TODO: 에러 처리
+                    }).disposed(by: self.disposeBag)
             }
             
         }.disposed(by: disposeBag)
