@@ -80,6 +80,9 @@ class LogInViewController: UIViewController {
         output.showMainView.drive { [weak self] _ in
             guard let self = self else { return }
             
+            let mainTabBarVC = MainTabBarController()
+            view.window?.rootViewController = mainTabBarVC
+            view.window?.makeKeyAndVisible()
         }.disposed(by: viewModel.disposeBag)
         
         output.showSignUpView.drive { [weak self] (email, provider) in
