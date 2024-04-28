@@ -96,7 +96,7 @@ extension SignUpViewModel {
         let showDuplicateBtn = PublishRelay<Void>()
         input.endEditingNickname.bind(to: showDuplicateBtn).disposed(by: disposeBag)
         
-        input.duplicateBtnDidTap.subscribe(onNext: { [weak self] nickname in
+        input.duplicateBtnDidTap.subscribe { [weak self] nickname in
             
             guard let self = self else { return }
             
@@ -109,10 +109,10 @@ extension SignUpViewModel {
                     nicknameState.accept(.unavailable)
                 } else {
                     SignUpAPI.shared.getDuplicateNickname(nickname).subscribe { [weak self] result in
-                        guard let self = self, let response = result.element else { return }
+                        guard let self = self else { return }
                         
-                        switch response.status {
-                        case 200: 
+                        switch result.status {
+                        case 200:
                             nicknameState.accept(.available)
                             self.nickname = nickname
                         case 4004:
@@ -125,7 +125,7 @@ extension SignUpViewModel {
                     }.disposed(by: self.disposeBag)
                 }
             }
-        }).disposed(by: disposeBag)
+        }.disposed(by: disposeBag)
         
         let showPrivacyView = PublishRelay<AnyObject>()
         input.privacyDidTap.subscribe { [weak self] _ in
@@ -140,8 +140,15 @@ extension SignUpViewModel {
             let request = PostUserRequest(email: email, name: nickname, provider: provider, imgData: data)
             
             SignUpAPI.shared.signUpUser(request).subscribe { [weak self] result in
-                
                 guard let self = self, let response = result.element else { return }
+                
+                switch response.status {
+                case 200:
+                    print(response.result)
+                    // TODO: 토큰 저장
+                case 400: print("이미 존재하는 사용자 입니다")
+                default: break
+                }
                 
             }.disposed(by: disposeBag)
             
