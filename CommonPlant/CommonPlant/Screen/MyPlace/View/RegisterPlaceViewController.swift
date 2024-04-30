@@ -8,23 +8,28 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
+import Photos
 
 class RegisterPlaceViewController: UIViewController {
-    // MARK: - Properties
     // MARK: - UI Components
     private let imagePickerButton = UIButton().then {
         let image = UIImage(named: "RegisterPlace")
         $0.setImage(image, for: .normal)
+        $0.layer.cornerRadius = 16
+        $0.clipsToBounds = true
     }
     private let cameraImageView = UIImageView().then {
         $0.image = UIImage(named: "CameraMark")
+        $0.contentMode = .scaleAspectFill
     }
     private let placeNameTextField = UITextField().then {
         $0.placeholder = "장소의 이름을 입력해 주세요"
         $0.font = .bodyM1
         $0.textColor = .black
         $0.clearButtonMode = .whileEditing
-        $0.returnKeyType = .done        
+        $0.returnKeyType = .done
     }
     private let countingLabel = UILabel().then {
         $0.text = "0/10"
@@ -40,10 +45,14 @@ class RegisterPlaceViewController: UIViewController {
         $0.text = "주소"
         $0.font = .bodyM1
     }
-    private let addressButton = UIButton().then {
-        let image = UIImage(named: "Backspace")
+    let roadAddressLabel = UILabel().then {
+        $0.font = .bodyM1
+        $0.textColor = .gray6
+        $0.text = ""
+    }
+    private lazy var addressButton = UIButton().then {
+        let image = UIImage(named: addressButtonImageName)
         $0.setImage(image, for: .normal)
-        $0.tintColor = .black
     }
     private let addressUnderlineView = UIView().then {
         $0.backgroundColor = .gray2
@@ -53,18 +62,125 @@ class RegisterPlaceViewController: UIViewController {
         $0.isDisabled = true
     }
     
+    // MARK: - Properties
+    private let viewModel = RegisterPlaceViewModel()
+    private let disposeBag = DisposeBag()
+    private var addressButtonImageName = "Backspace"
+    private let maxLength = 10
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        addTargets()
+        bind()
+        configurePlaceTextField()
+        // TODO: 텍스트 필드 글자 입력되면 언더바 색상 변경
     }
     
-    
     // MARK: - Custom Method
-    private func addTargets() {
-        imagePickerButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    private func bind() {
+        let input = RegisterPlaceViewModel.Input(
+            placeNameText: placeNameTextField.rx.text.orEmpty
+                .startWith("")
+                .map { Optional($0) },
+            imagePickerButtonTapped: imagePickerButton.rx.tap.asObservable(),
+            addressButtonTapped: addressButton.rx.tap.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.cameraPermissionState
+            .drive(onNext: { [weak self] state in
+                self?.handleCameraPermissionState(state)
+            })
+            .disposed(by: disposeBag)
+        
+        output.isNextButtonEnabled
+            .bind { [weak self] isEnabled in
+                self?.nextButton.isEnabled = isEnabled
+                self?.nextButton.isDisabled = !isEnabled
+            }
+            .disposed(by: disposeBag)
+        
+        addressButton.rx.tap
+            .withLatestFrom(viewModel.addressLabelText)
+            .subscribe(onNext: { [weak self] currentText in
+                guard let self = self else { return }
+                
+                if !currentText.isEmpty {
+                    self.viewModel.updateAddressText("")
+                    self.addressButton.setImage(UIImage(named: "Backspace")?.withTintColor(.gray6!), for: .normal)
+                } else {
+                    self.showPostCodeViewController()
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.addressLabelText
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] text in
+                self?.roadAddressLabel.text = text
+                let imageName = text.isEmpty ? "Backspace" : "Delete"
+                self?.addressButton.setImage(UIImage(named: imageName)?.withTintColor(.gray6!), for: .normal)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func handleCameraPermissionState(_ state: PHAuthorizationStatus) {
+        switch state {
+        case .authorized, .limited:
+            let completion: (String) -> Void = { imageString in
+                self.loadImage(imageString: imageString)
+            }
+            if state == .authorized {
+                ImagePickerViewController.shared.showPhotoPicker(viewController: self)
+                ImagePickerViewController.shared.didSelectImage = completion
+            } else {
+                let imagePickerVC = ImagePickerViewController()
+                self.present(imagePickerVC, animated: true)
+                imagePickerVC.didSelectImage = completion
+            }
+        case .denied, .restricted:
+            self.moveToSetting()
+        default:
+            break
+        }
+    }
+    
+    private func showPostCodeViewController() {
+        let postCodeVC = PostCodeViewController()
+        postCodeVC.onAddressSelect = { [weak self] address in
+            self?.viewModel.updateAddressText(address)
+            self?.addressButton.setImage(UIImage(named: "Delete")?.withTintColor(.gray3!), for: .normal)
+        }
+        present(postCodeVC, animated: true)
+    }
+    
+    private func configurePlaceTextField() {
+        placeNameTextField.rx.text.orEmpty
+            .map { [weak self] text in
+                return self?.truncateMaxLength(text: text) ?? ""
+            }
+            .observe(on: MainScheduler.instance)
+            .do(onNext: { [unowned self] text in
+                self.countingLabel.text = "\(text.count)/\(self.maxLength)"
+                self.countingLabel.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
+            })
+            .bind(to: placeNameTextField.rx.text)
+            .disposed(by: disposeBag)
+    }
+    
+    private func truncateMaxLength(text: String) -> String {
+        return String(text.prefix(maxLength))
+    }
+    
+    private func loadImage(imageString: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let url = URL(string: imageString) else { return }
+            guard let imageData = try? Data(contentsOf: url),
+                  let image = UIImage(data: imageData) else { return }
+            self?.imagePickerButton.setImage(image, for: .normal)
+        }
     }
 }
 
@@ -82,9 +198,9 @@ extension RegisterPlaceViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
         self.navigationController?.navigationBar.tintColor = .black
     }
-
+    
     private func setConstraints() {
-        [imagePickerButton, cameraImageView, placeNameTextField, countingLabel, placeNameUnderlineView, addressLabel, addressButton, addressUnderlineView, nextButton].forEach {
+        [imagePickerButton, cameraImageView, placeNameTextField, countingLabel, placeNameUnderlineView, addressLabel, roadAddressLabel, addressButton, addressUnderlineView, nextButton].forEach {
             view.addSubview($0)
         }
         
@@ -96,56 +212,63 @@ extension RegisterPlaceViewController {
         
         cameraImageView.snp.makeConstraints {
             $0.width.height.equalTo(40)
-            $0.trailing.equalTo(imagePickerButton).offset(10)
-            $0.bottom.equalTo(imagePickerButton).offset(10)
+            $0.right.bottom.equalTo(imagePickerButton).offset(10)
         }
+        
         placeNameTextField.snp.makeConstraints {
             $0.height.equalTo(24)
             $0.top.equalTo(imagePickerButton.snp.bottom).offset(48)
-            $0.leading.equalToSuperview().offset(20)
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalTo(countingLabel.snp.left).offset(-14)
         }
         
         countingLabel.snp.makeConstraints {
             $0.height.equalTo(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.right.equalToSuperview().offset(-20)
             $0.centerY.equalTo(placeNameTextField)
         }
         
         placeNameUnderlineView.snp.makeConstraints {
             $0.height.equalTo(1)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().offset(-20)
             $0.top.equalTo(countingLabel.snp.bottom).offset(15)
         }
         
         addressLabel.snp.makeConstraints {
             $0.height.equalTo(24)
-            $0.leading.equalToSuperview().offset(20)
+            $0.left.equalToSuperview().offset(20)
             $0.top.equalTo(placeNameUnderlineView.snp.bottom).offset(48)
         }
         
+        roadAddressLabel.snp.makeConstraints {
+            $0.height.equalTo(24)
+            $0.right.equalTo(addressButton.snp.left).offset(-8)
+            $0.centerY.equalTo(addressButton)
+        }
+        
         addressButton.snp.makeConstraints {
-            $0.width.height.equalTo(24)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.width.height.equalTo(40)
+            $0.right.equalToSuperview().offset(-20)
             $0.centerY.equalTo(addressLabel)
         }
         
         addressUnderlineView.snp.makeConstraints {
             $0.height.equalTo(1)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().offset(-20)
             $0.top.equalTo(addressButton.snp.bottom).offset(15)
         }
-    
+        
         nextButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide).offset(-16)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().offset(-20)
         }
     }
-    
-    @objc private func buttonTapped() {
-            print("Button tapped")
-        }
+}
+
+#Preview {
+    RegisterPlaceViewController()
 }
