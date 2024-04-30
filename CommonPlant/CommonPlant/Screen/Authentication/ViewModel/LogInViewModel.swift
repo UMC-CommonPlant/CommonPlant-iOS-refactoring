@@ -55,7 +55,9 @@ class LogInViewModel: NSObject {
             
             guard let response = result.element else { return }
             switch response.status {
-            case 200: showMainView.accept(())
+            case 200: 
+                try? KeychainManager.createToken(token: response.result)
+                showMainView.accept(())
             case 2001:
                 guard let email = result.element?.result else { return }
                 showSignUpView.accept((email, "kakao"))

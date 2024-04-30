@@ -144,8 +144,7 @@ extension SignUpViewModel {
                 
                 switch response.status {
                 case 200:
-                    print(response.result)
-                    // TODO: 토큰 저장
+                    try? KeychainManager.createToken(token: response.result)
                 case 400: print("이미 존재하는 사용자 입니다")
                 default: break
                 }

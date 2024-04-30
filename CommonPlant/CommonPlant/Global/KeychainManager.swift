@@ -9,9 +9,9 @@ import Foundation
 import Security
 
 final public class KeychainManager {
-    private let type = "accessToken"
+    static private let type = "accessToken"
     
-    func createToken(token: String) throws {
+    static func createToken(token: String) throws {
         let tokenData = token.data(using: .utf8)!
         
         let createQuery: [CFString: Any] = [
@@ -33,7 +33,7 @@ final public class KeychainManager {
         }
     }
     
-    func read() throws -> String {
+    static func read() throws -> String {
         let searchQuery: [CFString: Any] = [
             kSecClass: kSecClassKey,
             kSecAttrType: type,
@@ -65,7 +65,7 @@ final public class KeychainManager {
         return token
     }
     
-    private func updateToken(value: Data) throws {
+    static private func updateToken(value: Data) throws {
         let originalQuery: [CFString: Any] = [
             kSecClass: kSecClassKey,
             kSecAttrType: type
@@ -85,7 +85,7 @@ final public class KeychainManager {
         }
     }
     
-    func deleteToken() throws {
+    static func deleteToken() throws {
         let deleteQuery: [CFString: Any] = [
             kSecClass: kSecClassKey,
             kSecAttrType: type
