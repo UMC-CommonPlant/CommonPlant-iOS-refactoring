@@ -65,7 +65,7 @@ final class CommonCTAButton: UIButton {
     private func updateBackgroundColorForState() {
         var backgroundColor: UIColor = .gray1!
         
-        if isDisabled {
+        if !isEnabled {
             backgroundColor = .gray1!
         } else if isHighlighted {
             backgroundColor = buttonColor == .green ? .seaGreenDark3! : .gray6!
