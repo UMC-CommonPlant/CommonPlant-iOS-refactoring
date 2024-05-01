@@ -244,8 +244,8 @@ extension MainViewController {
         }
         
         gradientView.snp.makeConstraints {
-            $0.left.equalTo(contentView).offset(20)
-            $0.right.equalTo(contentView).offset(-20)
+            $0.left.equalTo(contentView)
+            $0.right.equalTo(contentView)
             $0.height.equalTo(27.6)
             $0.bottom.equalTo(topView.snp.bottom).offset(-11)
         }
