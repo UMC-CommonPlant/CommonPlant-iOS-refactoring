@@ -19,11 +19,10 @@ class SignUpAPI {
         self.provider = provider
     }
     
-    func getDuplicateNickname(_ nickname: String) -> Observable<GetDuplicateNicknameResponse> {
+    func getDuplicateNickname(_ nickname: String) -> Single<GetDuplicateNicknameResponse> {
         
         return provider.rx.request(.duplicateNickname(nickname: nickname))
-            .asObservable()
-            .map { try JSONDecoder().decode(GetDuplicateNicknameResponse.self, from: $0.data) }
+            .map(GetDuplicateNicknameResponse.self)
             
     }
     

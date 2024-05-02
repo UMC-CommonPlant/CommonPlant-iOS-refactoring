@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Moya
 
 class SignUpViewModel {
     enum SubmitState {
@@ -110,18 +111,25 @@ extension SignUpViewModel {
                 } else {
                     SignUpAPI.shared.getDuplicateNickname(nickname).subscribe { [weak self] result in
                         guard let self = self else { return }
-                        
-                        switch result.status {
-                        case 200:
-                            nicknameState.accept(.available)
-                            self.nickname = nickname
-                        case 4004:
-                            nicknameState.accept(.duplicate)
-                        case 4005:
-                            nicknameState.accept(.unavailable)
-                        default:
-                            break
+                        switch result {
+                        case .success(let response):
+                            if response.result {
+                                nicknameState.accept(.available)
+                                self.nickname = nickname
+                            } else {
+                                nicknameState.accept(.duplicate)
+                            }
+                        case .failure(let error):
+                            if let moyaError = error as? MoyaError, let responseBody = try? moyaError.response?.mapJSON() as? [String: Any], let errorCode = responseBody["code"] as? Int {
+                                
+                                if errorCode == 4005 {
+                                    nicknameState.accept(.unavailable)
+                                }
+                            } else {
+                                print(error.localizedDescription)
+                            }
                         }
+                        
                     }.disposed(by: self.disposeBag)
                 }
             }
