@@ -250,29 +250,38 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		C072D3582BCFA768009F1492 /* SignUpRequest */ = {
+		C072D3582BCFA768009F1492 /* Request */ = {
 			isa = PBXGroup;
 			children = (
 				C072D3592BCFA781009F1492 /* PostUserRequest.swift */,
 			);
-			path = SignUpRequest;
+			path = Request;
 			sourceTree = "<group>";
 		};
-		C072D35D2BCFAA27009F1492 /* SignUpResponse */ = {
+		C072D35D2BCFAA27009F1492 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				C072D35E2BCFAA40009F1492 /* GetDuplicateNicknameResponse.swift */,
-				C0409C502BD62D5700F5A002 /* PostUserResponse.swift */,
+				C072D3582BCFA768009F1492 /* Request */,
+				C078D7C82BE8EB0F006D808A /* Response */,
 			);
-			path = SignUpResponse;
+			path = SignUp;
 			sourceTree = "<group>";
 		};
-		C078D7C12BE7AD5F006D808A /* TokenResponse */ = {
+		C078D7C12BE7AD5F006D808A /* Token */ = {
 			isa = PBXGroup;
 			children = (
 				C078D7C22BE7AD81006D808A /* TokenResponse.swift */,
 			);
-			path = TokenResponse;
+			path = Token;
+			sourceTree = "<group>";
+		};
+		C078D7C82BE8EB0F006D808A /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				C0409C502BD62D5700F5A002 /* PostUserResponse.swift */,
+				C072D35E2BCFAA40009F1492 /* GetDuplicateNicknameResponse.swift */,
+			);
+			path = Response;
 			sourceTree = "<group>";
 		};
 		C07DF86E2A59440400CDC5CC /* MyPage */ = {
@@ -430,12 +439,12 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		C0D6E9022BC3B35D00A352DD /* LoginResponse */ = {
+		C0D6E9022BC3B35D00A352DD /* Login */ = {
 			isa = PBXGroup;
 			children = (
 				C0D6E9032BC3B37400A352DD /* KakaoResponse.swift */,
 			);
-			path = LoginResponse;
+			path = Login;
 			sourceTree = "<group>";
 		};
 		C0E270072B9713AC006492B0 /* Calendar */ = {
@@ -603,10 +612,9 @@
 		F91E47A52A53F869008E07A9 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
-				C078D7C12BE7AD5F006D808A /* TokenResponse */,
-				C072D35D2BCFAA27009F1492 /* SignUpResponse */,
-				C072D3582BCFA768009F1492 /* SignUpRequest */,
-				C0D6E9022BC3B35D00A352DD /* LoginResponse */,
+				C078D7C12BE7AD5F006D808A /* Token */,
+				C072D35D2BCFAA27009F1492 /* SignUp */,
+				C0D6E9022BC3B35D00A352DD /* Login */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
