@@ -3,8 +3,8 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -16,18 +16,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CommonPlant" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X6L-NE-c8G">
-                                <rect key="frame" x="92.666666666666686" y="405.66666666666669" width="208" height="40.666666666666686"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TextLogo" translatesAutoresizingMaskIntoConstraints="NO" id="qz9-wk-iRc">
+                                <rect key="frame" x="89" y="413.66666666666669" width="215" height="24.666666666666686"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="SeaGreenBG"/>
                         <constraints>
-                            <constraint firstItem="X6L-NE-c8G" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="48G-oy-cNT"/>
-                            <constraint firstItem="X6L-NE-c8G" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="zIQ-5d-lha"/>
+                            <constraint firstItem="qz9-wk-iRc" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="E5l-og-cfb"/>
+                            <constraint firstItem="qz9-wk-iRc" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="t2I-cN-16V"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,8 +34,9 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="TextLogo" width="215" height="24.666666030883789"/>
+        <namedColor name="SeaGreenBG">
+            <color red="0.95294117647058818" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

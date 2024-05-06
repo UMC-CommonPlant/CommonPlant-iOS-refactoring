@@ -6,16 +6,34 @@
 //
 
 import UIKit
+import SnapKit
 import RxSwift
 import Moya
 
-class SplashViewController: UIViewController {
-    let disposeBag = DisposeBag()
+final class SplashViewController: UIViewController {
+    private let disposeBag = DisposeBag()
+    
+    private let textLogoView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "TextLogo")
+        return view
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .seaGreen
+        
+        setLogoView()
         checkTokenAvailability()
+    }
+    
+    func setLogoView() {
+        view.addSubview(textLogoView)
+        
+        textLogoView.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+        }
     }
     
     func checkTokenAvailability() {

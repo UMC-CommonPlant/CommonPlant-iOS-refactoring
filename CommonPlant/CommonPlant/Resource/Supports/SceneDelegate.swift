@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         // 뷰 확인하기
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: LogInViewController())
+        window?.rootViewController = SplashViewController()
         window?.makeKeyAndVisible()
     }
     
