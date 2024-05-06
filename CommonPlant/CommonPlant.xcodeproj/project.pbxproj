@@ -34,6 +34,9 @@
 		C072D35F2BCFAA40009F1492 /* GetDuplicateNicknameResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072D35E2BCFAA40009F1492 /* GetDuplicateNicknameResponse.swift */; };
 		C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */; };
 		C073EBE32B738F9E006980BB /* DatePickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C073EBE22B738F9E006980BB /* DatePickerCollectionViewCell.swift */; };
+		C078D7C02BE7AC54006D808A /* TokenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C078D7BF2BE7AC54006D808A /* TokenService.swift */; };
+		C078D7C32BE7AD81006D808A /* TokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C078D7C22BE7AD81006D808A /* TokenResponse.swift */; };
+		C078D7C52BE7ADC7006D808A /* TokenAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C078D7C42BE7ADC7006D808A /* TokenAPI.swift */; };
 		C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */; };
 		C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8732A59463E00CDC5CC /* SettingViewController.swift */; };
 		C07DF8762A5947C400CDC5CC /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */; };
@@ -132,6 +135,9 @@
 		C072D35E2BCFAA40009F1492 /* GetDuplicateNicknameResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDuplicateNicknameResponse.swift; sourceTree = "<group>"; };
 		C073EBE02B736B6F006980BB /* PlaceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCollectionViewCell.swift; sourceTree = "<group>"; };
 		C073EBE22B738F9E006980BB /* DatePickerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerCollectionViewCell.swift; sourceTree = "<group>"; };
+		C078D7BF2BE7AC54006D808A /* TokenService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenService.swift; sourceTree = "<group>"; };
+		C078D7C22BE7AD81006D808A /* TokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponse.swift; sourceTree = "<group>"; };
+		C078D7C42BE7ADC7006D808A /* TokenAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenAPI.swift; sourceTree = "<group>"; };
 		C07DF86C2A5943FA00CDC5CC /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		C07DF8732A59463E00CDC5CC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		C07DF8752A5947C400CDC5CC /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
@@ -257,6 +263,14 @@
 				C0409C502BD62D5700F5A002 /* PostUserResponse.swift */,
 			);
 			path = SignUpResponse;
+			sourceTree = "<group>";
+		};
+		C078D7C12BE7AD5F006D808A /* TokenResponse */ = {
+			isa = PBXGroup;
+			children = (
+				C078D7C22BE7AD81006D808A /* TokenResponse.swift */,
+			);
+			path = TokenResponse;
 			sourceTree = "<group>";
 		};
 		C07DF86E2A59440400CDC5CC /* MyPage */ = {
@@ -385,6 +399,14 @@
 				C039A8612B79000B00673CCC /* EditPlantViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C0CE99BA2BE78DFB0071FC11 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
+			);
+			path = Launch;
 			sourceTree = "<group>";
 		};
 		C0D212992B8E0639003AB202 /* Delegate */ = {
@@ -532,8 +554,8 @@
 		F91E47A12A53EFAC008E07A9 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				C0CE99BA2BE78DFB0071FC11 /* Launch */,
 				C0E270072B9713AC006492B0 /* Calendar */,
-				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
 				C0A6DCE52A97883D001A2E11 /* MyPlant */,
 				C027A0882A909BB0009289E9 /* ImagePicker */,
 				C085BFBA2A71488B00188C02 /* Authentication */,
@@ -570,6 +592,7 @@
 			children = (
 				C0D6E9052BC3B45C00A352DD /* LoginAPI.swift */,
 				C072D35B2BCFA9C8009F1492 /* SignUpAPI.swift */,
+				C078D7C42BE7ADC7006D808A /* TokenAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -577,6 +600,7 @@
 		F91E47A52A53F869008E07A9 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				C078D7C12BE7AD5F006D808A /* TokenResponse */,
 				C072D35D2BCFAA27009F1492 /* SignUpResponse */,
 				C072D3582BCFA768009F1492 /* SignUpRequest */,
 				C0D6E9022BC3B35D00A352DD /* LoginResponse */,
@@ -589,6 +613,7 @@
 			children = (
 				C0D6E9002BC3A97300A352DD /* LoginService.swift */,
 				C072D3562BCFA5D6009F1492 /* SignUpService.swift */,
+				C078D7BF2BE7AC54006D808A /* TokenService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -771,6 +796,7 @@
 				F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */,
 				C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */,
 				C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */,
+				C078D7C52BE7ADC7006D808A /* TokenAPI.swift in Sources */,
 				C0D6E9062BC3B45C00A352DD /* LoginAPI.swift in Sources */,
 				C0B1BDED2A9E23F100DD7E04 /* MemoCollectionViewCell.swift in Sources */,
 				C0EE4A012B182D4000592185 /* CommonAlertView.swift in Sources */,
@@ -780,6 +806,7 @@
 				C072D35F2BCFAA40009F1492 /* GetDuplicateNicknameResponse.swift in Sources */,
 				C039A8672B79E5CD00673CCC /* EditPlantViewController.swift in Sources */,
 				C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */,
+				C078D7C32BE7AD81006D808A /* TokenResponse.swift in Sources */,
 				F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */,
 				C0B1BDEB2A9E21F200DD7E04 /* MemoListViewController.swift in Sources */,
 				C0B1BDE72A9E1ECA00DD7E04 /* MemoViewModel.swift in Sources */,
@@ -836,6 +863,7 @@
 				C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */,
 				C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */,
 				C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */,
+				C078D7C02BE7AC54006D808A /* TokenService.swift in Sources */,
 				C0C104E72A56DD5F00945BD6 /* UIFont+Extension.swift in Sources */,
 				C06299802A7A87FB00985171 /* UIImageView+Extension.swift in Sources */,
 				C027A0942A909CDC009289E9 /* ImagePickerViewController.swift in Sources */,
