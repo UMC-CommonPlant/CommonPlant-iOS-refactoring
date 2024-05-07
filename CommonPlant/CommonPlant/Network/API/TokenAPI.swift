@@ -19,9 +19,9 @@ class TokenAPI {
         self.provider = provider
     }
     
-    func getTokenAvailability(_ token: String?) -> Single<TokenResponse> {
+    func getTokenAvailability() -> Single<TokenResponse> {
         
-        return provider.rx.request(.getTokenAvailability(token: token))
+        return provider.rx.request(.getTokenAvailability)
             .map(TokenResponse.self)
     }
 }

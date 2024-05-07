@@ -40,7 +40,7 @@ final class SplashViewController: UIViewController {
         do {
             let accessToken = try KeychainManager.read()
             
-            TokenAPI.shared.getTokenAvailability(accessToken).subscribe { [weak self] result in
+            TokenAPI.shared.getTokenAvailability().subscribe { [weak self] result in
                 guard let self = self else { return }
                 
                 switch result {
