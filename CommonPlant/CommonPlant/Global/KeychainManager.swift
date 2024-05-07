@@ -103,10 +103,8 @@ final public class KeychainManager {
     }
 }
 
-extension KeychainManager {
-    enum KeychainError: Error {
-        case notFound // 키체인 찾을 수 없음
-        case undexpectedData // 예상치 못한 데이터
-        case unhandledError(status: OSStatus) // 예외 처리에 실패한 에러
-    }
+enum KeychainError: Error {
+    case notFound // 키체인 찾을 수 없음
+    case undexpectedData // 예상치 못한 데이터
+    case unhandledError(status: OSStatus) // 예외 처리에 실패한 에러
 }
