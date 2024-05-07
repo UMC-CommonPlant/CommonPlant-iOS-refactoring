@@ -13,20 +13,13 @@ enum SignUpService {
     case postUser(request: PostUserRequest)
 }
 
-extension SignUpService: TargetType {
-    var baseURL: URL {
-        guard let baseString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String,
-              let baseURL = URL(string: baseString) else { fatalError("유효하지 않는 서버 URL입니다.") }
-        
-        return baseURL
-    }
-    
+extension SignUpService: BaseTargetType {
     var path: String {
         switch self {
         case let .duplicateNickname(nickname):
-            "/user/\(nickname)/exists"
+            URLConstant.getDuplicateNickname + "/\(nickname)/exists"
         case .postUser:
-            "/user"
+            URLConstant.postUser
         }
     }
     
@@ -68,9 +61,9 @@ extension SignUpService: TargetType {
     var headers: [String : String]? {
         switch self {
         case .duplicateNickname(_):
-            return nil
+            return NetworkConstant.noHeader
         case .postUser(_):
-            return ["Content-Type" : "multipart/form-data"]
+            return NetworkConstant.hasMultipartHeader
         }
     }
 }
