@@ -13,20 +13,13 @@ enum LoginService {
     case appleLogin(token: String)
 }
 
-extension LoginService: TargetType {
-    var baseURL: URL {
-        guard let baseString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String,
-              let baseURL = URL(string: baseString) else { fatalError("유효하지 않는 서버 URL입니다.") }
-        
-        return baseURL
-    }
-    
+extension LoginService: BaseTargetType {
     var path: String {
         switch self {
         case .kakaoLogin:
-            "/login/kakao"
+            URLConstant.kakaoLogin
         case .appleLogin:
-            "/login/apple"
+            URLConstant.appleLogin
         }
     }
     
@@ -42,6 +35,6 @@ extension LoginService: TargetType {
     }
     
     var headers: [String : String]? {
-        return nil
+        return NetworkConstant.noHeader
     }
 }
