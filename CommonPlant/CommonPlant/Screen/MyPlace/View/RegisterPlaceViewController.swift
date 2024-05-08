@@ -74,7 +74,6 @@ class RegisterPlaceViewController: UIViewController {
         configureUI()
         bind()
         configurePlaceTextField()
-        // TODO: 텍스트 필드 글자 입력되면 언더바 색상 변경
     }
     
     // MARK: - Custom Method
@@ -121,6 +120,7 @@ class RegisterPlaceViewController: UIViewController {
             .subscribe(onNext: { [weak self] text in
                 self?.roadAddressLabel.text = text
                 let imageName = text.isEmpty ? "Backspace" : "Delete"
+                self?.addressUnderlineView.backgroundColor = text.isEmpty ? .gray2 : .black
                 self?.addressButton.setImage(UIImage(named: imageName)?.withTintColor(.gray6!), for: .normal)
             })
             .disposed(by: disposeBag)
@@ -162,9 +162,10 @@ class RegisterPlaceViewController: UIViewController {
                 return self?.truncateMaxLength(text: text) ?? ""
             }
             .observe(on: MainScheduler.instance)
-            .do(onNext: { [unowned self] text in
+            .do(onNext: { text in
                 self.countingLabel.text = "\(text.count)/\(self.maxLength)"
                 self.countingLabel.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
+                self.placeNameUnderlineView.backgroundColor = text.isEmpty ? .gray2 : .black
             })
             .bind(to: placeNameTextField.rx.text)
             .disposed(by: disposeBag)
@@ -267,8 +268,4 @@ extension RegisterPlaceViewController {
             $0.right.equalToSuperview().offset(-20)
         }
     }
-}
-
-#Preview {
-    RegisterPlaceViewController()
 }
