@@ -13,7 +13,7 @@ import AuthenticationServices
 class LogInViewController: UIViewController {
     // MARK: Properties
     var viewModel = LogInViewModel()
-    lazy var input = LogInViewModel.Input(kakaoBtnDidTap: kakaoLoginView.rx.tapGesture().map { _ in }.asObservable())
+    lazy var input = LogInViewModel.Input(kakaoBtnDidTap: kakaoLoginView.rx.tapGesture().map { _ in }.asObservable().skip(1))
     lazy var output = viewModel.transform(input: input)
     
     // MARK: UI Components

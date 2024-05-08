@@ -85,30 +85,31 @@ extension LogInViewModel {
         input.kakaoBtnDidTap.subscribe { [weak self] _ in
             guard let self = self else { return }
             
-            if UserApi.isKakaoTalkLoginAvailable() {
-                UserApi.shared.rx.loginWithKakaoTalk()
-                    .subscribe(onNext: { [weak self] oauthToken in
-                        guard let self = self else { return }
-                        
-                        let accessToken = oauthToken.accessToken
-                        
-                        callLoginAPI(accessToken, showMainView: showMainView, showSignUpView: showSignUpView)
-                    }, onError: { error in
-                        // TODO: 에러 처리
-                    }).disposed(by: self.disposeBag)
-            } else {
-                UserApi.shared.rx.loginWithKakaoAccount()
-                    .subscribe(onNext: { [weak self] oauthToken in
-                        guard let self = self else { return }
-                        
-                        let accessToken = oauthToken.accessToken
-                        
-                        callLoginAPI(accessToken, showMainView: showMainView, showSignUpView: showSignUpView)
-                    }, onError: { error in
-                        // TODO: 에러 처리
-                    }).disposed(by: self.disposeBag)
+            DispatchQueue.main.async {
+                if UserApi.isKakaoTalkLoginAvailable() {
+                    UserApi.shared.rx.loginWithKakaoTalk()
+                        .subscribe(onNext: { [weak self] oauthToken in
+                            guard let self = self else { return }
+                            
+                            let accessToken = oauthToken.accessToken
+                            
+                            callLoginAPI(accessToken, showMainView: showMainView, showSignUpView: showSignUpView)
+                        }, onError: { error in
+                            // TODO: 에러 처리
+                        }).disposed(by: self.disposeBag)
+                } else {
+                    UserApi.shared.rx.loginWithKakaoAccount()
+                        .subscribe(onNext: { [weak self] oauthToken in
+                            guard let self = self else { return }
+                            
+                            let accessToken = oauthToken.accessToken
+                            
+                            callLoginAPI(accessToken, showMainView: showMainView, showSignUpView: showSignUpView)
+                        }, onError: { error in
+                            // TODO: 에러 처리
+                        }).disposed(by: self.disposeBag)
+                }
             }
-            
         }.disposed(by: disposeBag)
         
         return Output(showSignUpView: showSignUpView.asDriver(onErrorDriveWith: .empty()), showMainView: showMainView.asDriver(onErrorDriveWith: .empty()))
