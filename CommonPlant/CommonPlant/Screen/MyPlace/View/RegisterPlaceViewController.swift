@@ -12,6 +12,8 @@ import RxSwift
 import RxCocoa
 import Photos
 
+// TODO: - 장소 사진이 비율에 맞지 않게 들어가는 문제 해결하기
+
 class RegisterPlaceViewController: UIViewController {
     // MARK: - UI Components
     private let imagePickerButton = UIButton().then {
@@ -19,6 +21,7 @@ class RegisterPlaceViewController: UIViewController {
         $0.setImage(image, for: .normal)
         $0.layer.cornerRadius = 16
         $0.clipsToBounds = true
+        $0.contentMode = .scaleAspectFill
     }
     private let cameraImageView = UIImageView().then {
         $0.image = UIImage(named: "CameraMark")
@@ -88,11 +91,27 @@ class RegisterPlaceViewController: UIViewController {
         
         let output = viewModel.transform(input: input)
         
+        output.showImageSettingAlert
+            .drive(onNext: { [weak self] _ in
+                self?.showImageSettingAlert { state in
+                    switch state {
+                    case .newImage:
+                        self?.handleCameraPermissionStateForImagePicker(output: output)
+                    case .defaultImage:
+                        self?.setDefaultImage()
+                    case .cancle:
+                        break
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+        
         output.cameraPermissionState
             .drive(onNext: { [weak self] state in
                 self?.handleCameraPermissionState(state)
             })
             .disposed(by: disposeBag)
+        
         
         output.isNextButtonEnabled
             .bind { [weak self] isEnabled in
@@ -126,25 +145,46 @@ class RegisterPlaceViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
+    private func handleCameraPermissionStateForImagePicker(output: RegisterPlaceViewModel.Output) {
+        output.cameraPermissionState
+            .drive(onNext: { [weak self] state in
+                self?.handleCameraPermissionState(state)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     private func handleCameraPermissionState(_ state: PHAuthorizationStatus) {
         switch state {
         case .authorized, .limited:
-            let completion: (String) -> Void = { imageString in
-                self.loadImage(imageString: imageString)
+            let completion: (String) -> Void = { [weak self] imageString in
+                self?.loadImage(imageString: imageString)
             }
             if state == .authorized {
                 ImagePickerViewController.shared.showPhotoPicker(viewController: self)
                 ImagePickerViewController.shared.didSelectImage = completion
             } else {
                 let imagePickerVC = ImagePickerViewController()
-                self.present(imagePickerVC, animated: true)
+                self.present(imagePickerVC, animated: true, completion: nil)
                 imagePickerVC.didSelectImage = completion
             }
         case .denied, .restricted:
-            self.moveToSetting()
+            moveToSetting()
         default:
             break
         }
+    }
+    
+    private func loadImage(imageString: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let url = URL(string: imageString),
+                  let imageData = try? Data(contentsOf: url),
+                  let image = UIImage(data: imageData) else { return }
+            self?.imagePickerButton.setImage(image, for: .normal)
+        }
+    }
+    
+    private func setDefaultImage() {
+        imagePickerButton.setImage(UIImage(named: "RegisterPlace"), for: .normal)
     }
     
     private func showPostCodeViewController() {
@@ -173,15 +213,6 @@ class RegisterPlaceViewController: UIViewController {
     
     private func truncateMaxLength(text: String) -> String {
         return String(text.prefix(maxLength))
-    }
-    
-    private func loadImage(imageString: String) {
-        DispatchQueue.main.async { [weak self] in
-            guard let url = URL(string: imageString) else { return }
-            guard let imageData = try? Data(contentsOf: url),
-                  let image = UIImage(data: imageData) else { return }
-            self?.imagePickerButton.setImage(image, for: .normal)
-        }
     }
 }
 
