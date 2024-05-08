@@ -81,7 +81,6 @@
 		F9595C192B85D3A700B8785D /* RegisterPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9595C182B85D3A600B8785D /* RegisterPlaceViewModel.swift */; };
 		F9595C1B2B85DF3700B8785D /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9595C1A2B85DF3700B8785D /* ViewModelType.swift */; };
 		F982EB232BE296BC00392314 /* JJFloatingActionButton in Frameworks */ = {isa = PBXBuildFile; productRef = F982EB222BE296BC00392314 /* JJFloatingActionButton */; };
-		F991D0D72BC5AA2700893E67 /* AddFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F991D0D62BC5AA2700893E67 /* AddFriendsViewController.swift */; };
 		F9A1FB1A2A619F2300F346DE /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = F9A1FB192A619F2300F346DE /* RxMoya */; };
 		F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB242A664F4300F346DE /* MainViewModel.swift */; };
 		F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB282A67B03400F346DE /* MainModel.swift */; };
@@ -165,7 +164,6 @@
 		F94BB2662B57E62900CB3504 /* CommonCTAButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCTAButton.swift; sourceTree = "<group>"; };
 		F9595C182B85D3A600B8785D /* RegisterPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPlaceViewModel.swift; sourceTree = "<group>"; };
 		F9595C1A2B85DF3700B8785D /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
-		F991D0D62BC5AA2700893E67 /* AddFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendsViewController.swift; sourceTree = "<group>"; };
 		F9A1FB242A664F4300F346DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F9A1FB282A67B03400F346DE /* MainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModel.swift; sourceTree = "<group>"; };
 		F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewController.swift; sourceTree = "<group>"; };
@@ -510,7 +508,6 @@
 				F9B6E9962BCFBA83000F05D4 /* Cells */,
 				F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */,
 				F9E6AEB32B931CB7001CA1AC /* PostCodeViewController.swift */,
-				F991D0D62BC5AA2700893E67 /* AddFriendsViewController.swift */,
 				F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */,
 			);
 			path = View;
@@ -736,7 +733,6 @@
 				F94BB2672B57E62900CB3504 /* CommonCTAButton.swift in Sources */,
 				C0A0D4DE2A73E96800426514 /* LogInViewModel.swift in Sources */,
 				F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */,
-				F991D0D72BC5AA2700893E67 /* AddFriendsViewController.swift in Sources */,
 				F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */,
 				C07DF8842A59844400CDC5CC /* UIView+Extension.swift in Sources */,
 				C007F63F2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift in Sources */,
