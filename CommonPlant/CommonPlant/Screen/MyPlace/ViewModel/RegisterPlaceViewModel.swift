@@ -25,18 +25,15 @@ class RegisterPlaceViewModel: ViewModelType {
     }
     
     private let cameraPermissionStateSubject = PublishSubject<PHAuthorizationStatus>()
-
+    
     let addressLabelText = BehaviorSubject<String>(value: "")
     
     func transform(input: Input) -> Output {
         let showImageSettingAlert = input.imagePickerButtonTapped
-                    .do(onNext: { [weak self] _ in
-                        self?.checkCameraPermission()
-                    })
-                    .asDriver(onErrorDriveWith: Driver.empty())
+                   .asDriver(onErrorDriveWith: Driver.empty())
         
         let cameraPermissionState = cameraPermissionStateSubject
-                   .asDriver(onErrorJustReturn: .notDetermined)
+            .asDriver(onErrorJustReturn: .notDetermined)
         
         let isNextButtonEnabled = Observable.combineLatest(input.placeNameText, addressLabelText)
             .map { placeNameText, addressText in
@@ -48,18 +45,18 @@ class RegisterPlaceViewModel: ViewModelType {
             .asDriver(onErrorJustReturn: ())
         
         return Output(
-            isNextButtonEnabled: isNextButtonEnabled, 
+            isNextButtonEnabled: isNextButtonEnabled,
             cameraPermissionState: cameraPermissionState,
             showImageSettingAlert: showImageSettingAlert,
             navigateToPostCode: navigateToPostCode)
     }
     
-    private func checkCameraPermission() {
-            PHPhotoLibrary.requestAuthorization { [weak self] status in
-                self?.cameraPermissionStateSubject.onNext(status)
-            }
+    func checkCameraPermission() {
+        ImagePickerViewModel.shared.checkPermissionState { state in
+            self.cameraPermissionStateSubject.onNext(state)
         }
-
+    }
+    
     
     func updateAddressText(_ text: String) {
         addressLabelText.onNext(text)

@@ -21,7 +21,7 @@ class RegisterPlaceViewController: UIViewController {
         $0.setImage(image, for: .normal)
         $0.layer.cornerRadius = 16
         $0.clipsToBounds = true
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleAspectFit
     }
     private let cameraImageView = UIImageView().then {
         $0.image = UIImage(named: "CameraMark")
@@ -96,7 +96,7 @@ class RegisterPlaceViewController: UIViewController {
                 self?.showImageSettingAlert { state in
                     switch state {
                     case .newImage:
-                        self?.handleCameraPermissionStateForImagePicker(output: output)
+                        self?.viewModel.checkCameraPermission()
                     case .defaultImage:
                         self?.setDefaultImage()
                     case .cancle:
@@ -107,11 +107,11 @@ class RegisterPlaceViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.cameraPermissionState
-            .drive(onNext: { [weak self] state in
-                self?.handleCameraPermissionState(state)
-            })
-            .disposed(by: disposeBag)
-        
+                   .drive(onNext: { [weak self] state in
+                       print(state)
+                       self?.subscribeToCameraPermissionState(output: output)
+                   })
+                   .disposed(by: disposeBag)
         
         output.isNextButtonEnabled
             .bind { [weak self] isEnabled in
@@ -145,33 +145,34 @@ class RegisterPlaceViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    private func handleCameraPermissionStateForImagePicker(output: RegisterPlaceViewModel.Output) {
+    private func handleCameraPermissionState(_ state: PHAuthorizationStatus) {
+        DispatchQueue.main.async {
+            switch state {
+            case .authorized:
+                ImagePickerViewController.shared.showPhotoPicker(viewController: self)
+                ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                    self?.loadImage(imageString: imageString)
+                }
+            case .limited:
+                let imagePickerVC = ImagePickerViewController()
+                self.present(imagePickerVC, animated: true)
+                imagePickerVC.didSelectImage = { [weak self] imageString in
+                    self?.loadImage(imageString: imageString)
+                }
+            case .denied, .restricted:
+                self.moveToSetting()
+            default:
+                break
+            }
+        }
+    }
+    
+    private func subscribeToCameraPermissionState(output: RegisterPlaceViewModel.Output) {
         output.cameraPermissionState
             .drive(onNext: { [weak self] state in
                 self?.handleCameraPermissionState(state)
             })
             .disposed(by: disposeBag)
-    }
-    
-    private func handleCameraPermissionState(_ state: PHAuthorizationStatus) {
-        switch state {
-        case .authorized, .limited:
-            let completion: (String) -> Void = { [weak self] imageString in
-                self?.loadImage(imageString: imageString)
-            }
-            if state == .authorized {
-                ImagePickerViewController.shared.showPhotoPicker(viewController: self)
-                ImagePickerViewController.shared.didSelectImage = completion
-            } else {
-                let imagePickerVC = ImagePickerViewController()
-                self.present(imagePickerVC, animated: true, completion: nil)
-                imagePickerVC.didSelectImage = completion
-            }
-        case .denied, .restricted:
-            moveToSetting()
-        default:
-            break
-        }
     }
     
     private func loadImage(imageString: String) {
