@@ -1,12 +1,13 @@
 # Created by https://www.toptal.com/developers/gitignore/api/swift,xcode
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,xcode
-
+CommonPlant/CommonPlant/Resource/Supports/GoogleService-Info.plist
 ### Swift ###
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## User settings
+
 *.xcuserstate
 xcuserdata/
 
