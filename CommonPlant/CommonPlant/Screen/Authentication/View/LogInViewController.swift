@@ -10,80 +10,112 @@ import SnapKit
 import RxSwift
 import AuthenticationServices
 
-import RxKakaoSDKAuth
-import RxKakaoSDKUser
-import RxKakaoSDKCommon
-import KakaoSDKAuth
-import KakaoSDKUser
-import KakaoSDKCommon
-
 class LogInViewController: UIViewController {
     // MARK: Properties
     var viewModel = LogInViewModel()
-    var disposeBag = DisposeBag()
+    lazy var input = LogInViewModel.Input(kakaoBtnDidTap: kakaoLoginView.rx.tapGesture().map { _ in }.asObservable().skip(1))
+    lazy var output = viewModel.transform(input: input)
     
     // MARK: UI Components
-    var textLogoView = UIImageView()
-    var imageLogoView = UIImageView()
-    var kakaoLoginView = UIView()
-    var kakaoImageView = UIImageView()
-    var kakaoLoginLabel = UILabel()
-    var appleLoginView = UIView()
-    var appleImageView = UIImageView()
-    var appleLoginLabel = UILabel()
+    var textLogoView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "TextLogo")
+        return view
+    }()
+    var imageLogoView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "SignLogo")
+        return view
+    }()
+    var kakaoLoginView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 254 / 255.0, green: 229 / 255.0, blue: 0, alpha: 1)
+        view.makeRound(radius: 8)
+        return view
+    }()
+    var kakaoImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "KakaoLogo")
+        return view
+    }()
+    var kakaoLoginLabel: UILabel = {
+        let label = UILabel()
+        label.text = "카카오로 로그인"
+        label.font = .bodyB3
+        label.textAlignment = .center
+        label.textColor = .gray6
+        return label
+    }()
+    var appleLoginView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.makeRound(radius: 8)
+        return view
+    }()
+    var appleImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "AppleLogo")
+        return view
+    }()
+    var appleLoginLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Apple로 로그인"
+        label.font = .bodyB3
+        label.textAlignment = .center
+        label.textColor = .white
+        return label
+    }()
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUI()
-        setHierarchy()
-        setLayout()
-        setAction()
+        view.backgroundColor = .seaGreen
+        
+        bind()
+        setConstraints()
     }
     
     // MARK: Custom Method
-    func setUI() {
-        view.backgroundColor = .seaGreen
+    func bind() {
+        output.showMainView.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            let mainTabBarVC = MainTabBarController()
+            view.window?.rootViewController = mainTabBarVC
+            view.window?.makeKeyAndVisible()
+        }.disposed(by: viewModel.disposeBag)
         
-        textLogoView.image = UIImage(named: "TextLogo")
+        output.showSignUpView.drive { [weak self] (email, provider) in
+            guard let self = self else { return }
+            
+            let nextVC = SignUpViewController(email: email, provider: provider)
+            
+            self.present(nextVC, animated: true)
+        }.disposed(by: viewModel.disposeBag)
         
-        imageLogoView.image = UIImage(named: "SignLogo")
-        
-        kakaoLoginView.backgroundColor = UIColor(red: 254 / 255.0, green: 229 / 255.0, blue: 0, alpha: 1)
-        kakaoLoginView.makeRound(radius: 8)
-        
-        kakaoLoginLabel.text = "카카오로 로그인"
-        kakaoLoginLabel.font = .bodyB3
-        kakaoLoginLabel.textAlignment = .center
-        kakaoLoginLabel.textColor = .gray6
-        
-        kakaoImageView.image = UIImage(named: "KakaoLogo")
-        
-        appleLoginView.backgroundColor = .black
-        appleLoginView.makeRound(radius: 8)
-        
-        appleLoginLabel.text = "Apple로 로그인"
-        appleLoginLabel.font = .bodyB3
-        appleLoginLabel.textAlignment = .center
-        appleLoginLabel.textColor = .white
-        
-        appleImageView.image = UIImage(named: "AppleLogo")
+        appleLoginView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                
+                viewModel.performAppleSignIn(scope: [.fullName, .email], on: self.view.window!)
+            })
+            .disposed(by: viewModel.disposeBag)
     }
     
-    func setHierarchy() {
-        view.addSubview(textLogoView)
-        view.addSubview(imageLogoView)
-        view.addSubview(kakaoLoginView)
-        view.addSubview(appleLoginView)
+    func setConstraints() {
+        [textLogoView, imageLogoView, kakaoLoginView, appleLoginView].forEach {
+            view.addSubview($0)
+        }
         
-        kakaoLoginView.addSubview(kakaoLoginLabel)
-        kakaoLoginView.addSubview(kakaoImageView)
+        [kakaoLoginLabel, kakaoImageView].forEach {
+            kakaoLoginView.addSubview($0)
+        }
         
-        appleLoginView.addSubview(appleLoginLabel)
-        appleLoginView.addSubview(appleImageView)
-    }
-    
-    func setLayout() {
+        [appleLoginLabel, appleImageView].forEach {
+            appleLoginView.addSubview($0)
+        }
+        
         textLogoView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(96)
             make.centerX.equalToSuperview()
@@ -128,46 +160,5 @@ class LogInViewController: UIViewController {
             make.centerY.equalToSuperview()
             make.centerX.equalToSuperview()
         }
-    }
-    
-    func setAction() {
-        UserApi.shared.rx.loginWithKakaoAccount()
-            .subscribe(onNext:{ (oauthToken) in
-                print("loginWithKakaoAccount() success.")
-                _ = oauthToken
-            }, onError: {error in
-                print(error)
-            })
-            .disposed(by: disposeBag)
-        
-        kakaoLoginView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                
-                if (UserApi.isKakaoTalkLoginAvailable()) {
-                    UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                        if let error = error {
-                            print(error)
-                        }
-                        else {
-                            print("loginWithKakaoTalk() success.")
-                            
-                            guard let oauthToken = oauthToken else { return }
-                            let accessToken = oauthToken.accessToken
-                        }
-                    }
-                }
-            })
-            .disposed(by: disposeBag)
-        
-        appleLoginView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                
-                viewModel.performAppleSignIn(scope: [.fullName, .email], on: self.view.window!)
-            })
-            .disposed(by: disposeBag)
     }
 }
