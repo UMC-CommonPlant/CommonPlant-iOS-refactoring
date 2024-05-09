@@ -56,9 +56,9 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         setCollectionView()
         configureUI()
         view.layoutIfNeeded()
-        setGradient()
         addTargets()
         bindCollectionView()
+        requestAuthorization()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,6 +105,16 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         myPlantCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
     }
     
+    private func requestAuthorization() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if granted {
+                print("알림 허용됨")
+            } else {
+                print("알림 거부됨")
+            }
+        }
+    }
+    
     // MARK: - @objc
     @objc private func addPlaceButtonTapped() {
         let registerPlaceVC = RegisterPlaceViewController()
@@ -118,6 +128,7 @@ extension MainViewController {
     private func configureUI() {
         setAttributes()
         setConstraints()
+        setGradient()
     }
     
     private func setGradient() {
