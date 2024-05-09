@@ -56,8 +56,9 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         setCollectionView()
         configureUI()
         view.layoutIfNeeded()
-        setGradient()
+        addTargets()
         bindCollectionView()
+        requestAuthorization()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,7 +66,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         self.navigationController?.isNavigationBarHidden = true
         self.view.backgroundColor = UIColor(red: 0.95, green: 0.96, blue: 0.96, alpha: 1)
     }
-        
+    
+    // MARK: - Custom Method
+    private func addTargets() {
+        addPlaceButton.addTarget(self, action: #selector(addPlaceButtonTapped), for: .touchUpInside)
+    }
+    
     // MARK: - CollectionView
     private func bindCollectionView() {
         viewModel.mainObservable
@@ -98,6 +104,23 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         myPlaceCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
         myPlantCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
     }
+    
+    private func requestAuthorization() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if granted {
+                print("알림 허용됨")
+            } else {
+                print("알림 거부됨")
+            }
+        }
+    }
+    
+    // MARK: - @objc
+    @objc private func addPlaceButtonTapped() {
+        let registerPlaceVC = RegisterPlaceViewController()
+        self.navigationController?.pushViewController(registerPlaceVC, animated: true)
+    }
+    
 }
 
 // MARK: - UI
@@ -105,6 +128,7 @@ extension MainViewController {
     private func configureUI() {
         setAttributes()
         setConstraints()
+        setGradient()
     }
     
     private func setGradient() {
@@ -231,8 +255,8 @@ extension MainViewController {
         }
         
         gradientView.snp.makeConstraints {
-            $0.left.equalTo(contentView).offset(20)
-            $0.right.equalTo(contentView).offset(-20)
+            $0.left.equalTo(contentView)
+            $0.right.equalTo(contentView)
             $0.height.equalTo(27.6)
             $0.bottom.equalTo(topView.snp.bottom).offset(-11)
         }
