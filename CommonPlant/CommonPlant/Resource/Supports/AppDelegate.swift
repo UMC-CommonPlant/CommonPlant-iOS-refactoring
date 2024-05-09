@@ -9,11 +9,16 @@ import UIKit
 //import FirebaseCore
 import UserNotifications
 //import FirebaseMessaging
+import RxKakaoSDKCommon
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
      //   FirebaseApp.configure()
+        if let appKey = Bundle.main.object(forInfoDictionaryKey: "KAKAO_APP_KEY") as? String {
+            RxKakaoSDK.initSDK(appKey: appKey)
+        }
+        
         if #available(iOS 15.0, *) {
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
