@@ -7,200 +7,203 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 import PhotosUI
 
-class SignUpViewController: UIViewController, UITextFieldDelegate {
+class SignUpViewController: UIViewController {
     // MARK: Properties
-    var disposeBag = DisposeBag()
-    let maximumCount = 10
+    private let viewModel = SignUpViewModel()
+    private lazy var privacyVC = PrivacyViewController(viewModel.privacyVM)
+    private let email: String
+    private let provider: String
+    
+    private lazy var input = SignUpViewModel.Input(
+        backBtnDidTap: backButton.rx.tap.asObservable(),
+        profileImgDidTap: profileImageView.rx.tapGesture().map{ _ in}.asObservable(),
+        selectedNewImage: selectNewImage.asObservable(),
+        selectedDefaultImage: changeToDefaultImage.asObservable(),
+        editingNickname: userNickNameTextFiled.rx.text.orEmpty.asObservable(),
+        endEditingNickname: userNickNameTextFiled.rx.controlEvent(.editingDidEnd).asObservable(),
+        duplicateBtnDidTap: checkDuplicateButton.rx.tapGesture().map{ _ in self.userNickNameTextFiled.text ?? "" }.asObservable(),
+        privacyDidTap: privacyView.rx.tapGesture().map { _ in }.asObservable(),
+        submitBtnDidTap: submitButton.rx.tap.map { _ in
+            var data: Data?
+            
+            if self.profileImageView.image == UIImage(named: "ProfileGreen") {
+                data = nil
+            } else {
+                data = self.profileImageView.image?.jpegData(compressionQuality: 1.0)
+            }
+            return (self.email, self.provider, data) }.asObservable())
+    private lazy var output = viewModel.transform(input: input)
+    private let selectNewImage = PublishRelay<Void>()
+    private let changeToDefaultImage = PublishRelay<Void>()
+    
+    private let maximumCount = 10
     
     // MARK: UI Components
-    var navigationBarView = UIView()
-    var backButton = UIButton()
-    var userProfileView = UIView()
-    var profileImageView = UIImageView()
-    var addImageView = UIImageView()
-    var userNickNameTextFiled = UITextField()
-    var underlineView = UIView()
-    var countLabel = UILabel()
-    var checkDuplicateButton = UIButton()
-    var messageLabel = UILabel()
-    var privacyView = UIView()
-    var checkButton = UIImageView()
-    var privacyPolicyLabel = UILabel()
-    var showButton = UIButton()
-    var doneButton = UIButton()
+    private var navigationBarView = UIView()
+    private var backButton: UIButton = {
+        let button = UIButton()
+        var backBtnConfig = UIButton.Configuration.plain()
+        backBtnConfig.image = UIImage(named: "Back")
+        button.configuration = backBtnConfig
+        return button
+    }()
+    private var userProfileView = UIView()
+    private var profileImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "ProfileGreen")
+        view.makeRound(radius: 41.6)
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
+    private var addImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "Add")
+        return view
+    }()
+    private var userNickNameTextFiled: UITextField = {
+        let field = UITextField()
+        field.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray3 as Any, NSAttributedString.Key.font: UIFont.bodyM1])
+        field.font = .bodyM1
+        field.textAlignment = .left
+        field.textColor = .black
+        field.tintColor = .black
+        field.clearButtonMode = .whileEditing
+        field.autocorrectionType = .no
+        field.spellCheckingType = .no
+        field.autocapitalizationType = .none
+        field.returnKeyType = .done
+        field.clearsOnInsertion = true
+        return field
+    }()
+    private var underlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray2
+        return view
+    }()
+    private var countLabel: UILabel = {
+        let label = UILabel()
+        label.font = .bodyB3
+        label.textAlignment = .right
+        label.textColor = .black
+        label.isHidden = true
+        return label
+    }()
+    private var checkDuplicateButton: UIButton = {
+        let button = UIButton()
+        var btnConfig = UIButton.Configuration.plain()
+        var btnAttr = AttributedString.init("중복검사")
+        btnAttr.font = .bodyM3
+        btnAttr.foregroundColor = .gray6
+        btnConfig.attributedTitle = btnAttr
+        
+        button.configuration = btnConfig
+        button.contentHorizontalAlignment = .center
+        button.backgroundColor = .gray1
+        button.makeRound(radius: 4)
+        button.isHidden = true
+        return button
+    }()
+    private var messageLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.font = .captionM2
+        label.textAlignment = .left
+        return label
+    }()
+    private var privacyView = UIView()
+    private var checkButton: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "UnselectedGray")
+        return view
+    }()
+    private var privacyPolicyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "개인정보 이용 약관 동의"
+        label.font = .bodyM2
+        label.textAlignment = .left
+        label.textColor = .black
+        return label
+    }()
+    private var showButton: UIButton = {
+        let button = UIButton()
+        var btnConfig = UIButton.Configuration.plain()
+        var btnAttr = AttributedString.init("보기")
+        btnAttr.font = .bodyB2
+        btnAttr.foregroundColor = .gray4
+        btnConfig.attributedTitle = btnAttr
+        btnConfig.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        button.configuration = btnConfig
+        return button
+    }()
+    private var submitButton: UIButton = {
+        let button = UIButton()
+        var btnConfig = UIButton.Configuration.plain()
+        var btnAttr = AttributedString.init("완료")
+        btnAttr.font = .bodyM2
+        btnConfig.attributedTitle = btnAttr
+        btnConfig.baseForegroundColor = .gray4
+        button.configuration = btnConfig
+        button.contentHorizontalAlignment = .center
+        button.backgroundColor = .gray1
+        button.makeRound(radius: 8)
+        button.isEnabled = false
+        return button
+    }()
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUI()
-        setHierarchy()
-        setLayout()
-        setAction()
+        view.backgroundColor = .white
+        
+        bind()
+        setConstraints()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        SignUpViewModel.shared.nickNameState.accept(.normal)
-        SignUpViewModel.shared.userEmail.onNext("")
-        SignUpViewModel.shared.userProfileImgURL.onNext("")
-        SignUpViewModel.shared.nickNameState.accept(.normal)
-        SignUpViewModel.shared.textCount.accept(0)
-        SignUpViewModel.shared.isAgreePolicy.accept(false)
+    init(email: String, provider: String) {
+        self.email = email
+        self.provider = provider
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: Custom Method
-    func setUI() {
-        view.backgroundColor = .white
-        
-        var backBtnConfig = UIButton.Configuration.plain()
-        var checkDupleBtnConfig = UIButton.Configuration.plain()
-        var doneBtnConfig = UIButton.Configuration.plain()
-        var showBtnConfig = UIButton.Configuration.plain()
-        
-        backBtnConfig.image = UIImage(named: "Back")
-        backButton.configuration = backBtnConfig
-        
-        addImageView.image = UIImage(named: "Add")
-        
-        userNickNameTextFiled.delegate = self
-        userNickNameTextFiled.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray3 as Any, NSAttributedString.Key.font: UIFont.bodyM1])
-        userNickNameTextFiled.font = .bodyM1
-        userNickNameTextFiled.textAlignment = .left
-        userNickNameTextFiled.textColor = .black
-        userNickNameTextFiled.tintColor = .black
-        userNickNameTextFiled.clearButtonMode = .whileEditing
-        userNickNameTextFiled.autocorrectionType = .no
-        userNickNameTextFiled.spellCheckingType = .no
-        userNickNameTextFiled.autocapitalizationType = .none
-        userNickNameTextFiled.returnKeyType = .done
-        userNickNameTextFiled.clearsOnInsertion = true
-        
-        var checkDupleAttr = AttributedString.init("중복검사")
-        checkDupleAttr.font = .bodyM3
-        checkDupleAttr.foregroundColor = .gray6
-        checkDupleBtnConfig.attributedTitle = checkDupleAttr
-        
-        checkDuplicateButton.configuration = checkDupleBtnConfig
-        checkDuplicateButton.contentHorizontalAlignment = .center
-        checkDuplicateButton.backgroundColor = .gray1
-        checkDuplicateButton.makeRound(radius: 4)
-        checkDuplicateButton.isHidden = true
-        
-        countLabel.font = .bodyB3
-        countLabel.textAlignment = .right
-        countLabel.textColor = .black
-        countLabel.isHidden = true
-        
-        messageLabel.font = .captionM2
-        messageLabel.textAlignment = .left
-        
-        privacyPolicyLabel.text = "개인정보 이용 약관 동의"
-        privacyPolicyLabel.font = .bodyM2
-        privacyPolicyLabel.textAlignment = .left
-        privacyPolicyLabel.textColor = .black
-        
-        var showAttr = AttributedString.init("보기")
-        showAttr.font = .bodyB2
-        showAttr.foregroundColor = .gray4
-        showBtnConfig.attributedTitle = showAttr
-        showBtnConfig.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        showButton.configuration = showBtnConfig
-        
-        var doneAttr = AttributedString.init("완료")
-        doneAttr.font = .bodyM2
-        doneButton.contentHorizontalAlignment = .center
-        doneButton.makeRound(radius: 8)
-        
-        SignUpViewModel.shared.userProfileImgURL.subscribe(onNext: { [weak self] imageURL in
-            guard let self = self else { return }
-            if imageURL.isEmpty {
-                profileImageView.image = UIImage(named: "ProfileGreen")
-            } else {
-                if let imageURL = URL(string: imageURL) {
-                    DispatchQueue.main.async {
-                        self.profileImageView.load(url: imageURL)
-                        self.profileImageView.contentMode = .scaleAspectFill
-                        self.profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
-                    }
-                }
-            }
-        }).disposed(by: disposeBag)
-        
-        SignUpViewModel.shared.isAgreePolicy.subscribe(onNext: { [weak self] isAgree in
-            guard let self = self else { return }
-            if isAgree {
-                checkButton.image = UIImage(named: "SelectedGray")
-            } else {
-                checkButton.image = UIImage(named: "UnselectedGray")
-            }
-        }).disposed(by: disposeBag)
-        
-        SignUpViewModel.shared.nickNameState.map { state -> UIColor in
-            self.messageLabel.isHidden = false
-            self.messageLabel.text = state.rawValue
-            
-            switch state {
-            case .normal:
-                return .gray2!
-            case .unusable:
-                return .activeRed!
-            case .usable:
-                return .activeBlue!
-            }
-        }.subscribe(onNext: { [weak self] color in
-            guard let self = self else { return }
-            
-            messageLabel.textColor = color
-            underlineView.backgroundColor = color
-        }).disposed(by: disposeBag)
-        
-        SignUpViewModel.shared.textCount.subscribe(onNext: { [weak self] count in
-            guard let self = self else { return }
-            countLabel.text = "\(count)/\(maximumCount)"
-            countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
-        }).disposed(by: disposeBag)
-        
-        Observable.combineLatest(SignUpViewModel.shared.nickNameState, SignUpViewModel.shared.isAgreePolicy) { nickNameState, isAgreePolicy in
-            return nickNameState == .usable && isAgreePolicy
-        }
-        .map { state -> (UIColor, UIColor, Bool) in
-            state ? (.white, .seaGreenDark1!, true) : (.gray3!, .gray1!, false)
-        }
-        .subscribe(onNext: { [weak self] foregroundColor, backgroundColor, isEnable in
-            guard let self = self else { return }
-            
-            doneAttr.foregroundColor = foregroundColor
-            doneBtnConfig.attributedTitle = doneAttr
-            
-            doneButton.configuration = doneBtnConfig
-            doneButton.backgroundColor = backgroundColor
-            doneButton.isEnabled = isEnable
-        }).disposed(by: disposeBag)
-    }
-    
     func setHierarchy() {
-        view.addSubview(navigationBarView)
-        view.addSubview(userProfileView)
-        view.addSubview(userNickNameTextFiled)
-        view.addSubview(underlineView)
-        view.addSubview(countLabel)
-        view.addSubview(messageLabel)
-        view.addSubview(checkDuplicateButton)
-        view.addSubview(privacyView)
-        view.addSubview(doneButton)
+        [navigationBarView, userProfileView, userNickNameTextFiled, underlineView, countLabel, messageLabel, checkDuplicateButton, privacyView, submitButton].forEach {
+            view.addSubview($0)
+        }
         
         navigationBarView.addSubview(backButton)
         
-        userProfileView.addSubview(profileImageView)
-        userProfileView.addSubview(addImageView)
+        [profileImageView, addImageView].forEach {
+            userProfileView.addSubview($0)
+        }
         
-        privacyView.addSubview(checkButton)
-        privacyView.addSubview(privacyPolicyLabel)
-        privacyView.addSubview(showButton)
+        [checkButton, privacyPolicyLabel, showButton].forEach {
+            privacyView.addSubview($0)
+        }
     }
     
-    func setLayout() {
+    func setConstraints() {
+        [navigationBarView, userProfileView, userNickNameTextFiled, underlineView, countLabel, messageLabel, checkDuplicateButton, privacyView, submitButton].forEach {
+            view.addSubview($0)
+        }
+        
+        navigationBarView.addSubview(backButton)
+        
+        [profileImageView, addImageView].forEach {
+            userProfileView.addSubview($0)
+        }
+        
+        [checkButton, privacyPolicyLabel, showButton].forEach {
+            privacyView.addSubview($0)
+        }
+        
         navigationBarView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(13)
             make.left.right.equalToSuperview()
@@ -265,7 +268,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         privacyView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(doneButton.snp.top).offset(-16)
+            make.bottom.equalTo(submitButton.snp.top).offset(-16)
             make.height.equalTo(56)
         }
         
@@ -288,7 +291,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             make.bottom.equalToSuperview().offset(-17)
         }
         
-        doneButton.snp.makeConstraints { make in
+        submitButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-43)
             make.left.equalTo(20)
             make.right.equalTo(-20)
@@ -296,130 +299,148 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func setAction() {
-        backButton.rx.tap.subscribe(onNext: { [weak self] in
+    func bind() {
+        output.dismissView.drive { [weak self] _ in
             guard let self = self else { return }
             self.dismiss(animated: true)
-        }).disposed(by: disposeBag)
+        }.disposed(by: viewModel.disposeBag)
         
-        checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
+        output.showImgSettingAlert.drive { [weak self] _ in
             guard let self = self else { return }
             
-            checkDuplicateButton.isHidden = true
-            
-            guard let text = userNickNameTextFiled.text else { return }
-            if text.count > 1 && text.count < 10 {
-                SignUpViewModel.shared.nickNameState.accept(.usable)
-            } else {
-                SignUpViewModel.shared.nickNameState.accept(.unusable)
+            self.showImageSettingAlert { state in
+                switch state {
+                case .newImage:
+                    self.selectNewImage.accept(())
+                case .defaultImage:
+                    self.changeToDefaultImage.accept(())
+                case .cancle:
+                    break
+                }
             }
-            
-            view.endEditing(true)
-        }).disposed(by: disposeBag)
+        }.disposed(by: viewModel.disposeBag)
         
-        doneButton.rx.tap.subscribe(onNext: {
-            let scenes = UIApplication.shared.connectedScenes
-            let windowScene = scenes.first as? UIWindowScene
-            let window = windowScene?.windows.first
-            
-            let mainVC = MainTabBarController()
-            
-            UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                window?.rootViewController = mainVC
-            }, completion: nil)
-        }).disposed(by: disposeBag)
-        
-        privacyView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                
-                let nextVC = PrivacyViewController()
-                self.present(nextVC, animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        doneButton.rx.tap.subscribe(onNext: { [weak self] in
+        output.showImagePicker.drive { [weak self] _ in
             guard let self = self else { return }
-            doneButton.backgroundColor = .seaGreenDark3
-        }).disposed(by: disposeBag)
-        
-        profileImageView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [self] _ in
-                self.showImageSettingAlert { selectedOption in
-                    switch selectedOption {
-                    case .newImage:
-                        ImagePickerViewModel.shared.checkPermissionState() { state in
-                            DispatchQueue.main.async {
-                                switch state {
-                                case .denied:
-                                    self.moveToSetting()
-                                case .authorized:
-                                    DispatchQueue.main.async { [weak self] in
-                                        guard let self = self else { return }
-                                        ImagePickerViewController.shared.showPhotoPicker(viewController: self)
-                                    }
-                                        
-                                    ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
-                                        guard self != nil else { return }
-                                        SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
-                                    }
-                                case .limited:
-                                    let imagePickerVC = ImagePickerViewController()
-                                    
-                                    self.present(imagePickerVC, animated: true)
-                                    
-                                    imagePickerVC.didSelectImage = { [weak self] imageString in
-                                        guard self != nil else { return }
-                                        SignUpViewModel.shared.userProfileImgURL.onNext(imageString)
-                                    }
-                                default:
-                                    print("\(state)")
-                                }
-
-                            }
+            
+            ImagePickerViewModel.shared.checkPermissionState() { state in
+                DispatchQueue.main.async {
+                    switch state {
+                    case .denied:
+                        self.moveToSetting()
+                    case .authorized:
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            ImagePickerViewController.shared.showPhotoPicker(viewController: self)
                         }
-                    case .defaultImage:
-                        SignUpViewModel.shared.userProfileImgURL.onNext("")
-                    case .cancle:
-                        break
+                        
+                        ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
+                            guard let self = self else { return }
+                            profileImageView.load(url: URL(string: imageString)!)
+                        }
+                    case .limited:
+                        let imagePickerVC = ImagePickerViewController()
+                        
+                        self.present(imagePickerVC, animated: true)
+                        
+                        imagePickerVC.didSelectImage = { [weak self] imageString in
+                            guard self != nil else { return }
+                            self?.profileImageView.load(url: URL(string: imageString)!)
+                        }
+                    default:
+                        print("\(state)")
                     }
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        userNickNameTextFiled.rx.text.orEmpty.map { text -> Int in
-                return text.count
             }
-            .subscribe(onNext: { count in
-                SignUpViewModel.shared.textCount.accept(count)
-            }).disposed(by: disposeBag)
+        }.disposed(by: viewModel.disposeBag)
         
-        userNickNameTextFiled.rx.controlEvent(.editingDidBegin)
-            .subscribe(onNext: { [weak self] in
-                guard let self = self else { return }
-                SignUpViewModel.shared.nickNameState.accept(.normal)
-                SignUpViewModel.shared.textCount.accept(0)
-                
-                userNickNameTextFiled.placeholder = ""
-                userNickNameTextFiled.text = ""
-                
-                underlineView.backgroundColor = .black
-                
-                messageLabel.isHidden = true
-                countLabel.isHidden = false
-                checkDuplicateButton.isHidden = true
-            }).disposed(by: disposeBag)
+        output.changeDefaultImage.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            profileImageView.image = UIImage(named: "ProfileGreen")
+        }.disposed(by: viewModel.disposeBag)
         
-        userNickNameTextFiled.rx.controlEvent(.editingDidEndOnExit)
-            .subscribe(onNext: { [weak self] in
-                guard let self = self else { return }
-                checkDuplicateButton.isHidden = false
-                countLabel.isHidden = true
-                underlineView.backgroundColor = .gray2
-                userNickNameTextFiled.resignFirstResponder()
-            })
-            .disposed(by: disposeBag)
+        output.nicknameText.drive { [weak self] nickname in
+            guard let self = self else { return }
+            
+            userNickNameTextFiled.text = nickname
+            countLabel.isHidden = false
+            countLabel.text = "\(nickname.count)/\(maximumCount)"
+            countLabel.textColor = nickname.count > 0 ? .black : .gray5
+            countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showDuplicateBtn.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            messageLabel.isHidden = true
+            countLabel.isHidden = true
+            checkDuplicateButton.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.nicknameState.subscribe(onNext: { [weak self] state in
+            guard let self = self else { return }
+            
+            switch state {
+            case .duplicate:
+                underlineView.backgroundColor = .activeRed
+                messageLabel.textColor = .activeRed
+                messageLabel.text = "중복된 닉네임입니다"
+            case .unavailable:
+                underlineView.backgroundColor = .activeRed
+                messageLabel.textColor = .activeRed
+                messageLabel.text = "2~10자의 영문, 한글, 숫자를 입력해주세요"
+            case .available:
+                underlineView.backgroundColor = .activeBlue
+                messageLabel.textColor = .activeBlue
+                messageLabel.text = "사용 가능한 닉네임입니다"
+            }
+            
+            messageLabel.isHidden = false
+            countLabel.isHidden = true
+            checkDuplicateButton.isHidden = true
+        }).disposed(by: viewModel.disposeBag)
+        
+        output.showPrivacyView.drive { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.present(privacyVC, animated: true)
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.isAgreePolicy.subscribe { [weak self] isAgree in
+            guard let self = self else { return }
+            
+            checkButton.image = isAgree ? UIImage(named: "SelectedGray") : UIImage(named: "UnselectedGray")
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.submitBtnState.bind { [weak self] state in
+            guard let self = self else { return }
+            
+            switch state {
+            case .enable:
+                submitButton.isEnabled = true
+                submitButton.layer.borderColor = UIColor.seaGreenDark1?.cgColor
+                submitButton.layer.borderWidth = 1
+                submitButton.configuration?.baseForegroundColor = .seaGreenDark1
+                submitButton.backgroundColor = .white
+            case .disable:
+                submitButton.isEnabled = false
+                submitButton.layer.borderColor = UIColor.gray1?.cgColor
+                submitButton.backgroundColor = .gray1
+                submitButton.setTitleColor(.yellow, for: .normal)
+                submitButton.configuration?.baseForegroundColor = .gray3
+            case .onClick:
+                submitButton.backgroundColor = .seaGreen
+            }
+            
+        }.disposed(by: viewModel.disposeBag)
+        
+        userNickNameTextFiled.rx.controlEvent(.editingDidBegin).subscribe { [weak self] _ in
+            guard let self = self else { return }
+            
+            messageLabel.isHidden = true
+            checkDuplicateButton.isHidden = true
+            underlineView.backgroundColor = .gray2
+        }.disposed(by: viewModel.disposeBag)
     }
 }
