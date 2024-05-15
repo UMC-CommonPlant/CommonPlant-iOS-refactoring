@@ -57,6 +57,7 @@
 		C0A0D4E22A73EAE200426514 /* PrivacyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4E12A73EAE200426514 /* PrivacyViewModel.swift */; };
 		C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */; };
 		C0A5AFFB2A6CF2AE00C8248D /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = C0A5AFFA2A6CF2AE00C8248D /* RxGesture */; };
+		C0A67DBC2BF4662D003F556D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0A67DBB2BF4662D003F556D /* GoogleService-Info.plist */; };
 		C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */; };
 		C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */; };
 		C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */; };
@@ -111,7 +112,6 @@
 		F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB242A664F4300F346DE /* MainViewModel.swift */; };
 		F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB282A67B03400F346DE /* MainModel.swift */; };
 		F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */; };
-		F9A7CC352B93003A00C73401 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9A7CC342B93003A00C73401 /* GoogleService-Info.plist */; };
 		F9B6E9932BCE743B000F05D4 /* MyPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */; };
 		F9B6E9952BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9942BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift */; };
 		F9B6E9982BCFBAA0000F05D4 /* PlantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9972BCFBAA0000F05D4 /* PlantCollectionViewCell.swift */; };
@@ -169,6 +169,7 @@
 		C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
 		C0A0D4E12A73EAE200426514 /* PrivacyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewModel.swift; sourceTree = "<group>"; };
 		C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
+		C0A67DBB2BF4662D003F556D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantModel.swift; sourceTree = "<group>"; };
 		C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewModel.swift; sourceTree = "<group>"; };
 		C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewController.swift; sourceTree = "<group>"; };
@@ -192,7 +193,6 @@
 		C0E270152B9849A1006492B0 /* CalendarPlaceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPlaceCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0E270172B984C91006492B0 /* CalendarPlantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPlantCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0E270192B98507F006492B0 /* CalendarMemoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMemoCollectionViewCell.swift; sourceTree = "<group>"; };
-		C0E442F92B7FAB4900A7AD99 /* CommonPlant.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CommonPlant.entitlements; sourceTree = "<group>"; };
 		C0EBDD292B9306F1004FF4D4 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		C0EE4A002B182D4000592185 /* CommonAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonAlertView.swift; sourceTree = "<group>"; };
 		F91E477C2A53E3C9008E07A9 /* CommonPlant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonPlant.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -218,7 +218,6 @@
 		F9A1FB242A664F4300F346DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F9A1FB282A67B03400F346DE /* MainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModel.swift; sourceTree = "<group>"; };
 		F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewController.swift; sourceTree = "<group>"; };
-		F9A7CC342B93003A00C73401 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F9A7CC3B2B93069C00C73401 /* CommonPlant.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CommonPlant.entitlements; sourceTree = "<group>"; };
 		F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlaceViewController.swift; sourceTree = "<group>"; };
 		F9B6E9942BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFriendsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -445,7 +444,6 @@
 		C0CE99BA2BE78DFB0071FC11 /* Launch */ = {
 			isa = PBXGroup;
 			children = (
-				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
 				C078D7C62BE8A8E7006D808A /* SplashViewController.swift */,
 			);
 			path = Launch;
@@ -587,7 +585,7 @@
 		F91E47A02A53EF91008E07A9 /* Supports */ = {
 			isa = PBXGroup;
 			children = (
-				F9A7CC342B93003A00C73401 /* GoogleService-Info.plist */,
+				C0A67DBB2BF4662D003F556D /* GoogleService-Info.plist */,
 				C0EBDD292B9306F1004FF4D4 /* Secrets.xcconfig */,
 				F91E478D2A53E3CA008E07A9 /* Info.plist */,
 				F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */,
@@ -888,7 +886,7 @@
 			files = (
 				F91E478C2A53E3CA008E07A9 /* LaunchScreen.storyboard in Resources */,
 				F91E47892A53E3CA008E07A9 /* Assets.xcassets in Resources */,
-				F9A7CC352B93003A00C73401 /* GoogleService-Info.plist in Resources */,
+				C0A67DBC2BF4662D003F556D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -910,7 +908,6 @@
 				F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */,
 				C0E270182B984C91006492B0 /* CalendarPlantCollectionViewCell.swift in Sources */,
 				F9447DA32A76CA3100903C28 /* (null) in Sources */,
-				F91E47B22A56968E008E07A9 /* empty3.swift in Sources */,
 				F9E6AEB42B931CB7001CA1AC /* PostCodeViewController.swift in Sources */,
 				C072D35F2BCFAA40009F1492 /* GetDuplicateNicknameResponse.swift in Sources */,
 				C039A8672B79E5CD00673CCC /* EditPlantViewController.swift in Sources */,
@@ -960,7 +957,6 @@
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
 				F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */,
-				C0E2701F2B999C06006492B0 /* CalendarPlace.swift in Sources */,
 				C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
 				C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */,
