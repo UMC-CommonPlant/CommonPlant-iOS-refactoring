@@ -10,9 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-//#Preview {
-//    AddPlantFirstViewController()
-//}
 class AddPlantFirstViewController: UIViewController {
     // MARK: - Properties
     private let viewModel = AddPlantFirstViewModel()

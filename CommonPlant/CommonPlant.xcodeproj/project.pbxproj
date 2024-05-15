@@ -467,6 +467,7 @@
 			isa = PBXGroup;
 			children = (
 				C078D7C62BE8A8E7006D808A /* SplashViewController.swift */,
+				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
 			);
 			path = Launch;
 			sourceTree = "<group>";
@@ -621,7 +622,6 @@
 			children = (
 				C0CE99BA2BE78DFB0071FC11 /* Launch */,
 				C0E270072B9713AC006492B0 /* Calendar */,
-				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
 				F94BB2682B58FE8500CB3504 /* MyPlace */,
 				C0A6DCE52A97883D001A2E11 /* MyPlant */,
 				C027A0882A909BB0009289E9 /* ImagePicker */,
