@@ -7,7 +7,12 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
+//#Preview {
+//    AddPlantFirstViewController()
+//}
 class AddPlantFirstViewController: UIViewController {
     // MARK: - Properties
     private let viewModel = AddPlantFirstViewModel()
@@ -58,14 +63,15 @@ class AddPlantFirstViewController: UIViewController {
     
     func bind() {
         viewModel.searchResultList.bind(to: searchResultTableView.rx.items(cellIdentifier: SearchResultTableViewCell.identifier, cellType: SearchResultTableViewCell.self)) { (_, result, cell) in
-            cell.setAttributes(with: result)
+            let plant = SearchResultModel(plantImage: result.imgURL, plantName: result.name, scientificName: result.scientificName)
+            cell.setAttributes(with: plant)
         }.disposed(by: viewModel.disposeBag)
         
-        output.transigionNextStep.drive { [ weak self ] result in
+        output.transigionNextStep.drive { [weak self] (plant: SearchResult) in
             guard let self = self else { return }
             // TODO: 식물 등록(2/2) 화면 전환
-            print(result)
-            let nextVC = AddPlantSecondViewController(name: result.plantName)
+            
+            let nextVC = AddPlantSecondViewController(name: plant.name)
             self.navigationController?.pushViewController(nextVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
     }

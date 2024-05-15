@@ -17,6 +17,7 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(_):
             URLConstant.searchPlant
+        }
     }
     
     var method: Moya.Method {
@@ -29,7 +30,7 @@ extension PlantService: BaseTargetType {
     var task: Moya.Task {
         switch self {
         case .searchPlant(let name):
-            return .requestParameters(parameters: ["name": name])
+            return .requestParameters(parameters: ["name": name], encoding: URLEncoding.default)
         }
     }
     

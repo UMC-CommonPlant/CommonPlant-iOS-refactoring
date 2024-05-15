@@ -11,33 +11,34 @@ import RxCocoa
 
 class AddPlantFirstViewModel {
     let disposeBag = DisposeBag()
-    var searchResultList = BehaviorRelay<[SearchResultModel]>(value: [])
-    
-    init() {
-        let sampleData1 = SearchResultModel(plantImage: "plant1", plantName: "몬스테라", scientificName: "Monstera deliciosa")
-        let sampleData2 = SearchResultModel(plantImage: "plant2", plantName: "몬카스테라", scientificName: "Monstera deliciosa")
-        let sampleData3 = SearchResultModel(plantImage: "plant3", plantName: "카스", scientificName: "Monstera deliciosa")
-        let sampleData4 = SearchResultModel(plantImage: "plant4", plantName: "테라", scientificName: "Monstera deliciosa")
-        
-        let list = [sampleData1, sampleData2, sampleData3, sampleData4]
-        
-        searchResultList.accept(list)
-    }
-    
+    let searchResultList = BehaviorRelay<[SearchResult]>(value: [])
+}
+
+extension AddPlantFirstViewModel: ViewModelType {
     struct Input {
         let searchBtnDidTap: Observable<String>
         let selectedPlant: Observable<IndexPath>
     }
     
     struct Output {
-        let transigionNextStep: Driver<SearchResultModel>
+        let transigionNextStep: Driver<SearchResult>
     }
     
     func transform(input: Input) -> Output {
-        let selectedPlant = PublishRelay<SearchResultModel>()
+        let selectedPlant = PublishRelay<SearchResult>()
         
         input.searchBtnDidTap.bind { plant in
-            // TODO: API 연동 및 searchResultList 업데이트
+            PlantAPI.shared.searchPlant(target: plant)
+                .subscribe { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let response):
+                        
+                        searchResultList.accept(response.result)
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }.disposed(by: self.disposeBag)
         }.disposed(by: disposeBag)
         
         input.selectedPlant.bind { [ weak self ] indexPath in
@@ -47,6 +48,6 @@ class AddPlantFirstViewModel {
             selectedPlant.accept(plant)
         }.disposed(by: disposeBag)
         
-        return Output(transigionNextStep: selectedPlant.asDriver(onErrorJustReturn: SearchResultModel(plantImage: "", plantName: "", scientificName: "")))
+        return Output(transigionNextStep: selectedPlant.asDriver(onErrorDriveWith: .empty()))
     }
 }

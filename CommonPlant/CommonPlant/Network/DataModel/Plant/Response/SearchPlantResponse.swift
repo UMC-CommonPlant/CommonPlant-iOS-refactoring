@@ -11,11 +11,11 @@ struct SearchPlantResponse: Codable {
     let timeStamp: String
     let status: Int
     let message: String
-    let result: [Result]
+    let result: [SearchResult]
     let success: Bool
 }
 
-struct Result: Codable {
+struct SearchResult: Codable {
     let name, scientificName: String
     let imgURL: String
 
