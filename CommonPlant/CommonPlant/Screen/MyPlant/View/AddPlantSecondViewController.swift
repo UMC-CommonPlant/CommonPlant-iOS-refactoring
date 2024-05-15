@@ -10,6 +10,9 @@ import SnapKit
 import RxSwift
 import RxRelay
 
+#Preview {
+    AddPlantSecondViewController(name: "몬스테라")
+}
 class AddPlantSecondViewController: UIViewController {
     private let viewModel = AddPlantSecondViewModel()
     private lazy var input = AddPlantSecondViewModel
@@ -306,8 +309,10 @@ class AddPlantSecondViewController: UIViewController {
             
             let isSelectedDay = viewModel.checkSelectedDay(day: result)
             let isToday = viewModel.checkToday(day: result)
+            let isAfterToday = viewModel.isDateAfterToday(day: result)
             
-            cell.setConfigure(with: result, isSelected: isSelectedDay, isToday: isToday)
+            cell.setConfigure(with: result, isSelected: isSelectedDay, isToday: isToday, isAfterToday: isAfterToday)
+            cell.isUserInteractionEnabled = !isAfterToday
         }.disposed(by: viewModel.disposeBag)
         
         output.showImgSettingAlert.drive { [weak self] _ in
@@ -424,6 +429,7 @@ class AddPlantSecondViewController: UIViewController {
         output.selectDate.drive { [weak self] indexPath in
             guard let self = self else { return }
             
+            datePickerCollectionView.reloadData()
             setCalendar(indexPath)
         }.disposed(by: viewModel.disposeBag)
         

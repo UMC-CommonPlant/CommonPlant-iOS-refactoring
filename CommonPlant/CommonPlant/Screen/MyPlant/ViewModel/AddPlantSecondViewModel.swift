@@ -68,12 +68,23 @@ class AddPlantSecondViewModel {
         guard let day = Int(day) else { return false }
         guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
         
-        let today = dateToString(todayDate)
-        let target = dateToString(newDate)
+        let todayComponents = calendar.dateComponents([.year, .month, .day], from: todayDate)
+        let newDateComponents = calendar.dateComponents([.year, .month, .day], from: newDate)
         
-        return today == target
+        return todayComponents == newDateComponents
     }
     
+    func isDateAfterToday(day: String) -> Bool {
+        guard let day = Int(day) else { return false }
+        
+        var dateComponents = calendar.dateComponents([.year, .month], from: calendarDate)
+        dateComponents.day = day
+        
+        guard let new = calendar.date(from: dateComponents) else { return false }
+        
+        return new > todayDate
+    }
+
     func checkSelectedDay(day: String) -> Bool {
         guard let day = Int(day) else { return false }
         guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
