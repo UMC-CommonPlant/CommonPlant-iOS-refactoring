@@ -59,6 +59,8 @@
 		C0A5AFFB2A6CF2AE00C8248D /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = C0A5AFFA2A6CF2AE00C8248D /* RxGesture */; };
 		C0A67DBC2BF4662D003F556D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0A67DBB2BF4662D003F556D /* GoogleService-Info.plist */; };
 		C0A67DBE2BF47835003F556D /* PlantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A67DBD2BF47835003F556D /* PlantService.swift */; };
+		C0A67DC32BF47E0B003F556D /* SearchPlantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A67DC22BF47E0B003F556D /* SearchPlantResponse.swift */; };
+		C0A67DC72BF47E56003F556D /* PlantAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A67DC62BF47E56003F556D /* PlantAPI.swift */; };
 		C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */; };
 		C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */; };
 		C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */; };
@@ -172,6 +174,8 @@
 		C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
 		C0A67DBB2BF4662D003F556D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C0A67DBD2BF47835003F556D /* PlantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantService.swift; sourceTree = "<group>"; };
+		C0A67DC22BF47E0B003F556D /* SearchPlantResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPlantResponse.swift; sourceTree = "<group>"; };
+		C0A67DC62BF47E56003F556D /* PlantAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantAPI.swift; sourceTree = "<group>"; };
 		C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantModel.swift; sourceTree = "<group>"; };
 		C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewModel.swift; sourceTree = "<group>"; };
 		C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewController.swift; sourceTree = "<group>"; };
@@ -393,6 +397,22 @@
 				C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		C0A67DBF2BF47DCC003F556D /* Plant */ = {
+			isa = PBXGroup;
+			children = (
+				C0A67DC12BF47DFB003F556D /* Response */,
+			);
+			path = Plant;
+			sourceTree = "<group>";
+		};
+		C0A67DC12BF47DFB003F556D /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				C0A67DC22BF47E0B003F556D /* SearchPlantResponse.swift */,
+			);
+			path = Response;
 			sourceTree = "<group>";
 		};
 		C0A6DCE52A97883D001A2E11 /* MyPlant */ = {
@@ -643,6 +663,7 @@
 				C0D6E9052BC3B45C00A352DD /* LoginAPI.swift */,
 				C072D35B2BCFA9C8009F1492 /* SignUpAPI.swift */,
 				C078D7C42BE7ADC7006D808A /* TokenAPI.swift */,
+				C0A67DC62BF47E56003F556D /* PlantAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -653,6 +674,7 @@
 				C078D7C12BE7AD5F006D808A /* Token */,
 				C072D35D2BCFAA27009F1492 /* SignUp */,
 				C0D6E9022BC3B35D00A352DD /* Login */,
+				C0A67DBF2BF47DCC003F556D /* Plant */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -957,12 +979,14 @@
 				C007F6472B62562200CD6252 /* AddPlantSecondViewController.swift in Sources */,
 				C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */,
 				C0D2129B2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift in Sources */,
+				C0A67DC32BF47E0B003F556D /* SearchPlantResponse.swift in Sources */,
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
 				F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */,
 				C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
+				C0A67DC72BF47E56003F556D /* PlantAPI.swift in Sources */,
 				C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
 				C085BFBC2A7148D500188C02 /* LogInViewController.swift in Sources */,
