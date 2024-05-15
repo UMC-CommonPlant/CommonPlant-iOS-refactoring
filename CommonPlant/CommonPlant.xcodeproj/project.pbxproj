@@ -58,6 +58,7 @@
 		C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */; };
 		C0A5AFFB2A6CF2AE00C8248D /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = C0A5AFFA2A6CF2AE00C8248D /* RxGesture */; };
 		C0A67DBC2BF4662D003F556D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0A67DBB2BF4662D003F556D /* GoogleService-Info.plist */; };
+		C0A67DBE2BF47835003F556D /* PlantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A67DBD2BF47835003F556D /* PlantService.swift */; };
 		C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */; };
 		C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */; };
 		C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */; };
@@ -170,6 +171,7 @@
 		C0A0D4E12A73EAE200426514 /* PrivacyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewModel.swift; sourceTree = "<group>"; };
 		C0A5AFF22A6BE21A00C8248D /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
 		C0A67DBB2BF4662D003F556D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C0A67DBD2BF47835003F556D /* PlantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantService.swift; sourceTree = "<group>"; };
 		C0A6DCE92A978949001A2E11 /* MyPlantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantModel.swift; sourceTree = "<group>"; };
 		C0A6DCEB2A9791D5001A2E11 /* MyPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewModel.swift; sourceTree = "<group>"; };
 		C0A6DCED2A97AC15001A2E11 /* MyPlantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlantViewController.swift; sourceTree = "<group>"; };
@@ -661,6 +663,7 @@
 				C0D6E9002BC3A97300A352DD /* LoginService.swift */,
 				C072D3562BCFA5D6009F1492 /* SignUpService.swift */,
 				C078D7BF2BE7AC54006D808A /* TokenService.swift */,
+				C0A67DBD2BF47835003F556D /* PlantService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -942,6 +945,7 @@
 				C078D7D02BEA0D98006D808A /* NetworkConstant.swift in Sources */,
 				C0D6E9012BC3A97300A352DD /* LoginService.swift in Sources */,
 				C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */,
+				C0A67DBE2BF47835003F556D /* PlantService.swift in Sources */,
 				F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */,
 				C073EBE32B738F9E006980BB /* DatePickerCollectionViewCell.swift in Sources */,
 				F93404022A81F9F400F0267B /* SearchResultTableViewCell.swift in Sources */,
