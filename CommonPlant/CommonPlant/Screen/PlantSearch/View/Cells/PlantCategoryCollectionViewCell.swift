@@ -8,8 +8,8 @@
 import UIKit
 import SnapKit
 
-class PlantSearchCollectionViewCell: UICollectionViewCell {
-    static let identifier = "PlantSearchCollectionViewCell"
+class PlantCategoryCollectionViewCell: UICollectionViewCell {
+    static let identifier = "PlantCategoryCollectionViewCell"
     
     let background = UIView()
     let icon = UIImageView()
