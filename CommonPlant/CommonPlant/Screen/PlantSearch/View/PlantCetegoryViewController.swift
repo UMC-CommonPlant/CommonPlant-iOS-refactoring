@@ -44,6 +44,7 @@ class PlantCetegoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setSegmentedControl()
+        setConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -87,7 +88,9 @@ extension PlantCetegoryViewController {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
             self.navigationItem.backButtonTitle = ""
         }
-        
+    }
+    
+    private func setConstraints() {
         [segmentedController, underLineView, tableView].forEach {
             view.addSubview($0)
         }
@@ -106,7 +109,6 @@ extension PlantCetegoryViewController {
             make.width.equalTo(segmentedController.snp.width).multipliedBy(1.0 / CGFloat(segmentedController.numberOfSegments))
         }
         
-        
         tableView.snp.makeConstraints {
             if selectedIndex == 3 || selectedIndex == 4 {
                 $0.top.equalTo(segmentedController.snp.bottom).offset(16)
@@ -114,7 +116,7 @@ extension PlantCetegoryViewController {
                 $0.top.equalToSuperview().offset(16)
             }
             $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()            
+            $0.bottom.equalToSuperview()
         }
     }
 }
