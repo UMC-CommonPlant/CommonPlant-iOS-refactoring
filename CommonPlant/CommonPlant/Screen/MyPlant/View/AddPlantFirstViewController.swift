@@ -43,7 +43,7 @@ class AddPlantFirstViewController: UIViewController {
         let view = UITableView()
         view.separatorStyle = .none
         view.rowHeight = 92
-        view.register(SearchResultTableViewCell.self, forCellReuseIdentifier: "SearchResultTableViewCell")
+        view.register(PlantDictTableViewCell.self, forCellReuseIdentifier: "SearchResultTableViewCell")
         return view
     }()
     
@@ -57,7 +57,7 @@ class AddPlantFirstViewController: UIViewController {
     }
     
     func bind() {
-        viewModel.searchResultList.bind(to: searchResultTableView.rx.items(cellIdentifier: SearchResultTableViewCell.identifier, cellType: SearchResultTableViewCell.self)) { (_, result, cell) in
+        viewModel.searchResultList.bind(to: searchResultTableView.rx.items(cellIdentifier: PlantDictTableViewCell.identifier, cellType: PlantDictTableViewCell.self)) { (_, result, cell) in
             cell.setAttributes(with: result)
         }.disposed(by: viewModel.disposeBag)
         
