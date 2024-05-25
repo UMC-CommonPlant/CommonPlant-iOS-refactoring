@@ -9,10 +9,6 @@ import UIKit
 import SnapKit
 import Then
 
-#Preview {
-    PlantCetegoryViewController()
-}
-
 class PlantCetegoryViewController: UIViewController {
     // MARK: - UI Components
     private let tableView = UITableView().then {
