@@ -28,7 +28,7 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate, UISearch
     private let searchResultController = SearchResultViewController()
     private lazy var searchController = UISearchController(searchResultsController: searchResultController)
     private let borderLineView = UIView()
-    private let sampleLabel = UILabel()
+    private let plantCategoryLabel = UILabel()
     private let plantCategoryCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -55,10 +55,8 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate, UISearch
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
-        self.navigationItem.title = "식물 정보"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1]
         configureUI()
+        setNavigationBar()
         setUpBindings()
         setSearchController()
         setCategoryCollectionView()
@@ -76,8 +74,17 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate, UISearch
     
     // MARK: - Custom Method
     private func configureUI() {
+        self.view.backgroundColor = .white
+        self.navigationItem.title = "식물 정보"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1]
         setAttributes()
         setConstraints()
+    }
+    
+    private func setNavigationBar() {
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .gray6
+        self.navigationItem.backBarButtonItem = backBarButtonItem
     }
     
     private func setSearchController() {
@@ -93,12 +100,7 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate, UISearch
         searchController.searchBar.searchTextField.leftView?.tintColor = .black
         searchController.searchBar.setImage(UIImage(named: "Reset"), for: .clear, state: .normal)
         
-        view.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                self?.searchController.searchBar.endEditing(true)
-            })
-            .disposed(by: disposeBag)
+        // TODO: 다른 화면 선택 시 searchBar 편집 끝내기 처리
     }
     
     private func setUpBindings() {
@@ -126,7 +128,7 @@ extension PlantSearchViewController: UICollectionViewDataSource, UICollectionVie
     private func setCategoryCollectionView() {
         self.plantCategoryCollectionView.dataSource = self
         self.plantCategoryCollectionView.delegate = self
-        self.plantCategoryCollectionView.register(PlantSearchCollectionViewCell.self, forCellWithReuseIdentifier: PlantSearchCollectionViewCell.identifier)
+        self.plantCategoryCollectionView.register(PlantCategoryCollectionViewCell.self, forCellWithReuseIdentifier: PlantCategoryCollectionViewCell.identifier)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -134,11 +136,24 @@ extension PlantSearchViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlantSearchCollectionViewCell", for: indexPath) as! PlantSearchCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlantCategoryCollectionViewCell", for: indexPath) as! PlantCategoryCollectionViewCell
         cell.background.backgroundColor = UIColor(named: collectionViewCellColor[indexPath.row])
         cell.label.text = collectionViewCellLabelText[indexPath.row]
         cell.icon.image = UIImage(named: collectionViewIcon[indexPath.row])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(#function)
+        navigateToCategoryView(colorName: collectionViewCellColor[indexPath.row], index: indexPath.row)
+    }
+    
+    private func navigateToCategoryView(colorName: String, index: Int) {
+        let detailVC = PlantCetegoryViewController()
+        detailVC.navigationBackgroundColor = colorName
+        detailVC.selectedIndex = index
+        detailVC.navigationItem.title = collectionViewCellLabelText[index]
+        self.navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 // MARK: - UI
@@ -149,8 +164,11 @@ extension PlantSearchViewController {
         contentView.backgroundColor = .white
         
         popularSearchWordLabel.text = "인기검색어"
-        popularSearchWordLabel.font = .bodyB1
-        popularSearchWordLabel.textColor = .gray4
+        plantCategoryLabel.text = "식물 카테고리"
+        [popularSearchWordLabel, plantCategoryLabel].forEach {
+            $0.font = .bodyB1
+            $0.textColor = .gray4
+        }
         
         referenceDateLabel.text = "2023.8.1 기준"
         referenceDateLabel.font = .bodyM3
@@ -169,7 +187,7 @@ extension PlantSearchViewController {
         scrollView.addSubview(contentView)
         searchController.searchBar.addSubview(borderLineView)
 
-        [plantCategoryCollectionView, popularSearchWordLabel, referenceDateLabel, popularSearchCollectionView].forEach {
+        [plantCategoryLabel, plantCategoryCollectionView, popularSearchWordLabel, referenceDateLabel, popularSearchCollectionView].forEach {
             contentView.addSubview($0)
         }
         
@@ -197,9 +215,15 @@ extension PlantSearchViewController {
             $0.width.equalTo(scrollView)
         }
         
+        plantCategoryLabel.snp.makeConstraints {
+            $0.height.equalTo(24)
+            $0.left.equalToSuperview().offset(20)
+            $0.top.equalToSuperview().offset(24)
+        }
+        
         plantCategoryCollectionView.snp.makeConstraints {
             $0.height.equalTo(176)
-            $0.top.equalTo(contentView).offset(24)
+            $0.top.equalTo(plantCategoryLabel.snp.bottom).offset(18)
             $0.left.equalTo(contentView).offset(20)
             $0.right.equalTo(contentView).offset(-20)
         }
