@@ -10,9 +10,6 @@ import SnapKit
 import RxSwift
 import RxRelay
 
-#Preview {
-    AddPlantSecondViewController(name: "몬스테라")
-}
 class AddPlantSecondViewController: UIViewController {
     private let viewModel = AddPlantSecondViewModel()
     private lazy var input = AddPlantSecondViewModel
@@ -236,6 +233,29 @@ class AddPlantSecondViewController: UIViewController {
         label.textColor = .seaGreenDark3
         return label
     }()
+    private let wateredBackgroundView = UIView()
+    private let wateredMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "물 주는 주기"
+        label.font = .bodyM1
+        label.textColor = .gray6
+        return label
+    }()
+    private let wateredTextField: UITextField = {
+        let tf = UITextField()
+        tf.font = .bodyB1
+        tf.textColor = .gray6
+        tf.textAlignment = .right
+        tf.tintColor = .gray6
+        tf.keyboardType = .numberPad
+        tf.returnKeyType = .done
+        return tf
+    }()
+    private let wateredUnderlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray2
+        return view
+    }()
     private let cancleButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
@@ -262,8 +282,9 @@ class AddPlantSecondViewController: UIViewController {
         return button
     }()
     
-    init(name: String) {
+    init(name: String, watered: Int) {
         nameLabel.text = name
+        wateredTextField.placeholder = "\(watered)"
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -384,7 +405,7 @@ class AddPlantSecondViewController: UIViewController {
             
             placeCollectionView.isHidden = false
             
-            dateView.snp.remakeConstraints { make in
+            wateredBackgroundView.snp.remakeConstraints { make in
                 make.top.equalTo(self.placeCollectionView.snp.bottom).offset(32)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(56)
@@ -399,7 +420,7 @@ class AddPlantSecondViewController: UIViewController {
             deleteButton.isHidden = false
             nextImageView.isHidden = true
             placeCollectionView.isHidden = true
-            dateView.snp.remakeConstraints { make in
+            wateredBackgroundView.snp.remakeConstraints { make in
                 make.top.equalTo(self.placeBackgroundView.snp.bottom).offset(32)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(56)
@@ -466,7 +487,7 @@ class AddPlantSecondViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [plantView, nameBackgroundView, nicknameView, placeBackgroundView, placeCollectionView, dateView, calendarView, messageLabel, cancleButton, submitButton].forEach {
+        [plantView, nameBackgroundView, nicknameView, placeBackgroundView, placeCollectionView, dateView, calendarView, messageLabel, wateredBackgroundView, cancleButton, submitButton].forEach {
             contentView.addSubview($0)
         }
         
@@ -488,6 +509,10 @@ class AddPlantSecondViewController: UIViewController {
         
         [selectedMonthLabel, previousButton, nextButton, weekStackView, datePickerCollectionView].forEach {
             calendarView.addSubview($0)
+        }
+        
+        [wateredMessageLabel, wateredTextField, wateredUnderlineView].forEach {
+            wateredBackgroundView.addSubview($0)
         }
     }
     
@@ -597,8 +622,29 @@ class AddPlantSecondViewController: UIViewController {
             make.height.equalTo(156)
         }
         
-        dateView.snp.makeConstraints { make in
+        wateredBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(placeBackgroundView.snp.bottom).offset(32)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(56)
+        }
+        
+        wateredMessageLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        wateredTextField.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        wateredUnderlineView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
+        dateView.snp.makeConstraints { make in
+            make.top.equalTo(wateredBackgroundView.snp.bottom).offset(32)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(56)
         }
