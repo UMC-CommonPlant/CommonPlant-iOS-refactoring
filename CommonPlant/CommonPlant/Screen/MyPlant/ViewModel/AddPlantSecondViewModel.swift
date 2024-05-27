@@ -13,7 +13,7 @@ class AddPlantSecondViewModel {
     let disposeBag = DisposeBag()
     let calendar = Calendar.current
     
-    let placeList = BehaviorRelay<[Place]>(value: [])
+    let placeList = BehaviorRelay<[PlaceListResult]>(value: [])
     let selectedDate = BehaviorRelay<String>(value: "")
     let currentMonth = BehaviorRelay<String>(value: "")
     let days = BehaviorRelay<[String]>(value: [])
@@ -27,9 +27,16 @@ class AddPlantSecondViewModel {
         currentMonth.accept(dateToMonthString(Date()))
         updateDays()
         
-        let list = [Place(placeImage: "", placeName: "스윗 홈_거실"),
-        Place(placeImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/ceb7bd36-86b4-4ab1-b2df-24862db128f8..jpg", placeName: "낫 스윗_회사")]
-        placeList.accept(list)
+        PlantAPI.shared.getPlaceListToAddPlant()
+            .subscribe { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    placeList.accept(response.result)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }.disposed(by: self.disposeBag)
     }
     
     func stringToDate(_ string: String) -> Date? {
@@ -133,7 +140,7 @@ extension AddPlantSecondViewModel {
         let changeDefaultImage: Driver<Void>
         let nicknameText: Driver<String>
         let showPlaceList: Driver<Void>
-        let selectPlace: Driver<Place>
+        let selectPlace: Driver<PlaceListResult>
         let resetPlace: Driver<Void>
         let showDatePicker: Driver<Void>
         let selectDate: Driver<IndexPath>
@@ -174,9 +181,10 @@ extension AddPlantSecondViewModel {
         }.disposed(by: disposeBag)
         
         let showPlaceList = PublishRelay<Void>()
-        input.placeDidTap.bind(to: showPlaceList).disposed(by: disposeBag)
+        input.placeDidTap.bind(to: showPlaceList)
+            .disposed(by: disposeBag)
         
-        let selectPlace = PublishRelay<Place>()
+        let selectPlace = PublishRelay<PlaceListResult>()
         input.selectedPlace.bind { [weak self] indexPath in
             guard let self = self else { return }
             selectPlace.accept(placeList.value[indexPath.row])
@@ -247,7 +255,7 @@ extension AddPlantSecondViewModel {
                       changeDefaultImage: changeDefaultImage.asDriver(onErrorJustReturn: ()),
                       nicknameText: nicknameText.asDriver(onErrorJustReturn: ""),
                       showPlaceList: showPlaceList.asDriver(onErrorJustReturn: ()),
-                      selectPlace: selectPlace.asDriver(onErrorJustReturn: Place(placeImage: "", placeName: "")),
+                      selectPlace: selectPlace.asDriver(onErrorDriveWith: .empty()),
                       resetPlace: resetPlace.asDriver(onErrorJustReturn: ()),
                       showDatePicker: showDatePicker.asDriver(onErrorJustReturn: ()), selectDate: selectDate.asDriver(onErrorJustReturn: IndexPath()),
                       cancleAddPlant: cancleAddPlant,

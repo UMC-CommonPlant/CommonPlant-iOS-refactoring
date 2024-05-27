@@ -416,7 +416,7 @@ class AddPlantSecondViewController: UIViewController {
             guard let self = self else { return }
             
             placeChoiceLabel.text = "장소"
-            selectedPlaceLabel.text = place.placeName
+            selectedPlaceLabel.text = place.name
             deleteButton.isHidden = false
             nextImageView.isHidden = true
             placeCollectionView.isHidden = true
