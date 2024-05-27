@@ -17,7 +17,7 @@ extension PlantService: BaseTargetType {
     var path: String {
         switch self {
         case .searchPlant(_):
-            URLConstant.searchPlant
+            URLConstant.searchPlantWithWaterDay
         case .getPlaceList:
             URLConstant.placeList
         }

@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: AddPlantSecondViewController(name: "몬스테라", watered: 4))
+        window?.rootViewController = SplashViewController()
         window?.makeKeyAndVisible()
     }
     
