@@ -23,4 +23,9 @@ class PlantAPI {
         return provider.rx.request(.searchPlant(name: name))
             .map(SearchPlantResponse.self)
     }
+    
+    func getPlaceListToAddPlant() -> Single<PlaceListResponse> {
+        return provider.rx.request(.getPlaceList)
+            .map(PlaceListResponse.self)
+    }
 }

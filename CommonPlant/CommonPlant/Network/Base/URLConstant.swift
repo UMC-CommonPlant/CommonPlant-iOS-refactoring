@@ -25,7 +25,7 @@ struct URLConstant {
     static let getDuplicateNickname = "/user"
     
     // MARK: Plant
-    
+    static let placeList = "/place/user"
     
     // MARK: Info
     static let searchPlant = "/info/searchInfo"

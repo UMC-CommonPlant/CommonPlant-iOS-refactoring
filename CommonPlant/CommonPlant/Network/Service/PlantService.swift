@@ -10,6 +10,7 @@ import Moya
 
 enum PlantService {
     case searchPlant(name: String)
+    case getPlaceList
 }
 
 extension PlantService: BaseTargetType {
@@ -17,12 +18,14 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(_):
             URLConstant.searchPlant
+        case .getPlaceList:
+            URLConstant.placeList
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .searchPlant(_):
+        case .searchPlant(_), .getPlaceList:
             return .get
         }
     }
@@ -31,6 +34,8 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(let name):
             return .requestParameters(parameters: ["name": name], encoding: URLEncoding.default)
+        case .getPlaceList:
+            return .requestPlain
         }
     }
     
@@ -38,6 +43,8 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(_):
             return NetworkConstant.noHeader
+        case .getPlaceList:
+            return NetworkConstant.hasTokenHeader
         }
     }
 }
