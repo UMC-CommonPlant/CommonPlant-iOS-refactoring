@@ -175,6 +175,9 @@ extension AddPlantSecondViewModel {
             if name.count > 0 {
                 nicknameState = .enable
                 submitBtnState.accept(placeState)
+            } else {
+                nicknameState = .disable
+                submitBtnState.accept(.disable)
             }
             
             nicknameText.accept(name)
