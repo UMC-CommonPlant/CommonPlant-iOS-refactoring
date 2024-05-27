@@ -25,6 +25,8 @@
 		C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */; };
 		C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */; };
 		C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C059A2722A5AA995005C0449 /* UILabel+Extension.swift */; };
+		C0602A4D2C04B55F0069C4B9 /* PostPlantRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0602A4C2C04B55F0069C4B9 /* PostPlantRequest.swift */; };
+		C0602A4F2C04B90A0069C4B9 /* PostPlantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0602A4E2C04B90A0069C4B9 /* PostPlantResponse.swift */; };
 		C06034942BDFBFC800277AC6 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06034932BDFBFC800277AC6 /* KeychainManager.swift */; };
 		C06299802A7A87FB00985171 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */; };
 		C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */; };
@@ -145,6 +147,8 @@
 		C044E5A92A66C1A800A8B3C6 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		C059A2702A5A4B54005C0449 /* EditUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoViewController.swift; sourceTree = "<group>"; };
 		C059A2722A5AA995005C0449 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		C0602A4C2C04B55F0069C4B9 /* PostPlantRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPlantRequest.swift; sourceTree = "<group>"; };
+		C0602A4E2C04B90A0069C4B9 /* PostPlantResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPlantResponse.swift; sourceTree = "<group>"; };
 		C06034932BDFBFC800277AC6 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		C062997F2A7A87FB00985171 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		C069D2B62AC0469A00A62E04 /* CommonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMenuView.swift; sourceTree = "<group>"; };
@@ -286,6 +290,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		C0602A4B2C04B5510069C4B9 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				C0602A4C2C04B55F0069C4B9 /* PostPlantRequest.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
 		C072D3582BCFA768009F1492 /* Request */ = {
 			isa = PBXGroup;
 			children = (
@@ -404,6 +416,7 @@
 		C0A67DBF2BF47DCC003F556D /* Plant */ = {
 			isa = PBXGroup;
 			children = (
+				C0602A4B2C04B5510069C4B9 /* Request */,
 				C0A67DC12BF47DFB003F556D /* Response */,
 			);
 			path = Plant;
@@ -414,6 +427,7 @@
 			children = (
 				C0A67DC22BF47E0B003F556D /* SearchPlantResponse.swift */,
 				C0A2F9E52C04A2B9001CFAA2 /* PlaceListResponse.swift */,
+				C0602A4E2C04B90A0069C4B9 /* PostPlantResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -982,6 +996,7 @@
 				C007F6472B62562200CD6252 /* AddPlantSecondViewController.swift in Sources */,
 				C039A8622B79000B00673CCC /* EditPlantViewModel.swift in Sources */,
 				C0D2129B2B8E0692003AB202 /* RxASAuthorizationControllerProxy.swift in Sources */,
+				C0602A4F2C04B90A0069C4B9 /* PostPlantResponse.swift in Sources */,
 				C0A67DC32BF47E0B003F556D /* SearchPlantResponse.swift in Sources */,
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
@@ -990,6 +1005,7 @@
 				C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
 				C0A67DC72BF47E56003F556D /* PlantAPI.swift in Sources */,
+				C0602A4D2C04B55F0069C4B9 /* PostPlantRequest.swift in Sources */,
 				C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
 				C085BFBC2A7148D500188C02 /* LogInViewController.swift in Sources */,
