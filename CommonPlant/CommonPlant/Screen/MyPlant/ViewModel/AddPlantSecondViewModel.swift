@@ -123,6 +123,7 @@ extension AddPlantSecondViewModel {
         let selectedNewImage: Observable<Void>
         let selectedDefaultImage: Observable<Void>
         let editingNickname: Observable<String>
+        let endEditingNickname: Observable<String?>
         let placeDidTap: Observable<Void>
         let selectedPlace: Observable<IndexPath>
         let deletePlaceBtnDidTap: Observable<Void>
@@ -163,8 +164,8 @@ extension AddPlantSecondViewModel {
             guard let self = self else { return }
             var name = name
             
-            if name.contains("\n") {
-                name.removeLast()
+            while name.contains("  ") {
+                name = name.replacingOccurrences(of: "  ", with: " ")
             }
             
             if name.count > 10 {
@@ -172,15 +173,32 @@ extension AddPlantSecondViewModel {
                 name = String(name[..<index])
             }
             
-            if name.count > 0 {
-                nicknameState = .enable
-                submitBtnState.accept(placeState)
-            } else {
-                nicknameState = .disable
-                submitBtnState.accept(.disable)
+            let pattern = "^[가-힣a-zA-Z0-9 !_.-^~]*$"
+            
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                let range = NSRange(location: 0, length: name.utf16.count)
+                
+                if regex.firstMatch(in: name, options: [], range: range) == nil || name.count < 2 {
+                    nicknameState = .disable
+                    submitBtnState.accept(.disable)
+                } else {
+                    nicknameState = .enable
+                    submitBtnState.accept(placeState)
+                }
             }
             
             nicknameText.accept(name)
+        }.disposed(by: disposeBag)
+        
+        input.endEditingNickname.bind { [weak self] name in
+            guard let self = self, var new = name else { return }
+            
+            if new.removeLast() == " " {
+                nicknameText.accept(new)
+            } else {
+                nicknameText.accept(name!)
+            }
+            
         }.disposed(by: disposeBag)
         
         let showPlaceList = PublishRelay<Void>()

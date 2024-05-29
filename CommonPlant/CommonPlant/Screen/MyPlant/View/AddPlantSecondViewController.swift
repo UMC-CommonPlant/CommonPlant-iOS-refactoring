@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxRelay
+import RxGesture
 
 class AddPlantSecondViewController: UIViewController {
     private let viewModel = AddPlantSecondViewModel()
@@ -16,7 +17,8 @@ class AddPlantSecondViewController: UIViewController {
         .Input(imageDidTap: plantImageView.rx.tapGesture().map { _ in }.asObservable(),
                selectedNewImage: selectNewImage.asObservable(),
                selectedDefaultImage: changeToDefaultImage.asObservable(),
-               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
+               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(), 
+               endEditingNickname: nicknameTextField.rx.controlEvent(.editingDidEndOnExit).withLatestFrom(nicknameTextField.rx.text).asObservable(),
                placeDidTap: placeBackgroundView.rx.tapGesture().map { _ in }.asObservable(),
                selectedPlace: placeCollectionView.rx.itemSelected.asObservable(),
                deletePlaceBtnDidTap: deleteButton.rx.tap.asObservable(),
@@ -248,7 +250,6 @@ class AddPlantSecondViewController: UIViewController {
         tf.textAlignment = .right
         tf.tintColor = .gray6
         tf.keyboardType = .numberPad
-        tf.returnKeyType = .done
         return tf
     }()
     private let wateredUnderlineView: UIView = {
@@ -294,11 +295,18 @@ class AddPlantSecondViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        setView()
         setNavigationBar()
         bind()
         setHierarchy()
         setConstraints()
+    }
+    
+    func setView() {
+        view.backgroundColor = .white
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardDismiss))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     func setNavigationBar() {
@@ -733,5 +741,10 @@ class AddPlantSecondViewController: UIViewController {
         guard let selectDay = datePickerCollectionView.cellForItem(at: indexPath) as? DatePickerCollectionViewCell else { return }
         selectDay.circleView.isHidden = false
         selectDay.dayLabel.textColor = .gray2
+    }
+    
+    @objc func keyboardDismiss() {
+        print(#function)
+        view.endEditing(true)
     }
 }
