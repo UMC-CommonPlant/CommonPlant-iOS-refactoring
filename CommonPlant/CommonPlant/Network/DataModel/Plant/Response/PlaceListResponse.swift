@@ -19,11 +19,11 @@ struct PlaceListResponse: Codable {
 struct PlaceListResult: Codable {
     let name: String
     let imgURL: String
-    let createdAt: String
+    let code: String
 
     enum CodingKeys: String, CodingKey {
         case name
         case imgURL = "imgUrl"
-        case createdAt
+        case code
     }
 }
