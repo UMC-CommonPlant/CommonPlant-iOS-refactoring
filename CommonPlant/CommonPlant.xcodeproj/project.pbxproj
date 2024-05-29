@@ -91,6 +91,7 @@
 		F91E479B2A53EE31008E07A9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F91E479A2A53EE31008E07A9 /* Kingfisher */; };
 		F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47A92A569128008E07A9 /* UIColor+Extension.swift */; };
 		F91E47AC2A569666008E07A9 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47AB2A569666008E07A9 /* empty.swift */; };
+		F9202E6A2C022347005C0796 /* CetegoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */; };
 		F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93403FF2A81F89300F0267B /* SearchResultViewController.swift */; };
 		F93404022A81F9F400F0267B /* PlantDictTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404012A81F9F400F0267B /* PlantDictTableViewCell.swift */; };
 		F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404032A8207B000F0267B /* SearchResultViewModel.swift */; };
@@ -202,6 +203,7 @@
 		F91E478D2A53E3CA008E07A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F91E47A92A569128008E07A9 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		F91E47AB2A569666008E07A9 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CetegoryDetailViewController.swift; sourceTree = "<group>"; };
 		F93403FF2A81F89300F0267B /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		F93404012A81F9F400F0267B /* PlantDictTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDictTableViewCell.swift; sourceTree = "<group>"; };
 		F93404032A8207B000F0267B /* SearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewModel.swift; sourceTree = "<group>"; };
@@ -754,6 +756,7 @@
 				F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */,
 				F93403FF2A81F89300F0267B /* SearchResultViewController.swift */,
 				F9C226C72BFCBCF700B14D11 /* PlantCetegoryViewController.swift */,
+				F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -970,6 +973,7 @@
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
 				F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */,
 				C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */,
+				F9202E6A2C022347005C0796 /* CetegoryDetailViewController.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
 				C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
