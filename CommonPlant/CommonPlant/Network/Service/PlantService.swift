@@ -72,7 +72,9 @@ extension PlantService: BaseTargetType {
         case .getPlaceList:
             return NetworkConstant.hasTokenHeader
         case .postPlant(_):
-            return NetworkConstant.hasMultipartHeader
+            var headers = NetworkConstant.hasMultipartHeader
+            headers.merge(NetworkConstant.hasTokenHeader) { (_, new) in new }
+            return headers
         }
     }
 }

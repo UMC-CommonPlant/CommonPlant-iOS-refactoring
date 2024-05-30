@@ -29,10 +29,9 @@ class PlantAPI {
             .map(PlaceListResponse.self)
     }
     
-    func addPlant(_ request: PostPlantRequest) -> Observable<PostPlantResponse> {
+    func addPlant(_ request: PostPlantRequest) -> Single<PostPlantResponse> {
         
         return provider.rx.request(.postPlant(request: request))
-            .asObservable()
-            .map { try JSONDecoder().decode(PostPlantResponse.self, from: $0.data) }
+            .map(PostPlantResponse.self)
     }
 }

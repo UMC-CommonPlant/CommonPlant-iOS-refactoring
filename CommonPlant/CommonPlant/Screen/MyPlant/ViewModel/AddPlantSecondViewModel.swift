@@ -132,7 +132,7 @@ extension AddPlantSecondViewModel {
         let nextMonthBtnDidTap: Observable<Void>
         let selectedDate: Observable<IndexPath>
         let cancleBtnDidTap: Observable<Void>
-        let submitBtnDidTap: Observable<Void>
+        let submitBtnDidTap: Observable<PostPlantRequest>
     }
     
     struct Output {
@@ -145,8 +145,7 @@ extension AddPlantSecondViewModel {
         let resetPlace: Driver<Void>
         let showDatePicker: Driver<Void>
         let selectDate: Driver<IndexPath>
-        let cancleAddPlant: Driver<Void>
-        let submitPlant: Driver<Void>
+        let popToRootViewController: Driver<Void>
         let submitBtnState: Driver<SubmitState>
     }
     
@@ -261,15 +260,24 @@ extension AddPlantSecondViewModel {
                 updateDays()
             }.disposed(by: disposeBag)
         
-        let cancleAddPlant = input.cancleBtnDidTap
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        let submitPlant = input.submitBtnDidTap
-            .map { _ in ()
-                // TODO: 네트워킹
-                submitBtnState.accept(.onClick)
-            }
-            .asDriver(onErrorDriveWith: .empty())
+        let popToRoot = PublishRelay<Void>()
+        
+        input.cancleBtnDidTap.bind(to: popToRoot)
+            .disposed(by: disposeBag)
+        
+        input.submitBtnDidTap.bind { [weak self] request in
+            guard let self = self else { return }
+            
+            PlantAPI.shared.addPlant(request).subscribe { result in
+                switch result {
+                case .success(let response):
+                    popToRoot.accept(())
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }.disposed(by: disposeBag)
+            
+        }.disposed(by: disposeBag)
         
         return Output(showImgSettingAlert: showImgSettingAlert.asDriver(onErrorJustReturn: ()),
                       showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()),
@@ -278,9 +286,8 @@ extension AddPlantSecondViewModel {
                       showPlaceList: showPlaceList.asDriver(onErrorJustReturn: ()),
                       selectPlace: selectPlace.asDriver(onErrorDriveWith: .empty()),
                       resetPlace: resetPlace.asDriver(onErrorJustReturn: ()),
-                      showDatePicker: showDatePicker.asDriver(onErrorJustReturn: ()), selectDate: selectDate.asDriver(onErrorJustReturn: IndexPath()),
-                      cancleAddPlant: cancleAddPlant,
-                      submitPlant: submitPlant,
+                      showDatePicker: showDatePicker.asDriver(onErrorJustReturn: ()), selectDate: selectDate.asDriver(onErrorJustReturn: IndexPath()), 
+                      popToRootViewController: popToRoot.asDriver(onErrorDriveWith: .empty()),
                       submitBtnState: submitBtnState.asDriver(onErrorJustReturn: .disable))
     }
 }

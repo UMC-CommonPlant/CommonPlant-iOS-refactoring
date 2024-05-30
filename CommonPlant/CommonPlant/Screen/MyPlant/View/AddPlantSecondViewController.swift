@@ -13,24 +13,33 @@ import RxGesture
 
 class AddPlantSecondViewController: UIViewController {
     private let viewModel = AddPlantSecondViewModel()
-    private lazy var input = AddPlantSecondViewModel
-        .Input(imageDidTap: plantImageView.rx.tapGesture().map { _ in }.asObservable(),
-               selectedNewImage: selectNewImage.asObservable(),
-               selectedDefaultImage: changeToDefaultImage.asObservable(),
-               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(), 
-               endEditingNickname: nicknameTextField.rx.controlEvent(.editingDidEndOnExit).withLatestFrom(nicknameTextField.rx.text).asObservable(),
-               placeDidTap: placeBackgroundView.rx.tapGesture().map { _ in }.asObservable(),
-               selectedPlace: placeCollectionView.rx.itemSelected.asObservable(),
-               deletePlaceBtnDidTap: deleteButton.rx.tap.asObservable(),
-               dateDidTap: selectedDateLabel.rx.tapGesture().map { _ in }.asObservable(),
-               previousMonthBtnDidTap: previousButton.rx.tap.asObservable(),
-               nextMonthBtnDidTap: nextButton.rx.tap.asObservable(),
-               selectedDate: datePickerCollectionView.rx.itemSelected.asObservable(),
-               cancleBtnDidTap: cancleButton.rx.tap.asObservable(),
-               submitBtnDidTap: submitButton.rx.tap.asObservable())
+    private lazy var input = AddPlantSecondViewModel.Input(
+        imageDidTap: plantImageView.rx.tapGesture().map { _ in }.asObservable(),
+        selectedNewImage: selectNewImage.asObservable(),
+        selectedDefaultImage: changeToDefaultImage.asObservable(),
+        editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
+        endEditingNickname: nicknameTextField.rx.controlEvent(.editingDidEndOnExit).withLatestFrom(nicknameTextField.rx.text).asObservable(),
+        placeDidTap: placeBackgroundView.rx.tapGesture().map { _ in }.asObservable(),
+        selectedPlace: placeCollectionView.rx.itemSelected.asObservable(),
+        deletePlaceBtnDidTap: deleteButton.rx.tap.asObservable(),
+        dateDidTap: selectedDateLabel.rx.tapGesture().map { _ in }.asObservable(),
+        previousMonthBtnDidTap: previousButton.rx.tap.asObservable(),
+        nextMonthBtnDidTap: nextButton.rx.tap.asObservable(),
+        selectedDate: datePickerCollectionView.rx.itemSelected.asObservable(),
+        cancleBtnDidTap: cancleButton.rx.tap.asObservable(),
+        submitBtnDidTap: submitButton.rx.tap.map { [weak self] _ in
+            guard let self, let plantImg = plantImageView.image, let name = nameLabel.text, let nickname = nicknameTextField.text, let place = selectedPlace, let waterCycle = wateredTextField.text, let defaultWaterCycle = wateredTextField.placeholder, let lastWatered = selectedDateLabel.text else {
+                return PostPlantRequest(plantName: "", nickname: "", place: "", waterCycle: "", lastWateredDate: "", imageData: nil)
+            }
+            
+            let data: Data? = plantImg == UIImage(named: "AddPlant") ? nil : plantImg.jpegData(compressionQuality: 1.0)
+            
+            return PostPlantRequest(plantName: name, nickname: nickname, place: place.code, waterCycle: waterCycle.isEmpty ? defaultWaterCycle : waterCycle, lastWateredDate: lastWatered.replacingOccurrences(of: " ", with: ""), imageData: data)
+        }.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
+    private var selectedPlace: PlaceListResult?
     
     private let scrollView: UIView = {
         let view = UIScrollView()
@@ -423,6 +432,7 @@ class AddPlantSecondViewController: UIViewController {
         output.selectPlace.drive { [weak self] place in
             guard let self = self else { return }
             
+            selectedPlace = place
             placeChoiceLabel.text = "장소"
             selectedPlaceLabel.text = place.name
             deleteButton.isHidden = false
@@ -462,14 +472,10 @@ class AddPlantSecondViewController: UIViewController {
             setCalendar(indexPath)
         }.disposed(by: viewModel.disposeBag)
         
-        output.cancleAddPlant.drive { [weak self] _ in
+        output.popToRootViewController.drive { [weak self] _ in
             guard let self = self else { return }
-            // TODO: navigation pop
-        }.disposed(by: viewModel.disposeBag)
-        
-        output.submitPlant.drive { [weak self] _ in
-            guard let self = self else { return }
-            // TODO: navigation pop
+            
+            navigationController?.popToRootViewController(animated: true)
         }.disposed(by: viewModel.disposeBag)
         
         output.submitBtnState.drive { [weak self] state in
@@ -744,7 +750,6 @@ class AddPlantSecondViewController: UIViewController {
     }
     
     @objc func keyboardDismiss() {
-        print(#function)
         view.endEditing(true)
     }
 }
