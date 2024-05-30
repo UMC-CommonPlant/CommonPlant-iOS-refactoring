@@ -29,10 +29,9 @@ class SearchResultViewController: UIViewController {
     private func setTableView() {
         searchResultTableView.estimatedRowHeight = 92
         searchResultTableView.separatorStyle = .none
-        searchResultTableView.register(SearchResultTableViewCell.self, forCellReuseIdentifier: "SearchResultTableViewCell")
-        
+        searchResultTableView.register(PlantDictTableViewCell.self, forCellReuseIdentifier: PlantDictTableViewCell.identifier)
         viewModel.searchResultObservable
-            .bind(to: searchResultTableView.rx.items(cellIdentifier: SearchResultTableViewCell.identifier, cellType: SearchResultTableViewCell.self)) { _, element, cell in
+            .bind(to: searchResultTableView.rx.items(cellIdentifier: PlantDictTableViewCell.identifier, cellType: PlantDictTableViewCell.self)) { _, element, cell in
                 cell.setAttributes(with: element)
             }
             .disposed(by: disposeBag)

@@ -7,8 +7,8 @@
 
 import UIKit
 
-class SearchResultTableViewCell: UITableViewCell {
-    static let identifier = "SearchResultTableViewCell"
+class PlantDictTableViewCell: UITableViewCell {
+    static let identifier = "PlantDictTableViewCell"
     let plantImage = UIImageView()
     let nameLabel = UILabel()
     let scientificNameLabel = UILabel()
