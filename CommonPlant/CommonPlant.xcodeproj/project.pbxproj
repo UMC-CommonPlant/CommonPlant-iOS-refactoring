@@ -53,6 +53,7 @@
 		C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C085BFBE2A71686E00188C02 /* SignUpViewController.swift */; };
 		C086A08D2A62322000F1560D /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = C086A08C2A62322000F1560D /* RxCocoa */; };
 		C086A08F2A62322000F1560D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C086A08E2A62322000F1560D /* RxSwift */; };
+		C09B8E7B2C0DED4B00375EC7 /* PlantDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09B8E7A2C0DED4B00375EC7 /* PlantDetailResponse.swift */; };
 		C0A0D4DD2A73E96800426514 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4DA2A73E96800426514 /* SignUpViewModel.swift */; };
 		C0A0D4DE2A73E96800426514 /* LogInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4DB2A73E96800426514 /* LogInViewModel.swift */; };
 		C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */; };
@@ -172,6 +173,7 @@
 		C07DF8832A59844400CDC5CC /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		C085BFBB2A7148D500188C02 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		C085BFBE2A71686E00188C02 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		C09B8E7A2C0DED4B00375EC7 /* PlantDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDetailResponse.swift; sourceTree = "<group>"; };
 		C0A0D4DA2A73E96800426514 /* SignUpViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		C0A0D4DB2A73E96800426514 /* LogInViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewModel.swift; sourceTree = "<group>"; };
 		C0A0D4DF2A73EAD800426514 /* PrivacyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
@@ -428,6 +430,7 @@
 				C0A67DC22BF47E0B003F556D /* SearchPlantResponse.swift */,
 				C0A2F9E52C04A2B9001CFAA2 /* PlaceListResponse.swift */,
 				C0602A4E2C04B90A0069C4B9 /* PostPlantResponse.swift */,
+				C09B8E7A2C0DED4B00375EC7 /* PlantDetailResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -1010,6 +1013,7 @@
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
 				C085BFBC2A7148D500188C02 /* LogInViewController.swift in Sources */,
 				C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */,
+				C09B8E7B2C0DED4B00375EC7 /* PlantDetailResponse.swift in Sources */,
 				F9B6E9982BCFBAA0000F05D4 /* PlantCollectionViewCell.swift in Sources */,
 				C07DF8762A5947C400CDC5CC /* PaddingLabel.swift in Sources */,
 				F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */,

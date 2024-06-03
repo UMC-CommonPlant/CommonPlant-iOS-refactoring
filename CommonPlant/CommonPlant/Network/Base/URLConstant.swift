@@ -29,6 +29,7 @@ struct URLConstant {
     
     // MARK: Place
     static let placeList = "/place/user"
+    static let getPlant = "/plant"
     
     // MARK: Info
     static let searchPlantWithWaterDay = "/info/searchInfoPlus"

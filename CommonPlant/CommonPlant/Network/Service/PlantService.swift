@@ -12,6 +12,7 @@ enum PlantService {
     case searchPlant(name: String)
     case getPlaceList
     case postPlant(request: PostPlantRequest)
+    case getPlantDetail(idx: Int)
 }
 
 extension PlantService: BaseTargetType {
@@ -23,6 +24,8 @@ extension PlantService: BaseTargetType {
             URLConstant.placeList
         case .postPlant(_):
             URLConstant.postPlant
+        case .getPlantDetail(idx: let idx):
+            URLConstant.getPlant + "/\(idx)"
         }
     }
     
@@ -32,6 +35,8 @@ extension PlantService: BaseTargetType {
             return .get
         case .postPlant(_):
             return .post
+        case .getPlantDetail(idx: let idx):
+            return .get
         }
     }
     
@@ -62,6 +67,8 @@ extension PlantService: BaseTargetType {
                 multiPartData.append(plantFormData)
             }
             return .uploadMultipart(multiPartData)
+        case .getPlantDetail(idx: let idx):
+            return .requestPlain
         }
     }
     
@@ -75,6 +82,8 @@ extension PlantService: BaseTargetType {
             var headers = NetworkConstant.hasMultipartHeader
             headers.merge(NetworkConstant.hasTokenHeader) { (_, new) in new }
             return headers
+        case .getPlantDetail(idx: let idx):
+            return NetworkConstant.hasTokenHeader
         }
     }
 }
