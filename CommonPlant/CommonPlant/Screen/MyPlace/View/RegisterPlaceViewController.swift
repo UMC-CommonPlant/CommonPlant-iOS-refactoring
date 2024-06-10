@@ -143,6 +143,12 @@ class RegisterPlaceViewController: UIViewController {
                 self?.addressButton.setImage(UIImage(named: imageName)?.withTintColor(.gray6!), for: .normal)
             })
             .disposed(by: disposeBag)
+        
+        nextButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.navigateToAddFriendViewController()
+            })
+            .disposed(by: disposeBag)
     }
     
     private func handleCameraPermissionState(_ state: PHAuthorizationStatus) {
@@ -214,6 +220,11 @@ class RegisterPlaceViewController: UIViewController {
     
     private func truncateMaxLength(text: String) -> String {
         return String(text.prefix(maxLength))
+    }
+    
+    private func navigateToAddFriendViewController() {
+        let addFriendVC = AddPlaceFriendViewController()
+        self.navigationController?.pushViewController(addFriendVC, animated: true)
     }
 }
 
