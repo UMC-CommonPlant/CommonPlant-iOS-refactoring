@@ -56,7 +56,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         setCollectionView()
         configureUI()
         view.layoutIfNeeded()
-        addTargets()
+        bindButton()
         bindCollectionView()
         requestAuthorization()
     }
@@ -68,8 +68,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
     }
     
     // MARK: - Custom Method
-    private func addTargets() {
-        addPlaceButton.addTarget(self, action: #selector(addPlaceButtonTapped), for: .touchUpInside)
+    private func bindButton() {
+        addPlaceButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.addPlaceButtonTapped()
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: - CollectionView
@@ -115,12 +119,11 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         }
     }
     
-    // MARK: - @objc
-    @objc private func addPlaceButtonTapped() {
+    private func addPlaceButtonTapped() {
         let registerPlaceVC = RegisterPlaceViewController()
+        registerPlaceVC.navigationItem.backButtonTitle = ""
         self.navigationController?.pushViewController(registerPlaceVC, animated: true)
     }
-    
 }
 
 // MARK: - UI
