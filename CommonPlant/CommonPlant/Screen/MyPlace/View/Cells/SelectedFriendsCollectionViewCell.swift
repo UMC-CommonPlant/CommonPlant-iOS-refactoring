@@ -46,10 +46,9 @@ class SelectedFriendsCollectionViewCell: UICollectionViewCell {
             make.top.equalToSuperview().offset(5)
         }
         
-        deleteImageView.snp.makeConstraints { make in
+        deleteButton.snp.makeConstraints { make in
             make.top.right.equalToSuperview()
             make.height.width.equalTo(18)
-            
         }
         
         nameLabel.snp.makeConstraints { make in
