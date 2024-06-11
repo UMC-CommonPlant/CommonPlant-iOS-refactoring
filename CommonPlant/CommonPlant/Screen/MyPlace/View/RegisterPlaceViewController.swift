@@ -223,7 +223,7 @@ class RegisterPlaceViewController: UIViewController {
     }
     
     private func navigateToAddFriendViewController() {
-        let addFriendVC = AddPlaceFriendViewController()
+        let addFriendVC = AddFriendsToPlaceViewController()
         self.navigationController?.pushViewController(addFriendVC, animated: true)
     }
 }
