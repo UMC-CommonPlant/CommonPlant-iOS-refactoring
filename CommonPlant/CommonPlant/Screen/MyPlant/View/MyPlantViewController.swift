@@ -13,9 +13,8 @@ import Then
 
 class MyPlantViewController: UIViewController {
     // MARK: Properties
-    let viewModel = MyPlantViewModel()
-    let disposeBag = DisposeBag()
-    let identifier = MemoCardCollectionViewCell.identifier
+    let viewModel: MyPlantViewModel
+    let plantIdx: Int
     
     // MARK: UIComponents
     private let scrollView = UIScrollView()
@@ -121,7 +120,7 @@ class MyPlantViewController: UIViewController {
     }
     private lazy var memoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout).then {
         $0.backgroundColor = .clear
-        $0.register(MemoCardCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
+        $0.register(MemoCardCollectionViewCell.self, forCellWithReuseIdentifier: MemoCardCollectionViewCell.identifier)
     }
     private let flowLayout = UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
@@ -198,12 +197,19 @@ class MyPlantViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
-        self.memoCollectionView.delegate = self
-        self.memoCollectionView.dataSource = self
-        
         setNavigationBar()
         setHierarchy()
         setConstraints()
+    }
+    
+    init(plantIdx: Int) {
+        self.plantIdx = plantIdx
+        self.viewModel = MyPlantViewModel(plantIdx)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: Custom Methods
@@ -484,35 +490,5 @@ class MyPlantViewController: UIViewController {
             make.top.equalTo(humidityInfoImageView.snp.top).offset(2)
             make.leading.equalTo(humidityInfoImageView.snp.trailing).offset(8)
         }
-    }
-}
-
-extension MyPlantViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.myPlant.memoList.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! MemoCardCollectionViewCell
-
-        let memo = viewModel.myPlant.memoList[indexPath.row]
-        
-        if let profileURL = URL(string: memo.userImgURL) {
-            cell.profileView.kf.setImage(with: profileURL)
-        }
-        
-        cell.nickNameLabel.text = memo.userNickName
-        
-        cell.contentLabel.text = memo.content
-        
-        if let imageURLString = memo.imgURL {
-            if let imageURL = URL(string: imageURLString) {
-                cell.imageView.kf.setImage(with: imageURL)
-            }
-        }
-        
-        cell.dateLabel.text = memo.createdAt
-        
-        return cell
     }
 }
