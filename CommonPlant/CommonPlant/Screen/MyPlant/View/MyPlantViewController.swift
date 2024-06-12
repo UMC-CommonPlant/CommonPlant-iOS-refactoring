@@ -51,6 +51,7 @@ class MyPlantViewController: UIViewController {
         $0.isHidden = true
     }
     private let alertView = CommonAlertView().then {
+        $0.isHidden = true
         $0.setTitle("식물 삭제")
         $0.setMessage("해당 식물을 삭제하시겠습니까?")
         $0.setActionButton(title: "삭제")
@@ -266,7 +267,15 @@ class MyPlantViewController: UIViewController {
             .do (onNext: { [weak self] memos in
                 guard let self = self else { return }
                 
-                memoCollectionView.isHidden = memos.isEmpty ? true : false
+                if memos.isEmpty {
+                    memoCollectionView.snp.updateConstraints { make in
+                        make.height.equalTo(0)
+                    }
+                } else {
+                    memoCollectionView.snp.updateConstraints { make in
+                        make.height.equalTo(174)
+                    }
+                }
             })
             .bind(to: memoCollectionView.rx.items(cellIdentifier: MemoCardCollectionViewCell.identifier, cellType: MemoCardCollectionViewCell.self)) { (_, result, cell) in
                 
@@ -321,7 +330,7 @@ class MyPlantViewController: UIViewController {
     }
     
     func setHierarchy() {
-        [scrollView, backgroundView, menuView].forEach {
+        [scrollView, backgroundView, menuView, alertView].forEach {
             view.addSubview($0)
         }
         
@@ -413,6 +422,12 @@ class MyPlantViewController: UIViewController {
             make.height.equalTo(128)
         }
         
+        alertView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalTo(270)
+            make.height.equalTo(148)
+        }
+        
         placeView.snp.makeConstraints { make in
             make.top.equalTo(plantImageView.snp.top).offset(8)
             make.centerX.equalToSuperview()
@@ -501,8 +516,7 @@ class MyPlantViewController: UIViewController {
         }
         
         memoView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(316)
+            make.horizontalEdges.equalToSuperview()
         }
         
         nextButton.snp.makeConstraints { make in
@@ -519,8 +533,8 @@ class MyPlantViewController: UIViewController {
         
         memoCollectionView.snp.makeConstraints { make in
             make.top.equalTo(memoTitleLabel.snp.bottom).offset(4)
-            make.width.equalToSuperview()
-            make.height.equalTo(182)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(174)
         }
         
         addMemoButton.snp.makeConstraints { make in
@@ -528,6 +542,7 @@ class MyPlantViewController: UIViewController {
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(42)
+            make.bottom.equalToSuperview().inset(24)
         }
         
         plantInfoView.snp.makeConstraints { make in
