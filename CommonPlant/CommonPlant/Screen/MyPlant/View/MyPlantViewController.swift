@@ -14,6 +14,15 @@ import Then
 class MyPlantViewController: UIViewController {
     // MARK: Properties
     let viewModel: MyPlantViewModel
+    private lazy var input = MyPlantViewModel.Input(menuBtnDidTap: menuButton.rx.tap.asObservable(),
+                                                    editBtnDidTap: menuView.editView.rx.tapGesture().map { _ in }.asObservable().skip(1),
+                                                    deleteBtnDidTap: menuView.deleteView.rx.tapGesture().map { _ in }.asObservable().skip(1),
+                                                    alertDeleteBtnDidTap: alertView.actionButton.rx.tap.asObservable(),
+                                                    alertCancelBtnDidTap: alertView.cancleButton.rx.tap.asObservable(),
+                                                    backgroundViewDidTap: backgroundView.rx.tapGesture().map { _ in }.asObservable(),
+                                                    writeBtnDidTap: addMemoButton.rx.tap.asObservable(),
+                                                    memoListDidTap: nextButton.rx.tap.asObservable())
+    private lazy var output = viewModel.transform(input: input)
     let plantIdx: Int
     
     // MARK: UIComponents
@@ -206,6 +215,7 @@ class MyPlantViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
+        bind()
         setNavigationBar()
         setHierarchy()
         setConstraints()
@@ -226,6 +236,88 @@ class MyPlantViewController: UIViewController {
         self.navigationItem.title = "My Plant"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
         self.navigationController?.navigationBar.barTintColor = .white
+    }
+    
+    func bind() {
+        viewModel.myPlant.subscribe { [weak self] plant in
+            guard let self, let plant = plant.element else { return }
+            if let imgURL = URL(string: plant.imgURL) {
+                plantImageView.kf.setImage(with: imgURL)
+            } else {
+                plantImageView.image = UIImage(named: "MyPlant")
+            }
+            
+            placeNameLabel.text = plant.place
+            nickNameLabel.text = plant.nickname
+            scientificNameLabel.text = plant.scientificName
+            countingMessageLabel.text = "\(plant.nickname)와/과 함께한지 \(plant.countDate)일이 지났어요!"
+            countingMessageLabel.partiallyChanged(targetString: "\(plant.countDate)일", font: .bodyB1, color: .gray6)
+            waterDayLabel.text = "D\(plant.remainderDate)"
+            metDateLabel.text = plant.createdAt
+            lastWateringDateLabel.text = plant.wateredDate
+            wateringCycleLabel.text = "\(plant.waterDay) Day"
+            sunlightInfoLabel.text = "\(plant.sunlight)"
+            temperatureLabel.text = "\(plant.tempMin)~\(plant.tempMax)℃"
+            humidityInfoLabel.text = "\(plant.humidity)"
+            
+        }.disposed(by: viewModel.disposeBag)
+        
+        viewModel.plantMemoList
+            .do (onNext: { [weak self] memos in
+                guard let self = self else { return }
+                
+                memoCollectionView.isHidden = memos.isEmpty ? true : false
+            })
+            .bind(to: memoCollectionView.rx.items(cellIdentifier: MemoCardCollectionViewCell.identifier, cellType: MemoCardCollectionViewCell.self)) { (_, result, cell) in
+                
+                cell.configureCell(result)
+            }.disposed(by: viewModel.disposeBag)
+        
+        output.backgroundHidden.drive { [weak self] _ in
+            guard let self else { return }
+            backgroundView.isHidden = true
+            alertView.isHidden = true
+            menuView.isHidden = true
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showMenu.drive { [weak self] _ in
+            guard let self else { return }
+            
+            menuView.isHidden = false
+            backgroundView.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showDeleteAlert.drive { [weak self] _ in
+            guard let self else { return }
+            
+            menuView.isHidden = true
+            alertView.isHidden = false
+            backgroundView.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showEditView.drive { [weak self] _ in
+            guard let self else { return }
+            
+            navigationController?.pushViewController(EditPlantViewController(), animated: true)
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showAddMemoView.drive { [weak self] index in
+            guard let self else { return }
+            
+            navigationController?.pushViewController(EditMemoViewController(), animated: true)
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.showMemoView.drive { [weak self] index in
+            guard let self else { return }
+            
+            navigationController?.pushViewController(MemoListViewController(focus: IndexPath(item: 0, section: 0)), animated: true)
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.popToPreviousView.drive { [weak self] _ in
+            guard let self else { return }
+            
+            navigationController?.popViewController(animated: true)
+        }.disposed(by: viewModel.disposeBag)
     }
     
     func setHierarchy() {

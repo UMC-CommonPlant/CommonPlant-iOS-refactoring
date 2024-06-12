@@ -37,7 +37,7 @@ struct PlantDetail: Codable {
 struct PlantMemo: Codable {
     let memoIdx: Int
     let content: String
-    let imgURL: String
+    let imgURL: String?
     let writer, createdAt: String
 
     enum CodingKeys: String, CodingKey {

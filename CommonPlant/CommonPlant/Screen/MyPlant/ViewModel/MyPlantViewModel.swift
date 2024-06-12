@@ -11,6 +11,7 @@ import RxCocoa
 
 class MyPlantViewModel {
     var myPlant = PublishRelay<PlantDetail>()
+    var plantMemoList = PublishRelay<[PlantMemo]>()
     let plantIdx: Int
     
     let disposeBag = DisposeBag()
@@ -24,6 +25,7 @@ class MyPlantViewModel {
                 switch result {
                 case .success(let response):
                     myPlant.accept(response.result)
+                    plantMemoList.accept(response.result.memoList)
                     print(response.result)
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -50,7 +52,7 @@ extension MyPlantViewModel: ViewModelType {
         let showDeleteAlert: Driver<Void>
         let backgroundHidden: Driver<Void>
         let showAddMemoView: Driver<Int>
-        let showMemmoView: Driver<Int>
+        let showMemoView: Driver<Int>
         let popToPreviousView: Driver<Void>
     }
     
@@ -86,6 +88,6 @@ extension MyPlantViewModel: ViewModelType {
         }.disposed(by: disposeBag)
         
         
-        return Output(showMenu: showMenu, showEditView: showEditView, showDeleteAlert: showDeleteAlert, backgroundHidden: backgroundHidden.asDriver(onErrorDriveWith: .empty()), showAddMemoView: showAddMemoView, showMemmoView: showMemoView, popToPreviousView: popToPreviousView.asDriver(onErrorJustReturn: ()))
+        return Output(showMenu: showMenu, showEditView: showEditView, showDeleteAlert: showDeleteAlert, backgroundHidden: backgroundHidden.asDriver(onErrorDriveWith: .empty()), showAddMemoView: showAddMemoView, showMemoView: showMemoView, popToPreviousView: popToPreviousView.asDriver(onErrorJustReturn: ()))
     }
 }

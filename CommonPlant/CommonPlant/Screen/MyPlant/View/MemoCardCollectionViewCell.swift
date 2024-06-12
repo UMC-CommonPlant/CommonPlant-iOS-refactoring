@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class MemoCardCollectionViewCell: UICollectionViewCell {
     // MARK: Properties
@@ -32,6 +33,22 @@ class MemoCardCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: Custom Methods
+    
+    func configureCell(_ data: PlantMemo) {
+        // TODO: profileView 이미지 로드
+        
+        nickNameLabel.text = data.writer
+        
+        contentLabel.text = data.content
+        
+        if let urlString = data.imgURL, !urlString.isEmpty {
+            let imgURL = URL(string: urlString)
+            imageView.kf.setImage(with: imgURL)
+        }
+        
+        dateLabel.text = data.createdAt
+    }
+    
     func setAttributes() {
         self.makeShadow(cornerRadius: 16)
         self.backgroundColor = .white
