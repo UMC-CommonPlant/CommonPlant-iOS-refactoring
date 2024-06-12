@@ -28,7 +28,11 @@ class MyPlantViewController: UIViewController {
     private let plantProfileView = UIView().then {
         $0.backgroundColor = .white
     }
-    private let menuButton = UIButton()
+    private let menuButton = UIButton().then {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Menu")
+        $0.configuration = config
+    }
     private let backgroundView = UIView().then {
         $0.backgroundColor = .black
         $0.layer.opacity = 0.4
@@ -36,6 +40,11 @@ class MyPlantViewController: UIViewController {
     }
     private let menuView = CommonMenuView().then {
         $0.isHidden = true
+    }
+    private let alertView = CommonAlertView().then {
+        $0.setTitle("식물 삭제")
+        $0.setMessage("해당 식물을 삭제하시겠습니까?")
+        $0.setActionButton(title: "삭제")
     }
     private let plantImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
