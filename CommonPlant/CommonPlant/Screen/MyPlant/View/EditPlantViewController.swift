@@ -103,7 +103,6 @@ class EditPlantViewController: UIViewController {
     func setNavigationBar() {
         self.navigationItem.title = "식물 수정"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
-        self.navigationController?.navigationBar.barTintColor = .white
     }
     
     func bind() {

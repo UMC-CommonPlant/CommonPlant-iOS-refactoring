@@ -234,9 +234,10 @@ class MyPlantViewController: UIViewController {
     
     // MARK: Custom Methods
     func setNavigationBar() {
-        self.navigationItem.title = "My Plant"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
-        self.navigationController?.navigationBar.barTintColor = .white
+        navigationItem.title = "My Plant"
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = .black
     }
     
     func bind() {
