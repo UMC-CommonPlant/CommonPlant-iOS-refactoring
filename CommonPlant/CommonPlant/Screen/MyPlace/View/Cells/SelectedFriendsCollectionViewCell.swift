@@ -8,22 +8,24 @@
 import UIKit
 import Then
 import SnapKit
+import RxSwift
 
 class SelectedFriendsCollectionViewCell: UICollectionViewCell {
     static let identifier = "SelectedFriendsCollectionViewCell"
+    var disposeBag = DisposeBag()
     
     private let profileImageView = UIImageView().then {
         $0.layer.cornerRadius = 18
         $0.image = UIImage(named: "ProfileGray")
     }
-    private let deleteButton = UIButton().then {
+    let deleteButton = UIButton().then {
         $0.setImage(UIImage(named: "Delete"), for: .normal)
         $0.layer.cornerRadius = 6
     }
-    private let nameLabel = UILabel().then {
-        $0.text = "이름입니다"
+    let nameLabel = UILabel().then {
         $0.font = .bodyM4
         $0.textColor = .gray4
+        $0.textAlignment = .center
     }
     
     override init(frame: CGRect) {
@@ -33,6 +35,11 @@ class SelectedFriendsCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(\(coder) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
     
     private func setConstraints() {
@@ -56,5 +63,9 @@ class SelectedFriendsCollectionViewCell: UICollectionViewCell {
             make.left.right.equalToSuperview()
             make.top.equalTo(profileImageView.snp.bottom)
         }
+    }
+    
+    func configure(with friend: String) {
+        nameLabel.text = friend
     }
 }
