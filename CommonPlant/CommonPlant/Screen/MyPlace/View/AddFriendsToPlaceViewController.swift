@@ -11,12 +11,8 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
-#Preview {
-    AddFriendsToPlaceViewController()
-}
-
 class AddFriendsToPlaceViewController: UIViewController {
-    // MARK: - Properties
+    // MARK: - UI Components
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout).then {
         $0.showsHorizontalScrollIndicator = false
     }
@@ -43,7 +39,7 @@ class AddFriendsToPlaceViewController: UIViewController {
     }
     private let tableView = UITableView().then {
         $0.backgroundColor = .white
-        
+        $0.separatorStyle = .none
     }
     private let stackView = UIStackView().then {
         $0.axis = .horizontal
@@ -51,16 +47,111 @@ class AddFriendsToPlaceViewController: UIViewController {
         $0.distribution = .fillEqually
     }
     
+    // MARK: - Properties
+    private let viewModel = AddFriendsToPlaceViewModel()
+    private let disposeBag = DisposeBag()
+    private var collectionViewHeightConstraint: Constraint?
+    
+    private let selectFriendRelay = PublishRelay<String>()
+    private let deselectFriendRelay = PublishRelay<String>()
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setConstraints()
-        setStackView()
+        setupUI()
+        bindTableView()
+        bindCollectionView()
+        bindSelection()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNavigationBar()
+    }
+    
+    // MARK: - Custom Methods
+    private func setupUI() {
+        self.view.backgroundColor = .white
+        
+        stackView.addArrangedSubview(cancelButton)
+        stackView.addArrangedSubview(doneButton)
+    }
+    
+    private func createViewModelInput() -> AddFriendsToPlaceViewModel.Input {
+        return AddFriendsToPlaceViewModel.Input(
+            selectFriend: selectFriendRelay,
+            deselectFriend: deselectFriendRelay
+        )
+    }
+    
+    private func bindTableView() {
+        tableView.register(AddFriendsTableViewCell.self, forCellReuseIdentifier: AddFriendsTableViewCell.identifier)
+        
+        let output = viewModel.transform(input: createViewModelInput())
+        
+        output.friends
+            .bind(to: tableView.rx.items(cellIdentifier: AddFriendsTableViewCell.identifier, cellType: AddFriendsTableViewCell.self)) { row, friend, cell in
+                cell.nameLabel.text = friend
+                
+                output.selectedFriends
+                    .map { $0.contains(friend) }
+                    .bind(to: cell.checkImage.rx.isSelected)
+                    .disposed(by: cell.disposeBag)
+                
+                cell.checkImage.rx.tap
+                    .take(until: cell.rx.methodInvoked(#selector(UITableViewCell.prepareForReuse)))
+                    .bind { [weak self] in
+                        guard let self = self else { return }
+                        if output.selectedFriends.value.contains(friend) {
+                            self.deselectFriendRelay.accept(friend)
+                        } else {
+                            self.selectFriendRelay.accept(friend)
+                        }
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindCollectionView() {
+        collectionView.register(SelectedFriendsCollectionViewCell.self, forCellWithReuseIdentifier: SelectedFriendsCollectionViewCell.identifier)
+        
+        let output = viewModel.transform(input: createViewModelInput())
+        
+        output.selectedFriends
+            .bind(to: collectionView.rx.items(cellIdentifier: SelectedFriendsCollectionViewCell.identifier, cellType: SelectedFriendsCollectionViewCell.self)) { row, friend, cell in
+                cell.configure(with: friend)
+                cell.deleteButton.rx.tap
+                    .take(until: cell.rx.methodInvoked(#selector(UICollectionViewCell.prepareForReuse)))
+                    .bind { [weak self] in
+                        self?.deselectFriendRelay.accept(friend)
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindSelection() {
+        let output = viewModel.transform(input: createViewModelInput())
+        
+        output.selectedFriends
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] selected in
+                guard let self = self else { return }
+                let newHeight: CGFloat = selected.isEmpty ? 0 : 80
+                self.collectionViewHeightConstraint?.update(offset: newHeight)
+                
+                if self.isViewLoaded && (self.view.window != nil) {
+                    UIView.animate(withDuration: 0.3) {
+                        self.view.layoutIfNeeded()
+                    }
+                } else {
+                    self.view.layoutIfNeeded()
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc private func skipAction() {
@@ -71,7 +162,6 @@ class AddFriendsToPlaceViewController: UIViewController {
 
 extension AddFriendsToPlaceViewController {
     private func setNavigationBar() {
-        self.view.backgroundColor = .white
         let skipButton = UIBarButtonItem(title: "건너뛰기", style: .plain, target: self, action: #selector(skipAction))
         navigationItem.rightBarButtonItem = skipButton
         self.navigationItem.backButtonTitle = ""
@@ -83,12 +173,6 @@ extension AddFriendsToPlaceViewController {
         skipButton.setTitleTextAttributes(attributes, for: .normal)
         skipButton.setTitleTextAttributes(attributes, for: .highlighted)
     }
-
-    
-    private func setStackView() {
-        stackView.addArrangedSubview(cancelButton)
-        stackView.addArrangedSubview(doneButton)
-    }
     
     private func setConstraints() {
         [collectionView, magnifierImageView, textField, underlineView, cancelButton, doneButton, tableView, stackView].forEach {
@@ -96,11 +180,12 @@ extension AddFriendsToPlaceViewController {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.height.equalTo(1)
             make.left.equalToSuperview().offset(20)
             make.right.equalToSuperview().offset(-20)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            collectionViewHeightConstraint = make.height.equalTo(0).constraint
         }
+        
         
         magnifierImageView.snp.makeConstraints { make in
             make.width.height.equalTo(32)
