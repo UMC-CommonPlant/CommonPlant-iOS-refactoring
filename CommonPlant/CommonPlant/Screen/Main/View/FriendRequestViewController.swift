@@ -18,12 +18,21 @@ class FriendRequestViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNavigationBar()
         setContstraints()
     }
 }
 
 extension FriendRequestViewController {
-    func setContstraints() {
+    private func setNavigationBar() {
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationItem.title = "장소 친구 요청"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
+        self.navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.backButtonTitle = ""
+    }
+    
+    private func setContstraints() {
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints { make in
