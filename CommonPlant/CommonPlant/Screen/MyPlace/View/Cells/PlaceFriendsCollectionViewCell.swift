@@ -29,6 +29,7 @@ class PlaceFriendsCollectionViewCell: UICollectionViewCell {
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
