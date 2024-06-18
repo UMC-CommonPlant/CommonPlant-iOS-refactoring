@@ -122,6 +122,8 @@
 		F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA32A583442006D688C /* MainViewController.swift */; };
 		F9D0CCA82A584025006D688C /* MainMyPlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */; };
 		F9D0CCAA2A586208006D688C /* MainMyPlantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */; };
+		F9D433E52C202B47002C8C27 /* FriendRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D433E42C202B47002C8C27 /* FriendRequestViewController.swift */; };
+		F9D433E82C2048D7002C8C27 /* FriendRequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D433E72C2048D7002C8C27 /* FriendRequestTableViewCell.swift */; };
 		F9D5C49B2C16F3410064028D /* AddFriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D5C49A2C16F3410064028D /* AddFriendsTableViewCell.swift */; };
 		F9D5C49D2C1838F00064028D /* SelectedFriendsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D5C49C2C1838F00064028D /* SelectedFriendsCollectionViewCell.swift */; };
 		F9D5C49F2C1850FF0064028D /* AddFriendsToPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D5C49E2C1850FF0064028D /* AddFriendsToPlaceViewModel.swift */; };
@@ -235,6 +237,8 @@
 		F9D0CCA32A583442006D688C /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMyPlaceCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMyPlantCollectionViewCell.swift; sourceTree = "<group>"; };
+		F9D433E42C202B47002C8C27 /* FriendRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestViewController.swift; sourceTree = "<group>"; };
+		F9D433E72C2048D7002C8C27 /* FriendRequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestTableViewCell.swift; sourceTree = "<group>"; };
 		F9D5C49A2C16F3410064028D /* AddFriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendsTableViewCell.swift; sourceTree = "<group>"; };
 		F9D5C49C2C1838F00064028D /* SelectedFriendsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedFriendsCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9D5C49E2C1850FF0064028D /* AddFriendsToPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendsToPlaceViewModel.swift; sourceTree = "<group>"; };
@@ -820,12 +824,22 @@
 		F9D0CCB12A5BB635006D688C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F9D433E62C204811002C8C27 /* Cells */,
 				F9D0CCA12A583432006D688C /* MainTabBarController.swift */,
 				F9D0CCA32A583442006D688C /* MainViewController.swift */,
-				F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */,
-				F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */,
+				F9D433E42C202B47002C8C27 /* FriendRequestViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		F9D433E62C204811002C8C27 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */,
+				F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */,
+				F9D433E72C2048D7002C8C27 /* FriendRequestTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -988,6 +1002,7 @@
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
 				F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */,
 				C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */,
+				F9D433E82C2048D7002C8C27 /* FriendRequestTableViewCell.swift in Sources */,
 				F9202E6A2C022347005C0796 /* CetegoryDetailViewController.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
 				C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */,
@@ -1001,6 +1016,7 @@
 				F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */,
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
 				C078D7CE2BEA0CE8006D808A /* BaseTargetType.swift in Sources */,
+				F9D433E52C202B47002C8C27 /* FriendRequestViewController.swift in Sources */,
 				C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */,
 				F9D0CCA82A584025006D688C /* MainMyPlaceCollectionViewCell.swift in Sources */,
 				C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */,
@@ -1180,7 +1196,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1221,7 +1237,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
