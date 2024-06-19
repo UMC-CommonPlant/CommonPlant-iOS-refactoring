@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 
 class MyPlantViewModel {
-    var myPlant = PublishRelay<PlantDetail>()
+    var myPlant = BehaviorRelay<PlantDetail?>(value: nil)
     var plantMemoList = PublishRelay<[PlantMemo]>()
     let plantIdx: Int
     
@@ -48,7 +48,7 @@ extension MyPlantViewModel: ViewModelType {
     
     struct Output {
         let showMenu: Driver<Void>
-        let showEditView: Driver<Int>
+        let showEditView: Driver<(String, String)>
         let showDeleteAlert: Driver<Void>
         let backgroundHidden: Driver<Void>
         let showAddMemoView: Driver<Int>
@@ -58,10 +58,14 @@ extension MyPlantViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let showMenu = input.menuBtnDidTap.asDriver(onErrorDriveWith: .empty())
-        let showEditView = input.editBtnDidTap.map { [weak self] _ in
-            guard let self else { return 0 }
-            return plantIdx
-        }.asDriver(onErrorJustReturn: 0)
+        let showEditView = input.editBtnDidTap.map { [weak self] _ -> (String, String) in
+            guard let self, let plant = myPlant.value else { return ("", "") }
+            
+            let nickname = plant.nickname
+            let imgString = plant.imgURL
+            
+            return (nickname, imgString)
+        }.asDriver(onErrorDriveWith: .empty())
         let showAddMemoView = input.writeBtnDidTap.map { [weak self] _ in
             guard let self else { return 0 }
             return plantIdx

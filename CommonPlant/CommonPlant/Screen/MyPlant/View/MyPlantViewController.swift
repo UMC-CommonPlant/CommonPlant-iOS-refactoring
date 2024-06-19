@@ -241,8 +241,9 @@ class MyPlantViewController: UIViewController {
     }
     
     func bind() {
-        viewModel.myPlant.subscribe { [weak self] plant in
-            guard let self, let plant = plant.element else { return }
+        viewModel.myPlant.bind { [weak self] plant in
+            guard let self, let plant = plant else { return }
+            print(#function)
             if let imgURL = URL(string: plant.imgURL) {
                 plantImageView.kf.setImage(with: imgURL)
             } else {
@@ -305,10 +306,10 @@ class MyPlantViewController: UIViewController {
             backgroundView.isHidden = false
         }.disposed(by: viewModel.disposeBag)
         
-        output.showEditView.drive { [weak self] _ in
+        output.showEditView.drive { [weak self] (nickname, imagString) in
             guard let self else { return }
             
-            navigationController?.pushViewController(EditPlantViewController(), animated: true)
+            navigationController?.pushViewController(EditPlantViewController(plantIdx, plantNickname: nickname, imgURL: imagString), animated: true)
         }.disposed(by: viewModel.disposeBag)
         
         output.showAddMemoView.drive { [weak self] index in

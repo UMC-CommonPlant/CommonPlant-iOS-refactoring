@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 class EditPlantViewController: UIViewController {
-    private let viewModel = EditPlantViewModel()
+    private let viewModel: EditPlantViewModel
     private lazy var input = EditPlantViewModel
         .Input(imageDidTap: plantView.rx.tapGesture().map { _ in }.asObservable(),
                selectedNewImage: selectNewImage.asObservable(),
@@ -98,6 +98,15 @@ class EditPlantViewController: UIViewController {
         setNavigationBar()
         setConstraints()
         bind()
+    }
+    
+    init(_ plantIdx: Int, plantNickname: String, imgURL: String) {
+        self.viewModel = EditPlantViewModel(plantIdx, plantNickname: plantNickname, imgURL: imgURL)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func setNavigationBar() {

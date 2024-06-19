@@ -15,10 +15,13 @@ class EditPlantViewModel {
     let initPlant: Plant
     //let currentPlant = PublishRelay<Plant>()
     var imageState: ButtonState = .disable
+    let plantIdx: Int
     
-    init() {
+    init(_ plantIdx: Int, plantNickname: String, imgURL: String) {
         //currentPlant.accept(Plant(plantImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/72e88997-7dcc-4a72-8a38-348d7754076b..jpeg", plantName: "몬테"))
         initPlant = Plant(plantImage: "", plantName: "몬테")
+        
+        self.plantIdx = plantIdx
     }
     
     struct Input {
