@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
+
 import RxSwift
 import RxCocoa
 
@@ -14,18 +16,16 @@ class EditPlantViewController: UIViewController {
     private let viewModel: EditPlantViewModel
     private lazy var input = EditPlantViewModel
         .Input(imageDidTap: plantView.rx.tapGesture().map { _ in }.asObservable(),
-               selectedNewImage: selectNewImage.asObservable(),
-               selectedDefaultImage: changeToDefaultImage.asObservable(),
-               changedImage: currentImage.map { [weak self] currentImage in
-            guard let initialImage = self?.initialImage.value else { return nil }
+               changedImage: plantImageView.rx.imageChanged.map { [weak self] currentImage in
+            guard let self, let initialImage = initialImage else { return false }
+            
             return currentImage?.pngData() != initialImage.pngData()
         },
                editingNickname: nicknameTextField.rx.text.orEmpty.asObservable())
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
-    private let currentImage = PublishRelay<UIImage?>()
-    private let initialImage = BehaviorRelay<UIImage?>(value: nil)
+    private var initialImage: UIImage?
     
     private let plantView: UIView = {
         let view = UIView()
@@ -33,15 +33,8 @@ class EditPlantViewController: UIViewController {
     }()
     private lazy var plantImageView: UIImageView = {
         let view = UIImageView()
-        if let imageUrl = URL(string: viewModel.initPlant.plantImage) {
-            view.load(url: imageUrl) {
-                self.initialImage.accept(view.image)
-            }
-        } else {
-            view.image = UIImage(named: "AddPlant")
-            initialImage.accept(UIImage(named: "AddPlant"))
-        }
         view.makeRound(radius: 16)
+        
         return view
     }()
     private let cameraImageView: UIImageView = {
@@ -53,13 +46,11 @@ class EditPlantViewController: UIViewController {
         let view = UIView()
         return view
     }()
-    private lazy var nicknameTextField: UITextField = {
+    private let nicknameTextField: UITextField = {
         let tf = UITextField()
         tf.font = .bodyM1
-        tf.text = viewModel.initPlant.plantName
         tf.textColor = .black
         tf.tintColor = .black
-        tf.placeholder = viewModel.initPlant.plantName
         tf.clearButtonMode = .whileEditing
         tf.returnKeyType = .done
         return tf
@@ -69,13 +60,11 @@ class EditPlantViewController: UIViewController {
         view.backgroundColor = .gray2
         return view
     }()
-    private lazy var nicknameCountLabel: UILabel = {
+    private let nicknameCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(viewModel.initPlant.plantName.count)/10"
         label.font = .captionB1
         label.textColor = .gray5
         label.textAlignment = .right
-        label.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
         return label
     }()
     private let completeButton: UIButton = {
@@ -102,7 +91,24 @@ class EditPlantViewController: UIViewController {
     
     init(_ plantIdx: Int, plantNickname: String, imgURL: String) {
         self.viewModel = EditPlantViewModel(plantIdx, plantNickname: plantNickname, imgURL: imgURL)
+        
         super.init(nibName: nil, bundle: nil)
+        
+        nicknameTextField.text = plantNickname
+        nicknameTextField.placeholder = plantNickname
+        
+        nicknameCountLabel.text = "\(plantNickname.count)/10"
+        nicknameCountLabel.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if let imgURL = URL(string: imgURL) {
+                plantImageView.kf.setImage(with: imgURL) { [weak self] _ in
+                    guard let self else { return }
+                    initialImage = plantImageView.image
+                }
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -115,21 +121,6 @@ class EditPlantViewController: UIViewController {
     }
     
     func bind() {
-        output.showImgSettingAlert.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            showImageSettingAlert { state in
-                switch state {
-                case .newImage:
-                    self.selectNewImage.accept(())
-                case .defaultImage:
-                    self.changeToDefaultImage.accept(())
-                case .cancle:
-                    break
-                }
-            }
-        }.disposed(by: viewModel.disposeBag)
-        
         output.showImagePicker.drive { [weak self] _ in
             guard let self = self else { return }
             
@@ -139,41 +130,28 @@ class EditPlantViewController: UIViewController {
                     case .denied:
                         self.moveToSetting()
                     case .authorized:
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-                            ImagePickerViewController.shared.showPhotoPicker(viewController: self)
-                        }
+                        ImagePickerViewController.shared.showPhotoPicker(viewController: self)
                         
                         ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
                             guard let self = self else { return }
-                            
-                            plantImageView.load(url: URL(string: imageString)!) {
-                                self.currentImage.accept(self.plantImageView.image)
-                            }
+                            plantImageView.kf.setImage(with: URL(string: imageString))
                         }
+                        
                     case .limited:
                         let imagePickerVC = ImagePickerViewController()
                         
                         self.present(imagePickerVC, animated: true)
                         
                         imagePickerVC.didSelectImage = { [weak self] imageString in
-                            guard self != nil else { return }
-                            self?.plantImageView.load(url: URL(string: imageString)!) {
-                                self?.currentImage.accept(self?.plantImageView.image)
-                            }
+                            guard let self else { return }
+                            
+                            self.plantImageView.kf.setImage(with: URL(string: imageString))
                         }
                     default:
                         print("\(state)")
                     }
                 }
             }
-        }.disposed(by: viewModel.disposeBag)
-        
-        output.changeDefaultImage.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            plantImageView.image = UIImage(named: "AddPlant")
-            currentImage.accept(UIImage(named: "AddPlant"))
         }.disposed(by: viewModel.disposeBag)
         
         output.newNickname.drive { [weak self] nickname in
@@ -262,5 +240,11 @@ class EditPlantViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
             make.height.equalTo(48)
         }
+    }
+}
+
+extension Reactive where Base: UIImageView {
+    var imageChanged: Observable<UIImage?> {
+        return self.observe(UIImage.self, "image")
     }
 }
