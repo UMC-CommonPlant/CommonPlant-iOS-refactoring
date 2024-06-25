@@ -134,7 +134,9 @@ class EditPlantViewController: UIViewController {
                         
                         ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
                             guard let self = self else { return }
-                            plantImageView.kf.setImage(with: URL(string: imageString))
+                            DispatchQueue.main.async {
+                                self.plantImageView.kf.setImage(with: URL(string: imageString))
+                            }
                         }
                         
                     case .limited:
@@ -144,8 +146,9 @@ class EditPlantViewController: UIViewController {
                         
                         imagePickerVC.didSelectImage = { [weak self] imageString in
                             guard let self else { return }
-                            
-                            self.plantImageView.kf.setImage(with: URL(string: imageString))
+                            DispatchQueue.main.async {
+                                self.plantImageView.kf.setImage(with: URL(string: imageString))
+                            }
                         }
                     default:
                         print("\(state)")

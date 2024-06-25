@@ -14,8 +14,8 @@ class EditPlantViewModel {
     
     let initNickname: String
     
-    var nicknameState: ButtonState = .disable
-    var imageState: ButtonState = .disable
+    var nicknameState = BehaviorRelay<ButtonState>(value: .disable)
+    var imageState = BehaviorRelay<ButtonState>(value: .disable)
     let plantIdx: Int
     
     init(_ plantIdx: Int, plantNickname: String, imgURL: String) {
@@ -45,7 +45,7 @@ class EditPlantViewModel {
             guard let self else { return }
             guard let isChanged = isChanged else { return }
             
-            imageState = isChanged ? buttonState.value : nicknameState
+            imageState.accept(isChanged ? buttonState.value : nicknameState.value)
             buttonState.accept(isChanged ? .enable : buttonState.value)
         }.disposed(by: disposeBag)
         
@@ -70,11 +70,11 @@ class EditPlantViewModel {
                 let range = NSRange(location: 0, length: nickname.utf16.count)
                 
                 if regex.firstMatch(in: nickname, options: [], range: range) == nil || nickname.count < 2 {
-                    nicknameState = .disable
+                    nicknameState.accept(.disable)
                     buttonState.accept(.disable)
                 } else {
-                    nicknameState = initNickname == nickname ? imageState : .enable
-                    buttonState.accept(initNickname == nickname ? imageState : .enable)
+                    nicknameState.accept(initNickname == nickname ? imageState.value : .enable)
+                    buttonState.accept(initNickname == nickname ? imageState.value : .enable)
                 }
             }
             
