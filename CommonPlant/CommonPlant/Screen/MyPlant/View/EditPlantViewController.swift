@@ -92,6 +92,7 @@ class EditPlantViewController: UIViewController {
     }()
     
     private let plantIdx: Int
+    var completionHandler: ((Int, String, UIImage) -> ())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -199,6 +200,9 @@ class EditPlantViewController: UIViewController {
         
         output.popToPreviousView.drive { [weak self] _ in
             guard let self else { return }
+            guard let nickname = nicknameTextField.text, let image = plantImageView.image else { return }
+            
+            completionHandler?(plantIdx, nickname, image)
             navigationController?.popViewController(animated: true)
         }.disposed(by: viewModel.disposeBag)
     }

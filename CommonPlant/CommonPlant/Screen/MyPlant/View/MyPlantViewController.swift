@@ -308,8 +308,17 @@ class MyPlantViewController: UIViewController {
         
         output.showEditView.drive { [weak self] (nickname, imagString) in
             guard let self else { return }
-            
-            navigationController?.pushViewController(EditPlantViewController(plantIdx, plantNickname: nickname, imgURL: imagString), animated: true)
+            let nextVC = EditPlantViewController(plantIdx, plantNickname: nickname, imgURL: imagString)
+            nextVC.completionHandler  = { [weak self] _, nickname, image in
+                guard let self else { return }
+                
+                nickNameLabel.text = nickname
+                plantImageView.image = image
+                
+                backgroundView.isHidden = true
+                menuView.isHidden = true
+            }
+            navigationController?.pushViewController(nextVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
         
         output.showAddMemoView.drive { [weak self] index in
