@@ -13,6 +13,7 @@ enum PlantService {
     case getPlaceList
     case postPlant(request: PostPlantRequest)
     case getPlantDetail(idx: Int)
+    case putPlant(request: PutPlantRequest)
 }
 
 extension PlantService: BaseTargetType {
@@ -26,6 +27,8 @@ extension PlantService: BaseTargetType {
             URLConstant.postPlant
         case .getPlantDetail(idx: let idx):
             URLConstant.getPlant + "/\(idx)"
+        case .putPlant(let request):
+            URLConstant.putPlant + "/\(request.plantIdx)"
         }
     }
     
@@ -37,6 +40,8 @@ extension PlantService: BaseTargetType {
             return .post
         case .getPlantDetail(idx: let idx):
             return .get
+        case .putPlant(request: let request):
+            return .put
         }
     }
     
@@ -69,6 +74,23 @@ extension PlantService: BaseTargetType {
             return .uploadMultipart(multiPartData)
         case .getPlantDetail(idx: let idx):
             return .requestPlain
+        case let .putPlant(request):
+            var multiPartData: [Moya.MultipartFormData] = []
+            
+            let plantImageData = MultipartFormData(provider: .data(request.imageData), name: "image", fileName: "image.jpeg", mimeType: "image/jpeg")
+            multiPartData.append(plantImageData)
+            
+            let plant: [String: Any] = [
+                "plantIdx" : request.plantIdx,
+                "nickname" : request.nickname
+            ]
+            
+            if let plantData = try? JSONSerialization.data(withJSONObject: plant, options: []) {
+                let plantFormData = MultipartFormData(provider: .data(plantData), name: "plant", fileName: "plant.json", mimeType: "application/json")
+                multiPartData.append(plantFormData)
+            }
+            
+            return .uploadMultipart(multiPartData)
         }
     }
     
@@ -78,7 +100,7 @@ extension PlantService: BaseTargetType {
             return NetworkConstant.noHeader
         case .getPlaceList:
             return NetworkConstant.hasTokenHeader
-        case .postPlant(_):
+        case .postPlant(_), .putPlant(_):
             var headers = NetworkConstant.hasMultipartHeader
             headers.merge(NetworkConstant.hasTokenHeader) { (_, new) in new }
             return headers

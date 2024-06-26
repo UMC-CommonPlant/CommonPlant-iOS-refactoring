@@ -39,4 +39,10 @@ class PlantAPI {
         return provider.rx.request(.getPlantDetail(idx: plantIdx))
             .map(PlantDetailResponse.self)
     }
+    
+    func putPlant(_ request: PutPlantRequest) -> Single<PutPlantResponse> {
+        
+        return provider.rx.request(.putPlant(request: request))
+            .map(PutPlantResponse.self)
+    }
 }

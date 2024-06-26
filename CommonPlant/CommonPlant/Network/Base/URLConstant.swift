@@ -26,6 +26,7 @@ struct URLConstant {
     
     // MARK: Plant
     static let postPlant = "/plant/add"
+    static let putPlant = "/plant/update"
     
     // MARK: Place
     static let placeList = "/place/user"
