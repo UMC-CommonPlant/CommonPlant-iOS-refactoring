@@ -27,12 +27,14 @@ class EditPlantViewModel {
         let imageDidTap: Observable<Void>
         let changedImage: Observable<Bool?>
         let editingNickname: Observable<String>
+        let completeBtnDidTap: Observable<PutPlantRequest>
     }
     
     struct Output {
         let showImagePicker: Driver<Void>
         let newNickname: Driver<String>
         let buttonState: Driver<ButtonState>
+        let popToPreviousView: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -81,7 +83,22 @@ class EditPlantViewModel {
             newNickname.accept(name)
         }.disposed(by: disposeBag)
         
-        return Output(showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()), newNickname: newNickname.asDriver(onErrorJustReturn: ""), buttonState: buttonState.asDriver())
+        let popToPreviousView = PublishRelay<Void>()
+        input.completeBtnDidTap.bind { [weak self] request in
+            guard let self else { return }
+            
+            PlantAPI.shared.putPlant(request)
+                .subscribe { result in
+                    switch result {
+                    case .success(_):
+                        popToPreviousView.accept(())
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }.disposed(by: self.disposeBag)
+        }.disposed(by: disposeBag)
+        
+        return Output(showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()), newNickname: newNickname.asDriver(onErrorJustReturn: ""), buttonState: buttonState.asDriver(), popToPreviousView: popToPreviousView.asDriver(onErrorDriveWith: .empty()))
     }
 }
 

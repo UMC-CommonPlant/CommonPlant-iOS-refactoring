@@ -21,7 +21,17 @@ class EditPlantViewController: UIViewController {
             
             return currentImage?.pngData() != initialImage.pngData()
         },
-               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable())
+               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
+               completeBtnDidTap: completeButton.rx.tap.map { [weak self] _ in
+            guard let self, let plantImg = plantImageView.image, let nickname = nicknameTextField.text else {
+                return PutPlantRequest(plantIdx: 0, nickname: "", imageData: Data())
+            }
+            
+            let data: Data = plantImg.jpegData(compressionQuality: 1.0) ?? Data()
+            
+            return PutPlantRequest(plantIdx: plantIdx, nickname: nickname, imageData: data)
+        }.asObservable())
+    
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
@@ -81,6 +91,8 @@ class EditPlantViewController: UIViewController {
         return button
     }()
     
+    private let plantIdx: Int
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -91,7 +103,7 @@ class EditPlantViewController: UIViewController {
     
     init(_ plantIdx: Int, plantNickname: String, imgURL: String) {
         self.viewModel = EditPlantViewModel(plantIdx, plantNickname: plantNickname, imgURL: imgURL)
-        
+        self.plantIdx = plantIdx
         super.init(nibName: nil, bundle: nil)
         
         nicknameTextField.text = plantNickname
@@ -183,6 +195,11 @@ class EditPlantViewController: UIViewController {
                 completeButton.backgroundColor = .seaGreenDark3
                 completeButton.configuration?.baseForegroundColor = .white
             }
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.popToPreviousView.drive { [weak self] _ in
+            guard let self else { return }
+            navigationController?.popViewController(animated: true)
         }.disposed(by: viewModel.disposeBag)
     }
     
