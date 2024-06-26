@@ -122,6 +122,7 @@
 		F9D0CCA82A584025006D688C /* MainMyPlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */; };
 		F9D0CCAA2A586208006D688C /* MainMyPlantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */; };
 		F9E6AEB42B931CB7001CA1AC /* PostCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E6AEB32B931CB7001CA1AC /* PostCodeViewController.swift */; };
+		F9F52C342C2C40E5006BCC10 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F52C332C2C40E5006BCC10 /* NetworkError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -231,6 +232,7 @@
 		F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMyPlaceCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMyPlantCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9E6AEB32B931CB7001CA1AC /* PostCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCodeViewController.swift; sourceTree = "<group>"; };
+		F9F52C332C2C40E5006BCC10 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -635,6 +637,7 @@
 				C078D7CF2BEA0D98006D808A /* NetworkConstant.swift */,
 				C078D7C92BEA0A09006D808A /* URLConstant.swift */,
 				C078D7CD2BEA0CE8006D808A /* BaseTargetType.swift */,
+				F9F52C332C2C40E5006BCC10 /* NetworkError.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -962,6 +965,7 @@
 				F93404022A81F9F400F0267B /* PlantDictTableViewCell.swift in Sources */,
 				C0E2700D2B981E93006492B0 /* CalendarViewModel.swift in Sources */,
 				C0D6E9042BC3B37400A352DD /* KakaoResponse.swift in Sources */,
+				F9F52C342C2C40E5006BCC10 /* NetworkError.swift in Sources */,
 				C0A0D4DD2A73E96800426514 /* SignUpViewModel.swift in Sources */,
 				C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */,
 				F9B6E9932BCE743B000F05D4 /* MyPlaceViewController.swift in Sources */,
