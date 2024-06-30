@@ -1,5 +1,5 @@
 //
-//  PlantSearchViewController.swift
+//  PlantInfoViewController.swift
 //  CommonPlant
 //
 //  Created by 이예원 on 2023/07/24.
@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import RxGesture
 
-class PlantSearchViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate {
+class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate {
     // MARK: - Properties
     private let collectionViewCellColor = ["OneRoomColor", "AirPurificationColor", "BeginnerColor", "SunlightColor", "WaterPreferenceColor", "InteriorColor"]
     private let collectionViewIcon = ["OneRoom", "AirPurification", "Beginner", "Sunlight", "WateringPot",  "Interior"]
@@ -124,7 +124,7 @@ class PlantSearchViewController: UIViewController, UITableViewDelegate, UISearch
 }
 
 // MARK: - Category CollectionView
-extension PlantSearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension PlantInfoViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     private func setCategoryCollectionView() {
         self.plantCategoryCollectionView.dataSource = self
         self.plantCategoryCollectionView.delegate = self
@@ -157,7 +157,7 @@ extension PlantSearchViewController: UICollectionViewDataSource, UICollectionVie
     }
 }
 // MARK: - UI
-extension PlantSearchViewController {
+extension PlantInfoViewController {
     private func setAttributes() {
         borderLineView.backgroundColor = .gray2
         

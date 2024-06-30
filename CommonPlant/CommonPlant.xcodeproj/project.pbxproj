@@ -110,7 +110,7 @@
 		F9A1FB1A2A619F2300F346DE /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = F9A1FB192A619F2300F346DE /* RxMoya */; };
 		F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB242A664F4300F346DE /* MainViewModel.swift */; };
 		F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB282A67B03400F346DE /* MainModel.swift */; };
-		F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */; };
+		F9A1FB362A6E547300F346DE /* PlantInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB352A6E547300F346DE /* PlantInfoViewController.swift */; };
 		F9A7CC352B93003A00C73401 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9A7CC342B93003A00C73401 /* GoogleService-Info.plist */; };
 		F9B6E9932BCE743B000F05D4 /* MyPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */; };
 		F9B6E9952BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9942BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift */; };
@@ -226,7 +226,7 @@
 		F9595C1A2B85DF3700B8785D /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		F9A1FB242A664F4300F346DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F9A1FB282A67B03400F346DE /* MainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModel.swift; sourceTree = "<group>"; };
-		F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewController.swift; sourceTree = "<group>"; };
+		F9A1FB352A6E547300F346DE /* PlantInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantInfoViewController.swift; sourceTree = "<group>"; };
 		F9A7CC342B93003A00C73401 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F9A7CC3B2B93069C00C73401 /* CommonPlant.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CommonPlant.entitlements; sourceTree = "<group>"; };
 		F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlaceViewController.swift; sourceTree = "<group>"; };
@@ -773,7 +773,7 @@
 			isa = PBXGroup;
 			children = (
 				F9C226C92BFCE59B00B14D11 /* Cells */,
-				F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */,
+				F9A1FB352A6E547300F346DE /* PlantInfoViewController.swift */,
 				F93403FF2A81F89300F0267B /* SearchResultViewController.swift */,
 				F9C226C72BFCBCF700B14D11 /* PlantCetegoryViewController.swift */,
 				F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */,
@@ -943,7 +943,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */,
+				F9A1FB362A6E547300F346DE /* PlantInfoViewController.swift in Sources */,
 				C0A5AFF32A6BE21A00C8248D /* UserInfoModel.swift in Sources */,
 				C0A6DCEE2A97AC15001A2E11 /* MyPlantViewController.swift in Sources */,
 				C078D7C52BE7ADC7006D808A /* TokenAPI.swift in Sources */,
