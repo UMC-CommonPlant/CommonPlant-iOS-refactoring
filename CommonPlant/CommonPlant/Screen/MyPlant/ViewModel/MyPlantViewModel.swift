@@ -48,7 +48,7 @@ extension MyPlantViewModel: ViewModelType {
     
     struct Output {
         let showMenu: Driver<Void>
-        let showEditView: Driver<(String, String)>
+        let showEditView: Driver<(String, Int, String)>
         let showDeleteAlert: Driver<Void>
         let backgroundHidden: Driver<Void>
         let showAddMemoView: Driver<Int>
@@ -58,13 +58,14 @@ extension MyPlantViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let showMenu = input.menuBtnDidTap.asDriver(onErrorDriveWith: .empty())
-        let showEditView = input.editBtnDidTap.map { [weak self] _ -> (String, String) in
-            guard let self, let plant = myPlant.value else { return ("", "") }
+        let showEditView = input.editBtnDidTap.map { [weak self] _ -> (String, Int, String) in
+            guard let self, let plant = myPlant.value else { return ("", 0, "") }
             
             let nickname = plant.nickname
+            let waterCycle = plant.waterDay
             let imgString = plant.imgURL
             
-            return (nickname, imgString)
+            return (nickname, waterCycle, imgString)
         }.asDriver(onErrorDriveWith: .empty())
         let showAddMemoView = input.writeBtnDidTap.map { [weak self] _ in
             guard let self else { return 0 }

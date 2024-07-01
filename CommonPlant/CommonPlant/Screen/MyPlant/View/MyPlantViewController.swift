@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import RxRelay
 import SnapKit
 import Kingfisher
 import Then
@@ -222,6 +223,14 @@ class MyPlantViewController: UIViewController {
         setConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        backgroundView.isHidden = true
+        menuView.isHidden = true
+        // TODO: 통신
+    }
+    
     init(plantIdx: Int) {
         self.plantIdx = plantIdx
         self.viewModel = MyPlantViewModel(plantIdx)
@@ -243,7 +252,7 @@ class MyPlantViewController: UIViewController {
     func bind() {
         viewModel.myPlant.bind { [weak self] plant in
             guard let self, let plant = plant else { return }
-            print(#function)
+            
             if let imgURL = URL(string: plant.imgURL) {
                 plantImageView.kf.setImage(with: imgURL)
             } else {
@@ -306,18 +315,10 @@ class MyPlantViewController: UIViewController {
             backgroundView.isHidden = false
         }.disposed(by: viewModel.disposeBag)
         
-        output.showEditView.drive { [weak self] (nickname, imagString) in
+        output.showEditView.drive { [weak self] (nickname, waterCycle, imagString) in
             guard let self else { return }
-            let nextVC = EditPlantViewController(plantIdx, plantNickname: nickname, imgURL: imagString)
-            nextVC.completionHandler  = { [weak self] _, nickname, image in
-                guard let self else { return }
-                
-                nickNameLabel.text = nickname
-                plantImageView.image = image
-                
-                backgroundView.isHidden = true
-                menuView.isHidden = true
-            }
+            let nextVC = EditPlantViewController(plantIdx, plantNickname: nickname, waterCycle: waterCycle, imgURL: imagString)
+            
             navigationController?.pushViewController(nextVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
         

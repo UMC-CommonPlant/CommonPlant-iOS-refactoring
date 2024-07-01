@@ -21,7 +21,8 @@ class EditPlantViewController: UIViewController {
             
             return currentImage?.pngData() != initialImage.pngData()
         },
-               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
+               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(), 
+               editingCycle: waterTextField.rx.text.orEmpty.asObservable(),
                completeBtnDidTap: completeButton.rx.tap.map { [weak self] _ in
             guard let self, let plantImg = plantImageView.image, let nickname = nicknameTextField.text else {
                 return PutPlantRequest(plantIdx: 0, nickname: "", imageData: Data())
@@ -29,6 +30,8 @@ class EditPlantViewController: UIViewController {
             
             let data: Data = plantImg.jpegData(compressionQuality: 1.0) ?? Data()
             
+            self.nickname = nickname
+            self.imageData = data
             return PutPlantRequest(plantIdx: plantIdx, nickname: nickname, imageData: data)
         }.asObservable())
     
@@ -56,8 +59,10 @@ class EditPlantViewController: UIViewController {
         let view = UIView()
         return view
     }()
-    private let nicknameTextField: UITextField = {
+    private lazy var nicknameTextField: UITextField = {
         let tf = UITextField()
+        tf.text = nickname
+        tf.placeholder = nickname
         tf.font = .bodyM1
         tf.textColor = .black
         tf.tintColor = .black
@@ -70,12 +75,39 @@ class EditPlantViewController: UIViewController {
         view.backgroundColor = .gray2
         return view
     }()
-    private let nicknameCountLabel: UILabel = {
+    private lazy var nicknameCountLabel: UILabel = {
         let label = UILabel()
+        label.text = "\(nickname.count)/10"
+        label.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
         label.font = .captionB1
         label.textColor = .gray5
         label.textAlignment = .right
         return label
+    }()
+    private let waterView = UIView()
+    private let waterMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "일 마다 물주기"
+        label.font = .captionM1
+        label.textColor = .gray6
+        label.textAlignment = .right
+        return label
+    }()
+    private lazy var waterTextField: UITextField = {
+        let tf = UITextField()
+        tf.text = "\(waterCycle)"
+        tf.placeholder = "\(waterCycle)"
+        tf.font = .bodyB1
+        tf.textColor = .gray6
+        tf.textAlignment = .left
+        tf.tintColor = .gray6
+        tf.keyboardType = .numberPad
+        return tf
+    }()
+    private let waterUnderlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray2
+        return view
     }()
     private let completeButton: UIButton = {
         let button = UIButton()
@@ -92,7 +124,9 @@ class EditPlantViewController: UIViewController {
     }()
     
     private let plantIdx: Int
-    var completionHandler: ((Int, String, UIImage) -> ())?
+    private var nickname: String
+    private var waterCycle: Int
+    private var imageData: Data
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,16 +136,14 @@ class EditPlantViewController: UIViewController {
         bind()
     }
     
-    init(_ plantIdx: Int, plantNickname: String, imgURL: String) {
-        self.viewModel = EditPlantViewModel(plantIdx, plantNickname: plantNickname, imgURL: imgURL)
+    init(_ plantIdx: Int, plantNickname: String, waterCycle: Int, imgURL: String) {
+        self.viewModel = EditPlantViewModel(plantIdx, plantNickname: plantNickname, waterCycle: waterCycle, imgURL: imgURL)
         self.plantIdx = plantIdx
+        self.nickname = plantNickname
+        self.waterCycle = waterCycle
+        self.imageData = Data()
+        
         super.init(nibName: nil, bundle: nil)
-        
-        nicknameTextField.text = plantNickname
-        nicknameTextField.placeholder = plantNickname
-        
-        nicknameCountLabel.text = "\(plantNickname.count)/10"
-        nicknameCountLabel.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
         
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
@@ -176,6 +208,13 @@ class EditPlantViewController: UIViewController {
             underlineView.backgroundColor = nickname.count > 0 ? .black : .gray2
         }.disposed(by: viewModel.disposeBag)
         
+        output.newCycle.drive { [weak self] cycle in
+            guard let self = self else { return }
+            
+            waterTextField.text = cycle
+            waterUnderlineView.backgroundColor = cycle == "\(waterCycle)" ? .gray2 : .black
+        }.disposed(by: viewModel.disposeBag)
+        
         output.buttonState.drive { [weak self] state in
             guard let self = self else { return }
             
@@ -191,20 +230,22 @@ class EditPlantViewController: UIViewController {
             case .onClick:
                 completeButton.backgroundColor = .seaGreenDark3
                 completeButton.configuration?.baseForegroundColor = .white
+            case .none:
+                completeButton.isEnabled = false
+                completeButton.backgroundColor = .gray1
+                completeButton.configuration?.baseForegroundColor = .gray3
             }
         }.disposed(by: viewModel.disposeBag)
         
         output.popToPreviousView.drive { [weak self] _ in
             guard let self else { return }
-            guard let nickname = nicknameTextField.text, let image = plantImageView.image else { return }
             
-            completionHandler?(plantIdx, nickname, image)
             navigationController?.popViewController(animated: true)
         }.disposed(by: viewModel.disposeBag)
     }
     
     func setConstraints() {
-        [plantView, nicknameView, completeButton].forEach {
+        [plantView, nicknameView, waterView, completeButton].forEach {
             view.addSubview($0)
         }
         
@@ -214,6 +255,10 @@ class EditPlantViewController: UIViewController {
         
         [nicknameTextField, nicknameCountLabel, underlineView].forEach {
             nicknameView.addSubview($0)
+        }
+        
+        [waterMessageLabel, waterTextField, waterUnderlineView].forEach {
+            waterView.addSubview($0)
         }
         
         plantView.snp.makeConstraints { make in
@@ -251,6 +296,27 @@ class EditPlantViewController: UIViewController {
         }
         
         underlineView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
+        waterView.snp.makeConstraints { make in
+            make.top.equalTo(nicknameView.snp.bottom).offset(32)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(56)
+        }
+        
+        waterTextField.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        waterMessageLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        waterUnderlineView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(1)
         }
