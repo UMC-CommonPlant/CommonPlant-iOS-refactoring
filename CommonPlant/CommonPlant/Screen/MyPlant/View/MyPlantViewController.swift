@@ -44,6 +44,7 @@ class MyPlantViewController: UIViewController {
     private let menuButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "Menu")
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         $0.configuration = config
     }
     private let backgroundView = UIView().then {
@@ -250,6 +251,9 @@ class MyPlantViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         navigationItem.backBarButtonItem?.tintColor = .black
+        
+        let menuItem = UIBarButtonItem(customView: menuButton)
+        navigationItem.rightBarButtonItem = menuItem
     }
     
     func bind() {
@@ -355,7 +359,7 @@ class MyPlantViewController: UIViewController {
             stackView.addArrangedSubview($0)
         }
         
-        [menuButton, plantImageView, placeView, nickNameLabel, scientificNameLabel].forEach {
+        [plantImageView, placeView, nickNameLabel, scientificNameLabel].forEach {
             plantProfileView.addSubview($0)
         }
         
@@ -411,12 +415,7 @@ class MyPlantViewController: UIViewController {
         plantProfileView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(322)
-        }
-        
-        menuButton.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview()
-            make.height.equalTo(32)
+            make.height.equalTo(298)
         }
         
         backgroundView.snp.makeConstraints { make in
@@ -424,14 +423,14 @@ class MyPlantViewController: UIViewController {
         }
         
         plantImageView.snp.makeConstraints { make in
-            make.top.equalTo(menuButton.snp.bottom).offset(4)
+            make.top.equalToSuperview().inset(12)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(208)
         }
         
         menuView.snp.makeConstraints { make in
-            make.top.equalTo(menuButton.snp.bottom).offset(4)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(4)
             make.trailing.equalToSuperview().offset(-20)
             make.width.equalTo(228)
             make.height.equalTo(128)
