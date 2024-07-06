@@ -15,15 +15,18 @@ import Then
 class MyPlantViewController: UIViewController {
     // MARK: Properties
     let viewModel: MyPlantViewModel
-    private lazy var input = MyPlantViewModel.Input(menuBtnDidTap: menuButton.rx.tap.asObservable(),
-                                                    editBtnDidTap: menuView.editView.rx.tapGesture().map { _ in }.asObservable().skip(1),
-                                                    deleteBtnDidTap: menuView.deleteView.rx.tapGesture().map { _ in }.asObservable().skip(1),
-                                                    alertDeleteBtnDidTap: alertView.actionButton.rx.tap.asObservable(),
-                                                    alertCancelBtnDidTap: alertView.cancleButton.rx.tap.asObservable(),
-                                                    backgroundViewDidTap: backgroundView.rx.tapGesture().map { _ in }.asObservable(),
-                                                    writeBtnDidTap: addMemoButton.rx.tap.asObservable(),
-                                                    memoListDidTap: nextButton.rx.tap.asObservable())
+    private lazy var input = MyPlantViewModel
+        .Input(enterMyPlant: viewAppearSubject.asObserver(),
+               menuBtnDidTap: menuButton.rx.tap.asObservable(),
+               editBtnDidTap: menuView.editView.rx.tapGesture().map { _ in }.asObservable().skip(1),
+               deleteBtnDidTap: menuView.deleteView.rx.tapGesture().map { _ in }.asObservable().skip(1),
+               alertDeleteBtnDidTap: alertView.actionButton.rx.tap.asObservable(),
+               alertCancelBtnDidTap: alertView.cancleButton.rx.tap.asObservable(),
+               backgroundViewDidTap: backgroundView.rx.tapGesture().map { _ in }.asObservable(),
+               writeBtnDidTap: addMemoButton.rx.tap.asObservable(),
+               memoListDidTap: nextButton.rx.tap.asObservable())
     private lazy var output = viewModel.transform(input: input)
+    private let viewAppearSubject = PublishSubject<Void>()
     let plantIdx: Int
     
     // MARK: UIComponents
@@ -228,7 +231,7 @@ class MyPlantViewController: UIViewController {
         
         backgroundView.isHidden = true
         menuView.isHidden = true
-        // TODO: 통신
+        viewAppearSubject.onNext(())
     }
     
     init(plantIdx: Int) {

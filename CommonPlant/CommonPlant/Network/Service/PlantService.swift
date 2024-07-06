@@ -72,7 +72,7 @@ extension PlantService: BaseTargetType {
                 multiPartData.append(plantFormData)
             }
             return .uploadMultipart(multiPartData)
-        case .getPlantDetail(idx: let idx):
+        case .getPlantDetail(_):
             return .requestPlain
         case let .putPlant(request):
             var multiPartData: [Moya.MultipartFormData] = []
@@ -82,7 +82,8 @@ extension PlantService: BaseTargetType {
             
             let plant: [String: Any] = [
                 "plantIdx" : request.plantIdx,
-                "nickname" : request.nickname
+                "nickname" : request.nickname,
+                "waterCycle" : request.waterCycle
             ]
             
             if let plantData = try? JSONSerialization.data(withJSONObject: plant, options: []) {

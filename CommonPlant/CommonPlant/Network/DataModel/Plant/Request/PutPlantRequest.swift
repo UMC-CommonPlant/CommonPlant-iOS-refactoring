@@ -10,5 +10,6 @@ import Foundation
 struct PutPlantRequest: Codable {
     let plantIdx: Int
     let nickname: String
+    let waterCycle: Int
     let imageData: Data
 }

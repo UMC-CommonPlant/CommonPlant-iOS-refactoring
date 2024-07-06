@@ -24,15 +24,12 @@ class EditPlantViewController: UIViewController {
                editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(), 
                editingCycle: waterTextField.rx.text.orEmpty.asObservable(),
                completeBtnDidTap: completeButton.rx.tap.map { [weak self] _ in
-            guard let self, let plantImg = plantImageView.image, let nickname = nicknameTextField.text else {
-                return PutPlantRequest(plantIdx: 0, nickname: "", imageData: Data())
+            guard let self, let plantImg = plantImageView.image, let imgData: Data = plantImg.jpegData(compressionQuality: 1.0), let nickname = nicknameTextField.text, let cycleString = waterTextField.text, let waterCycle = Int(cycleString) else {
+                return PutPlantRequest(plantIdx: 0, nickname: "", waterCycle: 0, imageData: Data())
             }
             
-            let data: Data = plantImg.jpegData(compressionQuality: 1.0) ?? Data()
-            
-            self.nickname = nickname
-            self.imageData = data
-            return PutPlantRequest(plantIdx: plantIdx, nickname: nickname, imageData: data)
+            let putRequest = PutPlantRequest(plantIdx: plantIdx, nickname: nickname, waterCycle: waterCycle, imageData: imgData)
+            return putRequest
         }.asObservable())
     
     private lazy var output = viewModel.transform(input: input)
@@ -95,8 +92,8 @@ class EditPlantViewController: UIViewController {
     }()
     private lazy var waterTextField: UITextField = {
         let tf = UITextField()
-        tf.text = "\(waterCycle)"
-        tf.placeholder = "\(waterCycle)"
+        tf.text = "\(initWaterCycle)"
+        tf.placeholder = "\(initWaterCycle)"
         tf.font = .bodyB1
         tf.textColor = .gray6
         tf.textAlignment = .left
@@ -124,9 +121,8 @@ class EditPlantViewController: UIViewController {
     }()
     
     private let plantIdx: Int
-    private var nickname: String
-    private var waterCycle: Int
-    private var imageData: Data
+    private let nickname: String
+    private let initWaterCycle: Int
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -140,8 +136,7 @@ class EditPlantViewController: UIViewController {
         self.viewModel = EditPlantViewModel(plantIdx, plantNickname: plantNickname, waterCycle: waterCycle, imgURL: imgURL)
         self.plantIdx = plantIdx
         self.nickname = plantNickname
-        self.waterCycle = waterCycle
-        self.imageData = Data()
+        self.initWaterCycle = waterCycle
         
         super.init(nibName: nil, bundle: nil)
         
@@ -212,7 +207,7 @@ class EditPlantViewController: UIViewController {
             guard let self = self else { return }
             
             waterTextField.text = cycle
-            waterUnderlineView.backgroundColor = cycle == "\(waterCycle)" ? .gray2 : .black
+            waterUnderlineView.backgroundColor = cycle == "\(initWaterCycle)" ? .gray2 : .black
         }.disposed(by: viewModel.disposeBag)
         
         output.buttonState.drive { [weak self] state in

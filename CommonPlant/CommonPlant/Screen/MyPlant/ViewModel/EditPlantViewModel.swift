@@ -101,7 +101,10 @@ class EditPlantViewModel {
             let cycle = cycle.filter { $0.isNumber }
             
             newCycle.accept(cycle)
-            guard let intCycle = Int(cycle) else { return }
+            guard let intCycle = Int(cycle) else {
+                cycleState.accept(.disable)
+                return
+            }
             cycleState.accept(initCycle == intCycle ? .none : intCycle < 1 ? .disable : .enable)
         }.disposed(by: disposeBag)
         

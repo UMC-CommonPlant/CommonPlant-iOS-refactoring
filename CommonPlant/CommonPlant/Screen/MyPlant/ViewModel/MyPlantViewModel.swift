@@ -18,24 +18,12 @@ class MyPlantViewModel {
     
     init(_ plantIdx: Int) {
         self.plantIdx = plantIdx
-        
-        PlantAPI.shared.getPlantDetail(index: plantIdx)
-            .subscribe { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let response):
-                    myPlant.accept(response.result)
-                    plantMemoList.accept(response.result.memoList)
-                    print(response.result)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }.disposed(by: self.disposeBag)
     }
 }
 
 extension MyPlantViewModel: ViewModelType {
     struct Input {
+        let enterMyPlant: Observable<Void>
         let menuBtnDidTap: Observable<Void>
         let editBtnDidTap: Observable<Void>
         let deleteBtnDidTap: Observable<Void>
@@ -57,6 +45,22 @@ extension MyPlantViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        input.enterMyPlant.bind { [weak self] _ in
+            guard let self else { return }
+            
+            PlantAPI.shared.getPlantDetail(index: plantIdx)
+                .subscribe { [weak self] result in
+                    guard let self else { return }
+                    switch result {
+                    case .success(let response):
+                        myPlant.accept(response.result)
+                        plantMemoList.accept(response.result.memoList)
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }.disposed(by: self.disposeBag)
+        }.disposed(by: self.disposeBag)
+        
         let showMenu = input.menuBtnDidTap.asDriver(onErrorDriveWith: .empty())
         let showEditView = input.editBtnDidTap.map { [weak self] _ -> (String, Int, String) in
             guard let self, let plant = myPlant.value else { return ("", 0, "") }
