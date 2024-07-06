@@ -271,7 +271,8 @@ class MyPlantViewController: UIViewController {
             scientificNameLabel.text = plant.scientificName
             countingMessageLabel.text = "\(plant.nickname)와/과 함께한지 \(plant.countDate)일이 지났어요!"
             countingMessageLabel.partiallyChanged(targetString: "\(plant.countDate)일", font: .bodyB1, color: .gray6)
-            waterDayLabel.text = "D\(plant.remainderDate)"
+            let reminder = plant.remainderDate
+            waterDayLabel.text = "D" + (reminder > 0 ? "-\(reminder)" : reminder < 0 ? "+\(abs(reminder))" : "-Day")
             metDateLabel.text = plant.createdAt
             lastWateringDateLabel.text = plant.wateredDate
             wateringCycleLabel.text = "\(plant.waterDay) Day"
