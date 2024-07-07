@@ -28,6 +28,11 @@ extension AddPlantFirstViewModel: ViewModelType {
         let selectedPlant = PublishRelay<SearchResult>()
         
         input.searchBtnDidTap.bind { plant in
+            var plant = plant
+            if let first = plant.first, first == " " {
+                plant.removeFirst()
+            }
+            
             PlantAPI.shared.searchPlant(target: plant)
                 .subscribe { [weak self] result in
                     guard let self = self else { return }
