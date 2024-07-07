@@ -34,13 +34,13 @@ class PlaceCollectionViewCell: UICollectionViewCell {
         fatalError("init(\(coder) has not been implemented")
     }
     
-    func setConfigure(with data: Place) {
-        if let imgUrl = URL(string: data.placeImage) {
+    func setConfigure(with data: PlaceListResult) {
+        if let imgUrl = URL(string: data.imgURL) {
             placeImageView.load(url: imgUrl)
         } else {
             placeImageView.image = UIImage(named: "MyPlant")
         }
-        placeNameLabel.text = data.placeName
+        placeNameLabel.text = data.name
     }
     
     func setConstraints() {

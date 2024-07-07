@@ -9,27 +9,37 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+
 class AddPlantSecondViewModel {
     let disposeBag = DisposeBag()
     let calendar = Calendar.current
     
-    let placeList = BehaviorRelay<[Place]>(value: [])
+    let placeList = BehaviorRelay<[PlaceListResult]>(value: [])
     let selectedDate = BehaviorRelay<String>(value: "")
     let currentMonth = BehaviorRelay<String>(value: "")
     let days = BehaviorRelay<[String]>(value: [])
     let todayDate = Date()
     var calendarDate = Date()
-    var nicknameState: SubmitState = .disable
-    var placeState: SubmitState = .disable
+    
+    var nicknameState = BehaviorRelay<SubmitState>(value: .disable)
+    var placeState = BehaviorRelay<SubmitState>(value: .disable)
+    var imageState = BehaviorRelay<SubmitState>(value: .disable)
     
     init() {
         selectedDate.accept(dateToString(Date()))
         currentMonth.accept(dateToMonthString(Date()))
         updateDays()
         
-        let list = [Place(placeImage: "", placeName: "스윗 홈_거실"),
-        Place(placeImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/ceb7bd36-86b4-4ab1-b2df-24862db128f8..jpg", placeName: "낫 스윗_회사")]
-        placeList.accept(list)
+        PlantAPI.shared.fetchPlaceListToAddPlant()
+            .subscribe { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let response):
+                    placeList.accept(response.result)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }.disposed(by: self.disposeBag)
     }
     
     func stringToDate(_ string: String) -> Date? {
@@ -68,12 +78,23 @@ class AddPlantSecondViewModel {
         guard let day = Int(day) else { return false }
         guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
         
-        let today = dateToString(todayDate)
-        let target = dateToString(newDate)
+        let todayComponents = calendar.dateComponents([.year, .month, .day], from: todayDate)
+        let newDateComponents = calendar.dateComponents([.year, .month, .day], from: newDate)
         
-        return today == target
+        return todayComponents == newDateComponents
     }
     
+    func isDateAfterToday(day: String) -> Bool {
+        guard let day = Int(day) else { return false }
+        
+        var dateComponents = calendar.dateComponents([.year, .month], from: calendarDate)
+        dateComponents.day = day
+        
+        guard let new = calendar.date(from: dateComponents) else { return false }
+        
+        return new > todayDate
+    }
+
     func checkSelectedDay(day: String) -> Bool {
         guard let day = Int(day) else { return false }
         guard let newDate = calendar.date(bySetting: .day, value: day, of: calendarDate) else { return false }
@@ -102,9 +123,9 @@ extension AddPlantSecondViewModel {
 extension AddPlantSecondViewModel {
     struct Input {
         let imageDidTap: Observable<Void>
-        let selectedNewImage: Observable<Void>
-        let selectedDefaultImage: Observable<Void>
+        let selectedImage: Observable<Void>
         let editingNickname: Observable<String>
+        let endEditingNickname: Observable<String?>
         let placeDidTap: Observable<Void>
         let selectedPlace: Observable<IndexPath>
         let deletePlaceBtnDidTap: Observable<Void>
@@ -113,40 +134,49 @@ extension AddPlantSecondViewModel {
         let nextMonthBtnDidTap: Observable<Void>
         let selectedDate: Observable<IndexPath>
         let cancleBtnDidTap: Observable<Void>
-        let submitBtnDidTap: Observable<Void>
+        let submitBtnDidTap: Observable<PostPlantRequest>
     }
     
     struct Output {
-        let showImgSettingAlert: Driver<Void>
         let showImagePicker: Driver<Void>
-        let changeDefaultImage: Driver<Void>
         let nicknameText: Driver<String>
         let showPlaceList: Driver<Void>
-        let selectPlace: Driver<Place>
+        let selectPlace: Driver<PlaceListResult>
         let resetPlace: Driver<Void>
         let showDatePicker: Driver<Void>
         let selectDate: Driver<IndexPath>
-        let cancleAddPlant: Driver<Void>
-        let submitPlant: Driver<Void>
+        let popToRootViewController: Driver<Void>
         let submitBtnState: Driver<SubmitState>
     }
     
     func transform(input: Input) -> Output {
         let submitBtnState = BehaviorRelay(value: SubmitState.disable)
         
-        let showImgSettingAlert = PublishRelay<Void>()
-        input.imageDidTap.bind(to: showImgSettingAlert).disposed(by: disposeBag)
+        Observable.combineLatest(nicknameState, placeState, imageState)
+            .map { nickname, place, image in
+                if nickname == .disable || place == .disable || image == .disable {
+                    return .disable
+                }
+                
+                return (nickname == .enable && image == .enable && place == .enable) ? .enable : .disable
+            }.bind(to: submitBtnState)
+            .disposed(by: disposeBag)
+        
         let showImagePicker = PublishRelay<Void>()
-        input.selectedNewImage.bind(to: showImagePicker).disposed(by: disposeBag)
-        let changeDefaultImage = PublishRelay<Void>()
-        input.selectedDefaultImage.bind(to: changeDefaultImage).disposed(by: disposeBag)
+        input.imageDidTap.bind(to: showImagePicker).disposed(by: disposeBag)
+        
+        input.selectedImage.bind { [weak self] _ in
+            guard let self else { return }
+            imageState.accept(.enable)
+        } .disposed(by: disposeBag)
+        
         let nicknameText = PublishRelay<String>()
         input.editingNickname.bind { [weak self] name in
             guard let self = self else { return }
             var name = name
             
-            if name.contains("\n") {
-                name.removeLast()
+            while name.contains("  ") {
+                name = name.replacingOccurrences(of: "  ", with: " ")
             }
             
             if name.count > 10 {
@@ -154,33 +184,48 @@ extension AddPlantSecondViewModel {
                 name = String(name[..<index])
             }
             
-            if name.count > 0 {
-                nicknameState = .enable
-                submitBtnState.accept(placeState)
+            let pattern = "^[가-힣a-zA-Z0-9 !_.-^~]*$"
+            
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                let range = NSRange(location: 0, length: name.utf16.count)
+                
+                if regex.firstMatch(in: name, options: [], range: range) == nil || name.count < 2 {
+                    nicknameState.accept(.disable)
+                } else {
+                    nicknameState.accept(.enable)
+                }
             }
             
             nicknameText.accept(name)
         }.disposed(by: disposeBag)
         
-        let showPlaceList = PublishRelay<Void>()
-        input.placeDidTap.bind(to: showPlaceList).disposed(by: disposeBag)
+        input.endEditingNickname.bind { [weak self] name in
+            guard let self = self, var new = name else { return }
+            
+            if new.removeLast() == " " {
+                nicknameText.accept(new)
+            } else {
+                nicknameText.accept(name!)
+            }
+            
+        }.disposed(by: disposeBag)
         
-        let selectPlace = PublishRelay<Place>()
+        let showPlaceList = PublishRelay<Void>()
+        input.placeDidTap.bind(to: showPlaceList)
+            .disposed(by: disposeBag)
+        
+        let selectPlace = PublishRelay<PlaceListResult>()
         input.selectedPlace.bind { [weak self] indexPath in
             guard let self = self else { return }
             selectPlace.accept(placeList.value[indexPath.row])
-            
-            placeState = .enable
-            submitBtnState.accept(nicknameState)
+            placeState.accept(.enable)
         }.disposed(by: disposeBag)
         
         let resetPlace = PublishRelay<Void>()
         input.deletePlaceBtnDidTap.bind { [weak self] indexPath in
             guard let self = self else { return }
             resetPlace.accept(())
-            
-            placeState = .disable
-            submitBtnState.accept(.disable)
+            placeState.accept(.disable)
         }.disposed(by: disposeBag)
         
         let showDatePicker = PublishRelay<Void>()
@@ -221,26 +266,32 @@ extension AddPlantSecondViewModel {
                 updateDays()
             }.disposed(by: disposeBag)
         
-        let cancleAddPlant = input.cancleBtnDidTap
-            .map { _ in () }
-            .asDriver(onErrorDriveWith: .empty())
-        let submitPlant = input.submitBtnDidTap
-            .map { _ in ()
-                // TODO: 네트워킹
-                submitBtnState.accept(.onClick)
-            }
-            .asDriver(onErrorDriveWith: .empty())
+        let popToRoot = PublishRelay<Void>()
         
-        return Output(showImgSettingAlert: showImgSettingAlert.asDriver(onErrorJustReturn: ()),
-                      showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()),
-                      changeDefaultImage: changeDefaultImage.asDriver(onErrorJustReturn: ()),
+        input.cancleBtnDidTap.bind(to: popToRoot)
+            .disposed(by: disposeBag)
+        
+        input.submitBtnDidTap.bind { [weak self] request in
+            guard let self = self else { return }
+            
+            PlantAPI.shared.addPlant(request).subscribe { result in
+                switch result {
+                case .success(let response):
+                    popToRoot.accept(())
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }.disposed(by: disposeBag)
+            
+        }.disposed(by: disposeBag)
+        
+        return Output(showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()),
                       nicknameText: nicknameText.asDriver(onErrorJustReturn: ""),
                       showPlaceList: showPlaceList.asDriver(onErrorJustReturn: ()),
-                      selectPlace: selectPlace.asDriver(onErrorJustReturn: Place(placeImage: "", placeName: "")),
+                      selectPlace: selectPlace.asDriver(onErrorDriveWith: .empty()),
                       resetPlace: resetPlace.asDriver(onErrorJustReturn: ()),
-                      showDatePicker: showDatePicker.asDriver(onErrorJustReturn: ()), selectDate: selectDate.asDriver(onErrorJustReturn: IndexPath()),
-                      cancleAddPlant: cancleAddPlant,
-                      submitPlant: submitPlant,
+                      showDatePicker: showDatePicker.asDriver(onErrorJustReturn: ()), selectDate: selectDate.asDriver(onErrorJustReturn: IndexPath()), 
+                      popToRootViewController: popToRoot.asDriver(onErrorDriveWith: .empty()),
                       submitBtnState: submitBtnState.asDriver(onErrorJustReturn: .disable))
     }
 }

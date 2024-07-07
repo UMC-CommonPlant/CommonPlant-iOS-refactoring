@@ -1,5 +1,5 @@
 {
-  "originHash" : "0b91be5ef6e873b2ca52f8478ffd92e0c4196da9f64398b23bd895776e8856d8",
+  "originHash" : "0e9254680413b48030af5a19893c013cf00da10109e365c9686329795497bea7",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kakao/kakao-ios-sdk.git",
       "state" : {
-        "revision" : "ae3c60cbd4e3b348775f8c766e5b908fa1e66c5a",
-        "version" : "2.20.0"
+        "revision" : "e9e649d3ba823c3673867d3d09010fc77005a940",
+        "version" : "2.22.3"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/kakao/kakao-ios-sdk-rx",
       "state" : {
         "branch" : "master",
-        "revision" : "4f3a1e5f17c1bb881ac00ab87c5579ed852f992b"
+        "revision" : "37ac7e289fea5f62b3b1f62d06290a18a202a5b0"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "5b92f029fab2cce44386d28588098b5be0824ef5",
-        "version" : "7.11.0"
+        "revision" : "2ef543ee21d63734e1c004ad6c870255e8716c50",
+        "version" : "7.12.0"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ReactiveX/RxSwift.git",
       "state" : {
-        "revision" : "5949cbd3d4f3f97968bb40b6cd232f8315c6341c",
-        "version" : "6.7.0"
+        "revision" : "b06a8c8596e4c3e8e7788e08e720e3248563ce6a",
+        "version" : "6.7.1"
       }
     },
     {

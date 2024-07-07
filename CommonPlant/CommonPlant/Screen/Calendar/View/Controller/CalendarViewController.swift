@@ -10,10 +10,6 @@ import SnapKit
 import RxSwift
 import RxRelay
 
-#Preview {
-    UINavigationController(rootViewController: CalendarViewController())
-}
-
 class CalendarViewController: UIViewController {
     // MARK: - Properties
     private let viewModel = CalendarViewModel()

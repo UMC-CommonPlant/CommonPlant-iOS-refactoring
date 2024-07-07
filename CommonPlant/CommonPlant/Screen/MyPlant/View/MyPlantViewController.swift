@@ -7,244 +7,350 @@
 
 import UIKit
 import RxSwift
+import RxRelay
 import SnapKit
 import Kingfisher
+import Then
 
 class MyPlantViewController: UIViewController {
     // MARK: Properties
-    let viewModel = MyPlantViewModel()
-    let disposeBag = DisposeBag()
-    let identifier = MemoCardCollectionViewCell.identifier
+    let viewModel: MyPlantViewModel
+    private lazy var input = MyPlantViewModel
+        .Input(enterMyPlant: viewAppearSubject.asObserver(),
+               menuBtnDidTap: menuButton.rx.tap.asObservable(),
+               editBtnDidTap: menuView.editView.rx.tapGesture().map { _ in }.asObservable().skip(1),
+               deleteBtnDidTap: menuView.deleteView.rx.tapGesture().map { _ in }.asObservable().skip(1),
+               alertDeleteBtnDidTap: alertView.actionButton.rx.tap.asObservable(),
+               alertCancelBtnDidTap: alertView.cancleButton.rx.tap.asObservable(),
+               backgroundViewDidTap: backgroundView.rx.tapGesture().map { _ in }.asObservable(),
+               writeBtnDidTap: addMemoButton.rx.tap.asObservable(),
+               memoListDidTap: nextButton.rx.tap.asObservable())
+    private lazy var output = viewModel.transform(input: input)
+    private let viewAppearSubject = PublishSubject<Void>()
+    let plantIdx: Int
     
     // MARK: UIComponents
-    var scrollView = UIScrollView()
-    var stackView = UIStackView()
-    var backButton = UIButton()
-    var plantProfileView = UIView()
-    var menuButton = UIButton()
-    let backgroundView = UIView()
-    let menuView = CommonMenuView()
-    var plantImageView = UIImageView()
-    var placeView = UIView()
-    var placeImageView = UIImageView()
-    var placeNameLabel = UILabel()
-    var nickNameLabel = UILabel()
-    var scientificNameLabel = UILabel()
-    var dateInfoView = UIView()
-    var countingMessageLabel = UILabel()
-    var wateringView = UIView()
-    var wateringImageView = UIImageView()
-    var waterDayLabel = UILabel()
-    var infoView = UIView()
-    var messageView = UIView()
-    var dateView = UIView()
-    var metMessageLabel = UILabel()
-    var metDateLabel = UILabel()
-    var lastWateringMessageLabel = UILabel()
-    var lastWateringDateLabel = UILabel()
-    var memoView = UIView()
-    var memoTitleLabel = PaddingLabel()
-    var nextButton = UIButton()
-    lazy var memoCollectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 8
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.itemSize = CGSize(width: 250, height: 174)
-        flowLayout.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 0, right: 20)
-        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        view.backgroundColor = .clear
-        return view
-    }()
-    var addMemoButton = UIButton()
-    var plantInfoView = UIView()
-    var infoTitleLabel = PaddingLabel()
-    var infoBackgroundView = UIView()
-    var wateringCycleImage = UIImageView()
-    var wateringCycleLabel = UILabel()
-    var cautionLabel = UILabel()
-    var sunlightImageView = UIImageView()
-    var sunlightInfoLabel = UILabel()
-    var temperatureImageView = UIImageView()
-    var temperatureLabel = UILabel()
-    var humidityInfoImageView = UIImageView()
-    var humidityInfoLabel = UILabel()
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView().then {
+        $0.backgroundColor = .gray1
+        $0.axis = .vertical
+        $0.alignment = .fill
+        $0.distribution = .equalSpacing
+        $0.spacing = 8
+    }
+    private let plantProfileView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    private let menuButton = UIButton().then {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Menu")
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        $0.configuration = config
+    }
+    private let backgroundView = UIView().then {
+        $0.backgroundColor = .black
+        $0.layer.opacity = 0.4
+        $0.isHidden = true
+    }
+    private let menuView = CommonMenuView().then {
+        $0.isHidden = true
+    }
+    private let alertView = CommonAlertView().then {
+        $0.isHidden = true
+        $0.setTitle("식물 삭제")
+        $0.setMessage("해당 식물을 삭제하시겠습니까?")
+        $0.setActionButton(title: "삭제")
+    }
+    private let plantImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.makeRound(radius: 16)
+    }
+    private let placeView = UIView().then {
+        $0.backgroundColor = .seaGreenDark3
+        $0.makeRound(radius: 8)
+    }
+    private let placeImageView = UIImageView().then {
+        $0.image = UIImage(named: "Place")
+    }
+    private let placeNameLabel = UILabel().then {
+        $0.textColor = .white
+        $0.font = .bodyB3
+    }
+    private let nickNameLabel = UILabel().then {
+        $0.textColor = .black
+        $0.font = .head5
+        $0.textAlignment = .center
+    }
+    private let scientificNameLabel = UILabel().then {
+        $0.textColor = .gray6
+        $0.font = .bodyM2
+        $0.textAlignment = .center
+    }
+    private let dateInfoView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    private let countingMessageLabel = UILabel().then {
+        $0.textColor = .gray5
+        $0.font = .bodyM2
+        $0.textAlignment = .center
+    }
+    private let wateringView = UIView()
+    private let wateringImageView = UIImageView().then {
+        $0.image = UIImage(named: "WateringCan")
+    }
+    private let waterDayLabel = UILabel().then {
+        $0.textColor = .gray6
+        $0.font = .head4
+        $0.textAlignment = .center
+    }
+    private let infoView = UIView()
+    private let messageView = UIView()
+    private let dateView = UIView()
+    private let metMessageLabel = UILabel().then {
+        $0.text = "처음 함께한 날"
+        $0.textColor = .gray4
+        $0.font = .captionM1
+        $0.textAlignment = .center
+    }
+    private let metDateLabel = UILabel().then {
+        $0.textColor = .gray4
+        $0.font = .captionM1
+        $0.textAlignment = .center
+    }
+    private let lastWateringMessageLabel = UILabel().then {
+        $0.text = "마지막으로 물 준 날짜"
+        $0.textColor = .gray4
+        $0.font = .captionM1
+        $0.textAlignment = .center
+    }
+    private let lastWateringDateLabel = UILabel().then {
+        $0.textColor = .gray4
+        $0.font = .captionM1
+        $0.textAlignment = .center
+    }
+    private let memoView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    private let memoTitleLabel = PaddingLabel().then {
+        $0.text = "Memo"
+        $0.textColor = .gray4
+        $0.font = .bodyB1
+        $0.padding = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 0)
+    }
+    private let nextButton = UIButton().then {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Next")
+        $0.configuration = config
+    }
+    private lazy var memoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout).then {
+        $0.backgroundColor = .clear
+        $0.register(MemoCardCollectionViewCell.self, forCellWithReuseIdentifier: MemoCardCollectionViewCell.identifier)
+    }
+    private let flowLayout = UICollectionViewFlowLayout().then {
+        $0.scrollDirection = .horizontal
+        $0.minimumLineSpacing = 8
+        $0.itemSize = CGSize(width: 250, height: 174)
+        $0.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 0, right: 20)
+    }
+    private let addMemoButton = UIButton().then {
+        var config = UIButton.Configuration.plain()
+        var attr = AttributedString.init("작성하기")
+        attr.font = .bodyB3
+        config.attributedTitle = attr
+        config.baseForegroundColor = .white
+        
+        $0.configuration = config
+        $0.contentHorizontalAlignment = .center
+        $0.backgroundColor = .seaGreenDark1
+        $0.makeRound(radius: 8)
+    }
+    private let plantInfoView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    private let infoTitleLabel = PaddingLabel().then {
+        $0.text = "식물정보"
+        $0.textColor = .gray4
+        $0.font = .bodyB1
+        $0.padding = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 0)
+    }
+    private let infoBackgroundView = UIView().then {
+        $0.backgroundColor = .seaGreen
+        $0.makeRound(radius: 16)
+    }
+    private let wateringCycleImage = UIImageView().then {
+        $0.image = UIImage(named: "WateringPot")
+    }
+    private let wateringCycleLabel = UILabel().then {
+        $0.textColor = .gray6
+        $0.font = .captionM1
+        $0.textAlignment = .left
+    }
+    private let cautionLabel = UILabel().then {
+        $0.text = "물을 좋아하나 과습에 주의하세요!"
+        $0.textColor = .gray5
+        $0.font = .captionM2
+        $0.textAlignment = .center
+    }
+    private let sunlightImageView = UIImageView().then {
+        $0.image = UIImage(named: "Sunlight")
+    }
+    private let sunlightInfoLabel = UILabel().then {
+        $0.textColor = .gray6
+        $0.font = .captionM1
+        $0.textAlignment = .left
+    }
+    private let temperatureImageView = UIImageView().then {
+        $0.image = UIImage(named: "Temperature")
+    }
+    private let temperatureLabel = UILabel().then {
+        $0.textColor = .gray6
+        $0.font = .captionM1
+        $0.textAlignment = .left
+    }
+    private let humidityInfoImageView = UIImageView().then {
+        $0.image = UIImage(named: "Humidity")
+    }
+    private let humidityInfoLabel = UILabel().then {
+        $0.textColor = .gray6
+        $0.font = .captionM1
+        $0.textAlignment = .left
+    }
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
-        self.memoCollectionView.delegate = self
-        self.memoCollectionView.dataSource = self
-        
+        bind()
         setNavigationBar()
-        setAttributes()
         setHierarchy()
         setConstraints()
     }
     
-    // MARK: Custom Methods
-    func setNavigationBar() {
-        self.navigationItem.title = "My Plant"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
-        self.navigationController?.navigationBar.barTintColor = .white
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        backgroundView.isHidden = true
+        menuView.isHidden = true
+        viewAppearSubject.onNext(())
     }
     
-    func setAttributes() {
-        let plantData = viewModel.myPlant
+    init(plantIdx: Int) {
+        self.plantIdx = plantIdx
+        self.viewModel = MyPlantViewModel(plantIdx)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: Custom Methods
+    func setNavigationBar() {
+        navigationItem.title = "My Plant"
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = .black
         
-        var menuBtnConfig = UIButton.Configuration.plain()
-        var nextBtnConfig = UIButton.Configuration.plain()
-        var addBtnConfig = UIButton.Configuration.plain()
+        let menuItem = UIBarButtonItem(customView: menuButton)
+        navigationItem.rightBarButtonItem = menuItem
+    }
+    
+    func bind() {
+        viewModel.myPlant.bind { [weak self] plant in
+            guard let self, let plant = plant else { return }
+            
+            if let imgURL = URL(string: plant.imgURL) {
+                plantImageView.kf.setImage(with: imgURL)
+            } else {
+                plantImageView.image = UIImage(named: "MyPlant")
+            }
+            
+            placeNameLabel.text = plant.place
+            nickNameLabel.text = plant.nickname
+            scientificNameLabel.text = plant.scientificName
+            countingMessageLabel.text = "\(plant.nickname)와/과 함께한지 \(plant.countDate)일이 지났어요!"
+            countingMessageLabel.partiallyChanged(targetString: "\(plant.countDate)일", font: .bodyB1, color: .gray6)
+            let reminder = plant.remainderDate
+            waterDayLabel.text = "D" + (reminder > 0 ? "-\(reminder)" : reminder < 0 ? "+\(abs(reminder))" : "-Day")
+            metDateLabel.text = plant.createdAt
+            lastWateringDateLabel.text = plant.wateredDate
+            wateringCycleLabel.text = "\(plant.waterDay) Day"
+            sunlightInfoLabel.text = "\(plant.sunlight)"
+            temperatureLabel.text = "\(plant.tempMin)~\(plant.tempMax)℃"
+            humidityInfoLabel.text = "\(plant.humidity)"
+            
+        }.disposed(by: viewModel.disposeBag)
         
-        stackView.backgroundColor = .gray1
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 8
+        viewModel.plantMemoList
+            .do (onNext: { [weak self] memos in
+                guard let self = self else { return }
+                
+                if memos.isEmpty {
+                    memoCollectionView.snp.updateConstraints { make in
+                        make.height.equalTo(0)
+                    }
+                } else {
+                    memoCollectionView.snp.updateConstraints { make in
+                        make.height.equalTo(174)
+                    }
+                }
+            })
+            .bind(to: memoCollectionView.rx.items(cellIdentifier: MemoCardCollectionViewCell.identifier, cellType: MemoCardCollectionViewCell.self)) { (_, result, cell) in
+                
+                cell.configureCell(result)
+            }.disposed(by: viewModel.disposeBag)
         
-        if let imageUrlString = plantData.imgURL, let imageURL = URL(string: imageUrlString) {
-            plantImageView.load(url: imageURL)
-            plantImageView.contentMode = .scaleAspectFill
-            plantImageView.makeRound(radius: 16)
-        } else {
-            plantImageView.image = UIImage(named: "MyPlant")
-        }
+        output.backgroundHidden.drive { [weak self] _ in
+            guard let self else { return }
+            backgroundView.isHidden = true
+            alertView.isHidden = true
+            menuView.isHidden = true
+        }.disposed(by: viewModel.disposeBag)
         
-        menuBtnConfig.image = UIImage(named: "Menu")
-        menuButton.configuration = menuBtnConfig
+        output.showMenu.drive { [weak self] _ in
+            guard let self else { return }
+            
+            menuView.isHidden = false
+            backgroundView.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
         
-        backgroundView.backgroundColor = .black
-        backgroundView.layer.opacity = 0.4
-        backgroundView.isHidden = true
+        output.showDeleteAlert.drive { [weak self] _ in
+            guard let self else { return }
+            
+            menuView.isHidden = true
+            alertView.isHidden = false
+            backgroundView.isHidden = false
+        }.disposed(by: viewModel.disposeBag)
         
-        menuView.isHidden = true
+        output.showEditView.drive { [weak self] (nickname, waterCycle, imagString) in
+            guard let self else { return }
+            let nextVC = EditPlantViewController(plantIdx, plantNickname: nickname, waterCycle: waterCycle, imgURL: imagString)
+            
+            navigationController?.pushViewController(nextVC, animated: true)
+        }.disposed(by: viewModel.disposeBag)
         
-        plantProfileView.backgroundColor = .white
+        output.showAddMemoView.drive { [weak self] index in
+            guard let self else { return }
+            
+            navigationController?.pushViewController(EditMemoViewController(), animated: true)
+        }.disposed(by: viewModel.disposeBag)
         
-        placeView.backgroundColor = .seaGreenDark3
-        placeView.makeRound(radius: 8)
+        output.showMemoView.drive { [weak self] index in
+            guard let self else { return }
+            
+            navigationController?.pushViewController(MemoListViewController(focus: IndexPath(item: 0, section: 0)), animated: true)
+        }.disposed(by: viewModel.disposeBag)
         
-        placeImageView.image = UIImage(named: "Place")
-        
-        placeNameLabel.text = "\(plantData.place)"
-        placeNameLabel.textColor = .white
-        placeNameLabel.font = .bodyB3
-        
-        nickNameLabel.text = "\(plantData.nickname)"
-        nickNameLabel.textColor = .black
-        nickNameLabel.font = .head5
-        nickNameLabel.textAlignment = .center
-        
-        scientificNameLabel.text = "\(plantData.scientificName)"
-        scientificNameLabel.textColor = .gray6
-        scientificNameLabel.font = .bodyM2
-        scientificNameLabel.textAlignment = .center
-        
-        dateInfoView.backgroundColor = .white
-        
-        countingMessageLabel.text = "\(plantData.nickname)와(과) 함께한지 \(plantData.countDate)일이 지났어요!"
-        countingMessageLabel.partiallyChanged(targetString: "\(plantData.countDate)일", font: .bodyB1, color: .gray6)
-        countingMessageLabel.textColor = .gray5
-        countingMessageLabel.font = .bodyM2
-        countingMessageLabel.textAlignment = .center
-        
-        wateringImageView.image = UIImage(named: "WateringCan")
-        
-        waterDayLabel.text = "D\(plantData.remainderDate)"
-        waterDayLabel.textColor = .gray6
-        waterDayLabel.font = .head4
-        waterDayLabel.textAlignment = .center
-        
-        metMessageLabel.text = "처음 함께한 날"
-        metMessageLabel.textColor = .gray4
-        metMessageLabel.font = .captionM1
-        metMessageLabel.textAlignment = .center
-        
-        metDateLabel.text = plantData.createdAt
-        metDateLabel.textColor = .gray4
-        metDateLabel.font = .captionM1
-        metDateLabel.textAlignment = .center
-        
-        lastWateringMessageLabel.text = "마지막으로 물 준 날짜"
-        lastWateringMessageLabel.textColor = .gray4
-        lastWateringMessageLabel.font = .captionM1
-        lastWateringMessageLabel.textAlignment = .center
-        
-        lastWateringDateLabel.text = plantData.wateredDate
-        lastWateringDateLabel.textColor = .gray4
-        lastWateringDateLabel.font = .captionM1
-        lastWateringDateLabel.textAlignment = .center
-        
-        memoView.backgroundColor = .white
-        
-        memoTitleLabel.text = "Memo"
-        memoTitleLabel.textColor = .gray4
-        memoTitleLabel.font = .bodyB1
-        memoTitleLabel.padding = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 0)
-        
-        nextBtnConfig.image = UIImage(named: "Next")
-        nextButton.configuration = nextBtnConfig
-        
-        memoCollectionView.register(MemoCardCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
-        
-        var addMemoAttr = AttributedString.init("작성하기")
-        addMemoAttr.font = .bodyB3
-        addBtnConfig.attributedTitle = addMemoAttr
-        addBtnConfig.baseForegroundColor = .white
-        
-        addMemoButton.configuration = addBtnConfig
-        addMemoButton.contentHorizontalAlignment = .center
-        addMemoButton.backgroundColor = .seaGreenDark1
-        addMemoButton.makeRound(radius: 8)
-        
-        plantInfoView.backgroundColor = .white
-        
-        infoTitleLabel.text = "식물정보"
-        infoTitleLabel.textColor = .gray4
-        infoTitleLabel.font = .bodyB1
-        infoTitleLabel.padding = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 0)
-        
-        infoBackgroundView.backgroundColor = .seaGreen
-        infoBackgroundView.makeRound(radius: 16)
-        
-        wateringCycleImage.image = UIImage(named: "WateringPot")
-        
-        wateringCycleLabel.text = "\(plantData.waterDay) Day"
-        wateringCycleLabel.textColor = .gray6
-        wateringCycleLabel.font = .captionM1
-        wateringCycleLabel.textAlignment = .left
-        
-        cautionLabel.text = "물을 좋아하나 과습에 주의하세요!" // 현재 api에 없는 값!
-        cautionLabel.textColor = .gray5
-        cautionLabel.font = .captionM2
-        cautionLabel.textAlignment = .center
-        
-        sunlightImageView.image = UIImage(named: "Sunlight")
-        
-        sunlightInfoLabel.text = "\(plantData.sunlight)"
-        sunlightInfoLabel.textColor = .gray6
-        sunlightInfoLabel.font = .captionM1
-        sunlightInfoLabel.textAlignment = .left
-        
-        temperatureImageView.image = UIImage(named: "Temperature")
-        
-        temperatureLabel.text = "\(plantData.tempMin)~\(plantData.tempMax)℃"
-        temperatureLabel.textColor = .gray6
-        temperatureLabel.font = .captionM1
-        temperatureLabel.textAlignment = .left
-        
-        humidityInfoImageView.image = UIImage(named: "Humidity")
-        
-        humidityInfoLabel.text = "\(plantData.humidity)"
-        humidityInfoLabel.textColor = .gray6
-        humidityInfoLabel.font = .captionM1
-        humidityInfoLabel.textAlignment = .left
+        output.popToPreviousView.drive { [weak self] _ in
+            guard let self else { return }
+            
+            navigationController?.popViewController(animated: true)
+        }.disposed(by: viewModel.disposeBag)
     }
     
     func setHierarchy() {
-        [scrollView, backgroundView, menuView].forEach {
+        [scrollView, backgroundView, menuView, alertView].forEach {
             view.addSubview($0)
         }
         
@@ -254,7 +360,7 @@ class MyPlantViewController: UIViewController {
             stackView.addArrangedSubview($0)
         }
         
-        [menuButton, plantImageView, placeView, nickNameLabel, scientificNameLabel].forEach {
+        [plantImageView, placeView, nickNameLabel, scientificNameLabel].forEach {
             plantProfileView.addSubview($0)
         }
         
@@ -310,12 +416,7 @@ class MyPlantViewController: UIViewController {
         plantProfileView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(322)
-        }
-        
-        menuButton.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview()
-            make.height.equalTo(32)
+            make.height.equalTo(298)
         }
         
         backgroundView.snp.makeConstraints { make in
@@ -323,17 +424,23 @@ class MyPlantViewController: UIViewController {
         }
         
         plantImageView.snp.makeConstraints { make in
-            make.top.equalTo(menuButton.snp.bottom).offset(4)
+            make.top.equalToSuperview().inset(12)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(208)
         }
         
         menuView.snp.makeConstraints { make in
-            make.top.equalTo(menuButton.snp.bottom).offset(4)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(4)
             make.trailing.equalToSuperview().offset(-20)
             make.width.equalTo(228)
             make.height.equalTo(128)
+        }
+        
+        alertView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalTo(270)
+            make.height.equalTo(148)
         }
         
         placeView.snp.makeConstraints { make in
@@ -424,8 +531,7 @@ class MyPlantViewController: UIViewController {
         }
         
         memoView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(316)
+            make.horizontalEdges.equalToSuperview()
         }
         
         nextButton.snp.makeConstraints { make in
@@ -442,8 +548,8 @@ class MyPlantViewController: UIViewController {
         
         memoCollectionView.snp.makeConstraints { make in
             make.top.equalTo(memoTitleLabel.snp.bottom).offset(4)
-            make.width.equalToSuperview()
-            make.height.equalTo(182)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(174)
         }
         
         addMemoButton.snp.makeConstraints { make in
@@ -451,6 +557,7 @@ class MyPlantViewController: UIViewController {
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(42)
+            make.bottom.equalToSuperview().inset(24)
         }
         
         plantInfoView.snp.makeConstraints { make in
@@ -514,35 +621,5 @@ class MyPlantViewController: UIViewController {
             make.top.equalTo(humidityInfoImageView.snp.top).offset(2)
             make.leading.equalTo(humidityInfoImageView.snp.trailing).offset(8)
         }
-    }
-}
-
-extension MyPlantViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.myPlant.memoList.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! MemoCardCollectionViewCell
-
-        let memo = viewModel.myPlant.memoList[indexPath.row]
-        
-        if let profileURL = URL(string: memo.userImgURL) {
-            cell.profileView.kf.setImage(with: profileURL)
-        }
-        
-        cell.nickNameLabel.text = memo.userNickName
-        
-        cell.contentLabel.text = memo.content
-        
-        if let imageURLString = memo.imgURL {
-            if let imageURL = URL(string: imageURLString) {
-                cell.imageView.kf.setImage(with: imageURL)
-            }
-        }
-        
-        cell.dateLabel.text = memo.createdAt
-        
-        return cell
     }
 }

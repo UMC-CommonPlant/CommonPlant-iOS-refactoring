@@ -7,25 +7,35 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
+
 import RxSwift
 import RxCocoa
 
 class EditPlantViewController: UIViewController {
-    private let viewModel = EditPlantViewModel()
+    private let viewModel: EditPlantViewModel
     private lazy var input = EditPlantViewModel
         .Input(imageDidTap: plantView.rx.tapGesture().map { _ in }.asObservable(),
-               selectedNewImage: selectNewImage.asObservable(),
-               selectedDefaultImage: changeToDefaultImage.asObservable(),
-               changedImage: currentImage.map { [weak self] currentImage in
-            guard let initialImage = self?.initialImage.value else { return nil }
+               changedImage: plantImageView.rx.imageChanged.map { [weak self] currentImage in
+            guard let self, let initialImage = initialImage else { return false }
+            
             return currentImage?.pngData() != initialImage.pngData()
         },
-               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable())
+               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(), 
+               editingCycle: waterTextField.rx.text.orEmpty.asObservable(),
+               completeBtnDidTap: completeButton.rx.tap.map { [weak self] _ in
+            guard let self, let plantImg = plantImageView.image, let imgData: Data = plantImg.jpegData(compressionQuality: 1.0), let nickname = nicknameTextField.text, let cycleString = waterTextField.text, let waterCycle = Int(cycleString) else {
+                return PutPlantRequest(plantIdx: 0, nickname: "", waterCycle: 0, imageData: Data())
+            }
+            
+            let putRequest = PutPlantRequest(plantIdx: plantIdx, nickname: nickname, waterCycle: waterCycle, imageData: imgData)
+            return putRequest
+        }.asObservable())
+    
     private lazy var output = viewModel.transform(input: input)
     private let selectNewImage = PublishRelay<Void>()
     private let changeToDefaultImage = PublishRelay<Void>()
-    private let currentImage = PublishRelay<UIImage?>()
-    private let initialImage = BehaviorRelay<UIImage?>(value: nil)
+    private var initialImage: UIImage?
     
     private let plantView: UIView = {
         let view = UIView()
@@ -33,15 +43,8 @@ class EditPlantViewController: UIViewController {
     }()
     private lazy var plantImageView: UIImageView = {
         let view = UIImageView()
-        if let imageUrl = URL(string: viewModel.initPlant.plantImage) {
-            view.load(url: imageUrl) {
-                self.initialImage.accept(view.image)
-            }
-        } else {
-            view.image = UIImage(named: "AddPlant")
-            initialImage.accept(UIImage(named: "AddPlant"))
-        }
         view.makeRound(radius: 16)
+        
         return view
     }()
     private let cameraImageView: UIImageView = {
@@ -55,11 +58,11 @@ class EditPlantViewController: UIViewController {
     }()
     private lazy var nicknameTextField: UITextField = {
         let tf = UITextField()
+        tf.text = nickname
+        tf.placeholder = nickname
         tf.font = .bodyM1
-        tf.text = viewModel.initPlant.plantName
         tf.textColor = .black
         tf.tintColor = .black
-        tf.placeholder = viewModel.initPlant.plantName
         tf.clearButtonMode = .whileEditing
         tf.returnKeyType = .done
         return tf
@@ -71,12 +74,37 @@ class EditPlantViewController: UIViewController {
     }()
     private lazy var nicknameCountLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(viewModel.initPlant.plantName.count)/10"
+        label.text = "\(nickname.count)/10"
+        label.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
         label.font = .captionB1
         label.textColor = .gray5
         label.textAlignment = .right
-        label.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
         return label
+    }()
+    private let waterView = UIView()
+    private let waterMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "일 마다 물주기"
+        label.font = .captionM1
+        label.textColor = .gray6
+        label.textAlignment = .right
+        return label
+    }()
+    private lazy var waterTextField: UITextField = {
+        let tf = UITextField()
+        tf.text = "\(initWaterCycle)"
+        tf.placeholder = "\(initWaterCycle)"
+        tf.font = .bodyB1
+        tf.textColor = .gray6
+        tf.textAlignment = .left
+        tf.tintColor = .gray6
+        tf.keyboardType = .numberPad
+        return tf
+    }()
+    private let waterUnderlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray2
+        return view
     }()
     private let completeButton: UIButton = {
         let button = UIButton()
@@ -92,6 +120,10 @@ class EditPlantViewController: UIViewController {
         return button
     }()
     
+    private let plantIdx: Int
+    private let nickname: String
+    private let initWaterCycle: Int
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -100,28 +132,35 @@ class EditPlantViewController: UIViewController {
         bind()
     }
     
+    init(_ plantIdx: Int, plantNickname: String, waterCycle: Int, imgURL: String) {
+        self.viewModel = EditPlantViewModel(plantIdx, plantNickname: plantNickname, waterCycle: waterCycle, imgURL: imgURL)
+        self.plantIdx = plantIdx
+        self.nickname = plantNickname
+        self.initWaterCycle = waterCycle
+        
+        super.init(nibName: nil, bundle: nil)
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if let imgURL = URL(string: imgURL) {
+                plantImageView.kf.setImage(with: imgURL) { [weak self] _ in
+                    guard let self else { return }
+                    initialImage = plantImageView.image
+                }
+            }
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func setNavigationBar() {
         self.navigationItem.title = "식물 수정"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
-        self.navigationController?.navigationBar.barTintColor = .white
     }
     
     func bind() {
-        output.showImgSettingAlert.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            showImageSettingAlert { state in
-                switch state {
-                case .newImage:
-                    self.selectNewImage.accept(())
-                case .defaultImage:
-                    self.changeToDefaultImage.accept(())
-                case .cancle:
-                    break
-                }
-            }
-        }.disposed(by: viewModel.disposeBag)
-        
         output.showImagePicker.drive { [weak self] _ in
             guard let self = self else { return }
             
@@ -131,41 +170,27 @@ class EditPlantViewController: UIViewController {
                     case .denied:
                         self.moveToSetting()
                     case .authorized:
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-                            ImagePickerViewController.shared.showPhotoPicker(viewController: self)
-                        }
+                        ImagePickerViewController.shared.showPhotoPicker(viewController: self)
                         
                         ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
-                            guard let self = self else { return }
-                            
-                            plantImageView.load(url: URL(string: imageString)!) {
-                                self.currentImage.accept(self.plantImageView.image)
-                            }
+                            guard let self else { return }
+                            plantImageView.kf.setImage(with: URL(string: imageString))
                         }
+                        
                     case .limited:
                         let imagePickerVC = ImagePickerViewController()
                         
                         self.present(imagePickerVC, animated: true)
                         
                         imagePickerVC.didSelectImage = { [weak self] imageString in
-                            guard self != nil else { return }
-                            self?.plantImageView.load(url: URL(string: imageString)!) {
-                                self?.currentImage.accept(self?.plantImageView.image)
-                            }
+                            guard let self else { return }
+                            plantImageView.kf.setImage(with: URL(string: imageString))
                         }
                     default:
                         print("\(state)")
                     }
                 }
             }
-        }.disposed(by: viewModel.disposeBag)
-        
-        output.changeDefaultImage.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            plantImageView.image = UIImage(named: "AddPlant")
-            currentImage.accept(UIImage(named: "AddPlant"))
         }.disposed(by: viewModel.disposeBag)
         
         output.newNickname.drive { [weak self] nickname in
@@ -176,6 +201,13 @@ class EditPlantViewController: UIViewController {
             nicknameCountLabel.partiallyChanged(targetString: "/10", font: .captionM1, color: .gray5)
             nicknameCountLabel.textColor = nickname.count > 0 ? .black : .gray5
             underlineView.backgroundColor = nickname.count > 0 ? .black : .gray2
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.newCycle.drive { [weak self] cycle in
+            guard let self = self else { return }
+            
+            waterTextField.text = cycle
+            waterUnderlineView.backgroundColor = cycle == "\(initWaterCycle)" ? .gray2 : .black
         }.disposed(by: viewModel.disposeBag)
         
         output.buttonState.drive { [weak self] state in
@@ -193,12 +225,22 @@ class EditPlantViewController: UIViewController {
             case .onClick:
                 completeButton.backgroundColor = .seaGreenDark3
                 completeButton.configuration?.baseForegroundColor = .white
+            case .none:
+                completeButton.isEnabled = false
+                completeButton.backgroundColor = .gray1
+                completeButton.configuration?.baseForegroundColor = .gray3
             }
+        }.disposed(by: viewModel.disposeBag)
+        
+        output.popToPreviousView.drive { [weak self] _ in
+            guard let self else { return }
+            
+            navigationController?.popViewController(animated: true)
         }.disposed(by: viewModel.disposeBag)
     }
     
     func setConstraints() {
-        [plantView, nicknameView, completeButton].forEach {
+        [plantView, nicknameView, waterView, completeButton].forEach {
             view.addSubview($0)
         }
         
@@ -208,6 +250,10 @@ class EditPlantViewController: UIViewController {
         
         [nicknameTextField, nicknameCountLabel, underlineView].forEach {
             nicknameView.addSubview($0)
+        }
+        
+        [waterMessageLabel, waterTextField, waterUnderlineView].forEach {
+            waterView.addSubview($0)
         }
         
         plantView.snp.makeConstraints { make in
@@ -249,10 +295,37 @@ class EditPlantViewController: UIViewController {
             make.height.equalTo(1)
         }
         
+        waterView.snp.makeConstraints { make in
+            make.top.equalTo(nicknameView.snp.bottom).offset(32)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(56)
+        }
+        
+        waterTextField.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        waterMessageLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        waterUnderlineView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
         completeButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
             make.height.equalTo(48)
         }
+    }
+}
+
+extension Reactive where Base: UIImageView {
+    var imageChanged: Observable<UIImage?> {
+        return self.observe(UIImage.self, "image")
     }
 }
