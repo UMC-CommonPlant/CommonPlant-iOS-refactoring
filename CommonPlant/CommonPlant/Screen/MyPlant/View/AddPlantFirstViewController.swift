@@ -77,6 +77,8 @@ class AddPlantFirstViewController: UIViewController {
         self.navigationItem.title = "식물 등록(1/2)"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
         self.navigationController?.navigationBar.barTintColor = .white
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = .black
     }
     
     private func setConstraints() {
