@@ -10,5 +10,5 @@ import Foundation
 struct PostPlantRequest: Codable {
     let plantName, nickname, place, waterCycle: String
     let lastWateredDate: String
-    let imageData: Data?
+    let imageData: Data
 }

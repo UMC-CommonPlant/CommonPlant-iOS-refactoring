@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: MyPlantViewController(plantIdx: 15))
+        window?.rootViewController = UINavigationController(rootViewController: AddPlantFirstViewController())
         window?.makeKeyAndVisible()
     }
     

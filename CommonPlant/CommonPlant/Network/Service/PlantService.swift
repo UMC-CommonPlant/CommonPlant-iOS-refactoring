@@ -54,10 +54,8 @@ extension PlantService: BaseTargetType {
         case let .postPlant(request):
             var multiPartData: [Moya.MultipartFormData] = []
             
-            if let profileImage = request.imageData {
-                let profileImageData = MultipartFormData(provider: .data(profileImage), name: "image", fileName: "image.jpeg", mimeType: "image/jpeg")
+            let profileImageData = MultipartFormData(provider: .data(request.imageData), name: "image", fileName: "image.jpeg", mimeType: "image/jpeg")
                 multiPartData.append(profileImageData)
-            }
             
             let plant: [String: Any] = [
                 "plantName" : request.plantName,

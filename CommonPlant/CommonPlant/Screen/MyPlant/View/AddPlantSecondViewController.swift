@@ -15,8 +15,7 @@ class AddPlantSecondViewController: UIViewController {
     private let viewModel = AddPlantSecondViewModel()
     private lazy var input = AddPlantSecondViewModel.Input(
         imageDidTap: plantImageView.rx.tapGesture().map { _ in }.asObservable(),
-        selectedNewImage: selectNewImage.asObservable(),
-        selectedDefaultImage: changeToDefaultImage.asObservable(),
+        selectedImage: selectedImage.asObservable(),
         editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
         endEditingNickname: nicknameTextField.rx.controlEvent(.editingDidEndOnExit).withLatestFrom(nicknameTextField.rx.text).asObservable(),
         placeDidTap: placeBackgroundView.rx.tapGesture().map { _ in }.asObservable(),
@@ -28,17 +27,14 @@ class AddPlantSecondViewController: UIViewController {
         selectedDate: datePickerCollectionView.rx.itemSelected.asObservable(),
         cancleBtnDidTap: cancleButton.rx.tap.asObservable(),
         submitBtnDidTap: submitButton.rx.tap.map { [weak self] _ in
-            guard let self, let plantImg = plantImageView.image, let name = nameLabel.text, let nickname = nicknameTextField.text, let place = selectedPlace, let waterCycle = wateredTextField.text, let defaultWaterCycle = wateredTextField.placeholder, let lastWatered = selectedDateLabel.text else {
-                return PostPlantRequest(plantName: "", nickname: "", place: "", waterCycle: "", lastWateredDate: "", imageData: nil)
+            guard let self, let plantImg = plantImageView.image, let data = plantImg.jpegData(compressionQuality: 1.0), let name = nameLabel.text, var nickname = nicknameTextField.text, let place = selectedPlace, let waterCycle = wateredTextField.text, let defaultWaterCycle = wateredTextField.placeholder, let lastWatered = selectedDateLabel.text else {
+                return PostPlantRequest(plantName: "", nickname: "", place: "", waterCycle: "", lastWateredDate: "", imageData: Data())
             }
-            
-            let data: Data? = plantImg == UIImage(named: "AddPlant") ? nil : plantImg.jpegData(compressionQuality: 1.0)
             
             return PostPlantRequest(plantName: name, nickname: nickname, place: place.code, waterCycle: waterCycle.isEmpty ? defaultWaterCycle : waterCycle, lastWateredDate: lastWatered.replacingOccurrences(of: " ", with: ""), imageData: data)
         }.asObservable())
     private lazy var output = viewModel.transform(input: input)
-    private let selectNewImage = PublishRelay<Void>()
-    private let changeToDefaultImage = PublishRelay<Void>()
+    private let selectedImage = PublishRelay<Void>()
     private var selectedPlace: PlaceListResult?
     
     private let scrollView: UIView = {
@@ -353,21 +349,6 @@ class AddPlantSecondViewController: UIViewController {
             cell.isUserInteractionEnabled = !isAfterToday
         }.disposed(by: viewModel.disposeBag)
         
-        output.showImgSettingAlert.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            self.showImageSettingAlert { state in
-                switch state {
-                case .newImage:
-                    self.selectNewImage.accept(())
-                case .defaultImage:
-                    self.changeToDefaultImage.accept(())
-                case .cancle:
-                    break
-                }
-            }
-        }.disposed(by: viewModel.disposeBag)
-        
         output.showImagePicker.drive { [weak self] _ in
             guard let self = self else { return }
             
@@ -385,6 +366,7 @@ class AddPlantSecondViewController: UIViewController {
                         ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
                             guard let self = self else { return }
                             plantImageView.load(url: URL(string: imageString)!)
+                            selectedImage.accept(())
                         }
                     case .limited:
                         let imagePickerVC = ImagePickerViewController()
@@ -392,20 +374,15 @@ class AddPlantSecondViewController: UIViewController {
                         self.present(imagePickerVC, animated: true)
                         
                         imagePickerVC.didSelectImage = { [weak self] imageString in
-                            guard self != nil else { return }
-                            self?.plantImageView.load(url: URL(string: imageString)!)
+                            guard let self else { return }
+                            plantImageView.load(url: URL(string: imageString)!)
+                            selectedImage.accept(())
                         }
                     default:
                         print("\(state)")
                     }
                 }
             }
-        }.disposed(by: viewModel.disposeBag)
-        
-        output.changeDefaultImage.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            plantImageView.image = UIImage(named: "AddPlant")
         }.disposed(by: viewModel.disposeBag)
         
         output.nicknameText.drive { [weak self] nickname in
