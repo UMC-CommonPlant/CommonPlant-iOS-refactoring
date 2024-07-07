@@ -10,9 +10,9 @@ import Moya
 
 enum PlantService {
     case searchPlant(name: String)
-    case getPlaceList
+    case fetchPlaceList
     case postPlant(request: PostPlantRequest)
-    case getPlantDetail(idx: Int)
+    case fetchPlantDetail(idx: Int)
     case putPlant(request: PutPlantRequest)
     case deletePlant(idx: Int)
 }
@@ -22,11 +22,11 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(_):
             URLConstant.searchPlantWithWaterDay
-        case .getPlaceList:
+        case .fetchPlaceList:
             URLConstant.placeList
         case .postPlant(_):
             URLConstant.postPlant
-        case .getPlantDetail(idx: let idx):
+        case .fetchPlantDetail(let idx):
             URLConstant.getPlant + "/\(idx)"
         case .putPlant(let request):
             URLConstant.putPlant + "/\(request.plantIdx)"
@@ -37,13 +37,11 @@ extension PlantService: BaseTargetType {
     
     var method: Moya.Method {
         switch self {
-        case .searchPlant(_), .getPlaceList:
+        case .searchPlant(_), .fetchPlantDetail(_), .fetchPlaceList:
             return .get
         case .postPlant(_):
             return .post
-        case .getPlantDetail(idx: let idx):
-            return .get
-        case .putPlant(request: let request):
+        case .putPlant(_):
             return .put
         case .deletePlant(_):
             return .delete
@@ -54,7 +52,7 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(let name):
             return .requestParameters(parameters: ["name": name], encoding: URLEncoding.default)
-        case .getPlaceList, .deletePlant(_):
+        case .fetchPlaceList, .deletePlant(_):
             return .requestPlain
         case let .postPlant(request):
             var multiPartData: [Moya.MultipartFormData] = []
@@ -75,7 +73,7 @@ extension PlantService: BaseTargetType {
                 multiPartData.append(plantFormData)
             }
             return .uploadMultipart(multiPartData)
-        case .getPlantDetail(_):
+        case .fetchPlantDetail(_):
             return .requestPlain
         case let .putPlant(request):
             var multiPartData: [Moya.MultipartFormData] = []
@@ -102,13 +100,13 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(_):
             return NetworkConstant.noHeader
-        case .getPlaceList, .deletePlant(_):
+        case .fetchPlaceList, .deletePlant(_):
             return NetworkConstant.hasTokenHeader
         case .postPlant(_), .putPlant(_):
             var headers = NetworkConstant.hasMultipartHeader
             headers.merge(NetworkConstant.hasTokenHeader) { (_, new) in new }
             return headers
-        case .getPlantDetail(idx: let idx):
+        case .fetchPlantDetail(_):
             return NetworkConstant.hasTokenHeader
         }
     }

@@ -48,7 +48,7 @@ extension MyPlantViewModel: ViewModelType {
         input.enterMyPlant.bind { [weak self] _ in
             guard let self else { return }
             
-            PlantAPI.shared.getPlantDetail(index: plantIdx)
+            PlantAPI.shared.fetchPlantDetail(index: plantIdx)
                 .subscribe { [weak self] result in
                     guard let self else { return }
                     switch result {

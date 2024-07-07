@@ -24,8 +24,8 @@ class PlantAPI {
             .map(SearchPlantResponse.self)
     }
     
-    func getPlaceListToAddPlant() -> Single<PlaceListResponse> {
-        return provider.rx.request(.getPlaceList)
+    func fetchPlaceListToAddPlant() -> Single<PlaceListResponse> {
+        return provider.rx.request(.fetchPlaceList)
             .map(PlaceListResponse.self)
     }
     
@@ -35,8 +35,8 @@ class PlantAPI {
             .map(PostPlantResponse.self)
     }
     
-    func getPlantDetail(index plantIdx: Int) -> Single<PlantDetailResponse> {
-        return provider.rx.request(.getPlantDetail(idx: plantIdx))
+    func fetchPlantDetail(index plantIdx: Int) -> Single<PlantDetailResponse> {
+        return provider.rx.request(.fetchPlantDetail(idx: plantIdx))
             .map(PlantDetailResponse.self)
     }
     

@@ -30,7 +30,7 @@ class AddPlantSecondViewModel {
         currentMonth.accept(dateToMonthString(Date()))
         updateDays()
         
-        PlantAPI.shared.getPlaceListToAddPlant()
+        PlantAPI.shared.fetchPlaceListToAddPlant()
             .subscribe { [weak self] result in
                 guard let self = self else { return }
                 switch result {
