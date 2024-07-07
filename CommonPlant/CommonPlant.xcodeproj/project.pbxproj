@@ -87,6 +87,7 @@
 		C0D6E9012BC3A97300A352DD /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6E9002BC3A97300A352DD /* LoginService.swift */; };
 		C0D6E9042BC3B37400A352DD /* KakaoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6E9032BC3B37400A352DD /* KakaoResponse.swift */; };
 		C0D6E9062BC3B45C00A352DD /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6E9052BC3B45C00A352DD /* LoginAPI.swift */; };
+		C0DBBD762C3A5F0A001D59D5 /* DeletePlantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DBBD752C3A5F0A001D59D5 /* DeletePlantResponse.swift */; };
 		C0E2700D2B981E93006492B0 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E2700C2B981E93006492B0 /* CalendarViewModel.swift */; };
 		C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E2700F2B982D45006492B0 /* CalendarViewController.swift */; };
 		C0E270142B984108006492B0 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E270132B984108006492B0 /* CalendarCollectionViewCell.swift */; };
@@ -205,6 +206,7 @@
 		C0D6E9002BC3A97300A352DD /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		C0D6E9032BC3B37400A352DD /* KakaoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoResponse.swift; sourceTree = "<group>"; };
 		C0D6E9052BC3B45C00A352DD /* LoginAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAPI.swift; sourceTree = "<group>"; };
+		C0DBBD752C3A5F0A001D59D5 /* DeletePlantResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePlantResponse.swift; sourceTree = "<group>"; };
 		C0E2700C2B981E93006492B0 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		C0E2700F2B982D45006492B0 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		C0E270132B984108006492B0 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				C0602A4E2C04B90A0069C4B9 /* PostPlantResponse.swift */,
 				C09B8E7A2C0DED4B00375EC7 /* PlantDetailResponse.swift */,
 				C069BEB42C2AC85200B007FB /* PutPlantResponse.swift */,
+				C0DBBD752C3A5F0A001D59D5 /* DeletePlantResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -1010,6 +1013,7 @@
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
 				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
+				C0DBBD762C3A5F0A001D59D5 /* DeletePlantResponse.swift in Sources */,
 				F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */,
 				C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,

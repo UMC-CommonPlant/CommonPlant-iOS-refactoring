@@ -45,4 +45,9 @@ class PlantAPI {
         return provider.rx.request(.putPlant(request: request))
             .map(PutPlantResponse.self)
     }
+    
+    func deletePlant(index plantIdx: Int) -> Single<DeletePlantResponse> {
+        return provider.rx.request(.deletePlant(idx: plantIdx))
+            .map(DeletePlantResponse.self)
+    }
 }

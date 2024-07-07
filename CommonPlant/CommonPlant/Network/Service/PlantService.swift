@@ -14,6 +14,7 @@ enum PlantService {
     case postPlant(request: PostPlantRequest)
     case getPlantDetail(idx: Int)
     case putPlant(request: PutPlantRequest)
+    case deletePlant(idx: Int)
 }
 
 extension PlantService: BaseTargetType {
@@ -29,6 +30,8 @@ extension PlantService: BaseTargetType {
             URLConstant.getPlant + "/\(idx)"
         case .putPlant(let request):
             URLConstant.putPlant + "/\(request.plantIdx)"
+        case .deletePlant(let idx):
+            URLConstant.deletePlant + "/\(idx)"
         }
     }
     
@@ -42,6 +45,8 @@ extension PlantService: BaseTargetType {
             return .get
         case .putPlant(request: let request):
             return .put
+        case .deletePlant(_):
+            return .delete
         }
     }
     
@@ -49,7 +54,7 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(let name):
             return .requestParameters(parameters: ["name": name], encoding: URLEncoding.default)
-        case .getPlaceList:
+        case .getPlaceList, .deletePlant(_):
             return .requestPlain
         case let .postPlant(request):
             var multiPartData: [Moya.MultipartFormData] = []
@@ -97,7 +102,7 @@ extension PlantService: BaseTargetType {
         switch self {
         case .searchPlant(_):
             return NetworkConstant.noHeader
-        case .getPlaceList:
+        case .getPlaceList, .deletePlant(_):
             return NetworkConstant.hasTokenHeader
         case .postPlant(_), .putPlant(_):
             var headers = NetworkConstant.hasMultipartHeader

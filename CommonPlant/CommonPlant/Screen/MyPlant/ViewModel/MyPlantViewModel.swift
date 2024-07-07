@@ -91,9 +91,18 @@ extension MyPlantViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         let popToPreviousView = PublishSubject<Void>()
-        input.alertDeleteBtnDidTap.bind { _ in
-            // TODO: 식물 삭제 API
-            popToPreviousView.onNext(())
+        input.alertDeleteBtnDidTap.bind { [weak self] _ in
+            guard let self else { return }
+            PlantAPI.shared.deletePlant(index: plantIdx)
+                .subscribe { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let response):
+                    popToPreviousView.onNext(())
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }.disposed(by: self.disposeBag)
         }.disposed(by: disposeBag)
         
         
