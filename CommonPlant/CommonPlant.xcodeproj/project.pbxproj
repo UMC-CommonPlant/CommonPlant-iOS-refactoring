@@ -98,19 +98,19 @@
 		F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */; };
 		F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */; };
 		F91E47892A53E3CA008E07A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F91E47882A53E3CA008E07A9 /* Assets.xcassets */; };
-		F91E478C2A53E3CA008E07A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */; };
 		F91E47982A53EDFF008E07A9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F91E47972A53EDFF008E07A9 /* SnapKit */; };
 		F91E479B2A53EE31008E07A9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F91E479A2A53EE31008E07A9 /* Kingfisher */; };
 		F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47A92A569128008E07A9 /* UIColor+Extension.swift */; };
 		F91E47AC2A569666008E07A9 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47AB2A569666008E07A9 /* empty.swift */; };
+		F9202E6A2C022347005C0796 /* CetegoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */; };
 		F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93403FF2A81F89300F0267B /* SearchResultViewController.swift */; };
-		F93404022A81F9F400F0267B /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */; };
+		F93404022A81F9F400F0267B /* PlantDictTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404012A81F9F400F0267B /* PlantDictTableViewCell.swift */; };
 		F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404032A8207B000F0267B /* SearchResultViewModel.swift */; };
 		F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404052A8207F300F0267B /* SearchResultModel.swift */; };
 		F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */; };
 		F9447DA32A76CA3100903C28 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA52A7795DF00903C28 /* PlantSearchViewModel.swift */; };
-		F9447DA82A77A71700903C28 /* PlantSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA72A77A71700903C28 /* PlantSearchCollectionViewCell.swift */; };
+		F9447DA82A77A71700903C28 /* PlantCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA72A77A71700903C28 /* PlantCategoryCollectionViewCell.swift */; };
 		F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */; };
 		F9447DAD2A78E52200903C28 /* PopularSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */; };
 		F94BB2672B57E62900CB3504 /* CommonCTAButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94BB2662B57E62900CB3504 /* CommonCTAButton.swift */; };
@@ -125,11 +125,21 @@
 		F9B6E9932BCE743B000F05D4 /* MyPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */; };
 		F9B6E9952BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9942BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift */; };
 		F9B6E9982BCFBAA0000F05D4 /* PlantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9972BCFBAA0000F05D4 /* PlantCollectionViewCell.swift */; };
+		F9C200F92C0F382700CB6078 /* AddFriendsToPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C200F82C0F382700CB6078 /* AddFriendsToPlaceViewController.swift */; };
+		F9C226C82BFCBCF700B14D11 /* PlantCetegoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C226C72BFCBCF700B14D11 /* PlantCetegoryViewController.swift */; };
+		F9C226CC2BFCF31700B14D11 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9C226CA2BFCF31700B14D11 /* LaunchScreen.storyboard */; };
 		F9D0CCA22A583432006D688C /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA12A583432006D688C /* MainTabBarController.swift */; };
 		F9D0CCA42A583442006D688C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA32A583442006D688C /* MainViewController.swift */; };
 		F9D0CCA82A584025006D688C /* MainMyPlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */; };
 		F9D0CCAA2A586208006D688C /* MainMyPlantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */; };
+		F9D433E52C202B47002C8C27 /* FriendRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D433E42C202B47002C8C27 /* FriendRequestViewController.swift */; };
+		F9D433E82C2048D7002C8C27 /* FriendRequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D433E72C2048D7002C8C27 /* FriendRequestTableViewCell.swift */; };
+		F9D5C49B2C16F3410064028D /* AddFriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D5C49A2C16F3410064028D /* AddFriendsTableViewCell.swift */; };
+		F9D5C49D2C1838F00064028D /* SelectedFriendsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D5C49C2C1838F00064028D /* SelectedFriendsCollectionViewCell.swift */; };
+		F9D5C49F2C1850FF0064028D /* AddFriendsToPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D5C49E2C1850FF0064028D /* AddFriendsToPlaceViewModel.swift */; };
 		F9E6AEB42B931CB7001CA1AC /* PostCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E6AEB32B931CB7001CA1AC /* PostCodeViewController.swift */; };
+		F9F52C342C2C40E5006BCC10 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F52C332C2C40E5006BCC10 /* NetworkError.swift */; };
+		F9F52C362C2C4954006BCC10 /* NetworkErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F52C352C2C4954006BCC10 /* NetworkErrorResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -219,17 +229,17 @@
 		F91E477F2A53E3C9008E07A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F91E47812A53E3C9008E07A9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F91E47882A53E3CA008E07A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		F91E478B2A53E3CA008E07A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F91E478D2A53E3CA008E07A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F91E47A92A569128008E07A9 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		F91E47AB2A569666008E07A9 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
+		F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CetegoryDetailViewController.swift; sourceTree = "<group>"; };
 		F93403FF2A81F89300F0267B /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
-		F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		F93404012A81F9F400F0267B /* PlantDictTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDictTableViewCell.swift; sourceTree = "<group>"; };
 		F93404032A8207B000F0267B /* SearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewModel.swift; sourceTree = "<group>"; };
 		F93404052A8207F300F0267B /* SearchResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultModel.swift; sourceTree = "<group>"; };
 		F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPlaceViewController.swift; sourceTree = "<group>"; };
 		F9447DA52A7795DF00903C28 /* PlantSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewModel.swift; sourceTree = "<group>"; };
-		F9447DA72A77A71700903C28 /* PlantSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		F9447DA72A77A71700903C28 /* PlantCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoplularSearchModel.swift; sourceTree = "<group>"; };
 		F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		F94BB2662B57E62900CB3504 /* CommonCTAButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCTAButton.swift; sourceTree = "<group>"; };
@@ -242,11 +252,21 @@
 		F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlaceViewController.swift; sourceTree = "<group>"; };
 		F9B6E9942BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFriendsCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9B6E9972BCFBAA0000F05D4 /* PlantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantCollectionViewCell.swift; sourceTree = "<group>"; };
+		F9C200F82C0F382700CB6078 /* AddFriendsToPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendsToPlaceViewController.swift; sourceTree = "<group>"; };
+		F9C226C72BFCBCF700B14D11 /* PlantCetegoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantCetegoryViewController.swift; sourceTree = "<group>"; };
+		F9C226CB2BFCF31700B14D11 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F9D0CCA12A583432006D688C /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		F9D0CCA32A583442006D688C /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMyPlaceCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMyPlantCollectionViewCell.swift; sourceTree = "<group>"; };
+		F9D433E42C202B47002C8C27 /* FriendRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestViewController.swift; sourceTree = "<group>"; };
+		F9D433E72C2048D7002C8C27 /* FriendRequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestTableViewCell.swift; sourceTree = "<group>"; };
+		F9D5C49A2C16F3410064028D /* AddFriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendsTableViewCell.swift; sourceTree = "<group>"; };
+		F9D5C49C2C1838F00064028D /* SelectedFriendsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedFriendsCollectionViewCell.swift; sourceTree = "<group>"; };
+		F9D5C49E2C1850FF0064028D /* AddFriendsToPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendsToPlaceViewModel.swift; sourceTree = "<group>"; };
 		F9E6AEB32B931CB7001CA1AC /* PostCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCodeViewController.swift; sourceTree = "<group>"; };
+		F9F52C332C2C40E5006BCC10 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		F9F52C352C2C4954006BCC10 /* NetworkErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,7 +516,7 @@
 			isa = PBXGroup;
 			children = (
 				C078D7C62BE8A8E7006D808A /* SplashViewController.swift */,
-				F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */,
+				F9C226CA2BFCF31700B14D11 /* LaunchScreen.storyboard */,
 			);
 			path = Launch;
 			sourceTree = "<group>";
@@ -682,6 +702,8 @@
 				C078D7CF2BEA0D98006D808A /* NetworkConstant.swift */,
 				C078D7C92BEA0A09006D808A /* URLConstant.swift */,
 				C078D7CD2BEA0CE8006D808A /* BaseTargetType.swift */,
+				F9F52C332C2C40E5006BCC10 /* NetworkError.swift */,
+				F9F52C352C2C4954006BCC10 /* NetworkErrorResponse.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -744,6 +766,7 @@
 				F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */,
 				F9E6AEB32B931CB7001CA1AC /* PostCodeViewController.swift */,
 				F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */,
+				F9C200F82C0F382700CB6078 /* AddFriendsToPlaceViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -752,6 +775,7 @@
 			isa = PBXGroup;
 			children = (
 				F9595C182B85D3A600B8785D /* RegisterPlaceViewModel.swift */,
+				F9D5C49E2C1850FF0064028D /* AddFriendsToPlaceViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -802,11 +826,11 @@
 		F9A1FB322A6E532800F346DE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F9C226C92BFCE59B00B14D11 /* Cells */,
 				F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */,
-				F9447DA72A77A71700903C28 /* PlantSearchCollectionViewCell.swift */,
-				F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */,
 				F93403FF2A81F89300F0267B /* SearchResultViewController.swift */,
-				F93404012A81F9F400F0267B /* SearchResultTableViewCell.swift */,
+				F9C226C72BFCBCF700B14D11 /* PlantCetegoryViewController.swift */,
+				F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -841,6 +865,18 @@
 			children = (
 				F9B6E9942BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift */,
 				F9B6E9972BCFBAA0000F05D4 /* PlantCollectionViewCell.swift */,
+				F9D5C49A2C16F3410064028D /* AddFriendsTableViewCell.swift */,
+				F9D5C49C2C1838F00064028D /* SelectedFriendsCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		F9C226C92BFCE59B00B14D11 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F9447DA72A77A71700903C28 /* PlantCategoryCollectionViewCell.swift */,
+				F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */,
+				F93404012A81F9F400F0267B /* PlantDictTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -848,12 +884,22 @@
 		F9D0CCB12A5BB635006D688C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F9D433E62C204811002C8C27 /* Cells */,
 				F9D0CCA12A583432006D688C /* MainTabBarController.swift */,
 				F9D0CCA32A583442006D688C /* MainViewController.swift */,
-				F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */,
-				F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */,
+				F9D433E42C202B47002C8C27 /* FriendRequestViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		F9D433E62C204811002C8C27 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F9D0CCA92A586208006D688C /* MainMyPlantCollectionViewCell.swift */,
+				F9D0CCA72A584025006D688C /* MainMyPlaceCollectionViewCell.swift */,
+				F9D433E72C2048D7002C8C27 /* FriendRequestTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -938,7 +984,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F91E478C2A53E3CA008E07A9 /* LaunchScreen.storyboard in Resources */,
+				F9C226CC2BFCF31700B14D11 /* LaunchScreen.storyboard in Resources */,
 				F91E47892A53E3CA008E07A9 /* Assets.xcassets in Resources */,
 				C0A67DBC2BF4662D003F556D /* GoogleService-Info.plist in Resources */,
 			);
@@ -979,6 +1025,8 @@
 				F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */,
 				C072D3572BCFA5D6009F1492 /* SignUpService.swift in Sources */,
 				C07DF8842A59844400CDC5CC /* UIView+Extension.swift in Sources */,
+				F9C226C82BFCBCF700B14D11 /* PlantCetegoryViewController.swift in Sources */,
+				F9D5C49D2C1838F00064028D /* SelectedFriendsCollectionViewCell.swift in Sources */,
 				C007F63F2B5AAFA500CD6252 /* AddPlantFirstViewModel.swift in Sources */,
 				C007F6452B5F712200CD6252 /* AddPlantSecondViewModel.swift in Sources */,
 				C02322B82A6AC0D6004D78CC /* EditUserInfoViewModel.swift in Sources */,
@@ -988,20 +1036,23 @@
 				C0E270142B984108006492B0 /* CalendarCollectionViewCell.swift in Sources */,
 				F9447DAD2A78E52200903C28 /* PopularSearchCollectionViewCell.swift in Sources */,
 				C0D6E8FF2BBFD72500A352DD /* CalendarPlant.swift in Sources */,
+				F9D5C49B2C16F3410064028D /* AddFriendsTableViewCell.swift in Sources */,
 				C0D6E8FE2BBFD72500A352DD /* CalendarPlace.swift in Sources */,
 				C059A2712A5A4B54005C0449 /* EditUserInfoViewController.swift in Sources */,
 				F91E47802A53E3C9008E07A9 /* AppDelegate.swift in Sources */,
 				C0409C512BD62D5700F5A002 /* PostUserResponse.swift in Sources */,
-				F9447DA82A77A71700903C28 /* PlantSearchCollectionViewCell.swift in Sources */,
+				F9447DA82A77A71700903C28 /* PlantCategoryCollectionViewCell.swift in Sources */,
 				C078D7D02BEA0D98006D808A /* NetworkConstant.swift in Sources */,
 				C0D6E9012BC3A97300A352DD /* LoginService.swift in Sources */,
 				C059A2732A5AA995005C0449 /* UILabel+Extension.swift in Sources */,
 				C0A67DBE2BF47835003F556D /* PlantService.swift in Sources */,
 				F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */,
 				C073EBE32B738F9E006980BB /* DatePickerCollectionViewCell.swift in Sources */,
-				F93404022A81F9F400F0267B /* SearchResultTableViewCell.swift in Sources */,
+				F93404022A81F9F400F0267B /* PlantDictTableViewCell.swift in Sources */,
+				F9D5C49F2C1850FF0064028D /* AddFriendsToPlaceViewModel.swift in Sources */,
 				C0E2700D2B981E93006492B0 /* CalendarViewModel.swift in Sources */,
 				C0D6E9042BC3B37400A352DD /* KakaoResponse.swift in Sources */,
+				F9F52C342C2C40E5006BCC10 /* NetworkError.swift in Sources */,
 				C0A0D4DD2A73E96800426514 /* SignUpViewModel.swift in Sources */,
 				C069D2B72AC0469A00A62E04 /* CommonMenuView.swift in Sources */,
 				F9B6E9932BCE743B000F05D4 /* MyPlaceViewController.swift in Sources */,
@@ -1016,6 +1067,8 @@
 				C0DBBD762C3A5F0A001D59D5 /* DeletePlantResponse.swift in Sources */,
 				F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */,
 				C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */,
+				F9D433E82C2048D7002C8C27 /* FriendRequestTableViewCell.swift in Sources */,
+				F9202E6A2C022347005C0796 /* CetegoryDetailViewController.swift in Sources */,
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
 				C0A67DC72BF47E56003F556D /* PlantAPI.swift in Sources */,
 				C0602A4D2C04B55F0069C4B9 /* PostPlantRequest.swift in Sources */,
@@ -1032,9 +1085,11 @@
 				F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */,
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
 				C078D7CE2BEA0CE8006D808A /* BaseTargetType.swift in Sources */,
+				F9D433E52C202B47002C8C27 /* FriendRequestViewController.swift in Sources */,
 				C027A08E2A909BB0009289E9 /* ImagePickerViewModel.swift in Sources */,
 				F9D0CCA82A584025006D688C /* MainMyPlaceCollectionViewCell.swift in Sources */,
 				C0A6DCEA2A978949001A2E11 /* MyPlantModel.swift in Sources */,
+				F9F52C362C2C4954006BCC10 /* NetworkErrorResponse.swift in Sources */,
 				C027A0972A90A1D8009289E9 /* UIViewController+Extension.swift in Sources */,
 				C044E5A82A65698800A8B3C6 /* MyPageViewModel.swift in Sources */,
 				C078D7C02BE7AC54006D808A /* TokenService.swift in Sources */,
@@ -1052,6 +1107,7 @@
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
 				C069BEB32C2AC57C00B007FB /* PutPlantRequest.swift in Sources */,
 				C0C3FE452BD78C0700479891 /* NetworkLogger.swift in Sources */,
+				F9C200F92C0F382700CB6078 /* AddFriendsToPlaceViewController.swift in Sources */,
 				C06034942BDFBFC800277AC6 /* KeychainManager.swift in Sources */,
 				C073EBE12B736B6F006980BB /* PlaceCollectionViewCell.swift in Sources */,
 				C0A6DCEC2A9791D5001A2E11 /* MyPlantViewModel.swift in Sources */,
@@ -1066,10 +1122,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		F91E478A2A53E3CA008E07A9 /* LaunchScreen.storyboard */ = {
+		F9C226CA2BFCF31700B14D11 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				F91E478B2A53E3CA008E07A9 /* Base */,
+				F9C226CB2BFCF31700B14D11 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1212,7 +1268,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1253,7 +1309,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

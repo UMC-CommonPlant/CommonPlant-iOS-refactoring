@@ -7,21 +7,21 @@
 
 import UIKit
 
-class SearchResultTableViewCell: UITableViewCell {
-    static let identifier = "SearchResultTableViewCell"
+class PlantDictTableViewCell: UITableViewCell {
+    static let identifier = "PlantDictTableViewCell"
     let plantImage = UIImageView()
     let nameLabel = UILabel()
     let scientificNameLabel = UILabel()
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-           super.init(style: style, reuseIdentifier: reuseIdentifier)
-           configureCell()
-       }
-
-   required init?(coder: NSCoder) {
-       fatalError("init(coder:) has not been implemented")
-   }
-
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configureCell()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -46,7 +46,7 @@ class SearchResultTableViewCell: UITableViewCell {
         scientificNameLabel.font = .bodyM4
         scientificNameLabel.text = model.scientificName
     }
-
+    
     private func setConstraints() {
         [plantImage, nameLabel, scientificNameLabel].forEach {
             contentView.addSubview($0)
