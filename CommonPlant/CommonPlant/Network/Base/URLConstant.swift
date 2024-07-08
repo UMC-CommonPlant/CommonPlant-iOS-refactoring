@@ -26,4 +26,16 @@ struct URLConstant {
     
     // MARK: History
     static let fetchWordList = "/recommend/getRecommendInfos"
+
+    // MARK: Plant
+    static let postPlant = "/plant/add"
+    static let putPlant = "/plant/update"
+    static let deletePlant = "/plant/delete"
+    
+    // MARK: Place
+    static let placeList = "/place/user"
+    static let getPlant = "/plant"
+    
+    // MARK: Info
+    static let searchPlantWithWaterDay = "/info/searchInfoPlus"
 }

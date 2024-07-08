@@ -9,26 +9,33 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxRelay
+import RxGesture
 
 class AddPlantSecondViewController: UIViewController {
     private let viewModel = AddPlantSecondViewModel()
-    private lazy var input = AddPlantSecondViewModel
-        .Input(imageDidTap: plantImageView.rx.tapGesture().map { _ in }.asObservable(),
-               selectedNewImage: selectNewImage.asObservable(),
-               selectedDefaultImage: changeToDefaultImage.asObservable(),
-               editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
-               placeDidTap: placeBackgroundView.rx.tapGesture().map { _ in }.asObservable(),
-               selectedPlace: placeCollectionView.rx.itemSelected.asObservable(),
-               deletePlaceBtnDidTap: deleteButton.rx.tap.asObservable(),
-               dateDidTap: selectedDateLabel.rx.tapGesture().map { _ in }.asObservable(),
-               previousMonthBtnDidTap: previousButton.rx.tap.asObservable(),
-               nextMonthBtnDidTap: nextButton.rx.tap.asObservable(),
-               selectedDate: datePickerCollectionView.rx.itemSelected.asObservable(),
-               cancleBtnDidTap: cancleButton.rx.tap.asObservable(),
-               submitBtnDidTap: submitButton.rx.tap.asObservable())
+    private lazy var input = AddPlantSecondViewModel.Input(
+        imageDidTap: plantImageView.rx.tapGesture().map { _ in }.asObservable(),
+        selectedImage: selectedImage.asObservable(),
+        editingNickname: nicknameTextField.rx.text.orEmpty.asObservable(),
+        endEditingNickname: nicknameTextField.rx.controlEvent(.editingDidEndOnExit).withLatestFrom(nicknameTextField.rx.text).asObservable(),
+        placeDidTap: placeBackgroundView.rx.tapGesture().map { _ in }.asObservable(),
+        selectedPlace: placeCollectionView.rx.itemSelected.asObservable(),
+        deletePlaceBtnDidTap: deleteButton.rx.tap.asObservable(),
+        dateDidTap: selectedDateLabel.rx.tapGesture().map { _ in }.asObservable(),
+        previousMonthBtnDidTap: previousButton.rx.tap.asObservable(),
+        nextMonthBtnDidTap: nextButton.rx.tap.asObservable(),
+        selectedDate: datePickerCollectionView.rx.itemSelected.asObservable(),
+        cancleBtnDidTap: cancleButton.rx.tap.asObservable(),
+        submitBtnDidTap: submitButton.rx.tap.map { [weak self] _ in
+            guard let self, let plantImg = plantImageView.image, let data = plantImg.jpegData(compressionQuality: 1.0), let name = nameLabel.text, var nickname = nicknameTextField.text, let place = selectedPlace, let waterCycle = wateredTextField.text, let defaultWaterCycle = wateredTextField.placeholder, let lastWatered = selectedDateLabel.text else {
+                return PostPlantRequest(plantName: "", nickname: "", place: "", waterCycle: "", lastWateredDate: "", imageData: Data())
+            }
+            
+            return PostPlantRequest(plantName: name, nickname: nickname, place: place.code, waterCycle: waterCycle.isEmpty ? defaultWaterCycle : waterCycle, lastWateredDate: lastWatered.replacingOccurrences(of: " ", with: ""), imageData: data)
+        }.asObservable())
     private lazy var output = viewModel.transform(input: input)
-    private let selectNewImage = PublishRelay<Void>()
-    private let changeToDefaultImage = PublishRelay<Void>()
+    private let selectedImage = PublishRelay<Void>()
+    private var selectedPlace: PlaceListResult?
     
     private let scrollView: UIView = {
         let view = UIScrollView()
@@ -233,6 +240,28 @@ class AddPlantSecondViewController: UIViewController {
         label.textColor = .seaGreenDark3
         return label
     }()
+    private let wateredBackgroundView = UIView()
+    private let wateredMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "물 주는 주기"
+        label.font = .bodyM1
+        label.textColor = .gray6
+        return label
+    }()
+    private let wateredTextField: UITextField = {
+        let tf = UITextField()
+        tf.font = .bodyB1
+        tf.textColor = .gray6
+        tf.textAlignment = .right
+        tf.tintColor = .gray6
+        tf.keyboardType = .numberPad
+        return tf
+    }()
+    private let wateredUnderlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray2
+        return view
+    }()
     private let cancleButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
@@ -259,8 +288,9 @@ class AddPlantSecondViewController: UIViewController {
         return button
     }()
     
-    init(name: String) {
+    init(name: String, watered: Int) {
         nameLabel.text = name
+        wateredTextField.placeholder = "\(watered)"
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -270,11 +300,18 @@ class AddPlantSecondViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        setView()
         setNavigationBar()
         bind()
         setHierarchy()
         setConstraints()
+    }
+    
+    func setView() {
+        view.backgroundColor = .white
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(keyboardDismiss))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     func setNavigationBar() {
@@ -306,23 +343,10 @@ class AddPlantSecondViewController: UIViewController {
             
             let isSelectedDay = viewModel.checkSelectedDay(day: result)
             let isToday = viewModel.checkToday(day: result)
+            let isAfterToday = viewModel.isDateAfterToday(day: result)
             
-            cell.setConfigure(with: result, isSelected: isSelectedDay, isToday: isToday)
-        }.disposed(by: viewModel.disposeBag)
-        
-        output.showImgSettingAlert.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            self.showImageSettingAlert { state in
-                switch state {
-                case .newImage:
-                    self.selectNewImage.accept(())
-                case .defaultImage:
-                    self.changeToDefaultImage.accept(())
-                case .cancle:
-                    break
-                }
-            }
+            cell.setConfigure(with: result, isSelected: isSelectedDay, isToday: isToday, isAfterToday: isAfterToday)
+            cell.isUserInteractionEnabled = !isAfterToday
         }.disposed(by: viewModel.disposeBag)
         
         output.showImagePicker.drive { [weak self] _ in
@@ -342,6 +366,7 @@ class AddPlantSecondViewController: UIViewController {
                         ImagePickerViewController.shared.didSelectImage = { [weak self] imageString in
                             guard let self = self else { return }
                             plantImageView.load(url: URL(string: imageString)!)
+                            selectedImage.accept(())
                         }
                     case .limited:
                         let imagePickerVC = ImagePickerViewController()
@@ -349,20 +374,15 @@ class AddPlantSecondViewController: UIViewController {
                         self.present(imagePickerVC, animated: true)
                         
                         imagePickerVC.didSelectImage = { [weak self] imageString in
-                            guard self != nil else { return }
-                            self?.plantImageView.load(url: URL(string: imageString)!)
+                            guard let self else { return }
+                            plantImageView.load(url: URL(string: imageString)!)
+                            selectedImage.accept(())
                         }
                     default:
                         print("\(state)")
                     }
                 }
             }
-        }.disposed(by: viewModel.disposeBag)
-        
-        output.changeDefaultImage.drive { [weak self] _ in
-            guard let self = self else { return }
-            
-            plantImageView.image = UIImage(named: "AddPlant")
         }.disposed(by: viewModel.disposeBag)
         
         output.nicknameText.drive { [weak self] nickname in
@@ -379,7 +399,7 @@ class AddPlantSecondViewController: UIViewController {
             
             placeCollectionView.isHidden = false
             
-            dateView.snp.remakeConstraints { make in
+            wateredBackgroundView.snp.remakeConstraints { make in
                 make.top.equalTo(self.placeCollectionView.snp.bottom).offset(32)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(56)
@@ -389,12 +409,13 @@ class AddPlantSecondViewController: UIViewController {
         output.selectPlace.drive { [weak self] place in
             guard let self = self else { return }
             
+            selectedPlace = place
             placeChoiceLabel.text = "장소"
-            selectedPlaceLabel.text = place.placeName
+            selectedPlaceLabel.text = place.name
             deleteButton.isHidden = false
             nextImageView.isHidden = true
             placeCollectionView.isHidden = true
-            dateView.snp.remakeConstraints { make in
+            wateredBackgroundView.snp.remakeConstraints { make in
                 make.top.equalTo(self.placeBackgroundView.snp.bottom).offset(32)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(56)
@@ -424,17 +445,14 @@ class AddPlantSecondViewController: UIViewController {
         output.selectDate.drive { [weak self] indexPath in
             guard let self = self else { return }
             
+            datePickerCollectionView.reloadData()
             setCalendar(indexPath)
         }.disposed(by: viewModel.disposeBag)
         
-        output.cancleAddPlant.drive { [weak self] _ in
+        output.popToRootViewController.drive { [weak self] _ in
             guard let self = self else { return }
-            // TODO: navigation pop
-        }.disposed(by: viewModel.disposeBag)
-        
-        output.submitPlant.drive { [weak self] _ in
-            guard let self = self else { return }
-            // TODO: navigation pop
+            
+            navigationController?.popToRootViewController(animated: true)
         }.disposed(by: viewModel.disposeBag)
         
         output.submitBtnState.drive { [weak self] state in
@@ -460,7 +478,7 @@ class AddPlantSecondViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [plantView, nameBackgroundView, nicknameView, placeBackgroundView, placeCollectionView, dateView, calendarView, messageLabel, cancleButton, submitButton].forEach {
+        [plantView, nameBackgroundView, nicknameView, placeBackgroundView, placeCollectionView, dateView, calendarView, messageLabel, wateredBackgroundView, cancleButton, submitButton].forEach {
             contentView.addSubview($0)
         }
         
@@ -482,6 +500,10 @@ class AddPlantSecondViewController: UIViewController {
         
         [selectedMonthLabel, previousButton, nextButton, weekStackView, datePickerCollectionView].forEach {
             calendarView.addSubview($0)
+        }
+        
+        [wateredMessageLabel, wateredTextField, wateredUnderlineView].forEach {
+            wateredBackgroundView.addSubview($0)
         }
     }
     
@@ -591,8 +613,29 @@ class AddPlantSecondViewController: UIViewController {
             make.height.equalTo(156)
         }
         
-        dateView.snp.makeConstraints { make in
+        wateredBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(placeBackgroundView.snp.bottom).offset(32)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(56)
+        }
+        
+        wateredMessageLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        wateredTextField.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        wateredUnderlineView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
+        dateView.snp.makeConstraints { make in
+            make.top.equalTo(wateredBackgroundView.snp.bottom).offset(32)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(56)
         }
@@ -681,5 +724,9 @@ class AddPlantSecondViewController: UIViewController {
         guard let selectDay = datePickerCollectionView.cellForItem(at: indexPath) as? DatePickerCollectionViewCell else { return }
         selectDay.circleView.isHidden = false
         selectDay.dayLabel.textColor = .gray2
+    }
+    
+    @objc func keyboardDismiss() {
+        view.endEditing(true)
     }
 }

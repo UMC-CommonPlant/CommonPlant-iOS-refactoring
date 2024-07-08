@@ -39,10 +39,10 @@ class DatePickerCollectionViewCell: UICollectionViewCell {
         dayLabel.text = nil
     }
     
-    func setConfigure(with day: String, isSelected: Bool, isToday: Bool) {
+    func setConfigure(with day: String, isSelected: Bool, isToday: Bool, isAfterToday: Bool) {
         dayLabel.text = day
-        dayLabel.textColor = isSelected ? .gray2 : isToday ? .seaGreenDark2 : .black
-        
+        dayLabel.textColor = isAfterToday ? .gray4 : isSelected ? .white : isToday ? .seaGreenDark2 : .black
+        dayLabel.font = isToday || isSelected ? .bodyB2 : .bodyM2
         circleView.isHidden = !isSelected
     }
     

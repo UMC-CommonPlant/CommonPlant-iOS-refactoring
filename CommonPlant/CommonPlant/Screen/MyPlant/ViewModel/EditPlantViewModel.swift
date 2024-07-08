@@ -12,79 +12,124 @@ import RxCocoa
 class EditPlantViewModel {
     let disposeBag = DisposeBag()
     
-    let initPlant: Plant
-    //let currentPlant = PublishRelay<Plant>()
-    var imageState: ButtonState = .disable
+    let plantIdx: Int
+    let initNickname: String
+    let initCycle: Int
     
-    init() {
-        //currentPlant.accept(Plant(plantImage: "https://commonplantbucket.s3.ap-northeast-2.amazonaws.com/72e88997-7dcc-4a72-8a38-348d7754076b..jpeg", plantName: "몬테"))
-        initPlant = Plant(plantImage: "", plantName: "몬테")
+    var nicknameState = BehaviorRelay<ButtonState>(value: .none)
+    var imageState = BehaviorRelay<ButtonState>(value: .none)
+    var cycleState = BehaviorRelay<ButtonState>(value: .none)
+    
+    init(_ plantIdx: Int, plantNickname: String, waterCycle: Int, imgURL: String) {
+        self.plantIdx = plantIdx
+        initNickname = plantNickname
+        initCycle = waterCycle
     }
     
     struct Input {
         let imageDidTap: Observable<Void>
-        let selectedNewImage: Observable<Void>
-        let selectedDefaultImage: Observable<Void>
         let changedImage: Observable<Bool?>
         let editingNickname: Observable<String>
+        let editingCycle: Observable<String>
+        let completeBtnDidTap: Observable<PutPlantRequest>
     }
     
     struct Output {
-        let showImgSettingAlert: Driver<Void>
         let showImagePicker: Driver<Void>
-        let changeDefaultImage: Driver<Void>
         let newNickname: Driver<String>
+        let newCycle: Driver<String>
         let buttonState: Driver<ButtonState>
+        let popToPreviousView: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let buttonState = BehaviorRelay<ButtonState>(value: .disable)
         
-        let showImgSettingAlert = PublishRelay<Void>()
-        input.imageDidTap.bind(to: showImgSettingAlert).disposed(by: disposeBag)
+        Observable.combineLatest(nicknameState, imageState, cycleState)
+            .map { nickname, image, cycle in
+                if nickname == .disable || image == .disable || cycle == .disable {
+                    return .disable
+                }
+                
+                return (nickname == .enable || image == .enable || cycle == .enable) ? .enable : .disable
+            }.bind(to: buttonState)
+            .disposed(by: disposeBag)
         
         let showImagePicker = PublishRelay<Void>()
-        input.selectedNewImage.bind(to: showImagePicker).disposed(by: disposeBag)
-        
-        let changeDefaultImage = PublishRelay<Void>()
-        input.selectedDefaultImage.bind(to: changeDefaultImage).disposed(by: disposeBag)
+        input.imageDidTap.bind(to: showImagePicker).disposed(by: disposeBag)
         
         input.changedImage.bind { [weak self] isChanged in
-            guard self != nil else { return }
+            guard let self else { return }
             guard let isChanged = isChanged else { return }
             
-            buttonState.accept(isChanged ? .enable : buttonState.value)
+            imageState.accept(isChanged ? .enable : .none)
         }.disposed(by: disposeBag)
         
         let newNickname = PublishRelay<String>()
         input.editingNickname.bind { [weak self] name in
             guard let self = self else { return }
-            var name = name
             
-            if name.contains("\n") {
-                name.removeLast()
+            var nickname = name
+            
+            while nickname.contains("  ") {
+                nickname = nickname.replacingOccurrences(of: "  ", with: " ")
             }
             
-            if name.count > 10 {
-                let index = name.index(name.startIndex, offsetBy: 10)
-                name = String(name[..<index])
+            if nickname.count > 10 {
+                let index = nickname.index(nickname.startIndex, offsetBy: 10)
+                nickname = String(nickname[..<index])
             }
             
-            if name != initPlant.plantName && name.count > 0 {
-                buttonState.accept(.enable)
-            } else {
-                buttonState.accept(.disable)
+            let pattern = "^[가-힣a-zA-Z0-9 !_.-^~]*$"
+            
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                let range = NSRange(location: 0, length: nickname.utf16.count)
+                
+                if regex.firstMatch(in: nickname, options: [], range: range) == nil || nickname.count < 2 {
+                    nicknameState.accept(.disable)
+                } else {
+                    nicknameState.accept(initNickname == nickname ? .none : .enable)
+                }
             }
             
             newNickname.accept(name)
         }.disposed(by: disposeBag)
         
-        return Output(showImgSettingAlert: showImgSettingAlert.asDriver(onErrorJustReturn: ()), showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()), changeDefaultImage: changeDefaultImage.asDriver(onErrorJustReturn: ()), newNickname: newNickname.asDriver(onErrorJustReturn: ""), buttonState: buttonState.asDriver())
+        let newCycle = PublishRelay<String>()
+        input.editingCycle.bind { [weak self] cycle in
+            guard let self = self else { return }
+            let cycle = cycle.filter { $0.isNumber }
+            
+            newCycle.accept(cycle)
+            guard let intCycle = Int(cycle) else {
+                cycleState.accept(.disable)
+                return
+            }
+            cycleState.accept(initCycle == intCycle ? .none : intCycle < 1 ? .disable : .enable)
+        }.disposed(by: disposeBag)
+        
+        let popToPreviousView = PublishRelay<Void>()
+        input.completeBtnDidTap.bind { [weak self] request in
+            guard let self else { return }
+            
+            PlantAPI.shared.putPlant(request)
+                .subscribe { result in
+                    switch result {
+                    case .success(_):
+                        popToPreviousView.accept(())
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }.disposed(by: self.disposeBag)
+        }.disposed(by: disposeBag)
+        
+        return Output(showImagePicker: showImagePicker.asDriver(onErrorJustReturn: ()), newNickname: newNickname.asDriver(onErrorJustReturn: ""), newCycle: newCycle.asDriver(onErrorJustReturn: ""), buttonState: buttonState.asDriver(), popToPreviousView: popToPreviousView.asDriver(onErrorDriveWith: .empty()))
     }
 }
 
 extension EditPlantViewModel {
     enum ButtonState {
+        case none
         case enable
         case disable
         case onClick

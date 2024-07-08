@@ -34,7 +34,9 @@ class PlantDictTableViewCell: UITableViewCell {
     // MARK: - UI
     func setAttributes(with model: SearchResultModel) {
         plantImage.layer.cornerRadius = 16
-        plantImage.image = UIImage(named: model.plantImage)
+        if let imageURL = URL(string: model.plantImage) {
+            plantImage.load(url: imageURL)
+        }
         plantImage.clipsToBounds = true
         plantImage.contentMode = .scaleAspectFill
         

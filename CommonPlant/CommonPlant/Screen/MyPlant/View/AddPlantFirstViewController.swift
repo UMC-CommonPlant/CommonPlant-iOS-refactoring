@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class AddPlantFirstViewController: UIViewController {
     // MARK: - Properties
@@ -43,7 +45,7 @@ class AddPlantFirstViewController: UIViewController {
         let view = UITableView()
         view.separatorStyle = .none
         view.rowHeight = 92
-        view.register(PlantDictTableViewCell.self, forCellReuseIdentifier: "SearchResultTableViewCell")
+        view.register(PlantDictTableViewCell.self, forCellReuseIdentifier: PlantDictTableViewCell.identifier)
         return view
     }()
     
@@ -58,14 +60,15 @@ class AddPlantFirstViewController: UIViewController {
     
     func bind() {
         viewModel.searchResultList.bind(to: searchResultTableView.rx.items(cellIdentifier: PlantDictTableViewCell.identifier, cellType: PlantDictTableViewCell.self)) { (_, result, cell) in
-            cell.setAttributes(with: result)
+            let plant = SearchResultModel(plantImage: result.imgURL, plantName: result.name, scientificName: result.scientificName)
+            cell.setAttributes(with: plant)
         }.disposed(by: viewModel.disposeBag)
         
-        output.transigionNextStep.drive { [ weak self ] result in
+        output.transigionNextStep.drive { [weak self] (plant: SearchResult) in
             guard let self = self else { return }
             // TODO: 식물 등록(2/2) 화면 전환
-            print(result)
-            let nextVC = AddPlantSecondViewController(name: result.plantName)
+            
+            let nextVC = AddPlantSecondViewController(name: plant.name, watered: plant.waterDay)
             self.navigationController?.pushViewController(nextVC, animated: true)
         }.disposed(by: viewModel.disposeBag)
     }
@@ -74,6 +77,8 @@ class AddPlantFirstViewController: UIViewController {
         self.navigationItem.title = "식물 등록(1/2)"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyB1, .foregroundColor: UIColor.gray6 as Any]
         self.navigationController?.navigationBar.barTintColor = .white
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = .black
     }
     
     private func setConstraints() {
