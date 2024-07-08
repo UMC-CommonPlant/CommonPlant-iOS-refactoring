@@ -92,6 +92,9 @@
 		F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47A92A569128008E07A9 /* UIColor+Extension.swift */; };
 		F91E47AC2A569666008E07A9 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E47AB2A569666008E07A9 /* empty.swift */; };
 		F9202E6A2C022347005C0796 /* CetegoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */; };
+		F92E5D4E2C3AEFDD008F84BA /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92E5D4D2C3AEFDD008F84BA /* HistoryService.swift */; };
+		F92E5D512C3BCE2B008F84BA /* HistoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92E5D502C3BCE2B008F84BA /* HistoryResponse.swift */; };
+		F92E5D532C3BD74E008F84BA /* HistoryAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92E5D522C3BD74E008F84BA /* HistoryAPI.swift */; };
 		F93404002A81F89300F0267B /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93403FF2A81F89300F0267B /* SearchResultViewController.swift */; };
 		F93404022A81F9F400F0267B /* PlantDictTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404012A81F9F400F0267B /* PlantDictTableViewCell.swift */; };
 		F93404042A8207B000F0267B /* SearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404032A8207B000F0267B /* SearchResultViewModel.swift */; };
@@ -212,6 +215,9 @@
 		F91E47A92A569128008E07A9 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		F91E47AB2A569666008E07A9 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = "<group>"; };
 		F9202E692C022347005C0796 /* CetegoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CetegoryDetailViewController.swift; sourceTree = "<group>"; };
+		F92E5D4D2C3AEFDD008F84BA /* HistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryService.swift; sourceTree = "<group>"; };
+		F92E5D502C3BCE2B008F84BA /* HistoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryResponse.swift; sourceTree = "<group>"; };
+		F92E5D522C3BD74E008F84BA /* HistoryAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryAPI.swift; sourceTree = "<group>"; };
 		F93403FF2A81F89300F0267B /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		F93404012A81F9F400F0267B /* PlantDictTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDictTableViewCell.swift; sourceTree = "<group>"; };
 		F93404032A8207B000F0267B /* SearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewModel.swift; sourceTree = "<group>"; };
@@ -663,6 +669,7 @@
 				C0D6E9052BC3B45C00A352DD /* LoginAPI.swift */,
 				C072D35B2BCFA9C8009F1492 /* SignUpAPI.swift */,
 				C078D7C42BE7ADC7006D808A /* TokenAPI.swift */,
+				F92E5D522C3BD74E008F84BA /* HistoryAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -670,6 +677,7 @@
 		F91E47A52A53F869008E07A9 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				F92E5D4F2C3BCE0A008F84BA /* History */,
 				C078D7C12BE7AD5F006D808A /* Token */,
 				C072D35D2BCFAA27009F1492 /* SignUp */,
 				C0D6E9022BC3B35D00A352DD /* Login */,
@@ -683,6 +691,7 @@
 				C0D6E9002BC3A97300A352DD /* LoginService.swift */,
 				C072D3562BCFA5D6009F1492 /* SignUpService.swift */,
 				C078D7BF2BE7AC54006D808A /* TokenService.swift */,
+				F92E5D4D2C3AEFDD008F84BA /* HistoryService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -703,6 +712,14 @@
 				F9D0CCB12A5BB635006D688C /* View */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		F92E5D4F2C3BCE0A008F84BA /* History */ = {
+			isa = PBXGroup;
+			children = (
+				F92E5D502C3BCE2B008F84BA /* HistoryResponse.swift */,
+			);
+			path = History;
 			sourceTree = "<group>";
 		};
 		F93792902B5902B300CD0BCF /* View */ = {
@@ -1014,6 +1031,7 @@
 				C005D3642A9B3870004CD53F /* MemoCardCollectionViewCell.swift in Sources */,
 				C007F63B2B59198E00CD6252 /* AddPlantFirstViewController.swift in Sources */,
 				C07DF86D2A5943FA00CDC5CC /* MyPageViewController.swift in Sources */,
+				F92E5D532C3BD74E008F84BA /* HistoryAPI.swift in Sources */,
 				C085BFBC2A7148D500188C02 /* LogInViewController.swift in Sources */,
 				C07DF8742A59463E00CDC5CC /* SettingViewController.swift in Sources */,
 				F9B6E9982BCFBAA0000F05D4 /* PlantCollectionViewCell.swift in Sources */,
@@ -1035,6 +1053,7 @@
 				C06299802A7A87FB00985171 /* UIImageView+Extension.swift in Sources */,
 				C078D7CA2BEA0A09006D808A /* URLConstant.swift in Sources */,
 				C027A0942A909CDC009289E9 /* ImagePickerViewController.swift in Sources */,
+				F92E5D4E2C3AEFDD008F84BA /* HistoryService.swift in Sources */,
 				C07DF87E2A597A8600CDC5CC /* WithdrwalViewController.swift in Sources */,
 				C027A0952A909CDC009289E9 /* ImagePickerCollectionViewCell.swift in Sources */,
 				C044E5AA2A66C1A800A8B3C6 /* SettingViewModel.swift in Sources */,
@@ -1042,6 +1061,7 @@
 				C0E2701A2B98507F006492B0 /* CalendarMemoCollectionViewCell.swift in Sources */,
 				C072D35A2BCFA781009F1492 /* PostUserRequest.swift in Sources */,
 				C0A0D4E02A73EAD800426514 /* PrivacyViewController.swift in Sources */,
+				F92E5D512C3BCE2B008F84BA /* HistoryResponse.swift in Sources */,
 				F91E47AA2A569128008E07A9 /* UIColor+Extension.swift in Sources */,
 				C0C3FE452BD78C0700479891 /* NetworkLogger.swift in Sources */,
 				F9C200F92C0F382700CB6078 /* AddFriendsToPlaceViewController.swift in Sources */,
