@@ -112,9 +112,8 @@
 		F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93404052A8207F300F0267B /* SearchResultModel.swift */; };
 		F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */; };
 		F9447DA32A76CA3100903C28 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA52A7795DF00903C28 /* PlantSearchViewModel.swift */; };
+		F9447DA62A7795DF00903C28 /* PlantInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA52A7795DF00903C28 /* PlantInfoViewModel.swift */; };
 		F9447DA82A77A71700903C28 /* PlantCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DA72A77A71700903C28 /* PlantCategoryCollectionViewCell.swift */; };
-		F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */; };
 		F9447DAD2A78E52200903C28 /* PopularSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */; };
 		F94BB2672B57E62900CB3504 /* CommonCTAButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94BB2662B57E62900CB3504 /* CommonCTAButton.swift */; };
 		F9595C172B7F5F1600B8785D /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = F9595C162B7F5F1600B8785D /* Then */; };
@@ -125,8 +124,6 @@
 		F9A1FB252A664F4300F346DE /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB242A664F4300F346DE /* MainViewModel.swift */; };
 		F9A1FB292A67B03400F346DE /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB282A67B03400F346DE /* MainModel.swift */; };
 		F9A1FB362A6E547300F346DE /* PlantInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB352A6E547300F346DE /* PlantInfoViewController.swift */; };
-		F9A7CC352B93003A00C73401 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9A7CC342B93003A00C73401 /* GoogleService-Info.plist */; };
-		F9A1FB362A6E547300F346DE /* PlantSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */; };
 		F9B6E9932BCE743B000F05D4 /* MyPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */; };
 		F9B6E9952BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9942BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift */; };
 		F9B6E9982BCFBAA0000F05D4 /* PlantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B6E9972BCFBAA0000F05D4 /* PlantCollectionViewCell.swift */; };
@@ -246,9 +243,8 @@
 		F93404032A8207B000F0267B /* SearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewModel.swift; sourceTree = "<group>"; };
 		F93404052A8207F300F0267B /* SearchResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultModel.swift; sourceTree = "<group>"; };
 		F93792922B5903E400CD0BCF /* RegisterPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPlaceViewController.swift; sourceTree = "<group>"; };
-		F9447DA52A7795DF00903C28 /* PlantSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewModel.swift; sourceTree = "<group>"; };
+		F9447DA52A7795DF00903C28 /* PlantInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantInfoViewModel.swift; sourceTree = "<group>"; };
 		F9447DA72A77A71700903C28 /* PlantCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
-		F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoplularSearchModel.swift; sourceTree = "<group>"; };
 		F9447DAC2A78E52200903C28 /* PopularSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		F94BB2662B57E62900CB3504 /* CommonCTAButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCTAButton.swift; sourceTree = "<group>"; };
 		F9595C182B85D3A600B8785D /* RegisterPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPlaceViewModel.swift; sourceTree = "<group>"; };
@@ -256,8 +252,6 @@
 		F9A1FB242A664F4300F346DE /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F9A1FB282A67B03400F346DE /* MainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModel.swift; sourceTree = "<group>"; };
 		F9A1FB352A6E547300F346DE /* PlantInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantInfoViewController.swift; sourceTree = "<group>"; };
-		F9A7CC342B93003A00C73401 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		F9A1FB352A6E547300F346DE /* PlantSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantSearchViewController.swift; sourceTree = "<group>"; };
 		F9A7CC3B2B93069C00C73401 /* CommonPlant.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CommonPlant.entitlements; sourceTree = "<group>"; };
 		F9B6E9922BCE743B000F05D4 /* MyPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlaceViewController.swift; sourceTree = "<group>"; };
 		F9B6E9942BCFA9BC000F05D4 /* PlaceFriendsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFriendsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -859,7 +853,7 @@
 		F9A1FB332A6E532E00F346DE /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				F9447DA52A7795DF00903C28 /* PlantSearchViewModel.swift */,
+				F9447DA52A7795DF00903C28 /* PlantInfoViewModel.swift */,
 				F93404032A8207B000F0267B /* SearchResultViewModel.swift */,
 			);
 			path = ViewModel;
@@ -868,7 +862,6 @@
 		F9A1FB342A6E533500F346DE /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F9447DAA2A78D26F00903C28 /* PoplularSearchModel.swift */,
 				F93404052A8207F300F0267B /* SearchResultModel.swift */,
 			);
 			path = Model;
@@ -1084,7 +1077,6 @@
 				C0A67DC32BF47E0B003F556D /* SearchPlantResponse.swift in Sources */,
 				C085BFBF2A71686E00188C02 /* SignUpViewController.swift in Sources */,
 				C02322B62A6AB6BE004D78CC /* WithdrwalViewModel.swift in Sources */,
-				F9447DAB2A78D26F00903C28 /* PoplularSearchModel.swift in Sources */,
 				C0DBBD762C3A5F0A001D59D5 /* DeletePlantResponse.swift in Sources */,
 				F93792932B5903E400CD0BCF /* RegisterPlaceViewController.swift in Sources */,
 				C0E270102B982D45006492B0 /* CalendarViewController.swift in Sources */,
@@ -1102,7 +1094,7 @@
 				C069BEB52C2AC85200B007FB /* PutPlantResponse.swift in Sources */,
 				F9B6E9982BCFBAA0000F05D4 /* PlantCollectionViewCell.swift in Sources */,
 				C07DF8762A5947C400CDC5CC /* PaddingLabel.swift in Sources */,
-				F9447DA62A7795DF00903C28 /* PlantSearchViewModel.swift in Sources */,
+				F9447DA62A7795DF00903C28 /* PlantInfoViewModel.swift in Sources */,
 				C0B1BDE92A9E21A200DD7E04 /* MemoModel.swift in Sources */,
 				F93404062A8207F300F0267B /* SearchResultModel.swift in Sources */,
 				F91E47822A53E3C9008E07A9 /* SceneDelegate.swift in Sources */,
