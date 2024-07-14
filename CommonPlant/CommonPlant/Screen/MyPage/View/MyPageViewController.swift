@@ -67,12 +67,23 @@ class MyPageViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        setNavigationBar()
         setHierarchy()
         setConstraints()
         setAction()
     }
     
     // MARK: Custom Method
+    func setNavigationBar() {
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
+        let backBarButtonItem = UIBarButtonItem(title: nil, style: .plain, target: nil, action: nil)
+        backBarButtonItem.tintColor = .gray6
+        navigationItem.backBarButtonItem = backBarButtonItem
+        let rightBarItem = UIBarButtonItem(customView: settingButton)
+        navigationItem.rightBarButtonItem = rightBarItem
+    }
+    
     func setHierarchy() {
         view.addSubview(backgroundView)
         view.addSubview(userInfoView)
@@ -88,7 +99,7 @@ class MyPageViewController: UIViewController {
     
     func setConstraints() {
         backgroundView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(201)
