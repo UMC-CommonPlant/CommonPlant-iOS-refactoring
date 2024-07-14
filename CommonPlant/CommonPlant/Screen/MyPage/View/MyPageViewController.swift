@@ -11,34 +11,34 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-class MyPageViewController: UIViewController {
+final class MyPageViewController: UIViewController {
     // MARK: Properties
-    let viewModel = MyPageViewModel()
+    private let viewModel = MyPageViewModel()
     var disposeBag = DisposeBag()
     
     // MARK: UI Components
-    let backgroundView = UIView()
-    let baseView: UIImageView = {
+    private let backgroundView = UIView()
+    private let baseView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "ProfileBackground")!
         return view
     }()
-    let userProfileView: UIImageView = {
+    private let userProfileView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "ProfileGreen")
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = 47.5
         return view
     }()
-    var settingButton: UIButton = {
+    private let settingButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "Setting")
         button.configuration = config
         return button
     }()
-    let userInfoView = UIView()
-    var userNameLabel: UILabel = {
+    private let userInfoView = UIView()
+    private let userNameLabel: UILabel = {
         let label = UILabel()
         label.text = "커먼플랜트"
         label.font = .head4
@@ -46,7 +46,7 @@ class MyPageViewController: UIViewController {
         label.textColor = .black
         return label
     }()
-    var userEmailLabel: UILabel = {
+    private let userEmailLabel: UILabel = {
         let label = UILabel()
         label.text = "common123@gmail.com"
         label.font = .captionM1
@@ -54,7 +54,7 @@ class MyPageViewController: UIViewController {
         label.textColor = .gray5
         return label
     }()
-    let editButton: UIButton = {
+    private let editButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "Edit")

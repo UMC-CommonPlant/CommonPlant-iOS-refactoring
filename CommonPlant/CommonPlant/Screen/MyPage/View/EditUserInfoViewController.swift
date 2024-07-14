@@ -15,24 +15,24 @@ import PhotosUI
 class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
     let disposeBag = DisposeBag()
-    let viewModel = EditUserInfoViewModel()
-    let maximumCount = 10
+    private let viewModel = EditUserInfoViewModel()
+    private let maximumCount = 10
     
     // MARK: UI Components
-    let userProfileView = UIView()
-    let profileImageView: UIImageView = {
+    private let userProfileView = UIView()
+    private let profileImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "ProfileGreen")
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = 83.33 / 2
         return view
     }()
-    let cameraImageView: UIImageView = {
+    private let cameraImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "CameraMark")!
         return view
     }()
-    let userNickNameTextFiled: UITextField = {
+    private let userNickNameTextFiled: UITextField = {
         let field = UITextField()
         field.text = "커먼플랜트"
         field.placeholder = "커먼플랜트"
@@ -48,12 +48,12 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         field.clearsOnInsertion = true
         return field
     }()
-    let underlineView: UIView = {
+    private let underlineView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray2
         return view
     }()
-    let countLabel: UILabel = {
+    private let countLabel: UILabel = {
         let label = UILabel()
         label.font = .bodyB3
         label.textAlignment = .right
@@ -61,7 +61,7 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         label.isHidden = true
         return label
     }()
-    let checkDuplicateButton: UIButton = {
+    private let checkDuplicateButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("중복검사")
@@ -75,13 +75,13 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         button.isHidden = true
         return button
     }()
-    let messageLabel: UILabel = {
+    private let messageLabel: UILabel = {
         let label = UILabel()
         label.font = .captionM2
         label.textAlignment = .left
         return label
     }()
-    let doneButton: UIButton = {
+    private let doneButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("수정 완료")

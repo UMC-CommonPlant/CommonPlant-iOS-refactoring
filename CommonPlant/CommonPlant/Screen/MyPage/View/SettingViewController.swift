@@ -9,14 +9,14 @@ import UIKit
 import SnapKit
 import RxSwift
 
-class SettingViewController: UIViewController {
+final class SettingViewController: UIViewController {
     // MARK: Properties
     let viewModel = SettingViewModel()
     let disposeBag = DisposeBag()
     
     // MARK: UI Components
-    let alarmView = UIView()
-    let alarmTitleLabel: PaddingLabel = {
+    private let alarmView = UIView()
+    private let alarmTitleLabel: PaddingLabel = {
         let label = PaddingLabel()
         label.text = "알람설정"
         label.font = .bodyB1
@@ -25,7 +25,7 @@ class SettingViewController: UIViewController {
         label.padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 0)
         return label
     }()
-    let alarmSettingLabel: UILabel = {
+    private let alarmSettingLabel: UILabel = {
         let label = UILabel()
         label.text = "알림 설정"
         label.font = .bodyM2
@@ -33,7 +33,7 @@ class SettingViewController: UIViewController {
         label.textColor = .gray6
         return label
     }()
-    let alarmGuideLabel: UILabel = {
+    private let alarmGuideLabel: UILabel = {
         let label = UILabel()
         label.text = "물주기 및 식물의 상태를 알려드려요"
         label.font = .captionB2
@@ -41,7 +41,7 @@ class SettingViewController: UIViewController {
         label.textColor = .seaGreenDark3
         return label
     }()
-    let alarmToggleSwitch: UISwitch = {
+    private let alarmToggleSwitch: UISwitch = {
         let toggle = UISwitch()
         toggle.onTintColor = .seaGreenDark1
         toggle.tintColor = .gray3
@@ -49,13 +49,13 @@ class SettingViewController: UIViewController {
         toggle.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         return toggle
     }()
-    let divideView: UIView = {
+    private let divideView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray1
         return view
     }()
-    let accountView = UIView()
-    let accountTitleLabel: PaddingLabel = {
+    private let accountView = UIView()
+    private let accountTitleLabel: PaddingLabel = {
         let label = PaddingLabel()
         label.text = "계정"
         label.font = .bodyB1
@@ -64,7 +64,7 @@ class SettingViewController: UIViewController {
         label.padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 0)
         return label
     }()
-    let logoutButton: UIButton = {
+    private let logoutButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("로그아웃")
@@ -76,7 +76,7 @@ class SettingViewController: UIViewController {
         button.contentHorizontalAlignment = .left
         return button
     }()
-    let logoutAlertView: CommonAlertView = {
+    private let logoutAlertView: CommonAlertView = {
         let view = CommonAlertView()
         view.setTitle("로그아웃")
         view.setMessage("로그아웃을 하시겠나요?")
@@ -84,7 +84,7 @@ class SettingViewController: UIViewController {
         view.isHidden = true
         return view
     }()
-    let withdrawalButton: UIButton = {
+    private let withdrawalButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("회원탈퇴")
@@ -96,7 +96,7 @@ class SettingViewController: UIViewController {
         button.contentHorizontalAlignment = .left
         return button
     }()
-    let backgroundView: UIView = {
+    private let backgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
         view.layer.opacity = 0.7

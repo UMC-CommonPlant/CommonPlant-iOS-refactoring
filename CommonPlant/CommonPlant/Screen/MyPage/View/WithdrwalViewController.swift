@@ -10,20 +10,20 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class WithdrwalViewController: UIViewController {
+final class WithdrwalViewController: UIViewController {
     // MARK: Properties
-    let viewModel = WithdrwalViewModel()
+    private let viewModel = WithdrwalViewModel()
     let disposeBag = DisposeBag()
     
     // MARK: UI Components
-    let scrollView = UIScrollView()
-    let contentView = UIView()
-    let backgroundView: UIView = {
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private let backgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .seaGreen
         return view
     }()
-    let warningTitleLabel: UILabel = {
+    private let warningTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "커먼플랜트님, 잠시만요!"
         label.font = .head5
@@ -31,12 +31,12 @@ class WithdrwalViewController: UIViewController {
         label.textColor = .black
         return label
     }()
-    let leaveView: UIImageView = {
+    private let leaveView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "LeaveLogo")!
         return view
     }()
-    let guideLabel: UILabel = {
+    private let guideLabel: UILabel = {
         let label = UILabel()
         label.text = """
         
@@ -53,15 +53,15 @@ class WithdrwalViewController: UIViewController {
         label.lineBreakMode = .byCharWrapping
         return label
     }()
-    let bottomView = UIView()
-    let checkButton: UIButton = {
+    private let bottomView = UIView()
+    private let checkButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "UnselectedGray")
         button.configuration = config
         return button
     }()
-    let confirmLabel: UILabel = {
+    private let confirmLabel: UILabel = {
         let label = UILabel()
         label.text = "유의사항을 모두 확인했습니다."
         label.font = .bodyM2
@@ -69,7 +69,7 @@ class WithdrwalViewController: UIViewController {
         label.textColor = .black
         return label
     }()
-    let deleteButton: UIButton = {
+    private let deleteButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("계정 삭제하기")
@@ -82,8 +82,8 @@ class WithdrwalViewController: UIViewController {
         button.makeRound(radius: 8)
         return button
     }()
-    let selectedGray = UIImage(named: "SelectedGray")
-    let unSelectedGray = UIImage(named: "UnselectedGray")
+    private let selectedGray = UIImage(named: "SelectedGray")
+    private let unSelectedGray = UIImage(named: "UnselectedGray")
     
     // MARK: Life Cycle
     override func viewDidLoad() {
