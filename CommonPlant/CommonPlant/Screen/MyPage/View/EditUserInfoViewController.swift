@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 import RxSwift
 import RxCocoa
 import RxGesture
@@ -13,147 +14,108 @@ import PhotosUI
 
 class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
-    var disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
     let viewModel = EditUserInfoViewModel()
     let maximumCount = 10
     
     // MARK: UI Components
-    var navigationBarView = UIView()
-    var editTitleLabel = UILabel()
-    var backButton = UIButton()
-    var userProfileView = UIView()
-    var profileImageView = UIImageView()
-    var profileImage = UIImage()
-    var cameraImageView = UIImageView()
-    var cameraImage = UIImage()
-    var userNickNameTextFiled = UITextField()
-    var completeButton = UIButton()
-    var underlineView = UIView()
-    var countLabel = UILabel()
-    var checkDuplicateButton = UIButton()
-    var messageLabel = UILabel()
-    var doneButton = UIButton()
+    let userProfileView = UIView()
+    let profileImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "ProfileGreen")
+        view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = 83.33 / 2
+        return view
+    }()
+    let cameraImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "CameraMark")!
+        return view
+    }()
+    let userNickNameTextFiled: UITextField = {
+        let field = UITextField()
+        field.text = "커먼플랜트"
+        field.placeholder = "커먼플랜트"
+        field.font = .bodyM1
+        field.textAlignment = .left
+        field.textColor = .black
+        field.tintColor = .black
+        field.clearButtonMode = .whileEditing
+        field.autocorrectionType = .no
+        field.spellCheckingType = .no
+        field.autocapitalizationType = .none
+        field.returnKeyType = .done
+        field.clearsOnInsertion = true
+        return field
+    }()
+    let underlineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray2
+        return view
+    }()
+    let countLabel: UILabel = {
+        let label = UILabel()
+        label.font = .bodyB3
+        label.textAlignment = .right
+        label.textColor = .black
+        label.isHidden = true
+        return label
+    }()
+    let checkDuplicateButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        var attr = AttributedString.init("중복검사")
+        attr.font = .bodyM3
+        attr.foregroundColor = .gray6
+        config.attributedTitle = attr
+        button.configuration = config
+        button.contentHorizontalAlignment = .center
+        button.backgroundColor = .gray1
+        button.makeRound(radius: 4)
+        button.isHidden = true
+        return button
+    }()
+    let messageLabel: UILabel = {
+        let label = UILabel()
+        label.font = .captionM2
+        label.textAlignment = .left
+        return label
+    }()
+    let doneButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        var attr = AttributedString.init("수정 완료")
+        attr.font = .bodyM2
+        attr.foregroundColor = .gray3
+        config.attributedTitle = attr
+        button.configuration = config
+        button.contentHorizontalAlignment = .center
+        button.backgroundColor = .gray1
+        button.makeRound(radius: 8)
+        button.isEnabled = false
+        return button
+    }()
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUI()
+        
+        view.backgroundColor = .white
+        setNavigationBar()
         setHierarchy()
         setLayout()
         setAction()
     }
     
     // MARK: Custom Method
-    func setUI() {
-        view.backgroundColor = .white
-        
-        var backBtnConfig = UIButton.Configuration.plain()
-        var checkDupleBtnConfig = UIButton.Configuration.plain()
-        var doneBtnConfig = UIButton.Configuration.plain()
-        
-        backBtnConfig.image = UIImage(named: "Back")
-        backButton.configuration = backBtnConfig
-        
-        editTitleLabel.text = "회원 정보 수정"
-        editTitleLabel.font = .bodyB1
-        editTitleLabel.textAlignment = .center
-        editTitleLabel.textColor = .black
-        
-        if let profileImage = MyPageViewModel.shared.editProfileRelay.value ?? MyPageViewModel.shared.infoProfileRelay.value {
-            profileImageView.image = profileImage
-        }
-        cameraImage = UIImage(named: "CameraMark")!
-        cameraImageView.image = cameraImage
-        
-        MyPageViewModel.shared.userSubject.subscribe(onNext: { [weak self] userInfo in
-            self?.userNickNameTextFiled.attributedPlaceholder = NSAttributedString(string: userInfo.nickName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
-        }).disposed(by: disposeBag)
-        userNickNameTextFiled.delegate = self
-        userNickNameTextFiled.font = .bodyM1
-        userNickNameTextFiled.textAlignment = .left
-        userNickNameTextFiled.textColor = .black
-        userNickNameTextFiled.tintColor = .black
-        userNickNameTextFiled.clearButtonMode = .whileEditing
-        userNickNameTextFiled.autocorrectionType = .no
-        userNickNameTextFiled.spellCheckingType = .no
-        userNickNameTextFiled.autocapitalizationType = .none
-        userNickNameTextFiled.returnKeyType = .done
-        userNickNameTextFiled.clearsOnInsertion = true
-        
-        var checkDupleAttr = AttributedString.init("중복검사")
-        checkDupleAttr.font = .bodyM3
-        checkDupleAttr.foregroundColor = .gray6
-        checkDupleBtnConfig.attributedTitle = checkDupleAttr
-        
-        checkDuplicateButton.configuration = checkDupleBtnConfig
-        checkDuplicateButton.contentHorizontalAlignment = .center
-        checkDuplicateButton.backgroundColor = .gray1
-        checkDuplicateButton.makeRound(radius: 4)
-        checkDuplicateButton.isHidden = true
-        
-        countLabel.font = .bodyB3
-        countLabel.textAlignment = .right
-        countLabel.textColor = .black
-        countLabel.isHidden = true
-        
-        var doneAttr = AttributedString.init("수정 완료")
-        doneAttr.font = .bodyM2
-        doneButton.contentHorizontalAlignment = .center
-        doneButton.makeRound(radius: 8)
-        
-        messageLabel.font = .captionM2
-        messageLabel.textAlignment = .left
-        
-        viewModel.profileImgURL.subscribe(onNext: { [weak self] imageURL in
-            guard let self = self else { return }
-            if imageURL.isEmpty {
-                profileImageView.image = UIImage(named: "ProfileGreen")
-            } else {
-                if let imageURL = URL(string: imageURL) {
-                    DispatchQueue.main.async {
-                        self.profileImageView.load(url: imageURL)
-                        self.profileImageView.contentMode = .scaleAspectFill
-                        self.profileImageView.makeRound(radius: self.profileImageView.frame.height/2)
-                    }
-                }
-            }
-        }).disposed(by: disposeBag)
-        
-        viewModel.nickNameState.map { state -> (UIColor, UIColor, UIColor, Bool) in
-            self.messageLabel.isHidden = false
-            self.messageLabel.text = state.rawValue
-            
-            switch state {
-            case .normal:
-                return (.gray2!, .gray3!, .gray1!, false)
-            case .unusable:
-                return (.activeRed!, .gray3!, .gray1!, false)
-            case .usable:
-                return (.activeBlue!, .white, .seaGreenDark1!, true)
-            }
-        }.subscribe(onNext: { [weak self] color, foregroundColor, backgroundColor, isEnable in
-            guard let self = self else { return }
-            
-            doneAttr.foregroundColor = foregroundColor
-            doneBtnConfig.attributedTitle = doneAttr
-            
-            doneButton.configuration = doneBtnConfig
-            doneButton.backgroundColor = backgroundColor
-            doneButton.isEnabled = isEnable
-            
-            messageLabel.textColor = color
-            underlineView.backgroundColor = color
-        }).disposed(by: disposeBag)
-        
-        viewModel.textCount.subscribe(onNext: { [weak self] count in
-            guard let self = self else { return }
-            countLabel.text = "\(count)/\(maximumCount)"
-            countLabel.partiallyChanged(targetString: "/\(maximumCount)", font: .bodyM3, color: .gray5)
-        }).disposed(by: disposeBag)
+    func setNavigationBar() {
+        navigationItem.title = "회원 정보 수정"
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .gray6
+        navigationItem.backBarButtonItem = backBarButtonItem
     }
     
     func setHierarchy() {
-        view.addSubview(navigationBarView)
         view.addSubview(userProfileView)
         view.addSubview(userNickNameTextFiled)
         view.addSubview(underlineView)
@@ -162,33 +124,13 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(checkDuplicateButton)
         view.addSubview(doneButton)
         
-        navigationBarView.addSubview(backButton)
-        navigationBarView.addSubview(editTitleLabel)
-        
         userProfileView.addSubview(profileImageView)
         userProfileView.addSubview(cameraImageView)
     }
     
     func setLayout() {
-        navigationBarView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(56)
-        }
-        
-        backButton.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.equalToSuperview()
-            make.width.height.equalTo(56)
-        }
-        
-        editTitleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(19)
-            make.centerX.equalToSuperview()
-        }
-        
         userProfileView.snp.makeConstraints { make in
-            make.top.equalTo(navigationBarView.snp.bottom).offset(24)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
             make.centerX.equalToSuperview()
             make.width.height.equalTo(100)
         }
@@ -246,11 +188,6 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setAction() {
-        backButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else { return }
-            viewModel.dissmissView(self)
-        }).disposed(by: disposeBag)
-        
         checkDuplicateButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             
