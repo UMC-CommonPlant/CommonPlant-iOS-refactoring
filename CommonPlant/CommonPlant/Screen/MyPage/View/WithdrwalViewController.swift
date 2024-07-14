@@ -6,71 +6,39 @@
 //
 
 import UIKit
+import SnapKit
 import RxSwift
 import RxCocoa
 
 class WithdrwalViewController: UIViewController {
     // MARK: Properties
-    var viewModel = WithdrwalViewModel()
-    var disposeBag = DisposeBag()
+    let viewModel = WithdrwalViewModel()
+    let disposeBag = DisposeBag()
     
     // MARK: UI Components
-    var scrollView = UIScrollView()
-    var contentView = UIView()
-    var navigationBarView = UIView()
-    var withdrawalTitleLabel = UILabel()
-    var backButton = UIButton()
-    var backgroundView = UIView()
-    var warningTitleLabel = UILabel()
-    var leaveView = UIImageView()
-    var leaveImage = UIImage()
-    var guideLabel = UILabel()
-    var bottomView = UIView()
-    var checkButton = UIButton()
-    var confirmLabel = UILabel()
-    var deleteButton = UIButton()
-    var selectedGray = UIImage(named: "SelectedGray")
-    var unSelectedGray = UIImage(named: "UnselectedGray")
-    
-    // MARK: Life Cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setUI()
-        setHierarchy()
-        setLayout()
-        setAction()
-    }
-    
-    // MARK: Custom Method
-    func setUI() {
-        view.backgroundColor = .white
-        
-        var backBtnConfig = UIButton.Configuration.plain()
-        var checkBtnConfig = UIButton.Configuration.plain()
-        var deleteBtnConfig = UIButton.Configuration.plain()
-        
-        backBtnConfig.image = UIImage(named: "Back")
-        backButton.configuration = backBtnConfig
-        
-        withdrawalTitleLabel.text = "회원탈퇴"
-        withdrawalTitleLabel.font = .bodyB1
-        withdrawalTitleLabel.textAlignment = .center
-        withdrawalTitleLabel.textColor = .gray6
-        
-        backgroundView.backgroundColor = .seaGreen
-        
-        MyPageViewModel.shared.userSubject.subscribe(onNext: { [weak self] userInfo in
-            self?.warningTitleLabel.text = "\(userInfo.nickName)님 잠시만요!"
-        }).disposed(by: disposeBag)
-        warningTitleLabel.font = .head5
-        warningTitleLabel.textAlignment = .center
-        warningTitleLabel.textColor = .black
-        
-        leaveImage = UIImage(named: "LeaveLogo")!
-        
-        leaveView.image = leaveImage
-        
-        guideLabel.text = """
+    let scrollView = UIScrollView()
+    let contentView = UIView()
+    let backgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .seaGreen
+        return view
+    }()
+    let warningTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "커먼플랜트님, 잠시만요!"
+        label.font = .head5
+        label.textAlignment = .center
+        label.textColor = .black
+        return label
+    }()
+    let leaveView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "LeaveLogo")!
+        return view
+    }()
+    let guideLabel: UILabel = {
+        let label = UILabel()
+        label.text = """
         
         • 회원 탈퇴 시 현재 계정으로 작성한 게시글, 댓글 등을 수정할 수 없습니다.
         
@@ -78,56 +46,74 @@ class WithdrwalViewController: UIViewController {
         
         • 본 계정으로 다시는 로그인 할 수 없습니다.
         """
-        guideLabel.font = .bodyM3
-        guideLabel.textAlignment = .left
-        guideLabel.textColor = .gray6
-        guideLabel.numberOfLines = 0
-        guideLabel.lineBreakMode = .byCharWrapping
+        label.font = .bodyM3
+        label.textAlignment = .left
+        label.textColor = .gray6
+        label.numberOfLines = 0
+        label.lineBreakMode = .byCharWrapping
+        return label
+    }()
+    let bottomView = UIView()
+    let checkButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "UnselectedGray")
+        button.configuration = config
+        return button
+    }()
+    let confirmLabel: UILabel = {
+        let label = UILabel()
+        label.text = "유의사항을 모두 확인했습니다."
+        label.font = .bodyM2
+        label.textAlignment = .left
+        label.textColor = .black
+        return label
+    }()
+    let deleteButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        var attr = AttributedString.init("계정 삭제하기")
+        attr.font = .bodyM2
+        attr.foregroundColor = .gray3
+        config.attributedTitle = attr
+        button.configuration = config
+        button.contentHorizontalAlignment = .center
+        button.backgroundColor = .gray1
+        button.makeRound(radius: 8)
+        return button
+    }()
+    let selectedGray = UIImage(named: "SelectedGray")
+    let unSelectedGray = UIImage(named: "UnselectedGray")
+    
+    // MARK: Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        checkBtnConfig.image = UIImage(named: "UnselectedGray")
-        checkButton.configuration = checkBtnConfig
-        
-        confirmLabel.text = "유의사항을 모두 확인했습니다."
-        confirmLabel.font = .bodyM2
-        confirmLabel.textAlignment = .left
-        confirmLabel.textColor = .black
-        
-        var deleteAttr = AttributedString.init("계정 삭제하기")
-        deleteAttr.font = .bodyM2
-        deleteAttr.foregroundColor = .gray3
-        deleteButton.contentHorizontalAlignment = .center
-        deleteButton.makeRound(radius: 8)
-        
-        viewModel.isOnCheckBtn.map { isOn -> (UIColor, UIColor, UIImage, Bool) in
-            return isOn ? (.seaGreenDark1!, .white, self.selectedGray!, true) : (.gray1!, .gray3!, self.unSelectedGray!, false)
-        }
-        .subscribe(onNext: { [weak self] backgroundColor, titleColor, image, isEnable in
-            guard let self = self else { return }
-            deleteAttr.foregroundColor = titleColor
-            deleteBtnConfig.attributedTitle = deleteAttr
-            deleteButton.configuration = deleteBtnConfig
-            deleteButton.backgroundColor = backgroundColor
-            deleteButton.isEnabled = isEnable
-            
-            checkButton.configuration?.image = image
-        })
-        .disposed(by: disposeBag)
+        view.backgroundColor = .white
+        setNavigationBar()
+        setHierarchy()
+        setLayout()
+        setAction()
+    }
+    
+    // MARK: Custom Method
+    func setNavigationBar() {
+        navigationItem.title = "회원탈퇴"
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .gray6
+        navigationItem.backBarButtonItem = backBarButtonItem
     }
     
     func setHierarchy() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        contentView.addSubview(navigationBarView)
         contentView.addSubview(backgroundView)
         contentView.addSubview(bottomView)
         
         bottomView.addSubview(checkButton)
         bottomView.addSubview(confirmLabel)
         bottomView.addSubview(deleteButton)
-        
-        navigationBarView.addSubview(withdrawalTitleLabel)
-        navigationBarView.addSubview(backButton)
         
         backgroundView.addSubview(warningTitleLabel)
         backgroundView.addSubview(leaveView)
@@ -136,38 +122,18 @@ class WithdrwalViewController: UIViewController {
     
     func setLayout() {
         scrollView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.left.right.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { make in
-            make.top.left.right.bottom.equalTo(scrollView)
+            make.edges.equalTo(scrollView)
             make.width.equalToSuperview()
             make.height.greaterThanOrEqualToSuperview().priority(.low)
         }
         
-        navigationBarView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.height.equalTo(56)
-        }
-        
-        backButton.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.width.height.equalTo(56)
-        }
-        
-        withdrawalTitleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(19)
-            make.centerX.equalToSuperview()
-        }
-        
         backgroundView.snp.makeConstraints { make in
-            make.top.equalTo(navigationBarView.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(502)
         }
         
@@ -184,13 +150,12 @@ class WithdrwalViewController: UIViewController {
         
         guideLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(314)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(-20)
+            make.horizontalEdges.equalToSuperview().inset(20)
         }
         
         bottomView.snp.makeConstraints { make in
-            make.top.equalTo(backgroundView.snp.bottom).offset(24)
-            make.left.right.bottom.equalToSuperview()
+            make.top.greaterThanOrEqualTo(backgroundView.snp.bottom).offset(24)
+            make.horizontalEdges.bottom.equalToSuperview()
         }
         
         checkButton.snp.makeConstraints { make in
@@ -207,19 +172,13 @@ class WithdrwalViewController: UIViewController {
         
         deleteButton.snp.makeConstraints { make in
             make.top.greaterThanOrEqualTo(confirmLabel.snp.bottom).offset(33)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(-20)
+            make.horizontalEdges.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().offset(-32)
             make.height.equalTo(48)
         }
     }
     
     func setAction() {
-        backButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else { return }
-            viewModel.dissmissView(self)
-        }).disposed(by: disposeBag)
-        
         checkButton.rx.tap.subscribe(onNext: { [weak self] button in
             guard let self = self else { return }
 
