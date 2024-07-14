@@ -13,6 +13,6 @@ class WithdrwalViewModel {
     var isOnCheckBtn = BehaviorRelay<Bool>(value: false)
     
     func dissmissView(_ withdrwalVC: UIViewController) {
-        withdrwalVC.dismiss(animated: true)
+        withdrwalVC.navigationController?.popViewController(animated: true)
     }
 }

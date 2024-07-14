@@ -46,13 +46,11 @@ class MyPageViewModel {
     
     func showEditView(_ myPageVC: UIViewController) {
         let nextVC = EditUserInfoViewController()
-        nextVC.modalPresentationStyle = .fullScreen
-        myPageVC.present(nextVC, animated: true)
+        myPageVC.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func showSettingView(_ myPageVC: UIViewController) {
         let nextVC = SettingViewController()
-        nextVC.modalPresentationStyle = .fullScreen
-        myPageVC.present(nextVC, animated: true)
+        myPageVC.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
