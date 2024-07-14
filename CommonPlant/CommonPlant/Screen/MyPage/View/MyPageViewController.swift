@@ -18,56 +18,61 @@ class MyPageViewController: UIViewController {
     
     // MARK: UI Components
     let backgroundView = UIView()
-    let baseView = UIImageView()
-    var baseImage = UIImage(named: "ProfileBackground")!
-    let userProfileView = UIImageView()
-    var settingButton = UIButton()
+    let baseView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "ProfileBackground")!
+        return view
+    }()
+    let userProfileView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "ProfileGreen")
+        view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = 47.5
+        return view
+    }()
+    var settingButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Setting")
+        button.configuration = config
+        return button
+    }()
     let userInfoView = UIView()
-    var userNameLabel = UILabel()
-    var userEmailLabel = UILabel()
-    let editButton = UIButton()
+    var userNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "커먼플랜트"
+        label.font = .head4
+        label.textAlignment = .center
+        label.textColor = .black
+        return label
+    }()
+    var userEmailLabel: UILabel = {
+        let label = UILabel()
+        label.text = "common123@gmail.com"
+        label.font = .captionM1
+        label.textAlignment = .center
+        label.textColor = .gray5
+        return label
+    }()
+    let editButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Edit")
+        button.configuration = config
+        return button
+    }()
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUI()
+        
+        view.backgroundColor = .white
         setHierarchy()
-        setLayout()
+        setConstraints()
         setAction()
     }
     
     // MARK: Custom Method
-    func setUI() {
-        view.backgroundColor = .white
-        
-        var settingBtnConfig = UIButton.Configuration.plain()
-        var editBtnConfig = UIButton.Configuration.plain()
-        
-        settingBtnConfig.image = UIImage(named: "Setting")
-        settingButton.configuration = settingBtnConfig
-        
-        editBtnConfig.image = UIImage(named: "Edit")
-        editButton.configuration = editBtnConfig
-        
-        baseView.image = baseImage
-        userProfileView.image = viewModel.infoProfileRelay.value!
-        
-        viewModel.userSubject.subscribe (onNext: { [weak self] userInfo in
-            guard let self = self else { return }
-            
-            userNameLabel.text = userInfo.nickName
-            userEmailLabel.text = userInfo.email
-        }).disposed(by: disposeBag)
-
-        userNameLabel.font = .head4
-        userNameLabel.textAlignment = .center
-        userNameLabel.textColor = .black
-        
-        userEmailLabel.font = .captionM1
-        userEmailLabel.textAlignment = .center
-        userEmailLabel.textColor = .gray5
-    }
-    
     func setHierarchy() {
         view.addSubview(backgroundView)
         view.addSubview(userInfoView)
@@ -81,7 +86,7 @@ class MyPageViewController: UIViewController {
         userInfoView.addSubview(editButton)
     }
     
-    func setLayout() {
+    func setConstraints() {
         backgroundView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             make.leading.equalToSuperview()
