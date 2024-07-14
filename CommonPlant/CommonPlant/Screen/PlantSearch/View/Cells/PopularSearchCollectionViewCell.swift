@@ -7,29 +7,38 @@
 
 import UIKit
 import SnapKit
+import Then
+import Kingfisher
 
 class PopularSearchCollectionViewCell: UICollectionViewCell {
     static let identifier = "PopularSearchCollectionViewCell"
-    let plantImage = UIImageView()
-    let nameLabel = UILabel()
-    let scientificNameLabel = UILabel()
-    let searchCountLabel = UILabel()
+    
+    let plantImage = UIImageView().then {
+        $0.layer.cornerRadius = 16
+    }
+    let nameLabel = UILabel().then {
+        $0.font = .bodyB2
+    }
+    let scientificNameLabel = UILabel().then {
+        $0.font = .bodyM4
+        $0.textColor = .gray5
+    }
+    let searchCountLabel = UILabel().then {
+        $0.font = .bodyM4
+        $0.textColor = .gray5
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureCell()
         setupCorner()
+        setConstraints()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(\(coder) has not been implemented")
     }
-    
-    private func configureCell() {
-        setAttributes(with: PoplularSearchModel.init(plantImage: "", plantName: "", scientificName: "", searchCount: 0))
-        setConstraints()
-    }
-    
+
     // MARK: - UI
     private func setupCorner() {
         self.backgroundColor = .white
@@ -40,20 +49,13 @@ class PopularSearchCollectionViewCell: UICollectionViewCell {
         self.layer.cornerRadius = 16
     }
     
-    func setAttributes(with model: PoplularSearchModel) {
-        plantImage.layer.cornerRadius = 16
-        plantImage.image = UIImage(named: model.plantImage)
-        
-        nameLabel.font = .bodyB2
-        nameLabel.text = model.plantName
-        
-        scientificNameLabel.font = .bodyM4
+    func setAttributes(with model: HistoryDto) {
+        if let url = URL(string: model.imgUrl) {
+            plantImage.kf.setImage(with: url)
+        }
+        nameLabel.text = model.name
         scientificNameLabel.text = model.scientificName
-        scientificNameLabel.textColor = .gray5
-        
-        searchCountLabel.font = .bodyM4
-        searchCountLabel.text = "지난달 \(model.searchCount)명이 검색"
-        searchCountLabel.textColor = .gray5
+        searchCountLabel.text = "지난달 \(model.count)명이 검색"
     }
     
     private func setConstraints() {
