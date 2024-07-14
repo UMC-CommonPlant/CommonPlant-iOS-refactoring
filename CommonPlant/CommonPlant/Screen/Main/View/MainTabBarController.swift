@@ -44,7 +44,7 @@ class MainTabBarController: UITabBarController {
         let plantSearchViewController = UINavigationController(rootViewController: PlantSearchViewController())
         let calenderViewController = UINavigationController(rootViewController: CalendarViewController())
         let mainViewController = UINavigationController(rootViewController: MainViewController())
-        let profileViewController = MyPageViewController()
+        let profileViewController = UINavigationController(rootViewController: MyPageViewController())
         
         plantSearchViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "info"), selectedImage: UIImage(named: "infoActive"))
         calenderViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "calendar"), selectedImage: UIImage(named: "calendarActive"))
