@@ -146,8 +146,8 @@ final class WithdrwalViewController: UIViewController {
         }
         
         checkButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
-            make.leading.equalToSuperview().offset(20)
+            make.top.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(20)
             make.width.height.equalTo(24)
         }
         

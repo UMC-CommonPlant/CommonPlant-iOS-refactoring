@@ -121,53 +121,48 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         }
         
         profileImageView.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+            make.center.equalToSuperview()
             make.width.height.equalTo(83.33)
         }
         
         cameraImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(69.27)
-            make.left.equalToSuperview().offset(69.49)
+            make.trailing.bottom.equalToSuperview().inset(6.9)
             make.width.height.equalTo(23.83)
         }
         
         userNickNameTextFiled.snp.makeConstraints { make in
             make.top.equalTo(userProfileView.snp.bottom).offset(16)
-            make.left.equalTo(20)
-            make.right.equalTo(-61)
+            make.leading.equalToSuperview().inset(20)
             make.height.equalTo(56)
         }
         
         underlineView.snp.makeConstraints { make in
             make.top.equalTo(userNickNameTextFiled.snp.bottom)
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
+            make.horizontalEdges.equalTo(20)
             make.height.equalTo(1.2)
         }
         
         checkDuplicateButton.snp.makeConstraints { make in
             make.centerY.equalTo(userNickNameTextFiled.snp.centerY)
-            make.right.equalTo(-20)
+            make.trailing.equalToSuperview().inset(20)
             make.width.equalTo(73)
             make.height.equalTo(36)
         }
         
         countLabel.snp.makeConstraints { make in
             make.centerY.equalTo(userNickNameTextFiled.snp.centerY)
-            make.right.equalTo(-20)
+            make.trailing.equalToSuperview().inset(20)
             make.height.equalTo(20)
         }
         
         messageLabel.snp.makeConstraints { make in
             make.top.equalTo(underlineView.snp.bottom).offset(8)
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
+            make.horizontalEdges.equalToSuperview().inset(20)
         }
         
         doneButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-43)
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
+            make.bottom.equalToSuperview().inset(43)
+            make.horizontalEdges.equalToSuperview().inset(20)
             make.height.equalTo(48)
         }
     }

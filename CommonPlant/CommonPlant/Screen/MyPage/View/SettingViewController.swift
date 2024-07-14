@@ -124,45 +124,41 @@ final class SettingViewController: UIViewController {
     func setLayout() {
         alarmView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(127)
         }
         
         alarmTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(44)
         }
         
         alarmSettingLabel.snp.makeConstraints { make in
             make.top.equalTo(alarmTitleLabel.snp.bottom).offset(25)
-            make.leading.equalToSuperview().offset(36)
+            make.leading.equalToSuperview().inset(36)
             make.height.equalTo(24)
         }
         
         alarmToggleSwitch.snp.makeConstraints { make in
             make.top.equalTo(alarmTitleLabel.snp.bottom).offset(23)
-            make.trailing.equalToSuperview().offset(-36)
+            make.trailing.equalToSuperview().inset(36)
         }
         
         alarmGuideLabel.snp.makeConstraints { make in
             make.top.equalTo(alarmSettingLabel.snp.bottom)
-            make.leading.equalToSuperview().offset(36)
+            make.leading.equalToSuperview().inset(36)
         }
         
         divideView.snp.makeConstraints { make in
             make.top.equalTo(alarmView.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(8)
         }
         
         accountView.snp.makeConstraints { make in
             make.top.equalTo(divideView.snp.bottom).offset(16)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
         }
         
@@ -174,15 +170,13 @@ final class SettingViewController: UIViewController {
         
         logoutButton.snp.makeConstraints { make in
             make.top.equalTo(accountTitleLabel.snp.bottom).offset(4)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(20)
+            make.horizontalEdges.equalToSuperview().inset(20)
             make.height.equalTo(62)
         }
         
         withdrawalButton.snp.makeConstraints { make in
             make.top.equalTo(logoutButton.snp.bottom)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(20)
+            make.horizontalEdges.equalToSuperview().inset(20)
             make.height.equalTo(62)
         }
         
@@ -192,8 +186,7 @@ final class SettingViewController: UIViewController {
         
         logoutAlertView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(52.5)
-            make.trailing.equalToSuperview().offset(-52.5)
+            make.horizontalEdges.equalToSuperview().inset(52.5)
             make.height.equalTo(148)
         }
     }

@@ -89,15 +89,13 @@ final class MyPageViewController: UIViewController {
     func setConstraints() {
         backgroundView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(201)
         }
         
         baseView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(30)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
         }
         
@@ -109,14 +107,13 @@ final class MyPageViewController: UIViewController {
         
         settingButton.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-10)
+            make.trailing.equalToSuperview().inset(10)
             make.width.height.equalTo(56)
         }
         
         userInfoView.snp.makeConstraints { make in
             make.top.equalTo(backgroundView.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(80)
         }
         
