@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Kingfisher
+import Then
 
 final class MyPageViewController: UIViewController {
     // MARK: Properties
@@ -18,49 +19,37 @@ final class MyPageViewController: UIViewController {
     
     // MARK: UI Components
     private let backgroundView = UIView()
-    private let baseView: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(named: "ProfileBackground")!
-        return view
-    }()
-    private let userProfileView: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(named: "ProfileGreen")
-        view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 47.5
-        return view
-    }()
-    private let settingButton: UIButton = {
-        let button = UIButton()
+    private let baseView = UIImageView().then {
+        $0.image = UIImage(named: "ProfileBackground")!
+    }
+    private let userProfileView = UIImageView().then {
+        $0.image = UIImage(named: "ProfileGreen")
+        $0.contentMode = .scaleAspectFill
+        $0.layer.cornerRadius = 47.5
+    }
+    private let settingButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "Setting")
-        button.configuration = config
-        return button
-    }()
+        $0.configuration = config
+    }
     private let userInfoView = UIView()
-    private let userNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "커먼플랜트"
-        label.font = .head4
-        label.textAlignment = .center
-        label.textColor = .black
-        return label
-    }()
-    private let userEmailLabel: UILabel = {
-        let label = UILabel()
-        label.text = "common123@gmail.com"
-        label.font = .captionM1
-        label.textAlignment = .center
-        label.textColor = .gray5
-        return label
-    }()
-    private let editButton: UIButton = {
-        let button = UIButton()
+    private let userNameLabel = UILabel().then {
+        $0.text = "커먼플랜트"
+        $0.font = .head4
+        $0.textAlignment = .center
+        $0.textColor = .black
+    }
+    private let userEmailLabel = UILabel().then {
+        $0.text = "common123@gmail.com"
+        $0.font = .captionM1
+        $0.textAlignment = .center
+        $0.textColor = .gray5
+    }
+    private let editButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "Edit")
-        button.configuration = config
-        return button
-    }()
+        $0.configuration = config
+    }
     
     // MARK: Life Cycle
     override func viewDidLoad() {

@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Then
 
 final class WithdrwalViewController: UIViewController {
     // MARK: Properties
@@ -18,27 +19,20 @@ final class WithdrwalViewController: UIViewController {
     // MARK: UI Components
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let backgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .seaGreen
-        return view
-    }()
-    private let warningTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "커먼플랜트님, 잠시만요!"
-        label.font = .head5
-        label.textAlignment = .center
-        label.textColor = .black
-        return label
-    }()
-    private let leaveView: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(named: "LeaveLogo")!
-        return view
-    }()
-    private let guideLabel: UILabel = {
-        let label = UILabel()
-        label.text = """
+    private let backgroundView = UIView().then {
+        $0.backgroundColor = .seaGreen
+    }
+    private let warningTitleLabel = UILabel().then {
+        $0.text = "커먼플랜트님, 잠시만요!"
+        $0.font = .head5
+        $0.textAlignment = .center
+        $0.textColor = .black
+    }
+    private let leaveView = UIImageView().then {
+        $0.image = UIImage(named: "LeaveLogo")!
+    }
+    private let guideLabel = UILabel().then {
+        $0.text = """
         
         • 회원 탈퇴 시 현재 계정으로 작성한 게시글, 댓글 등을 수정할 수 없습니다.
         
@@ -46,42 +40,35 @@ final class WithdrwalViewController: UIViewController {
         
         • 본 계정으로 다시는 로그인 할 수 없습니다.
         """
-        label.font = .bodyM3
-        label.textAlignment = .left
-        label.textColor = .gray6
-        label.numberOfLines = 0
-        label.lineBreakMode = .byCharWrapping
-        return label
-    }()
+        $0.font = .bodyM3
+        $0.textAlignment = .left
+        $0.textColor = .gray6
+        $0.numberOfLines = 0
+        $0.lineBreakMode = .byCharWrapping
+    }
     private let bottomView = UIView()
-    private let checkButton: UIButton = {
-        let button = UIButton()
+    private let checkButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(named: "UnselectedGray")
-        button.configuration = config
-        return button
-    }()
-    private let confirmLabel: UILabel = {
-        let label = UILabel()
-        label.text = "유의사항을 모두 확인했습니다."
-        label.font = .bodyM2
-        label.textAlignment = .left
-        label.textColor = .black
-        return label
-    }()
-    private let deleteButton: UIButton = {
-        let button = UIButton()
+        $0.configuration = config
+    }
+    private let confirmLabel = UILabel().then {
+        $0.text = "유의사항을 모두 확인했습니다."
+        $0.font = .bodyM2
+        $0.textAlignment = .left
+        $0.textColor = .black
+    }
+    private let deleteButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("계정 삭제하기")
         attr.font = .bodyM2
         attr.foregroundColor = .gray3
         config.attributedTitle = attr
-        button.configuration = config
-        button.contentHorizontalAlignment = .center
-        button.backgroundColor = .gray1
-        button.makeRound(radius: 8)
-        return button
-    }()
+        $0.configuration = config
+        $0.contentHorizontalAlignment = .center
+        $0.backgroundColor = .gray1
+        $0.makeRound(radius: 8)
+    }
     private let selectedGray = UIImage(named: "SelectedGray")
     private let unSelectedGray = UIImage(named: "UnselectedGray")
     

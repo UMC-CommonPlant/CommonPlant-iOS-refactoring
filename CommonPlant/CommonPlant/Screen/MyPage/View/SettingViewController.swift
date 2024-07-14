@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import RxSwift
+import Then
 
 final class SettingViewController: UIViewController {
     // MARK: Properties
@@ -16,93 +17,73 @@ final class SettingViewController: UIViewController {
     
     // MARK: UI Components
     private let alarmView = UIView()
-    private let alarmTitleLabel: PaddingLabel = {
-        let label = PaddingLabel()
-        label.text = "알람설정"
-        label.font = .bodyB1
-        label.textAlignment = .left
-        label.textColor = .black
-        label.padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 0)
-        return label
-    }()
-    private let alarmSettingLabel: UILabel = {
-        let label = UILabel()
-        label.text = "알림 설정"
-        label.font = .bodyM2
-        label.textAlignment = .left
-        label.textColor = .gray6
-        return label
-    }()
-    private let alarmGuideLabel: UILabel = {
-        let label = UILabel()
-        label.text = "물주기 및 식물의 상태를 알려드려요"
-        label.font = .captionB2
-        label.textAlignment = .left
-        label.textColor = .seaGreenDark3
-        return label
-    }()
-    private let alarmToggleSwitch: UISwitch = {
-        let toggle = UISwitch()
-        toggle.onTintColor = .seaGreenDark1
-        toggle.tintColor = .gray3
-        toggle.thumbTintColor = .white
-        toggle.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
-        return toggle
-    }()
-    private let divideView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .gray1
-        return view
-    }()
+    private let alarmTitleLabel = PaddingLabel().then {
+        $0.text = "알람설정"
+        $0.font = .bodyB1
+        $0.textAlignment = .left
+        $0.textColor = .black
+        $0.padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 0)
+    }
+    private let alarmSettingLabel = UILabel().then {
+        $0.text = "알림 설정"
+        $0.font = .bodyM2
+        $0.textAlignment = .left
+        $0.textColor = .gray6
+    }
+    private let alarmGuideLabel = UILabel().then {
+        $0.text = "물주기 및 식물의 상태를 알려드려요"
+        $0.font = .captionB2
+        $0.textAlignment = .left
+        $0.textColor = .seaGreenDark3
+    }
+    private let alarmToggleSwitch = UISwitch().then {
+        $0.onTintColor = .seaGreenDark1
+        $0.tintColor = .gray3
+        $0.thumbTintColor = .white
+        $0.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+    }
+    private let divideView = UIView().then {
+        $0.backgroundColor = .gray1
+    }
     private let accountView = UIView()
-    private let accountTitleLabel: PaddingLabel = {
-        let label = PaddingLabel()
-        label.text = "계정"
-        label.font = .bodyB1
-        label.textAlignment = .left
-        label.textColor = .black
-        label.padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 0)
-        return label
-    }()
-    private let logoutButton: UIButton = {
-        let button = UIButton()
+    private let accountTitleLabel = PaddingLabel().then {
+        $0.text = "계정"
+        $0.font = .bodyB1
+        $0.textAlignment = .left
+        $0.textColor = .black
+        $0.padding = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 0)
+    }
+    private let logoutButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("로그아웃")
         attr.font = .bodyM2
         attr.foregroundColor = .gray6
         config.attributedTitle = attr
         config.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 16, bottom: 20, trailing: 20)
-        button.configuration = config
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
-    private let logoutAlertView: CommonAlertView = {
-        let view = CommonAlertView()
-        view.setTitle("로그아웃")
-        view.setMessage("로그아웃을 하시겠나요?")
-        view.setActionButton(title: "확인")
-        view.isHidden = true
-        return view
-    }()
-    private let withdrawalButton: UIButton = {
-        let button = UIButton()
+        $0.configuration = config
+        $0.contentHorizontalAlignment = .left
+    }
+    private let logoutAlertView = CommonAlertView().then {
+        $0.setTitle("로그아웃")
+        $0.setMessage("로그아웃을 하시겠나요?")
+        $0.setActionButton(title: "확인")
+        $0.isHidden = true
+    }
+    private let withdrawalButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("회원탈퇴")
         attr.font = .bodyM2
         attr.foregroundColor = .gray6
         config.attributedTitle = attr
         config.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 16, bottom: 20, trailing: 20)
-        button.configuration = config
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
-    private let backgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        view.layer.opacity = 0.7
-        view.isHidden = true
-        return view
-    }()
+        $0.configuration = config
+        $0.contentHorizontalAlignment = .left
+    }
+    private let backgroundView = UIView().then {
+        $0.backgroundColor = .black
+        $0.layer.opacity = 0.7
+        $0.isHidden = true
+    }
     
     // MARK: Life Cycle
     override func viewDidLoad() {

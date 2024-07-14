@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 import RxGesture
 import PhotosUI
+import Then
 
 class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
@@ -20,81 +21,65 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: UI Components
     private let userProfileView = UIView()
-    private let profileImageView: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(named: "ProfileGreen")
-        view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 83.33 / 2
-        return view
-    }()
-    private let cameraImageView: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(named: "CameraMark")!
-        return view
-    }()
-    private let userNickNameTextFiled: UITextField = {
-        let field = UITextField()
-        field.text = "커먼플랜트"
-        field.placeholder = "커먼플랜트"
-        field.font = .bodyM1
-        field.textAlignment = .left
-        field.textColor = .black
-        field.tintColor = .black
-        field.clearButtonMode = .whileEditing
-        field.autocorrectionType = .no
-        field.spellCheckingType = .no
-        field.autocapitalizationType = .none
-        field.returnKeyType = .done
-        field.clearsOnInsertion = true
-        return field
-    }()
-    private let underlineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .gray2
-        return view
-    }()
-    private let countLabel: UILabel = {
-        let label = UILabel()
-        label.font = .bodyB3
-        label.textAlignment = .right
-        label.textColor = .black
-        label.isHidden = true
-        return label
-    }()
-    private let checkDuplicateButton: UIButton = {
-        let button = UIButton()
+    private let profileImageView = UIImageView().then {
+        $0.image = UIImage(named: "ProfileGreen")
+        $0.contentMode = .scaleAspectFill
+        $0.layer.cornerRadius = 83.33 / 2
+    }
+    private let cameraImageView = UIImageView().then {
+        $0.image = UIImage(named: "CameraMark")!
+    }
+    private let userNickNameTextFiled = UITextField().then {
+        $0.text = "커먼플랜트"
+        $0.placeholder = "커먼플랜트"
+        $0.font = .bodyM1
+        $0.textAlignment = .left
+        $0.textColor = .black
+        $0.tintColor = .black
+        $0.clearButtonMode = .whileEditing
+        $0.autocorrectionType = .no
+        $0.spellCheckingType = .no
+        $0.autocapitalizationType = .none
+        $0.returnKeyType = .done
+        $0.clearsOnInsertion = true
+    }
+    private let underlineView = UIView().then {
+        $0.backgroundColor = .gray2
+    }
+    private let countLabel = UILabel().then {
+        $0.font = .bodyB3
+        $0.textAlignment = .right
+        $0.textColor = .black
+        $0.isHidden = true
+    }
+    private let checkDuplicateButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("중복검사")
         attr.font = .bodyM3
         attr.foregroundColor = .gray6
         config.attributedTitle = attr
-        button.configuration = config
-        button.contentHorizontalAlignment = .center
-        button.backgroundColor = .gray1
-        button.makeRound(radius: 4)
-        button.isHidden = true
-        return button
-    }()
-    private let messageLabel: UILabel = {
-        let label = UILabel()
-        label.font = .captionM2
-        label.textAlignment = .left
-        return label
-    }()
-    private let doneButton: UIButton = {
-        let button = UIButton()
+        $0.configuration = config
+        $0.contentHorizontalAlignment = .center
+        $0.backgroundColor = .gray1
+        $0.makeRound(radius: 4)
+        $0.isHidden = true
+    }
+    private let messageLabel = UILabel().then {
+        $0.font = .captionM2
+        $0.textAlignment = .left
+    }
+    private let doneButton = UIButton().then {
         var config = UIButton.Configuration.plain()
         var attr = AttributedString.init("수정 완료")
         attr.font = .bodyM2
         attr.foregroundColor = .gray3
         config.attributedTitle = attr
-        button.configuration = config
-        button.contentHorizontalAlignment = .center
-        button.backgroundColor = .gray1
-        button.makeRound(radius: 8)
-        button.isEnabled = false
-        return button
-    }()
+        $0.configuration = config
+        $0.contentHorizontalAlignment = .center
+        $0.backgroundColor = .gray1
+        $0.makeRound(radius: 8)
+        $0.isEnabled = false
+    }
     
     // MARK: Life Cycle
     override func viewDidLoad() {
