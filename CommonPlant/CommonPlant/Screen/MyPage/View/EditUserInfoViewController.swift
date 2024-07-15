@@ -117,17 +117,17 @@ class EditUserInfoViewController: UIViewController, UITextFieldDelegate {
         userProfileView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(100)
+            make.size.equalTo(100)
         }
         
         profileImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.width.height.equalTo(83.33)
+            make.size.equalTo(83.33)
         }
         
         cameraImageView.snp.makeConstraints { make in
             make.trailing.bottom.equalToSuperview().inset(6.9)
-            make.width.height.equalTo(23.83)
+            make.size.equalTo(23.83)
         }
         
         userNickNameTextFiled.snp.makeConstraints { make in

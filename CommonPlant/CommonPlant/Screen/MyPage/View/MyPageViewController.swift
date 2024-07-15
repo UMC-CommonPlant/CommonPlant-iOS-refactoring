@@ -102,13 +102,13 @@ final class MyPageViewController: UIViewController {
         userProfileView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(85)
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(95)
+            make.size.equalTo(95)
         }
         
         settingButton.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.trailing.equalToSuperview().inset(10)
-            make.width.height.equalTo(56)
+            make.size.equalTo(56)
         }
         
         userInfoView.snp.makeConstraints { make in
@@ -131,8 +131,8 @@ final class MyPageViewController: UIViewController {
         
         editButton.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-38.5)
-            make.width.height.equalTo(56)
+            make.trailing.equalToSuperview().inset(38.5)
+            make.size.equalTo(56)
         }
     }
     

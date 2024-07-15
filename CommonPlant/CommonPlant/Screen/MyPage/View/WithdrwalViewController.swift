@@ -132,7 +132,7 @@ final class WithdrwalViewController: UIViewController {
         leaveView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(92)
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(148)
+            make.size.equalTo(148)
         }
         
         guideLabel.snp.makeConstraints { make in
@@ -148,7 +148,7 @@ final class WithdrwalViewController: UIViewController {
         checkButton.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
             make.leading.equalToSuperview().inset(20)
-            make.width.height.equalTo(24)
+            make.size.equalTo(24)
         }
         
         confirmLabel.snp.makeConstraints { make in
@@ -160,7 +160,7 @@ final class WithdrwalViewController: UIViewController {
         deleteButton.snp.makeConstraints { make in
             make.top.greaterThanOrEqualTo(confirmLabel.snp.bottom).offset(33)
             make.horizontalEdges.equalToSuperview().inset(20)
-            make.bottom.equalToSuperview().offset(-32)
+            make.bottom.equalToSuperview().inset(32)
             make.height.equalTo(48)
         }
     }

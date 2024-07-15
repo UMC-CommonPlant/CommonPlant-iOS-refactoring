@@ -181,7 +181,7 @@ final class SettingViewController: UIViewController {
         }
         
         backgroundView.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalTo(self.view)
+            make.edges.equalTo(view)
         }
         
         logoutAlertView.snp.makeConstraints { make in
