@@ -13,17 +13,15 @@ class SettingViewModel {
     
     func showWithdrwalView(_ settingVC: UIViewController) {
         let nextVC = WithdrwalViewController()
-        nextVC.modalPresentationStyle = .fullScreen
-        settingVC.present(nextVC, animated: true)
+        settingVC.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func showEditInfoView(_ settingVC: UIViewController) {
         let nextVC = EditUserInfoViewController()
-        nextVC.modalPresentationStyle = .fullScreen
-        settingVC.present(nextVC, animated: true)
+        settingVC.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     func dissmissView(_ settingVC: UIViewController) {
-        settingVC.dismiss(animated: true)
+        settingVC.navigationController?.popViewController(animated: true)
     }
 }

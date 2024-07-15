@@ -10,62 +10,67 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Kingfisher
+import Then
 
-class MyPageViewController: UIViewController {
+final class MyPageViewController: UIViewController {
     // MARK: Properties
-    let viewModel = MyPageViewModel()
+    private let viewModel = MyPageViewModel()
     var disposeBag = DisposeBag()
     
     // MARK: UI Components
-    let backgroundView = UIView()
-    let baseView = UIImageView()
-    var baseImage = UIImage(named: "ProfileBackground")!
-    let userProfileView = UIImageView()
-    var settingButton = UIButton()
-    let userInfoView = UIView()
-    var userNameLabel = UILabel()
-    var userEmailLabel = UILabel()
-    let editButton = UIButton()
+    private let backgroundView = UIView()
+    private let baseView = UIImageView().then {
+        $0.image = UIImage(named: "ProfileBackground")!
+    }
+    private let userProfileView = UIImageView().then {
+        $0.image = UIImage(named: "ProfileGreen")
+        $0.contentMode = .scaleAspectFill
+        $0.layer.cornerRadius = 47.5
+    }
+    private let settingButton = UIButton().then {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Setting")
+        $0.configuration = config
+    }
+    private let userInfoView = UIView()
+    private let userNameLabel = UILabel().then {
+        $0.text = "커먼플랜트"
+        $0.font = .head4
+        $0.textAlignment = .center
+        $0.textColor = .black
+    }
+    private let userEmailLabel = UILabel().then {
+        $0.text = "common123@gmail.com"
+        $0.font = .captionM1
+        $0.textAlignment = .center
+        $0.textColor = .gray5
+    }
+    private let editButton = UIButton().then {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(named: "Edit")
+        $0.configuration = config
+    }
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUI()
+        
+        view.backgroundColor = .white
+        setNavigationBar()
         setHierarchy()
-        setLayout()
+        setConstraints()
         setAction()
     }
     
     // MARK: Custom Method
-    func setUI() {
-        view.backgroundColor = .white
+    func setNavigationBar() {
+        navigationController?.navigationBar.shadowImage = UIImage()
         
-        var settingBtnConfig = UIButton.Configuration.plain()
-        var editBtnConfig = UIButton.Configuration.plain()
-        
-        settingBtnConfig.image = UIImage(named: "Setting")
-        settingButton.configuration = settingBtnConfig
-        
-        editBtnConfig.image = UIImage(named: "Edit")
-        editButton.configuration = editBtnConfig
-        
-        baseView.image = baseImage
-        userProfileView.image = viewModel.infoProfileRelay.value!
-        
-        viewModel.userSubject.subscribe (onNext: { [weak self] userInfo in
-            guard let self = self else { return }
-            
-            userNameLabel.text = userInfo.nickName
-            userEmailLabel.text = userInfo.email
-        }).disposed(by: disposeBag)
-
-        userNameLabel.font = .head4
-        userNameLabel.textAlignment = .center
-        userNameLabel.textColor = .black
-        
-        userEmailLabel.font = .captionM1
-        userEmailLabel.textAlignment = .center
-        userEmailLabel.textColor = .gray5
+        let backBarButtonItem = UIBarButtonItem(title: nil, style: .plain, target: nil, action: nil)
+        backBarButtonItem.tintColor = .gray6
+        navigationItem.backBarButtonItem = backBarButtonItem
+        let rightBarItem = UIBarButtonItem(customView: settingButton)
+        navigationItem.rightBarButtonItem = rightBarItem
     }
     
     func setHierarchy() {
@@ -81,37 +86,34 @@ class MyPageViewController: UIViewController {
         userInfoView.addSubview(editButton)
     }
     
-    func setLayout() {
+    func setConstraints() {
         backgroundView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(201)
         }
         
         baseView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(30)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
         }
         
         userProfileView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(85)
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(95)
+            make.size.equalTo(95)
         }
         
         settingButton.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-10)
-            make.width.height.equalTo(56)
+            make.trailing.equalToSuperview().inset(10)
+            make.size.equalTo(56)
         }
         
         userInfoView.snp.makeConstraints { make in
             make.top.equalTo(backgroundView.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(80)
         }
         
@@ -129,8 +131,8 @@ class MyPageViewController: UIViewController {
         
         editButton.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-38.5)
-            make.width.height.equalTo(56)
+            make.trailing.equalToSuperview().inset(38.5)
+            make.size.equalTo(56)
         }
     }
     
