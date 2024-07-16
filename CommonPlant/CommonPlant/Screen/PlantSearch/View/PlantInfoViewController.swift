@@ -7,178 +7,177 @@
 
 import UIKit
 import SnapKit
+import Then
 import RxSwift
 import RxCocoa
 import RxGesture
 
 class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate {
     // MARK: - Properties
-    private let collectionViewCellColor = ["OneRoomColor", "AirPurificationColor", "BeginnerColor", "SunlightColor", "WaterPreferenceColor", "InteriorColor"]
-    private let collectionViewIcon = ["OneRoom", "AirPurification", "Beginner", "Sunlight", "WateringPot",  "Interior"]
-    private let collectionViewCellLabelText = ["원룸", "공기정화", "초보집사", "채광", "물 주기", "인테리어"]
-    
-    private let plantSearchViewModel = PlantSearchViewModel()
+    private let viewModel = PlantInfoViewModel()
     private let disposeBag = DisposeBag()
-    private lazy var viewWidth = view.frame.width
+    private let selectCategorySubject = PublishSubject<CategoryModel>()
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
-    private let contentView = UIView()
+    private let contentView = UIView().then {
+        $0.backgroundColor = .white
+    }
     private let emptyView = UIView()
     private let searchResultController = SearchResultViewController()
-    private lazy var searchController = UISearchController(searchResultsController: searchResultController)
-    private let borderLineView = UIView()
-    private let plantCategoryLabel = UILabel()
-    private let plantCategoryCollectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = 24
-        flowLayout.itemSize = CGSize(width: 101, height: 76)
-        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        view.backgroundColor = .clear
-        return view
-    }()
-    private let popularSearchWordLabel = UILabel()
-    private let referenceDateLabel = UILabel()
-    private lazy var popularSearchCollectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = 16
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.itemSize = CGSize(width: self.viewWidth - 40, height: 108)
-        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        view.backgroundColor = .seaGreen
-        view.setCollectionViewLayout(flowLayout, animated: true)
-        return view
-    }()
+    private lazy var searchController = UISearchController(searchResultsController: searchResultController).then {
+        $0.searchResultsUpdater = searchResultController
+        $0.automaticallyShowsCancelButton = false
+        $0.hidesNavigationBarDuringPresentation = false
+        $0.searchBar.searchTextField.font = .bodyM1
+        $0.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "식물을 입력해 주세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray3!])
+        $0.searchBar.searchBarStyle = .minimal
+        $0.searchBar.searchTextField.borderStyle = .none
+        $0.searchBar.searchTextField.leftView?.tintColor = .black
+        $0.searchBar.setImage(UIImage(named: "Reset"), for: .clear, state: .normal)
+    }
+    private let borderLineView = UIView().then {
+        $0.backgroundColor = .gray2
+    }
+    private let plantCategoryLabel = UILabel().then {
+        $0.text = "식물 카테고리"
+        $0.font = .bodyB1
+        $0.textColor = .gray4
+    }
+    private let plantCategoryVStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.distribution = .fillEqually
+        $0.spacing = 24
+    }
+    private let hStackView1 = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+        $0.spacing = 16
+    }
+    private let hStackView2 = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+        $0.spacing = 16
+    }
+    private let popularSearchWordLabel = UILabel().then {
+        $0.text = "인기검색어"
+        $0.font = .bodyB1
+        $0.textColor = .gray4
+    }
+    private let referenceDateLabel = UILabel().then {
+        $0.text = "2023.8.1 기준"
+        $0.font = .bodyM3
+        $0.textColor = .gray5
+    }
+    private let flowLayout = UICollectionViewFlowLayout().then {
+        $0.scrollDirection = .vertical
+        $0.minimumLineSpacing = 16
+        $0.minimumInteritemSpacing = 0
+        $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 108)
+    }
+    private lazy var popularSearchCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout).then {
+        $0.isScrollEnabled = false
+        $0.backgroundColor = .clear
+        $0.clipsToBounds = false
+        $0.backgroundColor = .seaGreenDark2
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupStackView()
         configureUI()
-        setNavigationBar()
         setUpBindings()
-        setSearchController()
-        setCategoryCollectionView()
-        setpPopularSearchCollectionView()
+        setPopularSearchCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        setNavigationBar()
     }
     
     // MARK: - Custom Method
     private func configureUI() {
         self.view.backgroundColor = .white
-        self.navigationItem.title = "식물 정보"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1]
-        setAttributes()
         setConstraints()
     }
     
     private func setNavigationBar() {
+        self.navigationItem.title = "식물 정보"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1]
+        
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         backBarButtonItem.tintColor = .gray6
         self.navigationItem.backBarButtonItem = backBarButtonItem
-    }
-    
-    private func setSearchController() {
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        
         self.navigationItem.searchController = searchController
-        searchController.searchResultsUpdater = searchResultController
-        
-        searchController.automaticallyShowsCancelButton = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.searchTextField.font = .bodyM1
-        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "식물을 입력해 주세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray3!])
-        searchController.searchBar.searchBarStyle = .minimal
-        searchController.searchBar.searchTextField.borderStyle = .none
-        searchController.searchBar.searchTextField.leftView?.tintColor = .black
-        searchController.searchBar.setImage(UIImage(named: "Reset"), for: .clear, state: .normal)
-        
         // TODO: 다른 화면 선택 시 searchBar 편집 끝내기 처리
     }
     
+    private func setupStackView() {
+        plantCategoryVStackView.addArrangedSubview(hStackView1)
+        plantCategoryVStackView.addArrangedSubview(hStackView2)
+        
+        let halfCount = viewModel.categories.count / 2
+        for (index, category) in viewModel.categories.enumerated() {
+            let categoryView = CategoryView(category: category)
+            if index < halfCount {
+                hStackView1.addArrangedSubview(categoryView)
+            } else {
+                hStackView2.addArrangedSubview(categoryView)
+            }
+            
+            categoryView.button.rx.tap
+                .map { category }
+                .bind(to: selectCategorySubject)
+                .disposed(by: disposeBag)
+        }
+    }
+    
     private func setUpBindings() {
-        plantSearchViewModel.referenceDate
-            .bind(to: referenceDateLabel.rx.text)
+        let input = PlantInfoViewModel.Input(
+            selectCategory: selectCategorySubject
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.selectedCategory
+            .drive(onNext: { category in
+                self.navigateToCategoryView(colorName: category.color, title: category.label)
+            })
             .disposed(by: disposeBag)
+    }
+    
+    private func navigateToCategoryView(colorName: String, title: String) {
+        let detailVC = PlantCetegoryViewController()
+        detailVC.navigationBackgroundColor = colorName
+        detailVC.navigationItem.title = title
+        self.navigationController?.pushViewController(detailVC, animated: true)
     }
     
     // MARK: - Popular Search CollectionView
-    private func setpPopularSearchCollectionView() {
-        popularSearchCollectionView.register(PopularSearchCollectionViewCell.self, forCellWithReuseIdentifier: "PopularSearchCollectionViewCell")
+    private func setPopularSearchCollectionView() {
+        popularSearchCollectionView.register(PopularSearchCollectionViewCell.self, forCellWithReuseIdentifier: PopularSearchCollectionViewCell.identifier)
         popularSearchCollectionView.rx.setDelegate(self)
             .disposed(by: disposeBag)
         
-        plantSearchViewModel.plantSearchObservable
-            .bind(to: popularSearchCollectionView.rx.items(cellIdentifier: PopularSearchCollectionViewCell.identifier, cellType: PopularSearchCollectionViewCell.self)) { _, element, cell in
-                cell.setAttributes(with: element)
-            }
-            .disposed(by: disposeBag)
+        //        plantInfoViewModel.plantSearchObservable
+        //            .bind(to: popularSearchCollectionView.rx.items(cellIdentifier: PopularSearchCollectionViewCell.identifier, cellType: PopularSearchCollectionViewCell.self)) { _, element, cell in
+        //                cell.setAttributes(with: element)
+        //            }
+        //            .disposed(by: disposeBag)
     }
 }
 
-// MARK: - Category CollectionView
-extension PlantInfoViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    private func setCategoryCollectionView() {
-        self.plantCategoryCollectionView.dataSource = self
-        self.plantCategoryCollectionView.delegate = self
-        self.plantCategoryCollectionView.register(PlantCategoryCollectionViewCell.self, forCellWithReuseIdentifier: PlantCategoryCollectionViewCell.identifier)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlantCategoryCollectionViewCell", for: indexPath) as! PlantCategoryCollectionViewCell
-        cell.background.backgroundColor = UIColor(named: collectionViewCellColor[indexPath.row])
-        cell.label.text = collectionViewCellLabelText[indexPath.row]
-        cell.icon.image = UIImage(named: collectionViewIcon[indexPath.row])
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(#function)
-        navigateToCategoryView(colorName: collectionViewCellColor[indexPath.row], index: indexPath.row)
-    }
-    
-    private func navigateToCategoryView(colorName: String, index: Int) {
-        let detailVC = PlantCetegoryViewController()
-        detailVC.navigationBackgroundColor = colorName
-        detailVC.selectedIndex = index
-        detailVC.navigationItem.title = collectionViewCellLabelText[index]
-        self.navigationController?.pushViewController(detailVC, animated: true)
-    }
-}
+
 // MARK: - UI
 extension PlantInfoViewController {
-    private func setAttributes() {
-        borderLineView.backgroundColor = .gray2
-        
-        contentView.backgroundColor = .white
-        
-        popularSearchWordLabel.text = "인기검색어"
-        plantCategoryLabel.text = "식물 카테고리"
-        [popularSearchWordLabel, plantCategoryLabel].forEach {
-            $0.font = .bodyB1
-            $0.textColor = .gray4
-        }
-        
-        referenceDateLabel.text = "2023.8.1 기준"
-        referenceDateLabel.font = .bodyM3
-        referenceDateLabel.textColor = .gray5
-        
-        popularSearchCollectionView.isScrollEnabled = false
-        popularSearchCollectionView.backgroundColor = .clear
-        popularSearchCollectionView.clipsToBounds = false
-    }
-    
     private func setConstraints() {
         [scrollView, emptyView].forEach {
             view.addSubview($0)
@@ -186,18 +185,18 @@ extension PlantInfoViewController {
         
         scrollView.addSubview(contentView)
         searchController.searchBar.addSubview(borderLineView)
-
-        [plantCategoryLabel, plantCategoryCollectionView, popularSearchWordLabel, referenceDateLabel, popularSearchCollectionView].forEach {
+        
+        [plantCategoryLabel, plantCategoryVStackView, popularSearchWordLabel, referenceDateLabel, popularSearchCollectionView].forEach {
             contentView.addSubview($0)
         }
         
         scrollView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide)
-            $0.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
         
         emptyView.snp.makeConstraints {
-            $0.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(scrollView.snp.bottom)
             $0.bottom.equalTo(self.view)
             $0.height.equalTo(MainTabBarController.tabBarHeight)
@@ -205,10 +204,10 @@ extension PlantInfoViewController {
         
         borderLineView.snp.makeConstraints {
             $0.bottom.equalTo(searchController.searchBar)
-            $0.left.equalTo(searchController.searchBar)
-            $0.right.equalTo(searchController.searchBar)
+            $0.leading.equalTo(searchController.searchBar)
+            $0.trailing.equalTo(searchController.searchBar)
             $0.height.equalTo(1)
-          }
+        }
         
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
@@ -217,34 +216,33 @@ extension PlantInfoViewController {
         
         plantCategoryLabel.snp.makeConstraints {
             $0.height.equalTo(24)
-            $0.left.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(20)
             $0.top.equalToSuperview().offset(24)
         }
         
-        plantCategoryCollectionView.snp.makeConstraints {
+        plantCategoryVStackView.snp.makeConstraints {
             $0.height.equalTo(176)
             $0.top.equalTo(plantCategoryLabel.snp.bottom).offset(18)
-            $0.left.equalTo(contentView).offset(20)
-            $0.right.equalTo(contentView).offset(-20)
+            $0.leading.equalTo(contentView).offset(20)
+            $0.trailing.equalTo(contentView).offset(-20)
         }
         
         popularSearchWordLabel.snp.makeConstraints {
             $0.height.equalTo(24)
-            $0.left.equalTo(plantCategoryCollectionView)
-            $0.top.equalTo(plantCategoryCollectionView.snp.bottom).offset(50)
+            $0.leading.equalTo(plantCategoryVStackView)
+            $0.top.equalTo(plantCategoryVStackView.snp.bottom).offset(50)
         }
         
         referenceDateLabel.snp.makeConstraints {
             $0.height.equalTo(20)
-            $0.right.equalTo(plantCategoryCollectionView)
-            $0.top.equalTo(plantCategoryCollectionView.snp.bottom).offset(52)
+            $0.trailing.equalTo(plantCategoryVStackView)
+            $0.top.equalTo(plantCategoryVStackView.snp.bottom).offset(52)
         }
         
         popularSearchCollectionView.snp.makeConstraints {
-            $0.height.equalTo(1230)
             $0.top.equalTo(popularSearchWordLabel.snp.bottom).offset(18)
-            $0.left.equalTo(contentView).offset(20)
-            $0.right.equalTo(contentView).offset(-20)
+            $0.leading.equalTo(contentView).offset(20)
+            $0.trailing.equalTo(contentView).offset(-20)
             $0.bottom.equalTo(contentView)
         }
     }

@@ -17,7 +17,7 @@ struct CategoryModel {
 }
 
 class CategoryView: UIView {
-    private let button = UIButton().then {
+    let button = UIButton().then {
         $0.layer.cornerRadius = 8
     }
     private let label = UILabel().then {
@@ -39,7 +39,7 @@ class CategoryView: UIView {
         addSubview(label)
         
         button.backgroundColor = UIColor(named: category.color)
-        button.setImage(UIImage(named: "OneRoom"), for: .normal)
+        button.setImage(UIImage(named: category.icon), for: .normal)
         label.text = category.label
         
         button.snp.makeConstraints { make in
