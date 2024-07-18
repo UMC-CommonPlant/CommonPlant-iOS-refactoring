@@ -21,4 +21,15 @@ extension String {
         
         return toDateFormatter.string(from: date)
     }
+    
+    static func thisMonthFirstDayString(format: String = "yyyy.M.d") -> String {
+        let now = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month], from: now)
+        let startOfMonth = calendar.date(from: components)!
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: startOfMonth)
+    }
 }
