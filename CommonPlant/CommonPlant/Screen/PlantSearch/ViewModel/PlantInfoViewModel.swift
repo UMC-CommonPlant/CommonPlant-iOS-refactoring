@@ -11,6 +11,11 @@ import RxCocoa
 
 class PlantInfoViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
+    private var historyAPI = HistoryAPI()
+    
+    init() {
+        fetchPopularSearchWords()
+    }
     
     struct Input {
         let selectCategory: PublishSubject<CategoryModel>
@@ -18,6 +23,9 @@ class PlantInfoViewModel: ViewModelType {
     
     struct Output {
         let selectedCategory: Driver<CategoryModel>
+        let firstDayOfMonth: Driver<String>
+        let popularSearchWords: Driver<[HistoryDto]>
+        let numberOfItems: Driver<Int>
     }
     
     let categories: [CategoryModel] = [
@@ -30,12 +38,35 @@ class PlantInfoViewModel: ViewModelType {
     ]
     
     private let selectedCategoryRelay = PublishRelay<CategoryModel>()
+    private let popularSearchWordsRelay = BehaviorRelay<[HistoryDto]>(value: [])
+    private let firstDayOfMonthRelay = BehaviorRelay<String>(value: String.thisMonthFirstDayString())
     
     func transform(input: Input) -> Output {
         input.selectCategory
             .bind(to: selectedCategoryRelay)
             .disposed(by: disposeBag)
         
-        return Output(selectedCategory: selectedCategoryRelay.asDriver(onErrorDriveWith: .empty()))
+        let numberOfItems = popularSearchWordsRelay
+            .map { $0.count }
+            .asDriver(onErrorJustReturn: 0)
+        
+        return Output(
+            selectedCategory: selectedCategoryRelay.asDriver(onErrorDriveWith: .empty()),
+            firstDayOfMonth: firstDayOfMonthRelay.asDriver(onErrorDriveWith: .empty()),
+            popularSearchWords: popularSearchWordsRelay.asDriver(onErrorDriveWith: .empty()),
+            numberOfItems: numberOfItems)
+    }
+    
+    func fetchPopularSearchWords() {
+        historyAPI.fetchPopularWordList()
+            .subscribe(onSuccess: { [weak self] response in
+                self?.popularSearchWordsRelay.accept(response.result.historyDtoList)
+                if let formattedDate = response.result.firstDayOfMonth.toFormattedDateString(from: "yyyy-MM-dd", to: "yyyy.M.d") {
+                    self?.firstDayOfMonthRelay.accept("\(formattedDate) 기준")
+                }
+            }, onFailure: { [weak self] error in
+                self?.firstDayOfMonthRelay.accept(String.thisMonthFirstDayString())
+            })
+            .disposed(by: disposeBag)
     }
 }
