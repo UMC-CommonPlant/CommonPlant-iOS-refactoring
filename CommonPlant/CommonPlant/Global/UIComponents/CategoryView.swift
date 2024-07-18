@@ -10,12 +10,6 @@ import UIKit
 import SnapKit
 import Then
 
-struct CategoryModel {
-    let label: String
-    let color: String
-    let icon: String
-}
-
 class CategoryView: UIView {
     let button = UIButton().then {
         $0.layer.cornerRadius = 8
