@@ -10,7 +10,6 @@ import SnapKit
 import Then
 import RxSwift
 import RxCocoa
-import RxGesture
 
 class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate {
     // MARK: - Properties
@@ -20,10 +19,7 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
-    private let contentView = UIView().then {
-        $0.backgroundColor = .white
-    }
-    private let emptyView = UIView()
+    private let contentView = UIView()
     private let searchResultController = SearchResultViewController()
     private lazy var searchController = UISearchController(searchResultsController: searchResultController).then {
         $0.searchResultsUpdater = searchResultController
@@ -77,9 +73,7 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
     }
     private lazy var popularSearchCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout).then {
         $0.isScrollEnabled = false
-        $0.backgroundColor = .clear
         $0.clipsToBounds = false
-        $0.backgroundColor = .seaGreenDark2
     }
     
     // MARK: - Life Cycle
@@ -88,7 +82,6 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
         setupStackView()
         configureUI()
         setUpBindings()
-        setPopularSearchCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -152,6 +145,25 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
                 self.navigateToCategoryView(colorName: category.color, title: category.label)
             })
             .disposed(by: disposeBag)
+        
+        output.firstDayOfMonth
+            .drive(referenceDateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.numberOfItems
+            .drive(onNext: { [weak self] itemCount in
+                self?.updateCollectionViewHeight(itemCount: itemCount)
+            })
+            .disposed(by: disposeBag)
+        
+        setPopularSearchCollectionView(output: output)
+    }
+    
+    private func updateCollectionViewHeight(itemCount: Int) {
+        let height = CGFloat(itemCount) * 108
+        popularSearchCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
     }
     
     private func navigateToCategoryView(colorName: String, title: String) {
@@ -162,16 +174,16 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
     }
     
     // MARK: - Popular Search CollectionView
-    private func setPopularSearchCollectionView() {
+    private func setPopularSearchCollectionView(output: PlantInfoViewModel.Output) {
         popularSearchCollectionView.register(PopularSearchCollectionViewCell.self, forCellWithReuseIdentifier: PopularSearchCollectionViewCell.identifier)
         popularSearchCollectionView.rx.setDelegate(self)
             .disposed(by: disposeBag)
         
-        //        plantInfoViewModel.plantSearchObservable
-        //            .bind(to: popularSearchCollectionView.rx.items(cellIdentifier: PopularSearchCollectionViewCell.identifier, cellType: PopularSearchCollectionViewCell.self)) { _, element, cell in
-        //                cell.setAttributes(with: element)
-        //            }
-        //            .disposed(by: disposeBag)
+        output.popularSearchWords
+            .drive(popularSearchCollectionView.rx.items(cellIdentifier: PopularSearchCollectionViewCell.identifier, cellType: PopularSearchCollectionViewCell.self)) { _, element, cell in
+                cell.setAttributes(with: element)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -179,10 +191,7 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
 // MARK: - UI
 extension PlantInfoViewController {
     private func setConstraints() {
-        [scrollView, emptyView].forEach {
-            view.addSubview($0)
-        }
-        
+        self.view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         searchController.searchBar.addSubview(borderLineView)
         
@@ -191,15 +200,7 @@ extension PlantInfoViewController {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-        }
-        
-        emptyView.snp.makeConstraints {
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.top.equalTo(scrollView.snp.bottom)
-            $0.bottom.equalTo(self.view)
-            $0.height.equalTo(MainTabBarController.tabBarHeight)
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         borderLineView.snp.makeConstraints {
@@ -240,6 +241,7 @@ extension PlantInfoViewController {
         }
         
         popularSearchCollectionView.snp.makeConstraints {
+            $0.height.equalTo(0)
             $0.top.equalTo(popularSearchWordLabel.snp.bottom).offset(18)
             $0.leading.equalTo(contentView).offset(20)
             $0.trailing.equalTo(contentView).offset(-20)
