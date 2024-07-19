@@ -38,7 +38,6 @@ class PlantCetegoryViewController: UIViewController {
     
     // MARK: - Properties
     var navigationBackgroundColor: String?
-    var selectedIndex = 0
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -54,14 +53,14 @@ class PlantCetegoryViewController: UIViewController {
     
     // MARK: - Custom Method
     private func setSegmentedControl() {
-        if selectedIndex == 3 || selectedIndex == 4 {
+        if navigationBackgroundColor == "SunlightColor" || navigationBackgroundColor == "WaterPreferenceColor" {
             segmentedController.isHidden = false
         }
         segmentedController.selectedSegmentIndex = 0
         segmentedController.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
-        if selectedIndex == 3 {
+        if navigationBackgroundColor == "SunlightColor" {
             underLineView.backgroundColor = UIColor(red: 1, green: 0.43, blue: 0.43, alpha: 1)
-        } else if selectedIndex == 4 {
+        } else if navigationBackgroundColor == "WaterPreferenceColor" {
             underLineView.backgroundColor = UIColor(red: 0.55, green: 0.76, blue: 0.78, alpha: 1)
         }
     }
@@ -110,7 +109,7 @@ extension PlantCetegoryViewController {
         }
         
         tableView.snp.makeConstraints {
-            if selectedIndex == 3 || selectedIndex == 4 {
+            if navigationBackgroundColor == "SunlightColor" || navigationBackgroundColor == "WaterPreferenceColor" {
                 $0.top.equalTo(segmentedController.snp.bottom).offset(16)
             } else {
                 $0.top.equalToSuperview().offset(16)
