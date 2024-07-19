@@ -21,17 +21,7 @@ class PlantInfoViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let searchResultController = SearchResultViewController()
-    private lazy var searchController = UISearchController(searchResultsController: searchResultController).then {
-        $0.searchResultsUpdater = searchResultController
-        $0.automaticallyShowsCancelButton = false
-        $0.hidesNavigationBarDuringPresentation = false
-        $0.searchBar.searchTextField.font = .bodyM1
-        $0.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "식물을 입력해 주세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray3!])
-        $0.searchBar.searchBarStyle = .minimal
-        $0.searchBar.searchTextField.borderStyle = .none
-        $0.searchBar.searchTextField.leftView?.tintColor = .black
-        $0.searchBar.setImage(UIImage(named: "Reset"), for: .clear, state: .normal)
-    }
+    private lazy var searchController = UISearchController(searchResultsController: searchResultController)
     private let borderLineView = UIView().then {
         $0.backgroundColor = .gray2
     }
@@ -89,32 +79,6 @@ class PlantInfoViewController: UIViewController {
     }
     
     // MARK: - Custom Method
-    private func configureUI() {
-        self.view.backgroundColor = .white
-        setConstraints()
-    }
-    
-    private func setNavigationBar() {
-        self.navigationItem.title = "식물 정보"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1]
-        
-        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        backBarButtonItem.tintColor = .gray6
-        self.navigationItem.backBarButtonItem = backBarButtonItem
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
-        
-        self.navigationItem.searchController = searchController
-        // TODO: 다른 화면 선택 시 searchBar 편집 끝내기 처리
-    }
-    
-    private func setStackView() {
-        plantCategoryVStackView.addArrangedSubview(hStackView1)
-        plantCategoryVStackView.addArrangedSubview(hStackView2)
         
         let halfCount = viewModel.categories.count / 2
         for (index, category) in viewModel.categories.enumerated() {
@@ -158,13 +122,6 @@ class PlantInfoViewController: UIViewController {
         setPopularSearchCollectionView(output: output)
     }
     
-    private func updateCollectionViewHeight(itemCount: Int) {
-        let height = CGFloat(itemCount) * 108
-        popularSearchCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(height)
-        }
-    }
-    
     private func navigateToCategoryView(colorName: String, title: String) {
         let detailVC = PlantCetegoryViewController()
         detailVC.navigationBackgroundColor = colorName
@@ -172,21 +129,83 @@ class PlantInfoViewController: UIViewController {
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
     
+    private func setStackView() {
+        plantCategoryVStackView.addArrangedSubview(hStackView1)
+        plantCategoryVStackView.addArrangedSubview(hStackView2)
+        
+        let halfCount = viewModel.categories.count / 2
+        for (index, category) in viewModel.categories.enumerated() {
+            let categoryView = CategoryView(category: category)
+            if index < halfCount {
+                hStackView1.addArrangedSubview(categoryView)
+            } else {
+                hStackView2.addArrangedSubview(categoryView)
+            }
+            
+            categoryView.button.rx.tap
+                .map { category }
+                .bind(to: selectCategorySubject)
+                .disposed(by: disposeBag)
+        }
+    }
+    
     // MARK: - Popular Search CollectionView
     private func setPopularSearchCollectionView(output: PlantInfoViewModel.Output) {
         popularSearchCollectionView.register(PopularSearchCollectionViewCell.self, forCellWithReuseIdentifier: PopularSearchCollectionViewCell.identifier)
-       
+        
         output.popularSearchWords
             .drive(popularSearchCollectionView.rx.items(cellIdentifier: PopularSearchCollectionViewCell.identifier, cellType: PopularSearchCollectionViewCell.self)) { _, element, cell in
                 cell.setAttributes(with: element)
             }
             .disposed(by: disposeBag)
     }
+    
+    private func updateCollectionViewHeight(itemCount: Int) {
+        let height = CGFloat(itemCount) * popularSearchCollectionViewCellHeight
+        popularSearchCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
+    }
 }
-
 
 // MARK: - UI
 extension PlantInfoViewController {
+    private func configureUI() {
+        self.view.backgroundColor = .white
+        setConstraints()
+        setSearchController()
+    }
+    
+    private func setNavigationBar() {
+        self.navigationItem.title = "식물 정보"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.bodyM1]
+        
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .gray6
+        self.navigationItem.backBarButtonItem = backBarButtonItem
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        
+        self.navigationItem.searchController = searchController
+        // TODO: 다른 화면 선택 시 searchBar 편집 끝내기 처리
+    }
+    
+    private func setSearchController() {
+        searchController.searchResultsUpdater = searchResultController
+        searchController.automaticallyShowsCancelButton = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.searchTextField.font = .bodyM1
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "식물을 입력해 주세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray3!])
+        searchController.searchBar.searchBarStyle = .minimal
+        searchController.searchBar.searchTextField.borderStyle = .none
+        searchController.searchBar.searchTextField.leftView?.tintColor = .black
+        searchController.searchBar.setImage(UIImage(named: "Reset"), for: .clear, state: .normal)
+    }
+    
     private func setConstraints() {
         self.view.addSubview(scrollView)
         scrollView.addSubview(contentView)
