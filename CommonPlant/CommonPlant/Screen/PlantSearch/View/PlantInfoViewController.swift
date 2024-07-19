@@ -11,7 +11,7 @@ import Then
 import RxSwift
 import RxCocoa
 
-class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate {
+class PlantInfoViewController: UIViewController {
     // MARK: - Properties
     private let viewModel = PlantInfoViewModel()
     private let disposeBag = DisposeBag()
@@ -61,7 +61,6 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
         $0.textColor = .gray4
     }
     private let referenceDateLabel = UILabel().then {
-        $0.text = "2023.8.1 기준"
         $0.font = .bodyM3
         $0.textColor = .gray5
     }
@@ -79,9 +78,9 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupStackView()
+        setStackView()
         configureUI()
-        setUpBindings()
+        setBindings()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,7 +112,7 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
         // TODO: 다른 화면 선택 시 searchBar 편집 끝내기 처리
     }
     
-    private func setupStackView() {
+    private func setStackView() {
         plantCategoryVStackView.addArrangedSubview(hStackView1)
         plantCategoryVStackView.addArrangedSubview(hStackView2)
         
@@ -133,7 +132,7 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
         }
     }
     
-    private func setUpBindings() {
+    private func setBindings() {
         let input = PlantInfoViewModel.Input(
             selectCategory: selectCategorySubject
         )
@@ -176,9 +175,7 @@ class PlantInfoViewController: UIViewController, UITableViewDelegate, UISearchCo
     // MARK: - Popular Search CollectionView
     private func setPopularSearchCollectionView(output: PlantInfoViewModel.Output) {
         popularSearchCollectionView.register(PopularSearchCollectionViewCell.self, forCellWithReuseIdentifier: PopularSearchCollectionViewCell.identifier)
-        popularSearchCollectionView.rx.setDelegate(self)
-            .disposed(by: disposeBag)
-        
+       
         output.popularSearchWords
             .drive(popularSearchCollectionView.rx.items(cellIdentifier: PopularSearchCollectionViewCell.identifier, cellType: PopularSearchCollectionViewCell.self)) { _, element, cell in
                 cell.setAttributes(with: element)
