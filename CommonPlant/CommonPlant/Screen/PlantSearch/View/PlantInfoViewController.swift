@@ -15,7 +15,10 @@ class PlantInfoViewController: UIViewController {
     // MARK: - Properties
     private let viewModel = PlantInfoViewModel()
     private let disposeBag = DisposeBag()
+    private var input: PlantInfoViewModel.Input?
+    private var output: PlantInfoViewModel.Output?
     private let selectCategorySubject = PublishSubject<CategoryModel>()
+    private let popularSearchCollectionViewCellHeight: CGFloat = 108
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
@@ -70,6 +73,7 @@ class PlantInfoViewController: UIViewController {
         super.viewDidLoad()
         setStackView()
         configureUI()
+        initializeInputsOutputs()
         setBindings()
     }
     
@@ -79,29 +83,21 @@ class PlantInfoViewController: UIViewController {
     }
     
     // MARK: - Custom Method
-        
-        let halfCount = viewModel.categories.count / 2
-        for (index, category) in viewModel.categories.enumerated() {
-            let categoryView = CategoryView(category: category)
-            if index < halfCount {
-                hStackView1.addArrangedSubview(categoryView)
-            } else {
-                hStackView2.addArrangedSubview(categoryView)
-            }
-            
-            categoryView.button.rx.tap
-                .map { category }
-                .bind(to: selectCategorySubject)
-                .disposed(by: disposeBag)
-        }
-    }
-    
-    private func setBindings() {
-        let input = PlantInfoViewModel.Input(
+    private func initializeInputsOutputs() {
+        input = PlantInfoViewModel.Input(
             selectCategory: selectCategorySubject
         )
         
-        let output = viewModel.transform(input: input)
+        if let input = input {
+            output = viewModel.transform(input: input)
+        } else {
+            print("Failed to initialize input")
+        }
+        
+    }
+    
+    private func setBindings() {
+        guard let output = output else { return }
         
         output.selectedCategory
             .drive(onNext: { category in
